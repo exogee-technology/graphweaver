@@ -183,7 +183,7 @@ importers:
         version: 6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.0)(pg@8.13.3)
       '@mikro-orm/mysql':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)(pg@8.13.3)
+        version: 6.4.14(@mikro-orm/core@6.4.11)(pg@8.13.3)
       '@mikro-orm/postgresql':
         specifier: 6.4.11
         version: 6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.0)
@@ -391,7 +391,7 @@ importers:
         version: 6.4.11(@mikro-orm/core@6.4.11)
       '@mikro-orm/mysql':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)
+        version: 6.4.14(@mikro-orm/core@6.4.11)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -440,7 +440,7 @@ importers:
         version: 6.4.11
       '@mikro-orm/mysql':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)
+        version: 6.4.14(@mikro-orm/core@6.4.11)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -1506,10 +1506,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)
+        version: 6.4.11(@mikro-orm/core@6.4.14)
       '@mikro-orm/sqlite':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)
+        version: 6.4.11(@mikro-orm/core@6.4.14)
       node-sqlite3-wasm:
         specifier: 0.8.37
         version: 0.8.37
@@ -1568,7 +1568,7 @@ importers:
         version: 6.4.11(@mikro-orm/core@6.4.11)
       '@mikro-orm/mysql':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)
+        version: 6.4.14(@mikro-orm/core@6.4.11)
       '@mikro-orm/postgresql':
         specifier: 6.4.11
         version: 6.4.11(@mikro-orm/core@6.4.11)
@@ -3934,6 +3934,10 @@ packages:
     resolution: {integrity: sha512-FCXWpRwcLOjjc1/1gigqWLSeJpSlMOOO9TQMUT5JP5/NEpisLfDyblwMOklRfAidrFRRTSVL9DGa9OcdZC5ACg==}
     engines: {node: '>= 18.12.0'}
 
+  '@mikro-orm/core@6.4.14':
+    resolution: {integrity: sha512-e7nd4rnfegszdmJOXS5RIPMoHQ5KWeoZvQR7A0rdBLsuhoI0Pot6N++O1kE5uX87EJfWFX2KQhKlgkfzSk+3Yg==}
+    engines: {node: '>= 18.12.0'}
+
   '@mikro-orm/knex@6.4.11':
     resolution: {integrity: sha512-Lypp8Pw1SMFFtwu1ME7QiLECCFBY6B1Q8KcxkWiBFQaWohpU42h9JUPw13pzHCAYWQ5pNbQWrK0fh/1AFtxgkw==}
     engines: {node: '>= 18.12.0'}
@@ -3950,8 +3954,8 @@ packages:
       mariadb:
         optional: true
 
-  '@mikro-orm/mysql@6.4.11':
-    resolution: {integrity: sha512-jd7sd15JOk7DuxV5WrcFJSQX9AyW/xvzI6caMFyAuF0CaiTgwDYEKr9u4+j409ABFzZZ07l/0tsJnazlIp9tag==}
+  '@mikro-orm/mysql@6.4.14':
+    resolution: {integrity: sha512-fLhEof7Jw/ZBEwWPs6x94rEKLq8mGUXd+V/VbvcaOa/gwxPwtxugUIAYtm1Fj/ksdYMrswGfTw6gPRqjNJ3yBQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': 6.4.11
@@ -6591,8 +6595,8 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
 
-  detect-libc@2.0.3:
-    resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
+  detect-libc@2.0.4:
+    resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
 
   detect-newline@3.1.0:
@@ -6629,6 +6633,10 @@ packages:
 
   dotenv@16.4.7:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
+
+  dotenv@16.5.0:
+    resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
     engines: {node: '>=12'}
 
   downshift@9.0.9:
@@ -8313,6 +8321,9 @@ packages:
   long@5.3.1:
     resolution: {integrity: sha512-ka87Jz3gcx/I7Hal94xaN2tZEOPoUOEVftkQqZx2EeQRN7LGdfLlI3FvZ+7WDplm+vK2Urx9ULrvSowtdCieng==}
 
+  long@5.3.2:
+    resolution: {integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==}
+
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
@@ -8444,6 +8455,10 @@ packages:
 
   mikro-orm@6.4.11:
     resolution: {integrity: sha512-vmrAVGalS+pcgsumdHGAF7OwrlSItWwA6y0vBApuy8wDnNsejzUXk1PkoSoMSThVxV897+Dt+8xhbKd+OkNsvw==}
+    engines: {node: '>= 18.12.0'}
+
+  mikro-orm@6.4.14:
+    resolution: {integrity: sha512-5Rbr2DO8yYsk9OavFjPvsK1JW8HX0arN3CVCYKBMCjQfrIgMmSC/rLEhn6+ZQGiqv/5J00e+/kTtZ9BNQtfEdw==}
     engines: {node: '>= 18.12.0'}
 
   mime-db@1.52.0:
@@ -8596,6 +8611,10 @@ packages:
     resolution: {integrity: sha512-8eMhmG6gt/hRkU1G+8KlGOdQi2w+CgtNoD1ksXZq9gQfkfDsX4LHaBwTe1SY0Imx//t2iZA03DFnyYKPinxSRw==}
     engines: {node: '>= 8.0'}
 
+  mysql2@3.14.1:
+    resolution: {integrity: sha512-7ytuPQJjQB8TNAYX/H2yhL+iQOnIBjAMam361R7UAL0lOVXWjtdrmoL9HYKqKoLp/8UUTRcvo1QPvK9KL7wA8w==}
+    engines: {node: '>= 8.0'}
+
   named-placeholders@1.1.3:
     resolution: {integrity: sha512-eLoBxg6wE/rZkJPhU/xRX1WTpkFEwDJEN96oxFrTsqBdbT5ec295Q+CoHrL9IT0DipqKhmGcaZmwOt8OON5x1w==}
     engines: {node: '>=12.0.0'}
@@ -8637,8 +8656,8 @@ packages:
     resolution: {integrity: sha512-o2zOYiCpzRqSzPj0Zt/dQ/DqZeYoaQ7TUonc/xUPjCGl9WeHpNbxgVvOquXYAaJzI0M9BXV3HTzG0p8IUAbBTQ==}
     engines: {node: '>= 10.13'}
 
-  node-abi@3.74.0:
-    resolution: {integrity: sha512-c5XK0MjkGBrQPGYG24GBADZud0NCbznxNx0ZkS+ebUTrmV1qTDxPxSL8zEAPURXSbLRWVexxmP4986BziahL5w==}
+  node-abi@3.75.0:
+    resolution: {integrity: sha512-OhYaY5sDsIka7H7AtijtI9jwGYLyl29eQn/W623DiN/MIv5sUqc4g7BIDThX+gb7di9f6xK02nkp8sdfFWZLTg==}
     engines: {node: '>=10'}
 
   node-abort-controller@3.1.1:
@@ -8981,11 +9000,17 @@ packages:
   pg-cloudflare@1.1.1:
     resolution: {integrity: sha512-xWPagP/4B6BgFO+EKz3JONXv3YDgvkbVrGw2mTo3D6tVDQRh1e7cqVGvyR3BE+eQgAvx1XhW/iEASj4/jCWl3Q==}
 
+  pg-cloudflare@1.2.5:
+    resolution: {integrity: sha512-OOX22Vt0vOSRrdoUPKJ8Wi2OpE/o/h9T8X1s4qSkCedbNah9ei2W2765be8iMVxQUsvgT7zIAT2eIa9fs5+vtg==}
+
   pg-connection-string@2.6.2:
     resolution: {integrity: sha512-ch6OwaeaPYcova4kKZ15sbJ2hKb/VP48ZD2gE7i1J+L4MspCtBMAx8nMgz7bksc7IojCIIWuEhHibSMFH8m8oA==}
 
   pg-connection-string@2.7.0:
     resolution: {integrity: sha512-PI2W9mv53rXJQEOb8xNR8lH7Hr+EKa6oJa38zsK0S/ky2er16ios1wLKhZyxzD7jUReiWokc9WK5nxSnC7W1TA==}
+
+  pg-connection-string@2.8.5:
+    resolution: {integrity: sha512-Ni8FuZ8yAF+sWZzojvtLE2b03cqjO5jNULcHFfM9ZZ0/JXrgom5pBREbtnAw7oxsxJqHw9Nz/XWORUEL3/IFow==}
 
   pg-int8@1.0.1:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
@@ -8996,16 +9021,16 @@ packages:
     peerDependencies:
       pg: '>=8.0'
 
-  pg-pool@3.8.0:
-    resolution: {integrity: sha512-VBw3jiVm6ZOdLBTIcXLNdSotb6Iy3uOCwDGFAksZCXmi10nyRvnP2v3jl4d+IsLYRyXf6o9hIm/ZtUzlByNUdw==}
+  pg-pool@3.9.6:
+    resolution: {integrity: sha512-rFen0G7adh1YmgvrmE5IPIqbb+IgEzENUm+tzm6MLLDSlPRoZVhzU1WdML9PV2W5GOdRA9qBKURlbt1OsXOsPw==}
     peerDependencies:
       pg: '>=8.0'
 
   pg-protocol@1.7.1:
     resolution: {integrity: sha512-gjTHWGYWsEgy9MsY0Gp6ZJxV24IjDqdpTW7Eh0x+WfJLFsm/TJx1MzL6T0D88mBvkpxotCQ6TwW6N+Kko7lhgQ==}
 
-  pg-protocol@1.8.0:
-    resolution: {integrity: sha512-jvuYlEkL03NRvOoyoRktBK7+qU5kOvlAwvmrH8sr3wbLrOdVWsRxQfz8mMy9sZFsqJ1hEWNfdWKI4SAmoL+j7g==}
+  pg-protocol@1.9.5:
+    resolution: {integrity: sha512-DYTWtWpfd5FOro3UnAfwvhD8jh59r2ig8bPtc9H8Ds7MscE/9NYruUQWFAOuraRl29jwcT2kyMFQ3MxeaVjUhg==}
 
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
@@ -13311,7 +13336,7 @@ snapshots:
   '@grpc/proto-loader@0.7.13':
     dependencies:
       lodash.camelcase: 4.3.0
-      long: 5.3.1
+      long: 5.3.2
       protobufjs: 7.4.0
       yargs: 17.7.2
 
@@ -14032,26 +14057,21 @@ snapshots:
       mikro-orm: 6.4.11
       reflect-metadata: 0.2.2
 
+  '@mikro-orm/core@6.4.14':
+    dependencies:
+      dataloader: 2.2.3
+      dotenv: 16.5.0
+      esprima: 4.0.1
+      fs-extra: 11.3.0
+      globby: 11.1.0
+      mikro-orm: 6.4.14
+      reflect-metadata: 0.2.2
+
   '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.11)':
     dependencies:
       '@mikro-orm/core': 6.4.11
       fs-extra: 11.3.0
       knex: 3.1.0
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.11
-      fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.14.0)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -14082,6 +14102,36 @@ snapshots:
       '@mikro-orm/core': 6.4.11
       fs-extra: 11.3.0
       knex: 3.1.0(mysql2@3.14.0)(pg@8.14.1)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.1)':
+    dependencies:
+      '@mikro-orm/core': 6.4.11
+      fs-extra: 11.3.0
+      knex: 3.1.0(mysql2@3.14.1)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.1)(pg@8.13.3)':
+    dependencies:
+      '@mikro-orm/core': 6.4.11
+      fs-extra: 11.3.0
+      knex: 3.1.0(mysql2@3.14.1)(pg@8.13.3)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -14152,11 +14202,41 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/mysql@6.4.11(@mikro-orm/core@6.4.11)':
+  '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.14)':
+    dependencies:
+      '@mikro-orm/core': 6.4.14
+      fs-extra: 11.3.0
+      knex: 3.1.0
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.14)(sqlite3@5.1.7)':
+    dependencies:
+      '@mikro-orm/core': 6.4.14
+      fs-extra: 11.3.0
+      knex: 3.1.0(sqlite3@5.1.7)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/mysql@6.4.14(@mikro-orm/core@6.4.11)':
     dependencies:
       '@mikro-orm/core': 6.4.11
-      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.0)
-      mysql2: 3.14.0
+      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.1)
+      mysql2: 3.14.1
     transitivePeerDependencies:
       - better-sqlite3
       - libsql
@@ -14168,11 +14248,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/mysql@6.4.11(@mikro-orm/core@6.4.11)(pg@8.13.3)':
+  '@mikro-orm/mysql@6.4.14(@mikro-orm/core@6.4.11)(pg@8.13.3)':
     dependencies:
       '@mikro-orm/core': 6.4.11
-      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.0)(pg@8.13.3)
-      mysql2: 3.14.0
+      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.1)(pg@8.13.3)
+      mysql2: 3.14.1
     transitivePeerDependencies:
       - better-sqlite3
       - libsql
@@ -14245,6 +14325,25 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 6.4.11
       '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(pg@8.13.3)(sqlite3@5.1.7)
+      fs-extra: 11.3.0
+      sqlite3: 5.1.7
+      sqlstring-sqlite: 0.1.1
+    transitivePeerDependencies:
+      - better-sqlite3
+      - bluebird
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - supports-color
+      - tedious
+
+  '@mikro-orm/sqlite@6.4.11(@mikro-orm/core@6.4.14)':
+    dependencies:
+      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.14)(sqlite3@5.1.7)
       fs-extra: 11.3.0
       sqlite3: 5.1.7
       sqlstring-sqlite: 0.1.1
@@ -17418,7 +17517,7 @@ snapshots:
 
   detect-libc@1.0.3: {}
 
-  detect-libc@2.0.3: {}
+  detect-libc@2.0.4: {}
 
   detect-newline@3.1.0: {}
 
@@ -17452,6 +17551,8 @@ snapshots:
   dotenv-expand@10.0.0: {}
 
   dotenv@16.4.7: {}
+
+  dotenv@16.5.0: {}
 
   downshift@9.0.9(react@19.1.0):
     dependencies:
@@ -19456,27 +19557,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(mysql2@3.14.0):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      mysql2: 3.14.0
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(mysql2@3.14.0)(pg@8.13.3):
     dependencies:
       colorette: 2.0.19
@@ -19518,6 +19598,49 @@ snapshots:
     optionalDependencies:
       mysql2: 3.14.0
       pg: 8.14.1
+    transitivePeerDependencies:
+      - supports-color
+
+  knex@3.1.0(mysql2@3.14.1):
+    dependencies:
+      colorette: 2.0.19
+      commander: 10.0.1
+      debug: 4.3.4
+      escalade: 3.2.0
+      esm: 3.2.25
+      get-package-type: 0.1.0
+      getopts: 2.3.0
+      interpret: 2.2.0
+      lodash: 4.17.21
+      pg-connection-string: 2.6.2
+      rechoir: 0.8.0
+      resolve-from: 5.0.0
+      tarn: 3.0.2
+      tildify: 2.0.0
+    optionalDependencies:
+      mysql2: 3.14.1
+    transitivePeerDependencies:
+      - supports-color
+
+  knex@3.1.0(mysql2@3.14.1)(pg@8.13.3):
+    dependencies:
+      colorette: 2.0.19
+      commander: 10.0.1
+      debug: 4.3.4
+      escalade: 3.2.0
+      esm: 3.2.25
+      get-package-type: 0.1.0
+      getopts: 2.3.0
+      interpret: 2.2.0
+      lodash: 4.17.21
+      pg-connection-string: 2.6.2
+      rechoir: 0.8.0
+      resolve-from: 5.0.0
+      tarn: 3.0.2
+      tildify: 2.0.0
+    optionalDependencies:
+      mysql2: 3.14.1
+      pg: 8.13.3
     transitivePeerDependencies:
       - supports-color
 
@@ -19791,6 +19914,8 @@ snapshots:
 
   long@5.3.1: {}
 
+  long@5.3.2: {}
+
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
@@ -19935,6 +20060,8 @@ snapshots:
 
   mikro-orm@6.4.11: {}
 
+  mikro-orm@6.4.14: {}
+
   mime-db@1.52.0: {}
 
   mime-db@1.53.0: {}
@@ -20070,6 +20197,18 @@ snapshots:
       seq-queue: 0.0.5
       sqlstring: 2.3.3
 
+  mysql2@3.14.1:
+    dependencies:
+      aws-ssl-profiles: 1.1.2
+      denque: 2.1.0
+      generate-function: 2.3.1
+      iconv-lite: 0.6.3
+      long: 5.3.2
+      lru.min: 1.1.2
+      named-placeholders: 1.1.3
+      seq-queue: 0.0.5
+      sqlstring: 2.3.3
+
   named-placeholders@1.1.3:
     dependencies:
       lru-cache: 7.18.3
@@ -20112,7 +20251,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  node-abi@3.74.0:
+  node-abi@3.75.0:
     dependencies:
       semver: 7.7.1
 
@@ -20458,9 +20597,14 @@ snapshots:
   pg-cloudflare@1.1.1:
     optional: true
 
+  pg-cloudflare@1.2.5:
+    optional: true
+
   pg-connection-string@2.6.2: {}
 
   pg-connection-string@2.7.0: {}
+
+  pg-connection-string@2.8.5: {}
 
   pg-int8@1.0.1: {}
 
@@ -20468,13 +20612,13 @@ snapshots:
     dependencies:
       pg: 8.13.3
 
-  pg-pool@3.8.0(pg@8.14.1):
+  pg-pool@3.9.6(pg@8.14.1):
     dependencies:
       pg: 8.14.1
 
   pg-protocol@1.7.1: {}
 
-  pg-protocol@1.8.0: {}
+  pg-protocol@1.9.5: {}
 
   pg-types@2.2.0:
     dependencies:
@@ -20496,13 +20640,13 @@ snapshots:
 
   pg@8.14.1:
     dependencies:
-      pg-connection-string: 2.7.0
-      pg-pool: 3.8.0(pg@8.14.1)
-      pg-protocol: 1.8.0
+      pg-connection-string: 2.8.5
+      pg-pool: 3.9.6(pg@8.14.1)
+      pg-protocol: 1.9.5
       pg-types: 2.2.0
       pgpass: 1.0.5
     optionalDependencies:
-      pg-cloudflare: 1.1.1
+      pg-cloudflare: 1.2.5
 
   pgpass@1.0.5:
     dependencies:
@@ -20609,13 +20753,13 @@ snapshots:
 
   prebuild-install@7.1.3:
     dependencies:
-      detect-libc: 2.0.3
+      detect-libc: 2.0.4
       expand-template: 2.0.3
       github-from-package: 0.0.0
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
       napi-build-utils: 2.0.0
-      node-abi: 3.74.0
+      node-abi: 3.75.0
       pump: 3.0.2
       rc: 1.2.8
       simple-get: 4.0.1
