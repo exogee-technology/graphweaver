@@ -538,7 +538,7 @@ describe('EXOGW-384 Nested - Create operations', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Field \"ChildWithClientIdCreateOrUpdateInput.id\" of required type \"ID!\" was not provided.'
+			'Field "ChildWithClientIdCreateOrUpdateInput.id" of required type "ID!" was not provided.'
 		);
 	});
 
@@ -556,7 +556,7 @@ describe('EXOGW-384 Nested - Create operations', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Field \"id\" is not defined by type \"RootWithBackendIdInsertInput\".'
+			'Field "id" is not defined by type "RootWithBackendIdInsertInput".'
 		);
 	});
 
@@ -574,7 +574,7 @@ describe('EXOGW-384 Nested - Create operations', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Field \"RootWithClientIdInsertInput.id\" of required type \"ID!\" was not provided.'
+			'Field "RootWithClientIdInsertInput.id" of required type "ID!" was not provided.'
 		);
 	});
 });
@@ -582,10 +582,10 @@ describe('EXOGW-384 Nested - Create operations', () => {
 describe('EXOGW-384 Nested - Update operations', () => {
 	it('Should succeed - update rootClientId only', async () => {
 		assert(em !== undefined);
-		const rootWithClientId = wrap(new OrmRootWithClientId()).assign({
-			id: '1',
-			description: 'Root 1',
-		});
+		// const rootWithClientId = wrap(new OrmRootWithClientId()).assign({
+		// 	id: '1',
+		// 	description: 'Root 1',
+		// });
 
 		const response = await graphweaver.executeOperation({
 			query: gql`
