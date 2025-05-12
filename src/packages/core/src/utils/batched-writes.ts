@@ -22,15 +22,16 @@ const isLinking = <G = unknown, D = unknown>(
 		: isPrimaryKeyOnly(entity, node);
 };
 
-type OperationProcess = {
-	type: 'pre' | 'post';
-	action: 'get' | 'patch';
-	nodeId: string;
-	keys: Array<{
-		sourceKey: string | number | symbol;
-		value: string;
-	}>;
-};
+type OperationProcess<G> =
+	| {
+			type: 'post';
+			inject: (value: (G & ({} | undefined)) | null) => void;
+	  }
+	| {
+			type: 'pre';
+			//fetch: () => G[keyof G] | undefined;
+			fetch: any;
+	  };
 
 export const generateOperationBatches = async <G = unknown, D = unknown>(
 	rootInput: Partial<G> | Partial<G>[],
@@ -46,11 +47,41 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			operations: Array<{
 				nodeId: string;
 				type: 'create' | 'update';
-				processing: OperationProcess[];
+				processing: OperationProcess<G>[];
 			}>;
 		}
 	>();
 	const nodes = new Map<string, Partial<G>>();
+
+	const dependencyInjector =
+		(primaryKey: string) =>
+		(targetNodeId: string, foreignKey: string) =>
+		(value: (G & ({} | undefined)) | null) => {
+			const targetNode = nodes.get(targetNodeId);
+			if (!targetNode || !value || !value.hasOwnProperty(primaryKey)) {
+				throw new Error(`Source node ${targetNodeId} not found`);
+			}
+
+			targetNode[foreignKey as keyof typeof targetNode] = {
+				[primaryKey as keyof typeof value]: value[primaryKey as keyof typeof value] as G[keyof G],
+			} as G[keyof G];
+			return;
+		};
+
+	const fetchDependency =
+		(sourceNodeId: string, targetNodeId: string, sourceKey: string, targetKey: string) => () => {
+			const sourceNode = nodes.get(sourceNodeId);
+			const targetNode = nodes.get(targetNodeId);
+			if (!sourceNode || !targetNode) {
+				throw new Error(`Source node ${sourceNodeId} not found`);
+			}
+
+			targetNode[targetKey as keyof typeof targetNode] = {
+				[sourceKey as keyof typeof sourceNode]: sourceNode[
+					sourceKey as keyof typeof sourceNode
+				] as G[keyof G],
+			} as G[keyof G];
+		};
 
 	async function traverse(
 		input: Partial<G> | Partial<G>[],
@@ -62,7 +93,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 	): Promise<{
 		nodeId: string;
 		type: 'create' | 'update';
-		processing: OperationProcess[];
+		processing: OperationProcess<G>[];
 	} | null> {
 		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
 		if (Array.isArray(input)) {
@@ -91,7 +122,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 					): result is PromiseFulfilledResult<{
 						nodeId: string;
 						type: 'create' | 'update';
-						processing: OperationProcess[];
+						processing: OperationProcess<G>[];
 					} | null> => result.status === 'fulfilled'
 				)
 				.map((result) => result.value)
@@ -101,7 +132,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 					): result is {
 						nodeId: string;
 						type: 'create' | 'update';
-						processing: OperationProcess[];
+						processing: OperationProcess<G>[];
 					} => result !== null
 				);
 
@@ -114,7 +145,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			let node = { ...input };
 			const nodeId = `${operationId}:${index}`;
 			// Object containing instructions on what this operation should do once it has finished
-			const operationProcesses: Array<OperationProcess> = [];
+			const operationProcesses: Array<OperationProcess<G>> = [];
 			for (const entry of Object.entries(input)) {
 				const [key, childNode]: [string, Partial<G> | Partial<G>[]] = entry as any;
 				const relationship = meta.fields[key];
@@ -136,21 +167,11 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 						if (relationship.relationshipInfo?.relatedField) {
 							const relatedField = relationship.relationshipInfo?.relatedField;
 							deps.push([newOperationId, operationId]);
+							const injector = dependencyInjector(String(primaryKeyField));
 							childNode.forEach((_, i) => {
 								operationProcesses.push({
-									nodeId: `${newOperationId}:${i}`,
-									type: 'post',
-									action: 'patch',
-									keys: [
-										{
-											sourceKey: primaryKeyField,
-											value: JSON.stringify({
-												[relatedField]: {
-													[primaryKeyField]: '{{VALUE}}',
-												},
-											}),
-										},
-									],
+									inject: injector(`${newOperationId}:${i}`, relatedField),
+									type: 'post' as const,
 								});
 							});
 						}
@@ -161,19 +182,13 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 						if (relationship.relationshipInfo?.id) {
 							deps.push([operationId, newOperationId]);
 							operationProcesses.push({
-								nodeId: `${operationId}:${index}`,
-								type: 'pre',
-								action: 'get',
-								keys: [
-									{
-										sourceKey: key,
-										value: JSON.stringify({
-											[key]: {
-												[primaryKeyField]: '{{VALUE}}',
-											},
-										}),
-									},
-								],
+								fetch: fetchDependency(
+									`${newOperationId}:${index}`,
+									`${operationId}:${index}`,
+									key,
+									String(relationship.relationshipInfo?.id)
+								),
+								type: 'pre' as const,
 							});
 							await traverse(
 								childNode,
@@ -186,20 +201,10 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 						} else if (relationship.relationshipInfo?.relatedField) {
 							const relatedField = relationship.relationshipInfo?.relatedField;
 							deps.push([newOperationId, operationId]);
+							const injector = dependencyInjector(String(primaryKeyField));
 							operationProcesses.push({
-								nodeId: `${operationId}:${index}`,
+								inject: injector(`${newOperationId}:${index}`, relatedField),
 								type: 'post',
-								action: 'patch',
-								keys: [
-									{
-										sourceKey: primaryKeyField,
-										value: JSON.stringify({
-											[relatedField]: {
-												[primaryKeyField]: '{{VALUE}}',
-											},
-										}),
-									},
-								],
 							});
 							await traverse(
 								childNode,
@@ -262,7 +267,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 			operations: Array<{
 				nodeId: string;
 				type: 'create' | 'update';
-				processing: OperationProcess[];
+				processing: OperationProcess<G>[];
 			}>;
 		}
 	>,
@@ -278,26 +283,10 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 				const updates = operations.filter((operation) => operation.type === 'update');
 
 				// Handle any pre-processing steps
-				for (const { processing, nodeId: targetNodeId } of operations) {
+				for (const { processing } of operations) {
 					for (const process of processing.filter((process) => process.type === 'pre')) {
-						const { action, keys, nodeId: sourceNodeId } = process;
-						if (action === 'get') {
-							const sourceNode = nodes.get(sourceNodeId);
-							if (!sourceNode) {
-								throw new Error(`Target node ${nodeId} not found`);
-							}
-
-							// THIS SECTION NEEDS CLARIFICATION!!!
-
-							for (const key of keys) {
-								const { sourceKey, value } = key;
-								const targetNode = nodes.get(targetNodeId);
-								if (!targetNode) {
-									throw new Error(`Node to update ${targetNodeId} not found`);
-								}
-								nodes.set(targetNodeId, { ...targetNode, [sourceKey]: null });
-							}
-						}
+						const { fetch } = process;
+						fetch();
 					}
 				}
 
@@ -308,17 +297,8 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 							for (const process of creates[0].processing.filter(
 								(process) => process.type === 'post'
 							)) {
-								const { action, keys, nodeId: targetNodeId } = process;
-								for (const { sourceKey, value } of keys) {
-									if (action === 'patch' && result && result.hasOwnProperty(sourceKey)) {
-										nodes.set(targetNodeId, {
-											...nodes.get(targetNodeId)!,
-											...JSON.parse(
-												value.replace('{{VALUE}}', String(result[sourceKey as keyof typeof result]))
-											),
-										});
-									}
-								}
+								const { inject } = process;
+								inject(result);
 							}
 							return result;
 						})
@@ -334,21 +314,8 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 								for (const process of creates[i].processing.filter(
 									(process) => process.type === 'post'
 								)) {
-									const { action, keys, nodeId: targetNodeId } = process;
-
-									for (const { sourceKey, value } of keys) {
-										if (action === 'patch' && result && result.hasOwnProperty(sourceKey)) {
-											nodes.set(targetNodeId, {
-												...nodes.get(targetNodeId)!,
-												...JSON.parse(
-													value.replace(
-														'{{VALUE}}',
-														String(result[sourceKey as keyof typeof result])
-													)
-												),
-											});
-										}
-									}
+									const { inject } = process;
+									inject(result);
 								}
 							}
 							return results;
@@ -363,17 +330,8 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 							for (const process of updates[0].processing.filter(
 								(process) => process.type === 'post'
 							)) {
-								const { action, keys, nodeId: targetNodeId } = process;
-								for (const { sourceKey, value } of keys) {
-									if (action === 'patch' && result && result.hasOwnProperty(sourceKey)) {
-										nodes.set(targetNodeId, {
-											...nodes.get(targetNodeId)!,
-											...JSON.parse(
-												value.replace('{{VALUE}}', String(result[sourceKey as keyof typeof result]))
-											),
-										});
-									}
-								}
+								const { inject } = process;
+								inject(result);
 							}
 							return result;
 						})
@@ -389,21 +347,8 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 								for (const process of updates[i].processing.filter(
 									(process) => process.type === 'post'
 								)) {
-									const { action, keys, nodeId: targetNodeId } = process;
-
-									for (const { sourceKey, value } of keys) {
-										if (action === 'patch' && result && result.hasOwnProperty(sourceKey)) {
-											nodes.set(targetNodeId, {
-												...nodes.get(targetNodeId)!,
-												...JSON.parse(
-													value.replace(
-														'{{VALUE}}',
-														String(result[sourceKey as keyof typeof result])
-													)
-												),
-											});
-										}
-									}
+									const { inject } = process;
+									inject(result);
 								}
 							}
 							return results;
