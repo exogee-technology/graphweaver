@@ -42,9 +42,9 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
-		"@mikro-orm/core": "6.4.11",
-		"@mikro-orm/postgresql": "6.4.11",
-		"@mikro-orm/sqlite": "6.4.11",
+		"@mikro-orm/core": "6.4.14",
+		"@mikro-orm/postgresql": "6.4.14",
+		"@mikro-orm/sqlite": "6.4.14",
 		"class-validator": "0.14.1",
 		"dotenv-cli": "8.0.0",
 		"ethers": "5.8.0",
@@ -68,7 +68,7 @@
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.2.6",
 		"tsx": "4.19.3",
-		"typescript": "5.8.2"
+		"typescript": "5.8.3"
 	},
 	"keywords": [
 		"graphql",

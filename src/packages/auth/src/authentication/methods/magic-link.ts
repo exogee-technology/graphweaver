@@ -1,4 +1,4 @@
-import ms from 'ms';
+import ms, { StringValue } from 'ms';
 import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import { randomUUID } from 'node:crypto';
@@ -113,7 +113,7 @@ export class MagicLink extends BaseAuthMethod {
 		// Check if the user created X links in the last X period
 		const { rate } = config;
 		// Current date minus the rate limit period
-		const period = new Date(new Date().getTime() - ms(rate.period));
+		const period = new Date(new Date().getTime() - ms(rate.period as StringValue));
 		const links = await this.provider.find({
 			type: AuthenticationType.MagicLinkChallenge,
 			userId: user.id,
@@ -175,7 +175,7 @@ export class MagicLink extends BaseAuthMethod {
 			if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
 
 			// Check that the magic link is still valid
-			const ttl = new Date(new Date().getTime() - ms(config.ttl));
+			const ttl = new Date(new Date().getTime() - ms(config.ttl as StringValue));
 			if (link.createdAt < ttl)
 				throw new AuthenticationError('Auth unsuccessful: Authentication Magic Link expired.');
 

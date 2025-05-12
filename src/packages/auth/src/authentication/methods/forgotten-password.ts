@@ -1,4 +1,4 @@
-import ms from 'ms';
+import ms, { StringValue } from 'ms';
 import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import { randomUUID } from 'node:crypto';
@@ -174,7 +174,7 @@ export class ForgottenPassword extends BaseAuthMethod {
 		const { rate } = config;
 
 		// which is greater than 24hrs from now
-		const period = new Date(new Date().getTime() - ms(rate.period));
+		const period = new Date(new Date().getTime() - ms(rate.period as StringValue));
 		const links = await this.getForgottenPasswordLinks(user.id, period);
 
 		// Check rate limiting conditions for forgotten password link creation
@@ -234,7 +234,7 @@ export class ForgottenPassword extends BaseAuthMethod {
 			throw new AuthenticationError('Reset Password Failed');
 		}
 
-		if (link.createdAt < new Date(new Date().getTime() - ms(config.ttl))) {
+		if (link.createdAt < new Date(new Date().getTime() - ms(config.ttl as StringValue))) {
 			logger.warn(`Failed to reset password: E0003: Link expired`);
 			throw new AuthenticationError('Reset Password Failed');
 		}

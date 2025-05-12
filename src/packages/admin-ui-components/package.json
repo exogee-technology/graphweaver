@@ -36,7 +36,7 @@
 		"downshift": "9.0.9",
 		"graphiql": "3.8.3",
 		"graphql-deduplicator": "2.0.6",
-		"luxon": "3.5.0",
+		"luxon": "3.6.1",
 		"papaparse": "5.5.2",
 		"react-day-picker": "9.6.4",
 		"react-error-boundary": "5.0.0",
@@ -54,7 +54,7 @@
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
-		"@types/luxon": "3.4.2",
+		"@types/luxon": "3.6.2",
 		"@types/papaparse": "5.3.15",
 		"@types/react": "19.0.12",
 		"@types/react-syntax-highlighter": "15.5.13",
@@ -65,8 +65,8 @@
 		"graphql": "16.10.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"typescript": "5.8.2",
-		"vite": "6.2.5"
+		"typescript": "5.8.3",
+		"vite": "6.3.5"
 	},
 	"keywords": [
 		"graphql",
