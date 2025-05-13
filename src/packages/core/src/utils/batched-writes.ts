@@ -166,7 +166,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 						if (relationship.relationshipInfo?.relatedField) {
 							const relatedField = relationship.relationshipInfo?.relatedField;
 							deps.push([newOperationId, operationId]);
-							const injector = dependencyInjector(String(primaryKeyField));
+							const injector = dependencyInjector(String(primaryKeyField).toString());
 							childNode.forEach((_, i) => {
 								operationProcesses.push({
 									inject: injector(`${newOperationId}:${i}`, relatedField),
@@ -185,7 +185,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 									`${newOperationId}:${index}`,
 									`${operationId}:${index}`,
 									key,
-									String(relationship.relationshipInfo?.id)
+									String(relationship.relationshipInfo?.id).toString()
 								),
 								type: 'pre' as const,
 							});
@@ -196,11 +196,18 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 								context,
 								newOperationId,
 								index
-							);
+							).then((res) => {
+								if (res) {
+									tasks.set(newOperationId, {
+										meta,
+										operations: [res],
+									});
+								}
+							});
 						} else if (relationship.relationshipInfo?.relatedField) {
 							const relatedField = relationship.relationshipInfo?.relatedField;
 							deps.push([newOperationId, operationId]);
-							const injector = dependencyInjector(String(primaryKeyField));
+							const injector = dependencyInjector(String(primaryKeyField).toString());
 							operationProcesses.push({
 								inject: injector(`${newOperationId}:${index}`, relatedField),
 								type: 'post',
@@ -212,7 +219,14 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 								context,
 								newOperationId,
 								index
-							);
+							).then((res) => {
+								if (res) {
+									tasks.set(newOperationId, {
+										meta,
+										operations: [res],
+									});
+								}
+							});
 						}
 					}
 				}
@@ -244,7 +258,8 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 		throw new Error(`Unexpected Error: trying to create entity ${rootMeta.name}`);
 	}
 
-	const batches = layeredToposort(Array.from(tasks.keys()), deps);
+	const batches =
+		deps.length > 0 ? layeredToposort(Array.from(tasks.keys()), deps) : [Array.from(tasks.keys())];
 
 	return {
 		tasks,
