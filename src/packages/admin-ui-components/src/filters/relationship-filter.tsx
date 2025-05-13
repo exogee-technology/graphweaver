@@ -21,6 +21,11 @@ export interface RelationshipFilterProps {
 	// fields you specify, so a match in any of them will be found. This is slow
 	// and you should be very selective about which fields you enable this for.
 	searchableFields?: string[];
+
+	// Additional filter for items returned in the dropdown. You can use this to
+	// constrain the list of items displayed to the user to choose from. It is
+	// expressed relative to the entity displayed as rows in the dropdown.
+	dropdownItemsFilter?: Filter;
 }
 
 export const RelationshipFilter = ({
@@ -30,6 +35,7 @@ export const RelationshipFilter = ({
 	orderBy,
 	filter,
 	searchableFields,
+	dropdownItemsFilter,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
 	const entityType = entityByName(entity);
@@ -75,23 +81,33 @@ export const RelationshipFilter = ({
 		);
 	};
 
+	let dropdownFilter: Filter = {};
+
+	if (searchableFields?.length && inputValue) {
+		if (searchableFields.length === 1) {
+			dropdownFilter = {
+				[`${searchableFields[0]}_ilike`]: `%${inputValue}%`,
+			};
+		} else {
+			dropdownFilter = {
+				_or: searchableFields?.map((field) => ({
+					[`${field}_ilike`]: `%${inputValue}%`,
+				})),
+			};
+		}
+	}
+
+	if (Object.keys(dropdownFilter).length > 0 && dropdownItemsFilter) {
+		dropdownFilter = { _and: [dropdownFilter, dropdownItemsFilter] };
+	} else if (dropdownItemsFilter) {
+		dropdownFilter = dropdownItemsFilter;
+	}
+
 	const [fetchRelationshipOptionsList, { data, loading, error }] = useLazyQuery<{
 		result: any[];
 	}>(getRelationshipQuery(relatedEntity), {
 		variables: {
-			filter:
-				searchableFields?.length && inputValue
-					? searchableFields?.length === 1
-						? {
-								[`${searchableFields[0]}_ilike`]: `%${inputValue}%`,
-							}
-						: {
-								// add an _or with ilike for each searchable field from props
-								_or: searchableFields?.map((field) => ({
-									[`${field}_ilike`]: `%${inputValue}%`,
-								})),
-							}
-					: undefined,
+			filter: Object.keys(dropdownFilter).length > 0 ? dropdownFilter : undefined,
 
 			...(relatedEntity.summaryField
 				? {
