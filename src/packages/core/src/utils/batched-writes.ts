@@ -53,21 +53,6 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 	>();
 	const nodes = new Map<string, Partial<G>>();
 
-	const preReturnSteps: {
-		handler: () => void;
-	}[] = [];
-	const preReturnHandler =
-		(targetNodeId: string, value: Record<string, object | string | number | boolean | symbol>) =>
-		() => {
-			const targetNode = nodes.get(targetNodeId);
-			if (!targetNode || !value) {
-				throw new Error(`Source node ${targetNodeId} not found`);
-			}
-
-			const newValues = { ...targetNode, ...value };
-			nodes.set(targetNodeId, newValues);
-		};
-
 	const dependencyInjector =
 		(primaryKey: string) =>
 		(targetNodeId: string, foreignKey: string) =>
@@ -278,8 +263,6 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 
 	const batches =
 		deps.length > 0 ? layeredToposort(Array.from(tasks.keys()), deps) : [Array.from(tasks.keys())];
-
-	await Promise.all(preReturnSteps.map((step) => step.handler()));
 
 	return {
 		tasks,
@@ -514,41 +497,6 @@ const updateMany = async <G = unknown, D = unknown>(
 	);
 
 	return createdEntities.map((entity) => fromBackendEntity(meta, entity));
-};
-
-const findOne = async <G = unknown, D = unknown>(meta: EntityMetadata<G, D>, node: Partial<G>) => {
-	if (!meta || !meta.provider) {
-		throw new Error('Missing metadata or provider');
-	}
-	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
-
-	if (!isDefined(node[primaryKeyField])) {
-		throw new Error(
-			`Cannot create entity with ID because clientGeneratedPrimaryKeys is not enabled.`
-		);
-	}
-
-	return meta.provider.findOne({ [primaryKeyField]: node[primaryKeyField] } as Filter<D>);
-};
-
-const findMany = async <G = unknown, D = unknown>(
-	meta: EntityMetadata<G, D>,
-	nodes: Partial<G>[]
-) => {
-	if (!meta || !meta.provider) {
-		throw new Error('Missing metadata or provider');
-	}
-	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
-
-	if (nodes.some((n) => !isDefined(n[primaryKeyField]))) {
-		throw new Error(
-			`Cannot create entity with ID because clientGeneratedPrimaryKeys is not enabled.`
-		);
-	}
-
-	return meta.provider.find({
-		[primaryKeyField]: { $in: nodes.map((n) => n[primaryKeyField]) },
-	} as Filter<D>);
 };
 
 const operationType = async <G = unknown, D = unknown>(

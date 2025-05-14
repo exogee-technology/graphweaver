@@ -62,14 +62,14 @@ describe('nested create', () => {
 						}
 					}
 				`)
-				.variables({ input: { albums: [{ title: 'string' }], artistId: '276' } });
-			console.log('DATA', data);
+				.variables({ input: { albums: [{ title: 'string' }], artistId: '276' } })
+				.expectNoErrors();
 
 			expect(data?.updateArtist?.artistId).toBe('276');
 			expect(data?.updateArtist?.albums?.map((album) => album.albumId)).toContain('348');
 			expect(data?.updateArtist?.albums?.map((album) => album.title)).toContain('string');
 		} catch (error) {
-			//console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
+			console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
 			expect(error).toBeUndefined(); // fail the test;
 		}
 	});
@@ -95,7 +95,7 @@ describe('nested create', () => {
 			expect(data?.createArtist?.albums?.[0]?.albumId).toBe('348');
 			expect(data?.createArtist?.albums?.[0]?.title).toBe('string');
 		} catch (error) {
-			//console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
+			console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
 			expect(error).toBeUndefined(); // fail the test;
 		}
 	});
