@@ -46,7 +46,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			meta: EntityMetadata<G, D>;
 			operations: Array<{
 				nodeId: string;
-				type: 'create' | 'update' | 'skip';
+				type: 'create' | 'update';
 				processing: OperationProcess<G>[];
 			}>;
 		}
@@ -106,11 +106,11 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 		index: number
 	): Promise<{
 		nodeId: string;
-		type: 'create' | 'update' | 'skip';
+		type: 'create' | 'update';
 		processing: OperationProcess<G>[];
 	} | null> {
 		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
-		let type: 'create' | 'update' | 'skip' = 'create';
+		let type: 'create' | 'update' = 'create';
 		if (Array.isArray(input)) {
 			const results = await Promise.allSettled(
 				input.map((node, i) => traverse(node, meta, info, context, operationId, i))
@@ -192,21 +192,6 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 									type: 'post' as const,
 								});
 							});
-
-							if (['skip', 'update'].includes(type)) {
-								childNode.forEach((child, i) => {
-									if (!Object.keys(child).includes(relatedField)) {
-										const preReturnStep = preReturnHandler(`${newOperationId}:${i}`, {
-											[relatedField]: {
-												[primaryKeyField]: node[primaryKeyField],
-											},
-										});
-										preReturnSteps.push({
-											handler: preReturnStep,
-										});
-									}
-								});
-							}
 						}
 
 						await traverse(childNode, relatedEntityMetadata, info, context, newOperationId, index);
@@ -242,24 +227,13 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 						} else if (relationship.relationshipInfo?.relatedField) {
 							const relatedField = relationship.relationshipInfo?.relatedField;
 							deps.push([newOperationId, operationId]);
-							if (['skip', 'update'].includes(type)) {
-								if (!Object.keys(childNode).includes(relatedField)) {
-									const preReturnStep = preReturnHandler(`${newOperationId}:${index}`, {
-										[relatedField]: {
-											[primaryKeyField]: node[primaryKeyField],
-										},
-									});
-									preReturnSteps.push({
-										handler: preReturnStep,
-									});
-								}
-							} else {
-								const injector = dependencyInjector(String(primaryKeyField).toString());
-								operationProcesses.push({
-									inject: injector(`${newOperationId}:${index}`, relatedField),
-									type: 'post',
-								});
-							}
+
+							const injector = dependencyInjector(String(primaryKeyField).toString());
+							operationProcesses.push({
+								inject: injector(`${newOperationId}:${index}`, relatedField),
+								type: 'post',
+							});
+
 							await traverse(
 								childNode,
 								relatedEntityMetadata,
@@ -284,7 +258,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			returnOrder.push(nodeId);
 			return {
 				nodeId,
-				type: type as 'create' | 'update' | 'skip',
+				type: type as 'create' | 'update',
 				processing: operationProcesses,
 			};
 		} else {
@@ -323,7 +297,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 			meta: EntityMetadata<G, D>;
 			operations: Array<{
 				nodeId: string;
-				type: 'create' | 'update' | 'skip';
+				type: 'create' | 'update';
 				processing: OperationProcess<G>[];
 			}>;
 		}
@@ -375,7 +349,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 						meta,
 						creates.map((create) => nodes.get(create.nodeId)!)
 					).then((res) => {
-						for (let i = 0; i < creates.length; i++) {
+						for (let i = 0; i < res.length; i++) {
 							const result = res[i];
 							for (const process of creates[i].processing.filter(
 								(process) => process.type === 'post'
@@ -409,14 +383,9 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 							const { inject } = process;
 							inject(result);
 						}
-						const toUpdate = nodes.get(creates[0].nodeId)!;
-						if (result) {
-							Object.keys(result).forEach((key) => {
-								if (typeof key === 'string') {
-									toUpdate[key as keyof G] = result[key as keyof G];
-								}
-							});
-						}
+						console.log('UPDATE', result);
+						const toUpdate = nodes.get(updates[0].nodeId)!;
+
 						nodes.set(updates[0].nodeId, toUpdate);
 						results.set(updates[0].nodeId, result);
 						return;
@@ -426,10 +395,10 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 				promises.push(
 					updateMany(
 						meta,
-						updates.map((update) => nodes.get(update.nodeId)!)
+						updates.map((node) => nodes.get(node.nodeId)!)
 					).then((res) => {
-						for (let i = 0; i < updates.length; i++) {
-							const result = res[i];
+						for (let i = 0; i < res.length; i++) {
+							const result = res[i] as (G & ({} | undefined)) | null;
 							for (const process of updates[i].processing.filter(
 								(process) => process.type === 'post'
 							)) {
@@ -437,13 +406,6 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 								inject(result);
 							}
 							const toUpdate = nodes.get(updates[i].nodeId)!;
-							if (result) {
-								Object.keys(result).forEach((key) => {
-									if (typeof key === 'string') {
-										toUpdate[key as keyof G] = result[key as keyof G];
-									}
-								});
-							}
 							nodes.set(updates[i].nodeId, toUpdate);
 							results.set(updates[i].nodeId, result);
 						}
@@ -555,13 +517,48 @@ const updateMany = async <G = unknown, D = unknown>(
 	return createdEntities.map((entity) => fromBackendEntity(meta, entity));
 };
 
+const findOne = async <G = unknown, D = unknown>(meta: EntityMetadata<G, D>, node: Partial<G>) => {
+	if (!meta || !meta.provider) {
+		throw new Error('Missing metadata or provider');
+	}
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
+
+	if (!isDefined(node[primaryKeyField])) {
+		throw new Error(
+			`Cannot create entity with ID because clientGeneratedPrimaryKeys is not enabled.`
+		);
+	}
+
+	return meta.provider.findOne({ [primaryKeyField]: node[primaryKeyField] } as Filter<D>);
+};
+
+const findMany = async <G = unknown, D = unknown>(
+	meta: EntityMetadata<G, D>,
+	nodes: Partial<G>[]
+) => {
+	if (!meta || !meta.provider) {
+		throw new Error('Missing metadata or provider');
+	}
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
+
+	if (nodes.some((n) => !isDefined(n[primaryKeyField]))) {
+		throw new Error(
+			`Cannot create entity with ID because clientGeneratedPrimaryKeys is not enabled.`
+		);
+	}
+
+	return meta.provider.find({
+		[primaryKeyField]: { $in: nodes.map((n) => n[primaryKeyField]) },
+	} as Filter<D>);
+};
+
 const operationType = async <G = unknown, D = unknown>(
 	node: Partial<G>,
 	primaryKeyField: keyof G,
 	meta: EntityMetadata<G, D>,
 	info: GraphQLResolveInfo
 ) => {
-	let operation: 'create' | 'update' | 'skip' = 'create';
+	let operation: 'create' | 'update' = 'create';
 
 	/**
 	 * If there's an ID, we can't be certain whether it's an update, or a create with a client-side key.
@@ -569,7 +566,6 @@ const operationType = async <G = unknown, D = unknown>(
 	 */
 
 	const isConfiguredForClientSideKeys = !!meta.apiOptions?.clientGeneratedPrimaryKeys;
-	const hasOtherKeys = Object.keys(node).length > 1;
 
 	if (primaryKeyField in node && node[primaryKeyField] && meta.provider) {
 		const primaryKey = node[primaryKeyField];
@@ -589,10 +585,8 @@ const operationType = async <G = unknown, D = unknown>(
 			throw new Error(`Entity with ID ${primaryKey} already exists`);
 		}
 
-		if (existing && hasOtherKeys) {
+		if (existing) {
 			operation = 'update';
-		} else if (existing && !hasOtherKeys) {
-			operation = 'skip';
 		} else if (!existing && isConfiguredForClientSideKeys) {
 			operation = 'create';
 		} else {

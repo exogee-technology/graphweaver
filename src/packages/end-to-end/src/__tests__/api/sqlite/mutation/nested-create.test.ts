@@ -22,48 +22,34 @@ type Artist = {
 describe('nested create', () => {
 	beforeEach(resetDatabase);
 
-	// test('should create an album and an artist', async () => {
-	// 	try {
-	// 		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
-	// 			.mutate(gql`
-	// 				mutation CreateAlbum($input: AlbumInsertInput!) {
-	// 					createAlbum(input: $input) {
-	// 						albumId
-	// 						artist {
-	// 							artistId
-	// 							name
-	// 						}
-	// 					}
-	// 				}
-	// 			`)
-	// 			.variables({ input: { artist: { name: 'string' }, title: 'string' } })
-	// 			.expectNoErrors();
-
-	// 		expect(data?.createAlbum?.albumId).toBe('348');
-	// 		expect(data?.createAlbum?.artist?.artistId).toBe('276');
-	// 		expect(data?.createAlbum?.artist?.name).toBe('string');
-	// 	} catch (error) {
-	// 		console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
-	// 		expect(error).toBeUndefined(); // fail the test;
-	// 	}
-	// });
-
-	test('should update an artist and create an album', async () => {
+	test('should create an album and an artist', async () => {
 		try {
-			// We need to create an artist before we can update it.
-			const { data: createArtist } = await request<{ createArtist: Artist }>(config.baseUrl)
+			const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
 				.mutate(gql`
-					mutation CreateArtist($input: ArtistInsertInput!) {
-						createArtist(input: $input) {
-							artistId
+					mutation CreateAlbum($input: AlbumInsertInput!) {
+						createAlbum(input: $input) {
+							albumId
+							artist {
+								artistId
+								name
+							}
 						}
 					}
 				`)
-				.variables({ input: { name: 'string' } });
-			console.log(createArtist);
-			const artistId = createArtist?.createArtist.artistId;
-			expect(artistId).toBeDefined();
-			await new Promise((resolve) => setTimeout(resolve, 5000));
+				.variables({ input: { artist: { name: 'string' }, title: 'string' } })
+				.expectNoErrors();
+
+			expect(data?.createAlbum?.albumId).toBe('348');
+			expect(data?.createAlbum?.artist?.artistId).toBe('276');
+			expect(data?.createAlbum?.artist?.name).toBe('string');
+		} catch (error) {
+			console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
+			expect(error).toBeUndefined(); // fail the test;
+		}
+	});
+
+	test('should update an artist and create an album', async () => {
+		try {
 			const { data } = await request<{ updateArtist: Artist }>(config.baseUrl)
 				.mutate(gql`
 					mutation UpdateArtist($input: ArtistUpdateInput!) {
@@ -76,10 +62,10 @@ describe('nested create', () => {
 						}
 					}
 				`)
-				.variables({ input: { albums: [{ title: 'string' }], artistId } })
-				.expectNoErrors();
+				.variables({ input: { albums: [{ title: 'string' }], artistId: '276' } });
+			console.log('DATA', data);
 
-			expect(data?.updateArtist?.artistId).toBe(artistId);
+			expect(data?.updateArtist?.artistId).toBe('276');
 			expect(data?.updateArtist?.albums?.map((album) => album.albumId)).toContain('348');
 			expect(data?.updateArtist?.albums?.map((album) => album.title)).toContain('string');
 		} catch (error) {
@@ -88,29 +74,29 @@ describe('nested create', () => {
 		}
 	});
 
-	// test('should create an artist and an album', async () => {
-	// 	try {
-	// 		const { data } = await request<{ createArtist: Artist }>(config.baseUrl)
-	// 			.mutate(gql`
-	// 				mutation CreateArtist($input: ArtistInsertInput!) {
-	// 					createArtist(input: $input) {
-	// 						artistId
-	// 						albums {
-	// 							albumId
-	// 							title
-	// 						}
-	// 					}
-	// 				}
-	// 			`)
-	// 			.variables({ input: { albums: [{ title: 'string' }], name: 'string' } })
-	// 			.expectNoErrors();
+	test('should create an artist and an album', async () => {
+		try {
+			const { data } = await request<{ createArtist: Artist }>(config.baseUrl)
+				.mutate(gql`
+					mutation CreateArtist($input: ArtistInsertInput!) {
+						createArtist(input: $input) {
+							artistId
+							albums {
+								albumId
+								title
+							}
+						}
+					}
+				`)
+				.variables({ input: { albums: [{ title: 'string' }], name: 'string' } })
+				.expectNoErrors();
 
-	// 		expect(data?.createArtist?.artistId).toBe('276');
-	// 		expect(data?.createArtist?.albums?.[0]?.albumId).toBe('348');
-	// 		expect(data?.createArtist?.albums?.[0]?.title).toBe('string');
-	// 	} catch (error) {
-	// 		//console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
-	// 		expect(error).toBeUndefined(); // fail the test;
-	// 	}
-	// });
+			expect(data?.createArtist?.artistId).toBe('276');
+			expect(data?.createArtist?.albums?.[0]?.albumId).toBe('348');
+			expect(data?.createArtist?.albums?.[0]?.title).toBe('string');
+		} catch (error) {
+			//console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
+			expect(error).toBeUndefined(); // fail the test;
+		}
+	});
 });
