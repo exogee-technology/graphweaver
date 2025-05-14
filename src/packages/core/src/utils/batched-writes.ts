@@ -383,7 +383,6 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 							const { inject } = process;
 							inject(result);
 						}
-						console.log('UPDATE', result);
 						const toUpdate = nodes.get(updates[0].nodeId)!;
 
 						nodes.set(updates[0].nodeId, toUpdate);
