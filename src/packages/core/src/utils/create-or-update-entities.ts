@@ -32,9 +32,14 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 	}
 
 	try {
-		const { tasks, nodes, batches } = await generateOperationBatches(input, meta, info, context);
+		const { tasks, nodes, batches, returnOrder } = await generateOperationBatches(
+			input,
+			meta,
+			info,
+			context
+		);
 
-		return await runBatchedWrites(batches, tasks, nodes);
+		return await runBatchedWrites(batches, tasks, nodes, returnOrder);
 	} catch (error) {
 		// Ensure error is properly propagated with the message intact
 		if (error instanceof Error) {
