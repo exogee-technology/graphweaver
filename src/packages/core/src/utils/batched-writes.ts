@@ -401,7 +401,13 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 		await Promise.all(promises);
 	}
 
-	return [returnOrder.map((nodeId) => results.get(nodeId)!)?.[0]];
+	const rootNode = results.get(returnOrder?.[0]!);
+
+	if (!rootNode) {
+		throw new Error('Root node not found');
+	}
+
+	return [rootNode];
 };
 
 const createOne = async <G = unknown, D = unknown>(
