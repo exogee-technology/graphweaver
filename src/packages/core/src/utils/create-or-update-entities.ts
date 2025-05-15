@@ -39,9 +39,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 			context
 		);
 
-		const result = await runBatchedWrites(batches, tasks, nodes, returnOrder);
-		console.log('RESULT', result);
-		return result;
+		return await runBatchedWrites(batches, tasks, nodes, returnOrder);
 	} catch (error) {
 		// Ensure error is properly propagated with the message intact
 		if (error instanceof Error) {

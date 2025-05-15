@@ -1,3 +1,10 @@
+/**
+ * @file batched-writes.ts
+ * @description Handles batched write operations for entity creation and updates.
+ * This module provides functionality to process complex entity mutation operations
+ * with proper dependency handling across related entities.
+ */
+
 import { isDefined } from 'class-validator';
 import {
 	fromBackendEntity,
@@ -11,8 +18,20 @@ import { BaseContext, Filter, GraphQLResolveInfo } from '../types';
 
 import { getGraphweaverMutationType } from './resolver.utils';
 
+/**
+ * Checks if a value is an object (and not null)
+ * @param node - The value to check
+ * @returns True if the value is an object and not null
+ */
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
 
+/**
+ * Checks if the provided node(s) represent a linking operation
+ * (contains only primary key information)
+ * @param entity - The entity metadata
+ * @param node - The node or array of nodes to check
+ * @returns True if all nodes contain only primary key information
+ */
 const isLinking = <G = unknown, D = unknown>(
 	entity: EntityMetadata<G, D>,
 	node: Partial<G> | Partial<G>[]
@@ -22,6 +41,11 @@ const isLinking = <G = unknown, D = unknown>(
 		: isPrimaryKeyOnly(entity, node);
 };
 
+/**
+ * Type representing an operation process for an entity
+ * - 'post' processes run after the operation is complete
+ * - 'pre' processes run before the operation
+ */
 type OperationProcess<G> =
 	| {
 			type: 'post';
@@ -32,6 +56,21 @@ type OperationProcess<G> =
 			fetch: any;
 	  };
 
+/**
+ * Generates operation batches for entity mutations
+ *
+ * This function analyzes the input entity and its relationships to create a
+ * dependency graph of operations that need to be performed. It handles:
+ * - Entity creation/updates
+ * - Relationship management between entities
+ * - Topological sorting of operations to maintain dependency order
+ *
+ * @param rootInput - The input entity data or array of entities
+ * @param rootMeta - Metadata for the entity type
+ * @param rootInfo - GraphQL resolve info
+ * @param rootContext - Base context
+ * @returns A structured object containing tasks, nodes, batches and return order
+ */
 export const generateOperationBatches = async <G = unknown, D = unknown>(
 	rootInput: Partial<G> | Partial<G>[],
 	rootMeta: EntityMetadata<G, D>,
@@ -53,6 +92,11 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 	>();
 	const nodes = new Map<string, Partial<G>>();
 
+	/**
+	 * Creates a dependency injector function
+	 * @param primaryKey - The primary key field name
+	 * @returns A function that injects a foreign key reference
+	 */
 	const dependencyInjector =
 		(primaryKey: string) =>
 		(targetNodeId: string, foreignKey: string) =>
@@ -68,6 +112,14 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			return;
 		};
 
+	/**
+	 * Creates a fetch dependency function
+	 * @param sourceNodeId - ID of the source node
+	 * @param targetNodeId - ID of the target node
+	 * @param sourceKey - Source key field name
+	 * @param targetKey - Target key field name
+	 * @returns A function that fetches and assigns dependency
+	 */
 	const fetchDependency =
 		(sourceNodeId: string, targetNodeId: string, sourceKey: string, targetKey: string) => () => {
 			const sourceNode = nodes.get(sourceNodeId);
@@ -82,6 +134,18 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			nodes.set(targetNodeId, targetNode);
 		};
 
+	/**
+	 * Recursively traverses the input entity and its relationships
+	 * to build the dependency graph and task list
+	 *
+	 * @param input - The entity or entities to process
+	 * @param meta - Metadata for the entity type
+	 * @param info - GraphQL resolve info
+	 * @param context - Base context
+	 * @param operationId - Unique ID for this operation batch
+	 * @param index - Index when processing arrays
+	 * @returns An operation object or null
+	 */
 	async function traverse(
 		input: Partial<G> | Partial<G>[],
 		meta: EntityMetadata<G, D>,
@@ -272,6 +336,15 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 	};
 };
 
+/**
+ * Executes the batched write operations in the correct order
+ *
+ * @param batches - The batches to execute in order
+ * @param tasks - Map of tasks to execute
+ * @param nodes - Map of nodes to operate on
+ * @param returnOrder - The order to return results
+ * @returns The result of the operations
+ */
 export const runBatchedWrites = async <G = unknown, D = unknown>(
 	batches: Array<string[]>,
 	tasks: Map<
@@ -410,6 +483,13 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 	return [rootNode];
 };
 
+/**
+ * Creates a single entity
+ *
+ * @param meta - Entity metadata
+ * @param node - Entity data to create
+ * @returns The created entity
+ */
 const createOne = async <G = unknown, D = unknown>(
 	meta: EntityMetadata<G, D>,
 	node: Partial<G>
@@ -433,6 +513,13 @@ const createOne = async <G = unknown, D = unknown>(
 	return fromBackendEntity(meta, createdEntity);
 };
 
+/**
+ * Creates multiple entities
+ *
+ * @param meta - Entity metadata
+ * @param nodes - Array of entity data to create
+ * @returns Array of created entities
+ */
 const createMany = async <G = unknown, D = unknown>(
 	meta: EntityMetadata<G, D>,
 	nodes: Partial<G>[]
@@ -460,6 +547,13 @@ const createMany = async <G = unknown, D = unknown>(
 	return createdEntities.map((entity) => fromBackendEntity(meta, entity));
 };
 
+/**
+ * Updates a single entity
+ *
+ * @param meta - Entity metadata
+ * @param node - Entity data to update
+ * @returns The updated entity
+ */
 const updateOne = async <G = unknown, D = unknown>(
 	meta: EntityMetadata<G, D>,
 	node: Partial<G>
@@ -478,6 +572,13 @@ const updateOne = async <G = unknown, D = unknown>(
 	return fromBackendEntity(meta, result);
 };
 
+/**
+ * Updates multiple entities
+ *
+ * @param meta - Entity metadata
+ * @param nodes - Array of entity data to update
+ * @returns Array of updated entities
+ */
 const updateMany = async <G = unknown, D = unknown>(
 	meta: EntityMetadata<G, D>,
 	nodes: Partial<G>[]
@@ -505,6 +606,15 @@ const updateMany = async <G = unknown, D = unknown>(
 	return createdEntities.map((entity) => fromBackendEntity(meta, entity));
 };
 
+/**
+ * Determines the operation type (create or update) for an entity
+ *
+ * @param node - The entity data
+ * @param primaryKeyField - Name of the primary key field
+ * @param meta - Entity metadata
+ * @param info - GraphQL resolve info
+ * @returns The operation type ('create' or 'update')
+ */
 const operationType = async <G = unknown, D = unknown>(
 	node: Partial<G>,
 	primaryKeyField: keyof G,
@@ -552,11 +662,23 @@ const operationType = async <G = unknown, D = unknown>(
 	return operation;
 };
 
+/**
+ * Type definition for edges in the dependency graph
+ */
 type Edge<T> = [T, T];
 
 /**
- * Layered topological sort: returns an array of batches,
- * where each batch can be run in parallel.
+ * Performs a layered topological sort on a graph
+ *
+ * Layered topological sort returns an array of batches,
+ * where each batch can be run in parallel. This ensures that
+ * dependencies between entities are properly maintained during
+ * the write operations.
+ *
+ * @param nodes - Array of nodes in the graph
+ * @param edges - Array of directed edges between nodes
+ * @returns Array of node batches in execution order (reversed)
+ * @throws Error if a cyclic dependency is detected
  */
 const layeredToposort = <T>(nodes: T[], edges: Edge<T>[]): T[][] => {
 	// 1) Build adjacency list and in-degree map
