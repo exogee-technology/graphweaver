@@ -401,7 +401,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 		await Promise.all(promises);
 	}
 
-	return returnOrder.map((nodeId) => results.get(nodeId)!);
+	return [returnOrder.map((nodeId) => results.get(nodeId)!)?.[0]];
 };
 
 const createOne = async <G = unknown, D = unknown>(
