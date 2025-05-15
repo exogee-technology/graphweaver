@@ -89,12 +89,10 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
 		if (err.message && err.message.includes(defaultStateMessage)) {
 			// do nothing for now and silently fail
-			console.log('CCCCCCCC')
 		} else {
-			console.log(err.message + `\n in ${err.source?.name}`);
+			throw new Error("\nGraphweaver: Build failed.");
 		}
 	}
-	console.log('BBBBBBB')
 };
 
 const formatListOfTypeOutputPaths = (typesOutputPath?: string | string[]) => {
