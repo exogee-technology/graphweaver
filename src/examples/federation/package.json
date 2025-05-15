@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-federation",
 	"private": true,
-	"version": "2.15.0",
+	"version": "2.15.3",
 	"license": "Apache-2.0",
 	"description": "Example app used to test federation compatibility",
 	"main": "lib/index.js",
@@ -30,7 +30,7 @@
 		"@types/node": "22.13.14",
 		"graphweaver": "workspace:*",
 		"tsx": "4.19.3",
-		"typescript": "5.8.2"
+		"typescript": "5.8.3"
 	},
 	"keywords": [
 		"graphql",

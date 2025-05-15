@@ -44,18 +44,18 @@
 		"globals": "16.0.0",
 		"prettier": "3.5.3",
 		"turbo": "2.4.4",
-		"typescript": "5.8.2",
+		"typescript": "5.8.3",
 		"typescript-eslint": "8.29.1"
 	},
 	"pnpm": {
 		"overrides": {
 			"d3-color": "3.1.0",
 			"@babel/traverse": "7.23.2",
-			"@mikro-orm/core": "6.4.11",
-			"@mikro-orm/knex": "6.4.11",
-			"@mikro-orm/postgresql": "6.4.11",
-			"@mikro-orm/mysql": "6.4.11",
-			"@mikro-orm/sqlite": "6.4.11"
+			"@mikro-orm/core": "6.4.14",
+			"@mikro-orm/knex": "6.4.14",
+			"@mikro-orm/postgresql": "6.4.14",
+			"@mikro-orm/mysql": "6.4.14",
+			"@mikro-orm/sqlite": "6.4.14"
 		},
 		"peerDependencyRules": {
 			"ignoreMissing": [

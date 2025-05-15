@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-scalars",
-	"version": "2.15.0",
+	"version": "2.15.3",
 	"description": "Common scalar types for use with @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"main": "lib/index.js",
@@ -20,18 +20,18 @@
 	},
 	"dependencies": {
 		"graphql-scalars": "1.24.2",
-		"luxon": "3.5.0"
+		"luxon": "3.6.1"
 	},
 	"peerDependencies": {
 		"graphql": "16"
 	},
 	"devDependencies": {
-		"@types/luxon": "3.4.2",
+		"@types/luxon": "3.6.2",
 		"decimal.js": "10.5.0",
 		"esbuild": "0.25.1",
 		"glob": "11.0.1",
 		"graphql": "16.10.0",
-		"typescript": "5.8.2"
+		"typescript": "5.8.3"
 	},
 	"keywords": [
 		"graphql",

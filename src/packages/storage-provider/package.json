@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-storage-provider",
-	"version": "2.15.0",
+	"version": "2.15.3",
 	"description": "Graphweaver Storage Provider Package",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -29,7 +29,7 @@
 	"devDependencies": {
 		"esbuild": "0.25.1",
 		"glob": "11.0.1",
-		"typescript": "5.8.2"
+		"typescript": "5.8.3"
 	},
 	"keywords": [
 		"graphweaver",

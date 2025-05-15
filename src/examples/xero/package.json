@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "2.15.0",
+	"version": "2.15.3",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -51,7 +51,7 @@
 		"@types/node": "22.13.14",
 		"esbuild": "0.25.1",
 		"prettier": "3.5.3",
-		"typescript": "5.8.2",
-		"vite": "6.2.5"
+		"typescript": "5.8.3",
+		"vite": "6.3.5"
 	}
 }

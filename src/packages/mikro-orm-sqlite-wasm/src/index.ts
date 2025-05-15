@@ -1,4 +1,4 @@
-import { SqlitePlatform, SqliteConnection } from '@mikro-orm/sqlite';
+import { SqlitePlatform, SqliteConnection, Configuration } from '@mikro-orm/sqlite';
 import { AbstractSqlDriver, MonkeyPatchable } from '@mikro-orm/knex';
 import sqlite3 from 'node-sqlite3-wasm';
 
@@ -54,8 +54,8 @@ class Connection extends SqliteConnection {
 	}
 }
 
-export class SqliteDriver extends AbstractSqlDriver {
-	constructor(config: any) {
+export class SqliteDriver extends AbstractSqlDriver<Connection> {
+	constructor(config: Configuration) {
 		super(config, new SqlitePlatform(), Connection, ['knex', 'node-sqlite3-wasm']);
 	}
 }
