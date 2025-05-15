@@ -287,8 +287,8 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 	>,
 	nodes: Map<string, Partial<G>>,
 	returnOrder: string[]
-): Promise<Partial<G | null>[] | (G & {}) | null | undefined> => {
-	const results: Map<string, (G & ({} | undefined)) | null> = new Map();
+): Promise<Partial<G | null>[] | (G & object) | null | undefined> => {
+	const results: Map<string, (G & (object | undefined)) | null> = new Map();
 	for (const batch of batches) {
 		const promises: Promise<any>[] = [];
 		for (const nodeId of batch) {
@@ -380,7 +380,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 						updates.map((node) => nodes.get(node.nodeId)!)
 					).then((res) => {
 						for (let i = 0; i < res.length; i++) {
-							const result = res[i] as (G & ({} | undefined)) | null;
+							const result = res[i] as (G & (object | undefined)) | null;
 							for (const process of updates[i].processing.filter(
 								(process) => process.type === 'post'
 							)) {
