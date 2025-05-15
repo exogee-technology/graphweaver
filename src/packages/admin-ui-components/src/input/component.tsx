@@ -26,6 +26,8 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 	max?: number;
 	/** Step value for increments (only for type="number") */
 	step?: number;
+	/** Legacy field name property */
+	fieldName?: string;
 }
 
 /**
@@ -50,6 +52,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 			min,
 			max,
 			step = 1,
+			name,
+			fieldName,
 			...rest
 		},
 		ref
@@ -148,6 +152,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 						max={max}
 						step={step}
 						ref={ref}
+						name={name || fieldName}
 						{...rest}
 					/>
 
