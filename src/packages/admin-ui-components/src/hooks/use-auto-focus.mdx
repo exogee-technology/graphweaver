@@ -1,0 +1,62 @@
+import { Canvas, Meta, Story } from '@storybook/blocks';
+import * as UseAutoFocusStories from './use-auto-focus.stories';
+
+<Meta of={UseAutoFocusStories} />
+
+# useAutoFocus
+
+A hook that automatically focuses an HTML element after it mounts, with a configurable delay.
+
+## Overview
+
+The `useAutoFocus` hook is useful for focusing form inputs, especially in modals or dynamic components. It returns a ref that should be attached to the element you want to focus.
+
+## API Reference
+
+```tsx
+function useAutoFocus<T extends HTMLElement>(autoFocus?: boolean): React.RefObject<T>;
+```
+
+### Parameters
+
+- `autoFocus` (optional): Boolean flag to enable/disable auto-focusing. Default is `undefined` (no focus).
+
+### Returns
+
+- A React ref object that should be attached to the element you want to focus.
+
+### Configuration
+
+The focus delay is set to `600ms` by default (from the `autoFocusDelay` configuration). This delay ensures that the element is properly rendered and visible before attempting to focus it.
+
+## Examples
+
+### Basic Usage
+
+<Canvas of={UseAutoFocusStories.Example} />
+
+### Implementation Details
+
+The hook:
+
+1. Creates a ref to hold the HTML element
+2. Sets up an effect that:
+   - Checks if auto-focus is enabled
+   - Uses setTimeout to delay focusing by the configured amount
+   - Focuses the element using the ref
+3. Returns the ref to be attached to your element
+
+## When to Use
+
+- Forms where a specific field should receive focus when opened
+- Modals where the first input should be focused
+- Search interfaces where the search input should be automatically focused
+- Any UI where you want to guide the user to a specific input
+
+## Accessibility Considerations
+
+Auto-focusing elements can improve user experience by reducing the need for additional clicks, but should be used thoughtfully:
+
+- Only auto-focus when it would save the user effort
+- Avoid auto-focusing in a way that might disorient users
+- Consider that screen reader users may be disoriented if focus unexpectedly moves

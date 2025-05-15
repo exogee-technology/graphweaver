@@ -1,0 +1,79 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as ToolbarStories from './toolbar.stories';
+
+<Meta of={ToolbarStories} />
+
+# Toolbar
+
+The Toolbar component combines a title area with filtering capabilities to provide a consistent header for entity list pages.
+
+## Overview
+
+The Toolbar component serves as a composite header that:
+
+- Displays the entity title and subtitle
+- Provides action buttons for entity creation and other operations
+- Offers filtering capabilities for the data below
+- Adapts to different screen sizes with responsive design
+
+It's designed to be used at the top of entity listing pages, providing both context and interaction capabilities.
+
+## Examples
+
+### Default Toolbar
+
+The standard toolbar with title, subtitle, and filters.
+
+<Canvas of={ToolbarStories.Default} />
+
+### With Export Functionality
+
+The toolbar with an additional "Export to CSV" button.
+
+<Canvas of={ToolbarStories.WithExport} />
+
+### Without Filters
+
+The toolbar can be used without the filter bar for pages that don't require filtering.
+
+<Canvas of={ToolbarStories.WithoutFilters} />
+
+### Long Titles
+
+The toolbar handles long titles and subtitles gracefully.
+
+<Canvas of={ToolbarStories.LongTitles} />
+
+### Mobile View
+
+On smaller screens, the toolbar adapts by stacking elements vertically.
+
+<Canvas of={ToolbarStories.MobileView} />
+
+## Properties
+
+<Controls of={ToolbarStories.Default} />
+
+## Composition
+
+The Toolbar is a composite component that combines:
+
+1. **TitleBar** - Displays the entity title, subtitle, and action buttons
+2. **FilterBar** - Provides filtering capabilities based on entity fields
+
+## Usage Guidelines
+
+- Use the Toolbar at the top of entity list pages
+- Provide clear, concise titles that identify the entity being viewed
+- Use the subtitle to give additional context about the data
+- The "Export to CSV" button should only be shown when export functionality is available
+- The filter bar automatically adapts to show filters relevant to the entity's fields
+
+## Implementation Notes
+
+- The Toolbar memoizes the FilterBar to prevent unnecessary re-renders
+- The component automatically integrates with the entity context to show relevant filters
+- Filters are applied as URL parameters for shareable filtering
+- The component integrates with the routing system to handle filter navigation
+- On mobile devices, the layout adjusts to stack elements vertically

@@ -1,0 +1,74 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as TitleBarStories from './title-bar.stories';
+
+<Meta of={TitleBarStories} />
+
+# Title Bar
+
+The Title Bar component provides a consistent header area for entity list and detail pages, displaying the page title and offering relevant actions.
+
+## Overview
+
+The Title Bar component serves as a navigation and action header that:
+
+- Displays the primary title and subtitle for the current page
+- Provides quick access to create new entity instances
+- Offers export functionality when available
+- Links to the GraphQL playground for query testing
+- Adapts to different screen sizes with responsive design
+
+It's an important UI element that helps establish context and provides essential actions for each entity page.
+
+## Examples
+
+### Default Title Bar
+
+The standard title bar with page title and subtitle.
+
+<Canvas of={TitleBarStories.Default} />
+
+### With Export Functionality
+
+The title bar with an additional "Export to CSV" button.
+
+<Canvas of={TitleBarStories.WithExport} />
+
+### Long Titles
+
+The title bar handles long titles and subtitles gracefully.
+
+<Canvas of={TitleBarStories.LongTitles} />
+
+### Mobile View
+
+On smaller screens, the title bar adapts by stacking elements vertically.
+
+<Canvas of={TitleBarStories.MobileView} />
+
+### Read-Only Entity
+
+For read-only entities, the "Create New" action is disabled.
+
+<Canvas of={TitleBarStories.ReadOnlyEntity} />
+
+## Properties
+
+<Controls of={TitleBarStories.Default} />
+
+## Usage Guidelines
+
+- Use consistent, concise titles that clearly identify the entity being viewed
+- Keep subtitles informative but brief, providing additional context when needed
+- For read-only entities, the "Create New" button is automatically disabled
+- The "Export to CSV" button only appears when the `onExportToCSV` handler is provided
+- The component automatically adapts to screen size to maintain usability on mobile devices
+
+## Implementation Notes
+
+- The Title Bar is typically positioned at the top of entity list and detail pages
+- It integrates with the entity context to automatically disable actions when appropriate
+- The component handles responsive design internally, adjusting layout based on screen width
+- The "Open Playground" button opens the GraphQL playground in a new tab when not in an iframe
+- For security reasons, when running in an iframe, the playground opens in the same window
+- The component is tied to the routing system to properly navigate to entity creation screens

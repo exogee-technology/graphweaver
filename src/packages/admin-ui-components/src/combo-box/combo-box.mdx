@@ -1,0 +1,93 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as ComboBoxStories from './combo-box.stories';
+import { ComboBox } from './component';
+
+<Meta of={ComboBoxStories} />
+
+# ComboBox
+
+The ComboBox component combines input and dropdown functionality, allowing users to select from predefined options or filter through them by typing.
+
+## Overview
+
+The ComboBox component is a versatile form control that can be used to:
+
+- Select a single item from a list of options
+- Select multiple items from a list of options
+- Search and filter through available options by typing
+- Display selected item(s) with the ability to remove them
+
+## Examples
+
+### Single Select
+
+Use the single select mode when users should choose only one option.
+
+<Canvas of={ComboBoxStories.SingleSelect} />
+
+### Multi Select
+
+Use the multi select mode when users can choose multiple options.
+
+<Canvas of={ComboBoxStories.MultiSelect} />
+
+### With Pre-selected Values
+
+ComboBoxes can have pre-selected values for both single and multi-select modes.
+
+#### Single Pre-selected Value
+
+<Canvas of={ComboBoxStories.WithSelectedValue} />
+
+#### Multiple Pre-selected Values
+
+<Canvas of={ComboBoxStories.WithMultipleSelectedValues} />
+
+### States and Variations
+
+#### Loading State
+
+Display a loading spinner when options are being fetched asynchronously.
+
+<Canvas of={ComboBoxStories.Loading} />
+
+#### Disabled State
+
+Prevent user interaction with the disabled state.
+
+<Canvas of={ComboBoxStories.Disabled} />
+
+#### Free Typing
+
+Allow users to type to filter options.
+
+<Canvas of={ComboBoxStories.WithFreeTyping} />
+
+### In Form Context
+
+ComboBoxes are typically used within forms to collect user input.
+
+<Canvas of={ComboBoxStories.InForm} />
+
+## Properties
+
+<Controls of={ComboBoxStories.SingleSelect} />
+
+## Usage Guidelines
+
+- Use single select when only one option should be selected at a time
+- Use multi select when multiple options can be selected simultaneously
+- Provide clear, concise option labels that users can easily understand
+- Consider adding free typing capability for long lists to allow filtering
+- Use placeholder text to give users a hint about what to select
+- Include a loading state for asynchronously loaded options
+- For very short lists (2-5 items), consider using radio buttons or checkboxes instead
+
+## Accessibility
+
+- ComboBox is keyboard accessible, allowing for navigation with arrow keys
+- Selected pills include keyboard delete functionality (Backspace or Delete keys)
+- Focus states are visually distinct for keyboard users
+- Dropdown options have visual indication for both focus and selection state
+- Component includes proper ARIA roles for better screen reader support

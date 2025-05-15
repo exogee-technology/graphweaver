@@ -1,0 +1,65 @@
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+import * as DefaultErrorFallbackStories from './default-error-fallback.stories';
+
+<Meta of={DefaultErrorFallbackStories} />
+
+# DefaultErrorFallback
+
+The DefaultErrorFallback component provides a user-friendly error screen when unhandled exceptions occur in the application.
+
+## Overview
+
+The DefaultErrorFallback component is a fallback UI for React Error Boundaries. It displays a clean, branded error page that:
+
+- Provides context about the error to the user
+- Offers guidance based on user role (developer vs. end-user)
+- Allows copying error details for debugging
+- Maintains branding with the Graphweaver logo
+
+## Examples
+
+### Basic Error
+
+The standard error display for simple error objects.
+
+<Canvas of={DefaultErrorFallbackStories.BasicError} />
+
+### Detailed Error
+
+Error display for more complex errors with additional metadata.
+
+<Canvas of={DefaultErrorFallbackStories.DetailedError} />
+
+### Network Error
+
+Error display for network-related errors.
+
+<Canvas of={DefaultErrorFallbackStories.NetworkError} />
+
+## Properties
+
+<Controls of={DefaultErrorFallbackStories.BasicError} />
+
+## Usage
+
+The DefaultErrorFallback component is designed to be used with React Error Boundary:
+
+```jsx
+import { ErrorBoundary } from 'react-error-boundary';
+import { DefaultErrorFallback } from '@exogee/graphweaver-admin-ui-components';
+
+const MyComponent = () => {
+	return (
+		<ErrorBoundary FallbackComponent={DefaultErrorFallback}>
+			{/* Your component content */}
+		</ErrorBoundary>
+	);
+};
+```
+
+## Accessibility
+
+- Provides clear, descriptive error messages
+- Maintains good color contrast for readability
+- Includes navigation back to the home page
+- Offers error copying functionality for reporting issues

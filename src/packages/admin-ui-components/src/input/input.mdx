@@ -1,0 +1,157 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as InputStories from './input.stories';
+
+<Meta of={InputStories} />
+
+# Input
+
+A versatile input component that supports various input types with consistent styling and enhanced features.
+
+## Overview
+
+The Input component is a reusable form control that extends the native HTML input element with additional features like:
+
+- Consistent styling across all input types
+- Support for labels and error messages
+- Password visibility toggle
+- Custom number input controls
+- Accessibility enhancements
+
+## Examples
+
+### Text Input
+
+The basic text input with a label:
+
+<Canvas of={InputStories.Text} />
+
+### Password Input
+
+Password input with visibility toggle:
+
+<Canvas of={InputStories.Password} />
+
+### Number Input
+
+Number input with increment/decrement controls and min/max constraints:
+
+<Canvas of={InputStories.Number} />
+
+### Required Input
+
+Input with required indicator:
+
+<Canvas of={InputStories.Required} />
+
+### Disabled Input
+
+Input in disabled state:
+
+<Canvas of={InputStories.Disabled} />
+
+### Input with Error
+
+Input displaying an error message:
+
+<Canvas of={InputStories.WithError} />
+
+### Controlled Input
+
+Example of a controlled input with state management:
+
+<Canvas of={InputStories.Controlled} />
+
+### Form Example
+
+Multiple inputs working together in a form:
+
+<Canvas of={InputStories.FormExample} />
+
+## Properties
+
+<Controls />
+
+## Usage Guidelines
+
+### Basic Usage
+
+```jsx
+import { Input } from '@exogee/graphweaver-admin-ui-components';
+
+// Basic text input
+<Input
+  label="Username"
+  placeholder="Enter your username"
+/>
+
+// Password input with visibility toggle
+<Input
+  type="password"
+  label="Password"
+  placeholder="Enter your password"
+  showPasswordToggle={true}
+/>
+
+// Number input with constraints
+<Input
+  type="number"
+  label="Age"
+  min={18}
+  max={120}
+  defaultValue="25"
+/>
+```
+
+### Form Integration
+
+The Input component works well with form libraries or custom form implementations:
+
+```jsx
+// With controlled state
+const [value, setValue] = useState('');
+
+<Input
+  value={value}
+  onChange={(newValue) => setValue(newValue)}
+/>
+
+// With form libraries (like Formik)
+<Formik
+  initialValues={{ email: '' }}
+  onSubmit={values => console.log(values)}
+>
+  {({ values, handleChange, handleBlur }) => (
+    <Form>
+      <Input
+        name="email"
+        type="email"
+        label="Email"
+        value={values.email}
+        onChange={(value) => handleChange({ target: { name: 'email', value } })}
+        onBlur={handleBlur}
+      />
+      <button type="submit">Submit</button>
+    </Form>
+  )}
+</Formik>
+```
+
+## Accessibility
+
+- Labels are properly associated with input elements
+- Required fields are indicated both visually and semantically
+- Error messages are connected to their respective inputs
+- Interactive elements like password toggle and number controls are keyboard accessible
+- Visual states provide feedback for focus, error, and disabled states
+
+## Styling
+
+The Input component uses CSS modules for styling and respects your application's theme through CSS variables. Key style features include:
+
+- Consistent appearance across different input types
+- Hover and focus states for better user feedback
+- Error state highlighting
+- Custom controls for number and password inputs
+
+You can customize the styling using the CSS variables defined in your application's theme.

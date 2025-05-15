@@ -1,0 +1,102 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as SwitchStories from './switch.stories';
+import { Switch } from './component';
+
+<Meta of={SwitchStories} />
+
+# Switch
+
+The Switch component provides a toggle control for binary options, offering a more visual alternative to checkboxes.
+
+## Overview
+
+The Switch component is used to:
+
+- Toggle between two states (on/off, enabled/disabled, etc.)
+- Control boolean settings in forms
+- Provide an intuitive visual representation of binary choices
+- Allow for immediate effect actions (unlike checkboxes which often require form submission)
+
+The component can be used both as a controlled and uncontrolled component, making it flexible for various use cases.
+
+## Examples
+
+### Basic Switch
+
+The standard switch with a label.
+
+<Canvas of={SwitchStories.Default} />
+
+### Checked by Default
+
+A switch that's in the "on" position by default.
+
+<Canvas of={SwitchStories.DefaultChecked} />
+
+### Disabled States
+
+Switches can be disabled to prevent user interaction.
+
+<Canvas of={SwitchStories.Disabled} />
+
+<Canvas of={SwitchStories.DisabledChecked} />
+
+### Controlled Component
+
+A switch whose state is managed by React state, allowing for custom logic when the state changes.
+
+<Canvas of={SwitchStories.Controlled} />
+
+### Without Label
+
+The switch can be used without a label when the context is clear.
+
+<Canvas of={SwitchStories.NoLabel} />
+
+### With Long Label
+
+Labels can be of any length and will wrap as needed.
+
+<Canvas of={SwitchStories.LongLabel} />
+
+### Multiple Options
+
+Switches can be grouped to provide multiple related options.
+
+<Canvas of={SwitchStories.MultipleOptions} />
+
+### In a Form
+
+Switches work seamlessly in forms and can be used to control form state.
+
+<Canvas of={SwitchStories.InForm} />
+
+## Properties
+
+<Controls of={SwitchStories.Default} />
+
+## Usage Guidelines
+
+- Use switches for binary options that can be toggled on or off
+- Switches should provide immediate feedback and typically take effect immediately
+- For options that require confirmation or form submission, consider using checkboxes instead
+- Use clear, concise labels that describe the effect of enabling the switch
+- Group related switches together for better organization
+- When used in forms, switches should be properly labeled for accessibility
+
+## Accessibility
+
+- The component uses a native checkbox input under the hood for keyboard accessibility
+- Users can toggle the switch using the Space or Enter keys when focused
+- The switch includes focus styling for keyboard navigation
+- Labels are associated with the input for screen readers
+- Disabled states are properly conveyed to assistive technologies
+
+## Implementation Notes
+
+- Built using a combination of a hidden checkbox input and custom styling
+- Uses CSS transitions for smooth toggle animations
+- The component is implemented as a forwardRef to allow access to the underlying input element
+- Can be used as both controlled and uncontrolled component
+- Supports all standard HTML input attributes that apply to checkboxes

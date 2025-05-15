@@ -1,0 +1,131 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as ListToolBarStories from './list-toolbar.stories';
+
+<Meta of={ListToolBarStories} />
+
+# ListToolBar
+
+A specialized toolbar component designed for entity list views in the Graphweaver admin UI.
+
+## Overview
+
+The ListToolBar component provides a context-aware toolbar for entity list pages. It automatically extracts the entity name from the URL parameters and displays it along with optional information about the data source and record count. It also provides an Export to CSV functionality.
+
+## Examples
+
+Because this component relies heavily on routing context, we provide mock implementations to showcase how it looks in practice:
+
+### Full Toolbar
+
+A complete example with entity name, record count, and all action buttons:
+
+<Canvas of={ListToolBarStories.MockImplementation} />
+
+### With Record Count
+
+Showing the record count in the subtitle:
+
+<Canvas of={ListToolBarStories.WithCount} />
+
+### Without Record Count
+
+Just showing the entity name and data source without record count:
+
+<Canvas of={ListToolBarStories.WithoutCount} />
+
+## Properties
+
+<Controls />
+
+## Component Structure
+
+The ListToolBar is a composite component that:
+
+1. Uses URL parameters to determine the current entity
+2. Fetches entity metadata from the schema
+3. Renders a title bar with entity information and action buttons
+4. Includes a filter bar for refining the displayed data
+
+## Context Requirements
+
+This component relies on several context providers to function properly:
+
+- Wouter's routing context for URL parameters
+- Schema context for entity metadata
+- Filter context for the filter bar functionality
+
+## Usage Guidelines
+
+### Basic Usage
+
+The ListToolBar is typically used at the top of entity list pages:
+
+```jsx
+import { ListToolBar } from '@exogee/graphweaver-admin-ui-components';
+
+function UsersList() {
+	// Fetch users data and count
+	const { users, count } = useUsers();
+
+	const handleExportCSV = () => {
+		// Implementation for exporting data to CSV
+		exportToCSV(users);
+	};
+
+	return (
+		<div>
+			<ListToolBar count={count} onExportToCSV={handleExportCSV} />
+
+			{/* Rest of the list component */}
+			<DataTable data={users} />
+		</div>
+	);
+}
+```
+
+### Integration with Layout
+
+The ListToolBar is designed to be placed at the top of the content area within the page layout:
+
+```jsx
+import { DefaultLayout } from '../layouts';
+import { ListToolBar } from '../list-toolbar';
+import { DataTable } from '../data-table';
+
+function EntityPage() {
+	return (
+		<DefaultLayout>
+			<ListToolBar count={100} onExportToCSV={handleExport} />
+			<DataTable data={data} />
+		</DefaultLayout>
+	);
+}
+```
+
+## Toolbar Features
+
+### Entity Information
+
+- Displays the entity name as the title
+- Shows additional context like the backend data source
+- Indicates the count of records when provided
+
+### Actions
+
+- "Open Playground" button for exploring the GraphQL API
+- "Export to CSV" button for downloading data (when `onExportToCSV` is provided)
+- "Create New" button for adding new entity records
+
+### Filtering
+
+- Includes a FilterBar component that automatically populates with appropriate filters based on the entity's schema
+- Provides a "Clear Filters" button to reset all active filters
+
+## Responsive Behavior
+
+The ListToolBar is responsive and adapts to different screen sizes:
+
+- On larger screens, it displays in a single row with the title and actions side by side
+- On medium screens, it stacks the title section above the actions
+- On smaller screens, the action buttons wrap to fit the available space

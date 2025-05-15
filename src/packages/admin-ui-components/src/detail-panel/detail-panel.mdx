@@ -1,0 +1,92 @@
+import { Meta } from '@storybook/blocks';
+import * as DetailPanelStories from './detail-panel.stories';
+
+<Meta of={DetailPanelStories} />
+
+# DetailPanel
+
+The DetailPanel component provides a form interface for editing entity details or creating new entities.
+
+## Overview
+
+The DetailPanel is a slide-in panel that displays a form for editing or creating entities. It dynamically generates form fields based on entity metadata, validating and submitting data to the server via GraphQL mutations.
+
+## Features
+
+- **Edit Mode**: Displays and edits existing entity data
+- **Create Mode**: Provides a form for creating new entities
+- **Field Type Handling**: Renders appropriate inputs based on field types (string, number, boolean, etc.)
+- **Validation**: Validates required fields and field formats
+- **Animation**: Slides in and out with a smooth animation
+- **Responsive**: Adapts to different screen sizes
+- **Session Storage**: Preserves form state across navigation
+
+## Visual Appearance
+
+The DetailPanel appears as a slide-in panel from the right side of the screen. It contains:
+
+1. A form with fields based on the entity's metadata
+2. Input types appropriate for each field's data type
+3. Required field indicators
+4. Save and Cancel buttons at the bottom
+5. Validation error messages (displayed as toasts)
+
+## Implementation
+
+This component is typically used within a routing context and depends on:
+
+```jsx
+<ErrorBoundary FallbackComponent={DefaultErrorFallback}>
+	<WouterRouter base={import.meta.env.VITE_ADMIN_UI_BASE}>
+		<Switch>
+			{/* Other routes */}
+			<Route path="/:entity/:id?">
+				<DefaultLayout>
+					<List>
+						<Route path="/:entity/:id">
+							<DetailPanel />
+						</Route>
+					</List>
+				</DefaultLayout>
+			</Route>
+		</Switch>
+	</WouterRouter>
+</ErrorBoundary>
+```
+
+## Usage Contexts
+
+1. **Editing Entities**: Navigate to an entity list and click an item to edit it
+2. **Creating Entities**: Click the "Add" button in an entity list to create a new entity
+
+## Field Type Support
+
+The DetailPanel supports a wide range of field types:
+
+- **Text Fields**: For string data
+- **Number Fields**: For numeric data
+- **Boolean Fields**: For true/false values
+- **Date Fields**: For dates with optional time
+- **Enum Fields**: For selecting from predefined options
+- **Relationship Fields**: For linking to other entities
+- **Rich Text Fields**: For formatted text content
+- **JSON Fields**: For structured data
+- **Media Fields**: For images and other media
+
+## Dependencies
+
+The DetailPanel relies on:
+
+- Apollo Client for GraphQL data fetching and mutations
+- Wouter for routing and URL parameter handling
+- Formik for form state management and validation
+- React hooks for state management
+- Custom hooks from the utils module for schema and entity information
+
+## Accessibility
+
+- Form fields are properly labeled
+- Required fields are clearly indicated
+- Input errors are communicated clearly
+- Keyboard navigation is supported
+- Animation timing can be adjusted via CSS variables

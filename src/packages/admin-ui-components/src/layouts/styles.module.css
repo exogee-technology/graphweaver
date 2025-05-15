@@ -1,0 +1,43 @@
+.grid {
+	display: grid;
+	width: 100%;
+}
+
+.col {
+	display: flex;
+	flex-direction: column;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+
+.custom_page_header {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+.custom_page_header h1 {
+	font-size: 24px;
+	font-weight: 600;
+	margin: 0;
+}
+
+.custom_page_header h2 {
+	font-size: 16px;
+	font-weight: 400;
+	color: #666;
+	margin: 0;
+}
+
+.custom_page_content {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	overflow: auto;
+	padding-top: 24px;
+}

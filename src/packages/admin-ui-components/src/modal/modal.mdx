@@ -1,0 +1,158 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as ModalStories from './modal.stories';
+
+<Meta of={ModalStories} />
+
+# Modal
+
+A customizable modal dialog component for displaying content in a focused overlay.
+
+## Overview
+
+The Modal component creates a dialog that appears on top of the main content, providing a focused way to present information, gather input, or request user action. It includes features like overlay backgrounds, headers with close buttons, and customizable content areas.
+
+## Examples
+
+### Basic Modal
+
+The simplest form of modal with a title and content:
+
+<Canvas of={ModalStories.Default} />
+
+### Interactive Modal
+
+Modal that can be opened and closed with controls:
+
+<Canvas of={ModalStories.Interactive} />
+
+### Modal with Footer
+
+Modal with custom footer content, typically used for action buttons:
+
+<Canvas of={ModalStories.WithFooter} />
+
+### Without Close Button
+
+Modal without the default close button in the header:
+
+<Canvas of={ModalStories.WithoutCloseButton} />
+
+### Full Screen Modal
+
+Modal that takes up the entire screen for an immersive experience:
+
+<Canvas of={ModalStories.FullScreen} />
+
+### Form in Modal
+
+A common use case: a form within a modal dialog:
+
+<Canvas of={ModalStories.FormModal} />
+
+## Properties
+
+<Controls />
+
+## Usage Guidelines
+
+### Basic Usage
+
+The modal requires at minimum the `isOpen` prop to control its visibility:
+
+```jsx
+import { Modal } from '@exogee/graphweaver-admin-ui-components';
+import { useState } from 'react';
+
+function MyComponent() {
+	const [isOpen, setIsOpen] = useState(false);
+
+	return (
+		<>
+			<button onClick={() => setIsOpen(true)}>Open Modal</button>
+
+			<Modal
+				isOpen={isOpen}
+				onRequestClose={() => setIsOpen(false)}
+				title="My Modal"
+				modalContent={<div>Modal content goes here</div>}
+			/>
+		</>
+	);
+}
+```
+
+### Modal with Footer Actions
+
+For modals that require user actions, add a footer with buttons:
+
+```jsx
+<Modal
+	isOpen={isOpen}
+	onRequestClose={() => setIsOpen(false)}
+	title="Confirm Action"
+	modalContent={<p>Are you sure you want to proceed?</p>}
+	footerContent={
+		<div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+			<Button onClick={() => setIsOpen(false)}>Cancel</Button>
+			<Button
+				onClick={() => {
+					// Perform action
+					setIsOpen(false);
+				}}
+			>
+				Confirm
+			</Button>
+		</div>
+	}
+/>
+```
+
+### Custom Close Behavior
+
+You can customize how the modal can be closed:
+
+```jsx
+<Modal
+	isOpen={isOpen}
+	onRequestClose={() => setIsOpen(false)}
+	title="Custom Close Behavior"
+	modalContent={<p>Click outside or press ESC to close</p>}
+	shouldCloseOnOverlayClick={true}
+	shouldCloseOnEsc={true}
+/>
+```
+
+## Accessibility
+
+The Modal component follows accessibility best practices:
+
+- Properly handles keyboard navigation
+- Supports closing with the Escape key (when `shouldCloseOnEsc` is true)
+- Provides a visible close button for mouse users (unless `hideCloseX` is true)
+- Focuses user attention on the modal content
+- Uses proper semantic HTML structure
+
+For maximum accessibility, consider the following:
+
+- Always include a clear way to close the modal
+- Ensure the modal title clearly describes its purpose
+- Provide appropriate ARIA labels for custom controls inside the modal
+- Consider trapping focus within the modal while it's open
+
+## Animation
+
+The modal has subtle transitions for a smooth user experience. When the modal opens:
+
+1. The overlay fades in
+2. The modal content appears and draws attention
+
+## Styling
+
+The Modal uses CSS modules with CSS variables for theming:
+
+- `--color-white`: Background color for the modal
+- `--color-border-default`: Color for separator lines
+- `--detail-bg-color`: Background color for the header
+
+You can also pass a custom `className` to style the modal container with custom CSS.

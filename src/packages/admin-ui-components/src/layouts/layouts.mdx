@@ -1,0 +1,89 @@
+import { Canvas, Meta, Story } from '@storybook/blocks';
+
+import * as LayoutsStories from './layouts.stories';
+
+<Meta of={LayoutsStories} />
+
+# Layout Components
+
+The Graphweaver Admin UI layout system provides a collection of components for creating consistent, responsive layouts throughout the application.
+
+## Overview
+
+The layout system consists of several complementary components:
+
+1. **Grid** - A CSS grid-based container for creating complex layouts with configurable columns and spacing
+2. **Col** - A column component that can span multiple grid spaces
+3. **Row** - A horizontal flex container for arranging elements in a row
+4. **Page** - A standardized page layout with consistent header and content areas
+5. **DefaultLayout** - The main application shell with a resizable sidebar
+
+These components work together to create a consistent layout system across the application.
+
+## Component Showcase
+
+<Canvas of={LayoutsStories.Overview} />
+
+## Usage Patterns
+
+### Basic Grid Layout
+
+The most common pattern is to use Grid with Col components:
+
+```jsx
+<Grid cols={12} gap={16}>
+	<Col span={4}>Sidebar</Col>
+	<Col span={8}>Main content</Col>
+</Grid>
+```
+
+### Row-Based Layout
+
+For simpler horizontal layouts, the Row component can be used:
+
+```jsx
+<Row gap={16}>
+	<div>First item</div>
+	<div>Second item</div>
+	<div>Third item</div>
+</Row>
+```
+
+### Auto-Distributing Rows
+
+For arranging many rows into multiple columns, use Grid with the maxRowsPerColumn property:
+
+```jsx
+<Grid cols={3} maxRowsPerColumn={5} gap={16}>
+	<Row>Row 1</Row>
+	<Row>Row 2</Row>
+	{/* Additional rows... */}
+	<Row>Row 10</Row>
+</Grid>
+```
+
+### Page Layout
+
+For admin pages with standard headers:
+
+```jsx
+<Page title="Dashboard" subtitle="Overview of metrics">
+	<div>Page content goes here</div>
+</Page>
+```
+
+### Application Shell
+
+The DefaultLayout is typically used at the top level of the application:
+
+```jsx
+<DefaultLayout>{/* All application content goes here */}</DefaultLayout>
+```
+
+## Implementation Guidelines
+
+- Use the `Grid` and `Col` components for most complex layouts
+- Use `Row` for simple horizontal arrangements
+- Nest layout components as needed to create complex interfaces
+- The layout components are designed to work together, but can also be used independently
+- For consistency, all admin pages should use the `Page` component within `DefaultLayout`

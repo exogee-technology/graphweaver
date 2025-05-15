@@ -1,0 +1,64 @@
+import { Canvas, Meta, Story } from '@storybook/blocks';
+import * as UseDebounceStories from './use-debounce.stories';
+
+<Meta of={UseDebounceStories} />
+
+# useDebounce
+
+A hook that delays updating a value until after a specified period of inactivity.
+
+## Overview
+
+The `useDebounce` hook is useful for situations where you want to delay an operation until a user has stopped typing or interacting. Common use cases include search inputs, form validation, and API calls that shouldn't be triggered on every keystroke.
+
+## API Reference
+
+```tsx
+function useDebounce<T>(value: T, setter: (value: T) => any, delay: number = 500): void;
+```
+
+### Parameters
+
+- `value`: The value to debounce
+- `setter`: A function that will be called with the debounced value
+- `delay` (optional): The debounce delay in milliseconds. Default is `500ms`.
+
+### Returns
+
+- This hook doesn't return anything (void)
+
+## Examples
+
+### Basic Usage
+
+<Canvas of={UseDebounceStories.Example} />
+
+### Implementation Details
+
+The hook:
+
+1. Sets up an effect that runs whenever the input value changes
+2. Creates a timeout that will call the setter function with the current value after the specified delay
+3. Cleans up any pending timeouts if the value changes before the delay completes
+
+This ensures that the setter function is only called once the user has stopped changing the value for the specified delay period.
+
+## When to Use
+
+- Search inputs where you want to trigger API calls only after the user stops typing
+- Form validation that shouldn't run on every keystroke
+- Expensive calculations that shouldn't run too frequently
+- Window resize handlers that shouldn't fire too often
+
+## Performance Considerations
+
+- Debouncing helps reduce the number of operations performed during rapid input changes
+- Choose an appropriate delay based on your use case (shorter for responsive UI updates, longer for expensive operations)
+- For very performance-critical applications, consider using a memoized version of your setter function
+
+## Comparison with Throttling
+
+- **Debouncing** (this hook): Delays execution until after a period of inactivity
+- **Throttling**: Limits execution to a maximum frequency (e.g., once every 100ms)
+
+Choose debouncing when you want to wait until the user has "finished" an interaction before taking action.
