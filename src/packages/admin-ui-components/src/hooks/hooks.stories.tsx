@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
 import { Meta } from '@storybook/react';
-import { useAutoFocus, useDebounce } from './index';
 
 /**
  * This file doesn't contain actual stories but serves as documentation for hooks.

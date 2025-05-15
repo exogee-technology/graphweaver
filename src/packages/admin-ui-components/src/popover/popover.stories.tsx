@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { Popover, PopoverItem } from './component';
-import { Button } from '../button';
 
 const meta = {
 	title: 'Display/Popover',

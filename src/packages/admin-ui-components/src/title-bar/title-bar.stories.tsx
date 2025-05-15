@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import { TitleBar } from './component';
 
 // Create a mock component that doesn't depend on the actual hooks
 const MockTitleBar = (props: {

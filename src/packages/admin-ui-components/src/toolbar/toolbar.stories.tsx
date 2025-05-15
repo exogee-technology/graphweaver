@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ToolBar } from './component';
 import { fn } from '@storybook/test';
 
 // Define types for the mock component

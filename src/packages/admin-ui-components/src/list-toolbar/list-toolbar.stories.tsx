@@ -1,5 +1,4 @@
-import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import { ListToolBar } from './component';
 
 // Note: Since this component depends on routing context and schema context,
@@ -36,7 +35,6 @@ const meta = {
 } as Meta<typeof ListToolBar>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
 // Note: This is a mock implementation for Storybook
 // The real component relies on routing context that's not available in Storybook

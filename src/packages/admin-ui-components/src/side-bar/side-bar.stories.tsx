@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SideBar } from './component';
-import { useEffect } from 'react';
 
 // Import from Storybook testing library
 import { fn } from '@storybook/test';

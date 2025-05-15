@@ -1,4 +1,3 @@
-import React, { ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Card } from './component';
 
