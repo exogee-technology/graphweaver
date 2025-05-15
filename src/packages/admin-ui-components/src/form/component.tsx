@@ -1,9 +1,9 @@
-import { Checkbox } from '@exogee/graphweaver-admin-ui-components';
+import { Checkbox } from '../checkbox';
 import { AnyFieldApi, DeepKeys, useForm } from '@tanstack/react-form';
 import React, { memo, useCallback, useMemo, useState } from 'react';
 import { z } from 'zod';
 import { Input } from '../input/component';
-import { Col, Grid } from '../layout';
+import { Col, Grid } from '../layouts';
 import { SelectMode, SelectOption } from '../select';
 import { Select } from '../select/component';
 import { Switch } from '../switch/component';
@@ -202,7 +202,7 @@ export const createForm = <T extends Record<string, any>>(props: {
 			mode?: SelectMode;
 		}) => {
 			// Create memoized validation function to prevent unnecessary rerenders
-			const validationFn = useCallback(validation, [validation]);
+			const validationFn = validation ? useCallback(validation, [validation]) : undefined;
 
 			// Create a stable reference to options to prevent rerenders when options are passed inline
 			const stableOptions = useMemo(
@@ -317,7 +317,7 @@ export const createForm = <T extends Record<string, any>>(props: {
 												// Pre-compute the value outside of useMemo to avoid hook rules violation
 												if (mode === SelectMode.MULTI) {
 													if (Array.isArray(currentValue)) {
-														return currentValue.map((val) => {
+														return currentValue.map((val: any) => {
 															const foundOpt = findMatchingOption(val, stableOptions);
 															return foundOpt || { value: val, label: String(val) };
 														});

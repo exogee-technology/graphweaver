@@ -1,0 +1,60 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as ButtonStories from './button.stories';
+import { Button } from './button';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Buttons allow users to trigger actions with a single click. They communicate calls to action and allow users to interact with the application.
+
+## Overview
+
+The Button component is a versatile interactive element that can be used to:
+
+- Submit forms
+- Trigger modal dialogs
+- Perform application actions
+- Navigate to other pages using the `href` prop
+
+## Examples
+
+### Default Button
+
+The standard button with default styling.
+
+<Canvas of={ButtonStories.Default} />
+
+### States
+
+#### Disabled Button
+
+Use the `disabled` prop to make a button unclickable.
+
+<Canvas of={ButtonStories.Disabled} />
+
+#### Loading Button
+
+Display a loading spinner with the `loading` prop to indicate an in-progress action.
+
+<Canvas of={ButtonStories.Loading} />
+
+## Properties
+
+<Controls of={ButtonStories.Default} />
+
+## Usage Guidelines
+
+- Use buttons for important actions that users need to easily find
+- Ensure button text clearly communicates what happens when clicked
+- For page navigation, use the `href` prop rather than `onClick`
+- Provide visual feedback with the `loading` state for asynchronous operations
+- Disable buttons when the action is unavailable
+- Keep text concise; use 1-3 words when possible
+
+## Accessibility
+
+- Buttons are keyboard accessible and can be activated using the Enter or Space keys
+- When disabled, buttons are removed from the tab order
+- Loading state preserves button dimensions to prevent layout shifts

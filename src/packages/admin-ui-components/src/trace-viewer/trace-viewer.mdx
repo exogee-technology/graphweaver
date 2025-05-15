@@ -1,0 +1,90 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as TraceViewerStories from './trace-viewer.stories';
+import { TraceViewer } from './component';
+
+<Meta of={TraceViewerStories} />
+
+# Trace Viewer
+
+The Trace Viewer component visualizes OpenTelemetry trace spans to help understand and debug GraphQL query execution flow and performance.
+
+## Overview
+
+The Trace Viewer component provides:
+
+- A hierarchical view of request execution spans
+- Visualization of the timing and duration of each span
+- Collapsible tree structure for exploring complex traces
+- Details about GraphQL queries and variables used
+- Performance insights into database queries and other operations
+
+Traces are especially useful for debugging performance bottlenecks and understanding the flow of complex operations across the system.
+
+## Examples
+
+### Default Trace
+
+The standard trace view showing a GraphQL query execution with several spans.
+
+<Canvas of={TraceViewerStories.Default} />
+
+### Simple Trace
+
+A minimal trace with just a few spans, ideal for basic queries.
+
+<Canvas of={TraceViewerStories.SimpleTrace} />
+
+### Complex Trace
+
+A more complex trace with nested operations and multiple levels of depth.
+
+<Canvas of={TraceViewerStories.ComplexTrace} />
+
+### Empty Trace
+
+How the component appears when there is no meaningful trace data.
+
+<Canvas of={TraceViewerStories.EmptyTrace} />
+
+## Properties
+
+<Controls of={TraceViewerStories.Default} />
+
+## Component Structure
+
+The Trace Viewer is composed of several key sections:
+
+1. **Span Tree** - Displays hierarchical spans with timing information
+2. **GraphQL Query** - Shows the GraphQL query that was executed
+3. **Variables** - Displays the variables passed to the query
+
+The component uses resizable panels to allow users to adjust the view based on their needs.
+
+## Span Information
+
+Each span in the trace shows:
+
+- The operation name
+- The duration of the operation
+- Timing relative to the full request
+- Visual representation of when the span occurred and how long it took
+- Number of child operations (if any)
+
+Spans can be expanded and collapsed to explore the trace hierarchy.
+
+## Usage Guidelines
+
+- Use the Trace Viewer to debug complex GraphQL operations
+- Trace data should be collected and structured according to OpenTelemetry standards
+- The component performs best with properly ordered spans (by timestamp)
+- For complex traces, encourage users to expand only the relevant sections
+- Ensure timestamps are in nanosecond precision for accurate timing representation
+
+## Implementation Notes
+
+- Built using react-resizable-panels for adjustable layout
+- Spans are displayed as a tree structure based on parent-child relationships
+- Timing calculations are based on Unix nanosecond timestamps
+- The component handles cases where spans might overlap in time
+- GraphQL queries are formatted for readability using syntax highlighting

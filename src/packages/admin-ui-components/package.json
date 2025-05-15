@@ -14,7 +14,9 @@
 		"codegen": "graphql-codegen --config ./codegen.yml",
 		"test:tsc": "tsc --noEmit",
 		"test:prettier": "prettier --check .",
-		"version": "npm version --no-git-tag-version"
+		"version": "npm version --no-git-tag-version",
+		"storybook": "storybook dev -p 6006",
+		"build-storybook": "storybook build"
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
@@ -28,6 +30,7 @@
 		"@apollo/client": "3.13.5",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.11.1",
+		"@tanstack/react-form": "1.11.1",
 		"@tanstack/react-table": "8.21.2",
 		"@tiptap/extension-link": "2.11.5",
 		"@tiptap/react": "2.11.7",
@@ -44,7 +47,8 @@
 		"react-resizable-panels": "2.1.7",
 		"react-syntax-highlighter": "15.6.1",
 		"tiptap-markdown": "0.8.10",
-		"wouter": "3.6.0"
+		"wouter": "3.6.0",
+		"zod": "3.24.4"
 	},
 	"peerDependencies": {
 		"formik": "^2.4.6",
@@ -53,6 +57,15 @@
 		"react-dom": "^18.0.0 || ^19.0.0"
 	},
 	"devDependencies": {
+		"@storybook/addon-essentials": "^8.6.12",
+		"@storybook/addon-interactions": "^8.6.12",
+		"@storybook/addon-onboarding": "^8.6.12",
+		"@storybook/blocks": "^8.6.12",
+		"@storybook/manager-api": "8.6.12",
+		"@storybook/react": "^8.6.12",
+		"@storybook/react-vite": "^8.6.12",
+		"@storybook/test": "^8.6.12",
+		"@storybook/theming": "8.6.12",
 		"@types/graphql-deduplicator": "2.0.2",
 		"@types/luxon": "3.6.2",
 		"@types/papaparse": "5.3.15",
@@ -60,13 +73,17 @@
 		"@types/react-syntax-highlighter": "15.5.13",
 		"esbuild": "0.25.1",
 		"esbuild-plugin-copy": "2.1.1",
+		"eslint-plugin-storybook": "0.12.0",
 		"formik": "2.4.6",
 		"glob": "11.0.1",
 		"graphql": "16.10.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
+		"storybook": "^8.6.12",
 		"typescript": "5.8.3",
-		"vite": "6.3.5"
+		"vite": "6.3.5",
+		"vite-plugin-graphweaver": "workspace:*",
+		"vitest": "3.0.9"
 	},
 	"keywords": [
 		"graphql",

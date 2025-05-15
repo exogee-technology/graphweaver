@@ -1,0 +1,38 @@
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+import * as DatePickerStories from './date-picker.stories';
+
+<Meta of={DatePickerStories} />
+
+# DatePicker
+
+The DatePicker component allows users to select dates and date ranges with optional time selection.
+
+## Overview
+
+The DatePicker component is a versatile form control that can be used to:
+
+- Select a single date
+- Select a date range with start and end dates
+- Include time selection when needed
+- Accept dates in various formats
+- Support internationalization with locale settings
+
+## Examples
+
+### Basic Usage
+
+#### Single Date Picker
+
+<Canvas of={DatePickerStories.SingleDatePicker} />
+
+#### Date Range Picker
+
+<Canvas of={DatePickerStories.DateRangePicker} />
+
+### With Time Selection
+
+<Canvas of={DatePickerStories.SingleDatePickerWithTime} />
+
+### Properties
+
+<Controls of={DatePickerStories.SingleDatePicker} />

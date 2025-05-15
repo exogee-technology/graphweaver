@@ -1,0 +1,139 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as JsonViewerStories from './json-viewer.stories';
+
+<Meta of={JsonViewerStories} />
+
+# JsonViewer
+
+A component that renders JSON data with syntax highlighting for improved readability.
+
+## Overview
+
+The JsonViewer component provides a way to display JSON data in a readable, properly formatted way with syntax highlighting. It's useful for showing API responses, configuration data, or any other JSON content in a visually appealing manner.
+
+## Examples
+
+### Simple JSON Object
+
+Basic usage with a simple JSON object:
+
+<Canvas of={JsonViewerStories.SimpleObject} />
+
+### Nested Objects
+
+JSON with deeply nested objects:
+
+<Canvas of={JsonViewerStories.NestedObjects} />
+
+### Arrays
+
+JSON containing arrays of values and objects:
+
+<Canvas of={JsonViewerStories.WithArrays} />
+
+### Null Values
+
+JSON with null values:
+
+<Canvas of={JsonViewerStories.WithNullValues} />
+
+### Complex JSON
+
+A more complex, deeply nested JSON example:
+
+<Canvas of={JsonViewerStories.ComplexJSON} />
+
+### JSON as String
+
+Using the component with a JSON string instead of an object:
+
+<Canvas of={JsonViewerStories.StringJSON} />
+
+## Properties
+
+<Controls />
+
+## Usage Guidelines
+
+### Basic Usage
+
+The component accepts either a JSON object or a JSON string:
+
+```jsx
+import { JsonViewer } from '@exogee/graphweaver-admin-ui-components';
+
+// With a JSON object
+const data = {
+	name: 'John Doe',
+	age: 30,
+	isActive: true,
+};
+
+<JsonViewer text={data} />;
+
+// With a JSON string
+const jsonString = `{
+  "name": "John Doe",
+  "age": 30,
+  "isActive": true
+}`;
+
+<JsonViewer text={jsonString} />;
+```
+
+### API Response Display
+
+A common use case is to display API responses:
+
+```jsx
+import { JsonViewer } from '@exogee/graphweaver-admin-ui-components';
+import { useState, useEffect } from 'react';
+
+function ApiResponseViewer() {
+	const [data, setData] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		fetch('https://api.example.com/data')
+			.then((response) => response.json())
+			.then((data) => {
+				setData(data);
+				setLoading(false);
+			});
+	}, []);
+
+	if (loading) return <div>Loading...</div>;
+
+	return (
+		<div>
+			<h2>API Response</h2>
+			<div style={{ height: '400px', border: '1px solid #ccc' }}>
+				<JsonViewer text={data} />
+			</div>
+		</div>
+	);
+}
+```
+
+## Implementation Details
+
+Under the hood, the JsonViewer uses:
+
+- `react-syntax-highlighter` with the Prism.js syntax highlighter
+- The "coldark-dark" theme for consistent and readable highlighting
+- Auto-formatting of JSON objects with proper indentation
+- Line numbers for easier reference
+- Automatic conversion of objects to formatted JSON strings
+
+## Styling
+
+The component uses a dark background (#14111a) by default to ensure good contrast for the syntax highlighting. You can adjust the height by wrapping the component in a container with a specific height.
+
+The component can grow to fill its container but will add scrollbars when content exceeds the available space.
+
+## Accessibility
+
+- Proper color contrast for syntax highlighting
+- Keyboard-navigable through standard scrolling mechanisms
+- Line numbers aid in verbal communication about specific parts of the data

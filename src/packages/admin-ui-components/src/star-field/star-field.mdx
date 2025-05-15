@@ -1,0 +1,71 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as StarFieldStories from './star-field.stories';
+import { StarField } from './component';
+
+<Meta of={StarFieldStories} />
+
+# StarField
+
+The StarField component creates an animated cosmic background with twinkling stars. It provides an engaging visual element for UI backgrounds, hero sections, or themed pages.
+
+## Overview
+
+The StarField component generates:
+
+- A dark space-like background
+- Randomly positioned stars of varying sizes
+- Animation effects including twinkling and orbital movement
+- A container that can hold other content as overlays
+
+It's particularly useful for creating immersive experiences or branded elements within the Graphweaver application.
+
+## Examples
+
+### Default StarField
+
+The basic StarField component fills its container with an animated star background.
+
+<Canvas of={StarFieldStories.Default} />
+
+### With Content Overlay
+
+The StarField can contain other elements that appear above the animated background.
+
+<Canvas of={StarFieldStories.WithContent} />
+
+### In a Small Container
+
+The StarField adapts to containers of any size while maintaining its cosmic appearance.
+
+<Canvas of={StarFieldStories.SmallContainer} />
+
+### Card Background
+
+The StarField can serve as an engaging background for UI cards and other elements.
+
+<Canvas of={StarFieldStories.CardBackground} />
+
+## Usage Guidelines
+
+- Use the StarField as a background element for themed sections of your application
+- Ensure sufficient contrast for any content placed over the StarField
+- Consider using the StarField for welcome screens, feature highlights, or error pages
+- The component works in containers of any size, but is most effective in larger areas
+- Avoid using multiple StarField components in close proximity as it may create visual noise
+
+## Implementation Notes
+
+- The StarField generates 100 stars with random positions and sizes
+- Stars are a mix of small point-like stars and larger cross-shaped stars
+- Stars have twinkle and orbital movement animations with varying durations
+- The component uses CSS animations for performance
+- For smaller screens, the component may be less performant due to the number of elements
+- The StarField accepts all standard HTML div properties and passes them to the container
+
+## Accessibility Considerations
+
+- Ensure that any text content overlaid on the StarField has sufficient contrast
+- The animations are subtle and shouldn't trigger vestibular disorders
+- Consider providing a reduced-motion alternative for users with motion sensitivity
+- When using as a background for important content, ensure the content remains legible
