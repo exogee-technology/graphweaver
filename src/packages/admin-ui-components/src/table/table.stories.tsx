@@ -122,7 +122,7 @@ const columnsWithSelection = [
 ];
 
 const meta = {
-	title: 'Components/Table',
+	title: 'Display/Table',
 	component: Table,
 	parameters: {
 		layout: 'padded',

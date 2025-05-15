@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { StarField } from './component';
 
 const meta = {
-	title: 'Components/StarField',
+	title: 'Layout/StarField',
 	component: StarField,
 	parameters: {
 		layout: 'fullscreen',

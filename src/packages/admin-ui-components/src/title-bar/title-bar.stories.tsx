@@ -107,7 +107,7 @@ const MockTitleBar = (props: {
 };
 
 const meta = {
-	title: 'Components/TitleBar',
+	title: 'Display/TitleBar',
 	component: MockTitleBar,
 	parameters: {
 		layout: 'padded',

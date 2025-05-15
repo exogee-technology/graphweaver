@@ -18,7 +18,7 @@ const sampleOptions: SelectOption[] = [
 const emptyOptions: SelectOption[] = [];
 
 const meta = {
-	title: 'Components/Select',
+	title: 'Inputs/Select',
 	component: Select,
 	parameters: {
 		layout: 'centered',

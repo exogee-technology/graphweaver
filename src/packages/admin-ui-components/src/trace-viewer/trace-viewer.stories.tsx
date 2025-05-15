@@ -243,7 +243,7 @@ const emptyTraces = (): Span[] => {
 };
 
 const meta = {
-	title: 'Components/TraceViewer',
+	title: 'Display/TraceViewer',
 	component: TraceViewer,
 	parameters: {
 		layout: 'padded',

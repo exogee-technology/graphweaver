@@ -256,7 +256,7 @@ const MockToolbar = ({ title, subtitle, onExportToCSV, showFilters = true }: Moc
 };
 
 const meta = {
-	title: 'Components/Toolbar',
+	title: 'Display/Toolbar',
 	component: MockToolbar,
 	parameters: {
 		layout: 'padded',

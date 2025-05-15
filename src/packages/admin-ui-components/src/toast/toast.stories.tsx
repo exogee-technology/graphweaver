@@ -92,7 +92,7 @@ const ToastDemo = ({
 };
 
 const meta = {
-	title: 'Components/Toast',
+	title: 'Display/Toast',
 	component: ToastDemo,
 	parameters: {
 		layout: 'padded',

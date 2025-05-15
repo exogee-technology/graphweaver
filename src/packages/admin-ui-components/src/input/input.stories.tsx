@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { Input } from './component';
 
 const meta = {
-	title: 'Components/Input',
+	title: 'Inputs/Input',
 	component: Input,
 	parameters: {
 		docs: {

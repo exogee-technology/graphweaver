@@ -5,7 +5,7 @@ import { SelectionBar } from './component';
 import { RowSelectionState } from '@tanstack/react-table';
 
 const meta = {
-	title: 'Components/SelectionBar',
+	title: 'Display/SelectionBar',
 	component: SelectionBar,
 	parameters: {
 		layout: 'centered',

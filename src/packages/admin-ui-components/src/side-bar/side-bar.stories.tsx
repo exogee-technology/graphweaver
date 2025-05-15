@@ -230,7 +230,7 @@ const SideBarContainer = ({ children }: { children: React.ReactNode }) => (
 );
 
 const meta = {
-	title: 'Components/SideBar',
+	title: 'Display/SideBar',
 	component: MockSideBar,
 	decorators: [(Story) => <SideBarContainer>{Story()}</SideBarContainer>],
 	parameters: {

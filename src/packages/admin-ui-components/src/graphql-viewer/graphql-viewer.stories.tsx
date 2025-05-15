@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { GraphQlViewer } from './component';
 
 const meta = {
-	title: 'Components/GraphQlViewer',
+	title: 'Display/GraphQlViewer',
 	component: GraphQlViewer,
 	parameters: {
 		docs: {

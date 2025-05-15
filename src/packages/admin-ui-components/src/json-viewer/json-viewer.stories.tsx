@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { JsonViewer } from './component';
 
 const meta = {
-	title: 'Components/JsonViewer',
+	title: 'Display/JsonViewer',
 	component: JsonViewer,
 	parameters: {
 		docs: {

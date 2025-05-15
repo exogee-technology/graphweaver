@@ -104,7 +104,7 @@ const FormWrapper = (props: any) => {
 };
 
 const meta = {
-	title: 'Components/Form',
+	title: 'Inputs/Form',
 	component: FormWrapper,
 	parameters: {
 		docs: {
