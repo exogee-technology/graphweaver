@@ -476,11 +476,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 
 	const rootNode = returnOrder?.[0] ? results.get(returnOrder[0]) : null;
 
-	if (!rootNode) {
-		throw new Error('Root node not found');
-	}
-
-	return [rootNode];
+	return rootNode ? [rootNode] : [];
 };
 
 /**
