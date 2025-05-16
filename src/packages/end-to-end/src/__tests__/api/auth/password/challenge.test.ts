@@ -21,8 +21,24 @@ class TaskProvider extends BaseDataProvider<any> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}
-	async updateOne(data: any) {
+	async updateOne(pk: string, data: any) {
 		return data;
+	}
+	async findOne(data: any) {
+		return data;
+	}
+}
+
+class TagProvider extends BaseDataProvider<any> {
+	public async withTransaction<T>(callback: () => Promise<T>) {
+		return await callback();
+	}
+	async updateOne(pk: string, data: any) {
+		return data;
+	}
+	async findOne(data: any) {
+		console.log('FIND ONE', data);
+		throw new Error('Authentication Error: Expected Token.');
 	}
 }
 
@@ -47,7 +63,7 @@ class Task {
 }
 
 @Entity('Tag', {
-	provider: new BaseDataProvider('Tag'),
+	provider: new TagProvider('Tag'),
 })
 class Tag {
 	@Field(() => ID)
@@ -139,7 +155,6 @@ describe('Password Authentication - Challenge', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		console.error(response.body.singleResult);
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
 			'Authentication Error: Expected Token.'
 		);
