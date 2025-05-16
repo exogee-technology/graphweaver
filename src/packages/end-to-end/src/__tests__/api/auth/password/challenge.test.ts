@@ -21,11 +21,11 @@ class TaskProvider extends BaseDataProvider<any> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}
-	async updateOne(pk: string, data: any) {
+	async updateOne(_: string, data: any) {
 		return data;
 	}
-	async findOne(data: any) {
-		return data;
+	async findOne() {
+		return '';
 	}
 }
 
