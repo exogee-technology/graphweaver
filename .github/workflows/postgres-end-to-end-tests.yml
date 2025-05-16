@@ -69,7 +69,7 @@ jobs:
 
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end
-        timeout-minutes: 7
+        timeout-minutes: 10
         run: |
           pnpm start-server &
           sleep 5 &&

@@ -32,6 +32,16 @@
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
     },
     {
+      "name": "End to End - Postgres",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["test-postgres"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/packages/end-to-end"
+    },
+    {
       "name": "End to End - Metadata",
       "type": "node",
       "request": "launch",
