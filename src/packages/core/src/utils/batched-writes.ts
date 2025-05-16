@@ -647,7 +647,7 @@ const operationType = async <G = unknown, D = unknown>(
 			throw new Error(`Entity with ID ${primaryKey} already exists`);
 		}
 
-		if (!existing || existing === 'is_base_provider') {
+		if (existing) {
 			operation = 'update';
 		} else if (!existing && isConfiguredForClientSideKeys) {
 			operation = 'create';
