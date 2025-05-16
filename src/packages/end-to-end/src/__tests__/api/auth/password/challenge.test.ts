@@ -24,6 +24,9 @@ class TaskProvider extends BaseDataProvider<any> {
 	async updateOne(data: any) {
 		return data;
 	}
+	async findOne(data: any) {
+		return data;
+	}
 }
 
 @ApplyMultiFactorAuthentication<Task>(() => ({
