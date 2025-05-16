@@ -37,7 +37,6 @@ class TagProvider extends BaseDataProvider<any> {
 		return data;
 	}
 	async findOne(data: any) {
-		console.log('FIND ONE', data);
 		throw new Error('Authentication Error: Expected Token.');
 	}
 }
