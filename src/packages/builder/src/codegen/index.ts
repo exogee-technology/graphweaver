@@ -22,18 +22,21 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 			pluginLoader: async (plugin: string) => import(plugin),
 			schema,
 			ignoreNoDocuments: true,
+			noSilentErrors: true,
 			documents: [
 				path.join('./src', extensions),
 				...(options?.watchForFileChangesInPaths?.map((clientPath) =>
 					path.join(clientPath, extensions)
 				) || []),
 			],
+			
 			generates: {
 				'src/types.generated.ts': {
 					config: {
 						skipDocumentsValidation: {
-							skipDuplicateValidation: true, // A flag to disable the validation for duplicate query and mutation names we don't need this as we are using near-operation-file
+							skipDuplicateValidation: true, // A flag to disable the validation for duplicate query and mutation names (we don't need this as we are using near-operation-file)
 						},
+						noSilentErrors: true,
 					},
 					plugins: [
 						{
@@ -68,7 +71,7 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 		// Write the files to disk
 		const writeOperations = files.flatMap((file) => [
 			fs.promises.writeFile(path.join(file.filename), file.content, 'utf8'),
-			// We save the types to two locations src and .graphweaver / outdir
+			// We save the types to two locations: src and .graphweaver / outdir
 			...(file.filename === 'src/types.generated.ts'
 				? typesOutputPaths.map((outputPath: string) =>
 						fs.promises.writeFile(outputPath, file.content, 'utf8')
@@ -83,7 +86,7 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 		if (err.message && err.message.includes(defaultStateMessage)) {
 			// do nothing for now and silently fail
 		} else {
-			console.log(err.message + `\n in ${err.source?.name}`);
+			throw err;
 		}
 	}
 };
