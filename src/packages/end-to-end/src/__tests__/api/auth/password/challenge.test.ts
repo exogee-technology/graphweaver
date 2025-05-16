@@ -139,6 +139,7 @@ describe('Password Authentication - Challenge', () => {
 		});
 
 		assert(response.body.kind === 'single');
+		console.error(response.body.singleResult);
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
 			'Authentication Error: Expected Token.'
 		);

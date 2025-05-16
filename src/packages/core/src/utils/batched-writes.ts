@@ -558,14 +558,13 @@ const updateOne = async <G = unknown, D = unknown>(
 		throw new Error('Missing metadata or provider');
 	}
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
-	const result = Object.keys(meta.provider).includes('updateOne')
-		? await meta.provider.updateOne(
-				String(node[primaryKeyField]),
-				isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
-					? meta.target.toBackendEntity(node)
-					: (node as unknown as Partial<D>)
-			)
-		: (node as Awaited<D>);
+
+	const result = await meta.provider.updateOne(
+		String(node[primaryKeyField]),
+		isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
+			? meta.target.toBackendEntity(node)
+			: (node as unknown as Partial<D>)
+	);
 
 	return fromBackendEntity(meta, result);
 };
@@ -586,7 +585,6 @@ const updateMany = async <G = unknown, D = unknown>(
 	}
 	const clientGeneratedPrimaryKeys = meta.apiOptions?.clientGeneratedPrimaryKeys;
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
-
 	if (nodes.some((n) => isDefined(n[primaryKeyField])) && clientGeneratedPrimaryKeys !== true) {
 		throw new Error(
 			`Cannot create entity with ID because clientGeneratedPrimaryKeys is not enabled.`
@@ -634,11 +632,9 @@ const operationType = async <G = unknown, D = unknown>(
 			throw new Error(
 				'Cannot call create or update on a client generated primary key entity without specifying a primary key.'
 			);
-		const existing = Object.keys(meta.provider).includes('findOne')
-			? await meta.provider.findOne({
-					[primaryKeyField]: primaryKey,
-				} as Filter<D>)
-			: 'is_base_provider';
+		const existing = await meta.provider.findOne({
+			[primaryKeyField]: primaryKey,
+		} as Filter<D>);
 		const graphweaverMutationType = getGraphweaverMutationType(info);
 		if (
 			(graphweaverMutationType === 'createOne' || graphweaverMutationType === 'createMany') &&
