@@ -24,8 +24,8 @@ class TaskProvider extends BaseDataProvider<any> {
 	async updateOne(_: string, data: any) {
 		return data;
 	}
-	async findOne() {
-		return '';
+	async findOne(data: any) {
+		return data;
 	}
 }
 
@@ -33,10 +33,10 @@ class TagProvider extends BaseDataProvider<any> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}
-	async updateOne(pk: string, data: any) {
+	async updateOne(_: string, data: any) {
 		return data;
 	}
-	async findOne(data: any) {
+	async findOne() {
 		throw new Error('Authentication Error: Expected Token.');
 	}
 }
