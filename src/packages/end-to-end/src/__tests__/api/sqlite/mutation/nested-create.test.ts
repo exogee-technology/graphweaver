@@ -1,5 +1,5 @@
-import request from 'supertest-graphql';
 import gql from 'graphql-tag';
+import request from 'supertest-graphql';
 
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
@@ -48,6 +48,32 @@ describe('nested create', () => {
 		}
 	});
 
+	test('should update an artist and create an album', async () => {
+		try {
+			const { data } = await request<{ updateArtist: Artist }>(config.baseUrl)
+				.mutate(gql`
+					mutation UpdateArtist($input: ArtistUpdateInput!) {
+						updateArtist(input: $input) {
+							artistId
+							albums {
+								albumId
+								title
+							}
+						}
+					}
+				`)
+				.variables({ input: { albums: [{ title: 'string' }], artistId: '275' } })
+				.expectNoErrors();
+
+			expect(data?.updateArtist?.artistId).toBe('275');
+			expect(data?.updateArtist?.albums?.map((album) => album.albumId)).toContain('348');
+			expect(data?.updateArtist?.albums?.map((album) => album.title)).toContain('string');
+		} catch (error) {
+			console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
+			expect(error).toBeUndefined(); // fail the test;
+		}
+	});
+
 	test('should create an artist and an album', async () => {
 		try {
 			const { data } = await request<{ createArtist: Artist }>(config.baseUrl)
@@ -68,32 +94,6 @@ describe('nested create', () => {
 			expect(data?.createArtist?.artistId).toBe('276');
 			expect(data?.createArtist?.albums?.[0]?.albumId).toBe('348');
 			expect(data?.createArtist?.albums?.[0]?.title).toBe('string');
-		} catch (error) {
-			console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
-			expect(error).toBeUndefined(); // fail the test;
-		}
-	});
-
-	test('should update an artist and create an album', async () => {
-		try {
-			const { data } = await request<{ updateArtist: Artist }>(config.baseUrl)
-				.mutate(gql`
-					mutation UpdateArtist($input: ArtistUpdateInput!) {
-						updateArtist(input: $input) {
-							artistId
-							albums {
-								albumId
-								title
-							}
-						}
-					}
-				`)
-				.variables({ input: { albums: [{ title: 'string' }], artistId: '1' } })
-				.expectNoErrors();
-
-			expect(data?.updateArtist?.artistId).toBe('1');
-			expect(data?.updateArtist?.albums?.map((album) => album.albumId)).toContain('348');
-			expect(data?.updateArtist?.albums?.map((album) => album.title)).toContain('string');
 		} catch (error) {
 			console.log(error); // print error so we know what went wrong (instead of just "AggregateError").
 			expect(error).toBeUndefined(); // fail the test;

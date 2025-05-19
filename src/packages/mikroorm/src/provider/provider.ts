@@ -608,7 +608,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		logger.trace(`Running create or update many for ${this.entityType.name} with args`, {
 			items: JSON.stringify(items),
 		});
-
 		const entities = await this.database.transactional<D[]>(async () => {
 			return Promise.all<D>(
 				items.map(async (item) => {
