@@ -128,17 +128,14 @@ export const WithError: Story = {
 export const Controlled = () => {
 	const [value, setValue] = useState('');
 
-	const handleChange = (newValue: string) => {
-		setValue(newValue);
-	};
-
 	return (
 		<div style={{ maxWidth: '300px' }}>
 			<Input
 				label="Controlled Input"
 				placeholder="Type something..."
 				value={value}
-				onChange={handleChange}
+				onChange={(_, newValue) => setValue(newValue)}
+				name="controlled-input"
 			/>
 			<div style={{ marginTop: '10px' }}>
 				Current value: <code>{value}</code>
@@ -171,6 +168,7 @@ export const FormExample = () => {
 				value={formValues.name}
 				onChange={handleChange('name')}
 				required
+				name="full-name"
 			/>
 
 			<Input
@@ -180,6 +178,7 @@ export const FormExample = () => {
 				value={formValues.email}
 				onChange={handleChange('email')}
 				required
+				name="email"
 			/>
 
 			<Input
@@ -189,6 +188,7 @@ export const FormExample = () => {
 				value={formValues.password}
 				onChange={handleChange('password')}
 				required
+				name="password"
 			/>
 
 			<Input
@@ -198,6 +198,7 @@ export const FormExample = () => {
 				max={120}
 				value={formValues.age}
 				onChange={handleChange('age')}
+				name="age"
 			/>
 
 			<button
