@@ -8,6 +8,7 @@ import {
 	useId,
 	useRef,
 	useState,
+	JSX,
 } from 'react';
 import styles from './styles.module.css';
 
