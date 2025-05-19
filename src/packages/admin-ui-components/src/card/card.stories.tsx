@@ -72,7 +72,7 @@ export const ContentOnly: Story = {
 	args: {
 		children: 'Custom content only',
 	},
-	render: (args) => (
+	render: () => (
 		<Card>
 			<div>
 				<h4>Custom Content</h4>
