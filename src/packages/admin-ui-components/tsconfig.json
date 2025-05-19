@@ -12,5 +12,5 @@
 	},
 	"include": ["./src", "./@types"],
 	"exclude": ["src/**/*.test.ts"],
-	"references": [{ "path": "../apollo-client" }, { "path": "../vite-plugin-graphweaver" }]
+	"references": [{ "path": "../apollo-client" }]
 }

@@ -1,11 +1,5 @@
-import { createRequire } from 'module';
 import type { Plugin } from 'vite';
-
-import { loadAuth } from './loaders/auth';
-import { loadCustomFields } from './loaders/custom-fields';
-import { loadCustomPages } from './loaders/custom-pages';
-
-const require = createRequire(import.meta.url);
+import { loadCustomPages, loadCustomFields, loadAuth } from './loaders';
 
 const resolved = (virtualModuleId: string) => `\0${virtualModuleId}`;
 

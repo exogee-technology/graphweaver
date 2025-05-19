@@ -3,10 +3,8 @@
 	"version": "2.15.3",
 	"description": "A vite plugin for use with @exogee/graphweaver's admin UI",
 	"license": "Apache-2.0",
-	"types": "lib/index.d.ts",
-	"source": "src/index.ts",
 	"main": "lib/index.js",
-	"type": "module",
+	"source": "src/index.ts",
 	"directories": {
 		"lib": "lib"
 	},
