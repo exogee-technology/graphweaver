@@ -5,13 +5,13 @@ import styles from './styles.module.css';
 /**
  * Input component props
  */
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface BaseInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'name'> {
 	/** Label for the input field */
 	label?: string;
 	/** Whether the input is required */
 	required?: boolean;
 	/** Handler for when the input value changes */
-	onChange?: (value: string) => void;
+	onChange?: (fieldName: string, value: string) => void;
 	/** Error message to display */
 	error?: string;
 	/** Whether to show the password toggle button (only for type="password") */
@@ -26,9 +26,23 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 	max?: number;
 	/** Step value for increments (only for type="number") */
 	step?: number;
-	/** Legacy field name property */
+	/** Placeholder for the input field */
+	placeholder?: string;
+}
+
+interface InputPropsWithName extends BaseInputProps {
+	/** Name of the input field */
+	name: string;
 	fieldName?: string;
 }
+
+interface InputPropsWithFieldName extends BaseInputProps {
+	/** Legacy field name property */
+	fieldName: string;
+	name?: string;
+}
+
+export type InputProps = InputPropsWithName | InputPropsWithFieldName;
 
 /**
  * A reusable input component that supports various input types including
@@ -71,7 +85,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 		const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 			const newValue = event.target.value;
 			setInternalValue(newValue);
-			onChange?.(newValue);
+			onChange?.((name || fieldName) as string, newValue);
 		};
 
 		const handleFocus = () => {
@@ -102,7 +116,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 			}
 
 			setInternalValue(String(newValue));
-			onChange?.(String(newValue));
+			onChange?.((name || fieldName) as string, String(newValue));
 		};
 
 		const decrementNumber = () => {
@@ -120,7 +134,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 			}
 
 			setInternalValue(String(newValue));
-			onChange?.(String(newValue));
+			onChange?.((name || fieldName) as string, String(newValue));
 		};
 
 		return (

@@ -244,7 +244,7 @@ export const createForm = <T extends Record<string, any>>(props: {
 											name={field.name}
 											type="text"
 											placeholder={placeholder}
-											onChange={(val: string) => {
+											onChange={(_, val: string) => {
 												field.handleChange(val as any);
 											}}
 											value={stringValue}
@@ -256,7 +256,7 @@ export const createForm = <T extends Record<string, any>>(props: {
 											name={field.name}
 											type="number"
 											placeholder={placeholder}
-											onChange={(val: string) => {
+											onChange={(_, val: string) => {
 												// Convert empty string to undefined or 0, otherwise to number
 												if (val === '') {
 													// Default to 0 for numeric fields when empty - more predictable
