@@ -28,9 +28,10 @@ export const TextFilter = ({
 		<Input
 			key={fieldName}
 			inputMode="text"
-			fieldName={fieldName}
+			name={fieldName}
+			placeholder={fieldName}
 			value={value}
-			onChange={(fieldName: string, newValue?: string) => {
+			onChange={(newValue?: string) => {
 				// In either case we'll use ilike so we should escape any literal % characters
 				if (caseInsensitive || substringMatch) newValue = newValue?.replaceAll('%', '\\%');
 				if (substringMatch && newValue) newValue = `%${newValue}%`;
