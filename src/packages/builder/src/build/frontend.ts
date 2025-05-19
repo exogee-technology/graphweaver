@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { rimraf } from 'rimraf';
-import { config } from '@exogee/graphweaver-config';
 
 import { viteConfig } from '../vite-config';
 
@@ -13,6 +12,9 @@ export const buildFrontend = async ({ adminUiBase }: FrontendBuildOptions) => {
 	// We're using the async import here because we're in CJS and vite's CJS entry point is
 	// deprecated. Once we move to ESM, we can use the ESM entry point directly above.
 	const { build } = await import('vite');
+
+	// Same here, it's ESM but we're in CJS so we need to use the async import.
+	const { config } = await import('@exogee/graphweaver-config');
 
 	// Clear the folders
 	await rimraf(path.join('.graphweaver', 'admin-ui'));

@@ -1,4 +1,3 @@
-import graphweaver from 'vite-plugin-graphweaver';
 import { config as getGraphweaverConfig } from '@exogee/graphweaver-config';
 
 import type { InlineConfig } from 'vite';
@@ -22,6 +21,9 @@ export const viteConfig = async ({
 	// This needs to be ESM imported regardless of whether we're in CJS or ESM because the
 	// CJS entrypoint for vite has been deprecated.
 	const { default: react } = await import('@vitejs/plugin-react');
+
+	// Same here, this is ESM only
+	const { default: graphweaver } = await import('vite-plugin-graphweaver');
 
 	// if config includes auth options then check that the auth package is installed
 	const config = getGraphweaverConfig();

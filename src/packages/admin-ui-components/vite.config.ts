@@ -1,9 +1,6 @@
 // vite.config.ts
 import { defineConfig } from 'vitest/config';
-import graphweaverPluginImport from 'vite-plugin-graphweaver';
-
-const graphweaverPlugin = (graphweaverPluginImport as any)
-	.default as typeof graphweaverPluginImport;
+import graphweaverPlugin from 'vite-plugin-graphweaver';
 
 export default defineConfig({
 	test: {
