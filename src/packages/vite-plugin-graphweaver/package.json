@@ -5,10 +5,6 @@
 	"license": "Apache-2.0",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
-	"exports": {
-		".": "./lib/index.js"
-	},
-	"module": "lib/index.js",
 	"directories": {
 		"lib": "lib"
 	},
