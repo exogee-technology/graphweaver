@@ -22,7 +22,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
-        working-directory: src
         with:
           version: 8
           run_install: false
@@ -41,8 +40,8 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
         working-directory: src
+        run: pnpm install
 
       - name: Build Storybook
         working-directory: src
