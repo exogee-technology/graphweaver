@@ -44,7 +44,7 @@ jobs:
         run: pnpm install
 
       - name: Build vite-plugin-graphweaver
-        working-directory: src/packages/vite-plugin-graphweaver
+        working-directory: src
         run: pnpm build
 
       - name: Build Storybook
