@@ -44,8 +44,8 @@ jobs:
         run: pnpm install
 
       - name: Build Storybook
-        working-directory: src
-        run: pnpm run build-storybook
+        working-directory: src/packages/admin-ui-components
+        run: pnpm -r build-storybook
 
       - name: Deploy to Netlify
         uses: netlify/actions/cli@master
