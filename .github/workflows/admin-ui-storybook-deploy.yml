@@ -22,6 +22,7 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
+        working-directory: src
         with:
           version: 8
           run_install: false
@@ -41,9 +42,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+        working-directory: src
 
       - name: Build Storybook
-        working-directory: src/packages/admin-ui-components
+        working-directory: src
         run: pnpm run build-storybook
 
       - name: Deploy to Netlify
