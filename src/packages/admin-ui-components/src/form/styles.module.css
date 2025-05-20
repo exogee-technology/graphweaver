@@ -1,0 +1,44 @@
+.label {
+	font-size: 12px;
+	color: rgba(160, 155, 170, 0.85);
+	margin-bottom: 4px;
+	display: block;
+}
+
+.formField {
+	margin-bottom: 16px;
+}
+
+.errorText {
+	color: #f44336;
+	font-size: 12px;
+	margin-top: 4px;
+}
+
+.validatingText {
+	color: #2196f3;
+	font-size: 12px;
+	margin-top: 4px;
+	font-style: italic;
+}
+
+.formContainer {
+	max-width: 650px;
+}
+
+.formActions {
+	margin-top: 24px;
+}
+
+.resultContainer {
+	margin-top: 24px;
+	padding: 16px;
+	background: rgba(237, 232, 242, 0.05);
+	border-radius: 6px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.error {
+	color: #f44336;
+	margin-top: 8px;
+}

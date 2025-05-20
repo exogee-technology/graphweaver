@@ -1,0 +1,163 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as PopoverStories from './popover.stories';
+
+<Meta of={PopoverStories} />
+
+# Popover
+
+A dropdown menu component that displays a list of items when clicked, similar to a select dropdown but with more flexibility.
+
+## Overview
+
+The Popover component provides a button that, when clicked, displays a list of selectable options or actions. It's commonly used for dropdown menus, action menus, and custom select components.
+
+## Examples
+
+### Basic Popover
+
+A simple popover with a list of actions:
+
+<Canvas of={PopoverStories.Default} />
+
+### With Default Value
+
+Popover with a pre-selected value shown in the button:
+
+<Canvas of={PopoverStories.WithDefaultValue} />
+
+### Positioned Above
+
+Popover that appears above the button instead of below:
+
+<Canvas of={PopoverStories.PositionedTop} />
+
+### With Links
+
+Popover items can be links that navigate to different URLs:
+
+<Canvas of={PopoverStories.WithLinks} />
+
+### Interactive Selection
+
+An interactive example that updates state when options are selected:
+
+<Canvas of={PopoverStories.Interactive} />
+
+### With Custom Rendering
+
+Items can include custom content rendered after the main text:
+
+<Canvas of={PopoverStories.WithCustomRendering} />
+
+### With Dividers and Sections
+
+A more complex menu with sections and dividers:
+
+<Canvas of={PopoverStories.WithDividers} />
+
+## Properties
+
+<Controls />
+
+## PopoverItem Properties
+
+Each item in the `items` array should have the following properties:
+
+| Property      | Type     | Description                                                                                              |
+| ------------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| `id`          | string   | Unique identifier for the item                                                                           |
+| `name`        | string   | Text label for the item                                                                                  |
+| `href`        | string   | (Optional) URL for the item if it should act as a link                                                   |
+| `onClick`     | function | (Optional) Function called when the item is clicked. Return `false` to prevent the popover from closing. |
+| `renderAfter` | function | (Optional) Function that returns React nodes to render after the item text                               |
+| `className`   | string   | (Optional) CSS class to apply to the item                                                                |
+
+## Usage Guidelines
+
+### Basic Usage
+
+```jsx
+import { Popover } from '@exogee/graphweaver-admin-ui-components';
+
+const items = [
+  {
+    id: 'item1',
+    name: 'Option 1',
+    onClick: () => console.log('Option 1 clicked'),
+  },
+  {
+    id: 'item2',
+    name: 'Option 2',
+    onClick: () => console.log('Option 2 clicked'),
+  },
+];
+
+// As an action menu
+<Popover items={items}>
+  Actions
+</Popover>
+
+// With a default value
+<Popover
+  items={items}
+  defaultValue={items[0]}
+/>
+```
+
+### Creating a Custom Select
+
+The Popover can be used to create a custom select component:
+
+```jsx
+import { useState } from 'react';
+import { Popover } from '@exogee/graphweaver-admin-ui-components';
+
+function CustomSelect() {
+	const [selectedValue, setSelectedValue] = useState('Select an option');
+
+	const items = [
+		{
+			id: 'option1',
+			name: 'Option 1',
+			onClick: () => setSelectedValue('Option 1'),
+		},
+		{
+			id: 'option2',
+			name: 'Option 2',
+			onClick: () => setSelectedValue('Option 2'),
+		},
+	];
+
+	return <Popover items={items}>{selectedValue}</Popover>;
+}
+```
+
+### Links vs Button Actions
+
+- Use `href` for navigation to different pages or sections
+- Use `onClick` for actions that should happen within the current page
+
+### Preventing Auto-Close
+
+By default, the popover closes when an item is clicked. To prevent this behavior (useful for multi-select scenarios or toggling options), return `false` from the onClick handler:
+
+```jsx
+{
+  id: 'toggle',
+  name: 'Toggle Feature',
+  onClick: () => {
+    // Toggle logic here
+    return false; // Prevents the popover from closing
+  }
+}
+```
+
+## Styling
+
+The Popover inherits styling from the Button component for the trigger and adds its own styling for the dropdown menu. The component uses CSS variables that can be customized:
+
+- `--detail-border-color`: Border color for the popover menu
+- `--primary-color`: Background color for items on hover
+
+Custom styling can be applied to individual items using the `className` property.

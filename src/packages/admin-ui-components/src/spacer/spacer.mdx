@@ -1,0 +1,72 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as SpacerStories from './spacer.stories';
+import { Spacer } from './component';
+
+<Meta of={SpacerStories} />
+
+# Spacer
+
+The Spacer component is a utility component for creating consistent spacing between elements in a flex layout.
+
+## Overview
+
+The Spacer component is a versatile layout utility that can be used to:
+
+- Add fixed vertical spacing between stacked elements
+- Add fixed horizontal spacing between inline elements
+- Create flexible spacing that pushes elements apart
+- Distribute elements evenly in a container
+- Implement consistent spacing patterns throughout the application
+
+## Examples
+
+### Vertical Spacing
+
+Use the Spacer with a fixed height to add vertical spacing between elements in a column layout.
+
+<Canvas of={SpacerStories.HeightSpacer} />
+
+### Horizontal Spacing
+
+Use the Spacer with a fixed width to add horizontal spacing between elements in a row layout.
+
+<Canvas of={SpacerStories.WidthSpacer} />
+
+### Flexible Spacing with Grow
+
+Use the Spacer with the `grow` property to push elements to the edges of a container.
+
+<Canvas of={SpacerStories.GrowSpacer} />
+
+### Even Distribution
+
+Use multiple Spacers with the `flex` property to evenly distribute elements in a container.
+
+<Canvas of={SpacerStories.FlexDistribution} />
+
+### Fixed Dimensions
+
+Combine width and height properties to create consistent spacing patterns.
+
+<Canvas of={SpacerStories.FixedDimensions} />
+
+## Properties
+
+<Controls of={SpacerStories.HeightSpacer} />
+
+## Usage Guidelines
+
+- Use the `height` property for vertical spacing in column layouts
+- Use the `width` property for horizontal spacing in row layouts
+- Use the `grow` property to push elements apart (similar to `flex-grow: 1`)
+- Use the `flex` property for flexible spacing that respects other flex items
+- Use the `shrink` property to control how the spacer shrinks when space is limited
+- Use multiple spacers for even distribution of elements
+
+## Implementation Notes
+
+- The Spacer is an empty `<div>` element styled with flex properties
+- It can be customized with fixed dimensions or flexible spacing
+- When using fixed dimensions, the component sets min/max dimensions to ensure consistent spacing
+- The component accepts a custom `className` for additional styling if needed

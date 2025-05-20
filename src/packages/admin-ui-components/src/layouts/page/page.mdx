@@ -1,0 +1,57 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as PageStories from './page.stories';
+
+<Meta of={PageStories} />
+
+# Page
+
+The Page component provides a standardized layout for admin pages with a consistent header and content structure.
+
+## Overview
+
+The Page component offers:
+
+- A consistent layout for admin UI pages
+- Standardized header with title and optional subtitle
+- Content area with consistent padding and styling
+- Integration with the DefaultLayout component
+
+## Examples
+
+### Default Page
+
+A basic page with a title and content.
+
+<Canvas of={PageStories.Default} />
+
+### With Subtitle
+
+A page with both a title and a descriptive subtitle.
+
+<Canvas of={PageStories.WithSubtitle} />
+
+### With Custom Classes
+
+The Page component accepts custom CSS classes for both the header and content sections.
+
+<Canvas of={PageStories.WithCustomClasses} />
+
+## Properties
+
+<Controls of={PageStories.Default} />
+
+## Usage Guidelines
+
+- Use the Page component as a container for all custom admin pages
+- Provide a clear, concise title that describes the page's purpose
+- Use the subtitle for additional context or instructions when needed
+- The content area automatically provides appropriate spacing and layout
+- Custom CSS classes can be used to extend the default styling while maintaining consistency
+
+## Implementation Notes
+
+- The Page component renders within the DefaultLayout, which provides the application frame
+- The header section is styled consistently across all pages
+- The content area is designed to handle various types of content while maintaining visual consistency
+- The component separates the header and content areas with appropriate spacing

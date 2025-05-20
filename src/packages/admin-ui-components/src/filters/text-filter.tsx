@@ -28,7 +28,8 @@ export const TextFilter = ({
 		<Input
 			key={fieldName}
 			inputMode="text"
-			fieldName={fieldName}
+			name={fieldName}
+			placeholder={fieldName}
 			value={value}
 			onChange={(fieldName: string, newValue?: string) => {
 				// In either case we'll use ilike so we should escape any literal % characters

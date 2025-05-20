@@ -1,0 +1,10 @@
+.card {
+	background-color: #1e1a25;
+	border: 1px solid #3b3349;
+	border-radius: 12px;
+	padding: 10px;
+}
+
+.description {
+	color: #666;
+}

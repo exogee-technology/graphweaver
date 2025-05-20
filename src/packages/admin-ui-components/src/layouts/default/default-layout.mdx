@@ -1,0 +1,49 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as DefaultLayoutStories from './default-layout.stories';
+
+<Meta of={DefaultLayoutStories} />
+
+# DefaultLayout
+
+The DefaultLayout component provides the main application shell for the Graphweaver Admin UI, with a resizable sidebar and content area.
+
+## Overview
+
+The DefaultLayout component includes:
+
+- A SideBar component for navigation
+- A resizable sidebar with minimum and maximum width constraints
+- A responsive layout that adapts to different screen sizes
+- A mobile-friendly drawer menu for smaller screens
+
+## Examples
+
+### Default Layout
+
+The standard layout with sidebar and content area.
+
+<Canvas of={DefaultLayoutStories.Default} />
+
+### With Complex Content
+
+An example of the layout with more complex dashboard content.
+
+<Canvas of={DefaultLayoutStories.WithComplexContent} />
+
+## Usage Guidelines
+
+- Use DefaultLayout as the outer container for all admin pages
+- The layout automatically handles the sidebar and navigation
+- Place page content as children of the DefaultLayout
+- The SideBar will be rendered automatically as part of the layout
+- For custom pages, consider using the Page component within DefaultLayout
+
+## Implementation Notes
+
+- Uses a resizable sidebar with drag functionality
+- Sidebar width persists between sessions
+- On mobile devices, the sidebar becomes a drawer that can be toggled
+- Relies on the RequireSchema component to ensure schema is loaded
+- The resizer element allows users to adjust the sidebar width
+- Minimum width: 220px, Maximum width: 820px, Default width: 320px

@@ -1,0 +1,134 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as FormStories from './form.stories';
+
+<Meta of={FormStories} />
+
+# Form
+
+The Form module provides a powerful hook-based approach to creating forms with built-in validation, state management, and field components.
+
+## Overview
+
+The `createForm` hook generates a set of components and utilities for building forms with minimal boilerplate. It uses [@tanstack/react-form](https://tanstack.com/form/latest) under the hood and provides integration with [Zod](https://github.com/colinhacks/zod) for schema validation.
+
+## Key Concepts
+
+### The `createForm` Hook
+
+The `createForm` hook is the main entry point for creating forms. It takes a configuration object and returns components and utilities for building your form.
+
+```tsx
+const { Form, Field, canSubmit, reset, getValues, setValue, instance } = createForm({
+  defaultValues: { name: '', email: '' },
+  zodSchema: z.object({...}),  // Optional
+  onSubmit: (values) => {...},
+  onError: (error) => {...},   // Optional
+  cols: 2                      // Optional, default: 1
+});
+```
+
+### Returned Components and Utilities
+
+| Name        | Type      | Description                                                       |
+| ----------- | --------- | ----------------------------------------------------------------- |
+| `Form`      | Component | Container component that handles form submission                  |
+| `Field`     | Component | Renders different types of form inputs with labels and validation |
+| `canSubmit` | boolean   | Indicates if the form is valid and can be submitted               |
+| `reset`     | function  | Resets the form to its default values                             |
+| `getValues` | function  | Returns the current form values                                   |
+| `setValue`  | function  | Sets a specific field's value programmatically                    |
+| `instance`  | object    | The underlying form instance for advanced usage                   |
+
+## Examples
+
+### Form with Validation
+
+A basic form with Zod schema validation.
+
+<Canvas of={FormStories.WithValidation} />
+
+### Multi-Column Layout
+
+A form with a two-column layout.
+
+<Canvas of={FormStories.MultiColumnLayout} />
+
+### Form without Validation
+
+A simple form without schema validation.
+
+<Canvas of={FormStories.WithoutValidation} />
+
+## Field Types
+
+The `Field` component supports several input types:
+
+- **text**: For text input
+- **number**: For numeric input (with optional min/max)
+- **select**: For dropdown selection (single or multi-select)
+- **switch**: For toggle switches
+- **checkbox**: For checkbox inputs
+
+## Field Props
+
+The `Field` component accepts the following props:
+
+| Prop          | Type     | Description                                         |
+| ------------- | -------- | --------------------------------------------------- |
+| `name`        | string   | Field name (path in form data)                      |
+| `type`        | string   | Input type (text, number, select, switch, checkbox) |
+| `label`       | string   | Optional label text                                 |
+| `placeholder` | string   | Optional placeholder text                           |
+| `validation`  | function | Optional custom validation function                 |
+| `span`        | number   | Column span in grid layout (default: 1)             |
+| `min`         | number   | Minimum value for number inputs                     |
+| `max`         | number   | Maximum value for number inputs                     |
+| `options`     | array    | Options for select inputs                           |
+| `mode`        | enum     | Selection mode for select inputs (SINGLE or MULTI)  |
+
+## Using Zod Validation
+
+The `createForm` hook accepts an optional Zod schema for validation. When provided, the form will validate against this schema and prevent submission until all validation passes.
+
+```tsx
+import { z } from 'zod';
+
+const { Form, Field } = createForm({
+	defaultValues: { name: '', email: '', age: 0 },
+	zodSchema: z.object({
+		name: z.string().min(2, 'Name must be at least 2 characters'),
+		email: z.string().email('Invalid email address'),
+		age: z.number().min(18, 'Must be at least 18 years old'),
+	}),
+	onSubmit: (values) => {
+		// This will only be called if validation passes
+		console.log(values);
+	},
+});
+```
+
+## Custom Validation
+
+In addition to schema validation, you can provide custom validation for individual fields:
+
+```tsx
+<Field
+	name="username"
+	type="text"
+	label="Username"
+	validation={({ value }) => {
+		if (value && value.includes(' ')) {
+			return 'Username cannot contain spaces';
+		}
+		return undefined; // No error
+	}}
+/>
+```
+
+## Accessibility
+
+- All form inputs are properly labeled for screen readers
+- Validation errors are clearly communicated
+- The form supports keyboard navigation
+- Form state is maintained for better user experience

@@ -1,0 +1,93 @@
+:root {
+	font-family: 'Inter', sans-serif;
+	--body-copy-color: #ede8f2;
+	--body-copy-color-rbg: 237, 232, 242;
+	--body-bg-color: #100a1c;
+	--primary-color: #7038c2;
+	--secondary-color: #853af2;
+	--detail-bg-color: #171221;
+	--detail-border-color: rgba(var(--body-copy-color-rbg), 0.1);
+
+	--color-light-blue: #abbce9;
+	--color-light-green: #abe9b8;
+	--color-light-orange: #e9c8ab;
+	--color-light-red: #ff9999;
+	--color-blue: #0288d1;
+	--color-red: #b70e07;
+	--color-orange: #ed6c02;
+	--color-green: #2e7d32;
+	--color-white: #fff;
+	--color-black: #5b5151;
+}
+@supports (font-variation-settings: normal) {
+	:root {
+		font-family: 'Inter var', sans-serif;
+	}
+}
+
+* {
+	font-family: 'Inter', sans-serif;
+	color: var(--body-copy-color);
+	box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+	margin: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background-color: var(--body-bg-color);
+	scrollbar-color: black transparent;
+	scrollbar-width: thin;
+
+	font-size: 14px;
+	line-height: 150%;
+
+	height: 100%;
+	color-scheme: dark;
+}
+
+body::-webkit-scrollbar {
+	display: none;
+}
+
+/* Font styling */
+h1 {
+	font-style: normal;
+	font-weight: 600;
+	font-size: 32px;
+	line-height: 140%;
+}
+
+p.subtext {
+	opacity: 0.6;
+}
+
+p.subtext a {
+	font-weight: 400;
+	text-decoration: underline;
+	transition: ease 0.12s;
+	opacity: 1;
+}
+
+p.subtext a:hover {
+	opacity: 0.6;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+	/* Remove default */
+	-webkit-appearance: none;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+*,
+*::after,
+*::before {
+	/* Make it so that users can't drag the application elements by default */
+	-webkit-user-drag: none;
+	-webkit-app-region: no-drag;
+}

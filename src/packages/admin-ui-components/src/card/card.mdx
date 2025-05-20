@@ -1,0 +1,71 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as CardStories from './card.stories';
+import { Card } from './component';
+
+<Meta of={CardStories} />
+
+# Card
+
+Cards are container components that group related content and actions, providing a consistent way to present information.
+
+## Overview
+
+The Card component is a versatile container that can be used to:
+
+- Display related content in a visually distinct container
+- Group information and actions together
+- Create visual hierarchy in layouts
+- Provide a consistent design pattern across the application
+
+## Examples
+
+### Default Card
+
+The standard card with a title, description, and content.
+
+<Canvas of={CardStories.Default} />
+
+### Title Only
+
+A card with only a title and content.
+
+<Canvas of={CardStories.TitleOnly} />
+
+### Description Only
+
+A card with only a description and content.
+
+<Canvas of={CardStories.DescriptionOnly} />
+
+### Content Only
+
+A card with only content, no title or description.
+
+<Canvas of={CardStories.ContentOnly} />
+
+### Complex Content
+
+A card with more complex content and structure.
+
+<Canvas of={CardStories.ComplexContent} />
+
+## Properties
+
+<Controls of={CardStories.Default} />
+
+## Usage Guidelines
+
+- Use cards to group related information and create visual separation
+- Keep card content concise and related to a single topic or action
+- Maintain consistent spacing within and between cards
+- Use titles that clearly describe the card's content
+- Consider using cards in grid layouts to present collections of similar items
+- Avoid nesting cards within other cards when possible
+
+## Accessibility
+
+- Ensure proper heading hierarchy with card titles
+- Maintain sufficient color contrast for text elements
+- Cards should have logical tab order for interactive elements
+- Content within cards should be accessible to screen readers

@@ -92,19 +92,19 @@ export const NumericRangeFilter = ({ fieldName, onChange, filter }: Props) => {
 				<div className={styles.popup} ref={popUpRef}>
 					<div className={styles.inputContainer}>
 						<Input
-							inputMode="numeric"
+							type="number"
 							fieldName="from"
 							value={`${from ?? ''}`}
-							onChange={(_: unknown, value: unknown) => handleOnChange(value, to)}
-							inputClassName={styles.input}
+							onChange={(value: unknown) => handleOnChange(value, to)}
+							className={styles.input}
 						/>
 						<span>-</span>
 						<Input
-							inputMode="numeric"
+							type="number"
 							fieldName="to"
 							value={`${to ?? ''}`}
-							onChange={(_: unknown, value: unknown) => handleOnChange(from, value)}
-							inputClassName={styles.input}
+							onChange={(value: unknown) => handleOnChange(from, value)}
+							className={styles.input}
 						/>
 					</div>
 

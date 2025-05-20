@@ -1,0 +1,61 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as RowStories from './row.stories';
+import { Row } from './component';
+
+<Meta of={RowStories} />
+
+# Row
+
+The Row component creates a horizontal flex layout for arranging elements in a single row.
+
+## Overview
+
+The Row component is designed to:
+
+- Create a horizontal layout with elements arranged side by side
+- Provide consistent spacing between rows when used in layouts
+- Work together with other layout components like Grid and Col
+
+## Examples
+
+### Default Row
+
+A basic row with a single child element.
+
+<Canvas of={RowStories.Default} />
+
+### Multiple Children
+
+A row containing multiple child elements that are arranged horizontally.
+
+<Canvas of={RowStories.WithMultipleChildren} />
+
+### Custom Gap
+
+You can customize the spacing between rows by specifying the gap property.
+
+<Canvas of={RowStories.CustomGap} />
+
+### With Custom CSS Class
+
+Add a custom CSS class to extend or override the default styles.
+
+<Canvas of={RowStories.WithCustomClassName} />
+
+## Properties
+
+<Controls of={RowStories.Default} />
+
+## Usage Guidelines
+
+- Use Row components to create horizontal arrangements of elements
+- When used inside a Grid with the maxRowsPerColumn property, rows will automatically distribute across columns
+- Combine with Col components for more complex layouts
+- For vertical stacking, consider using a column-based layout instead
+
+## Implementation Notes
+
+- Built on flexbox for consistent cross-browser support
+- Spacing between rows is controlled via the gap property
+- Custom classes can be added while preserving the core functionality

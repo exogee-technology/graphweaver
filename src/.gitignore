@@ -119,3 +119,4 @@ dist
 # Output folders
 lib/
 .graphweaver/
+*storybook.log

@@ -1,0 +1,105 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as TableStories from './table.stories';
+import { Table } from './component';
+
+<Meta of={TableStories} />
+
+# Table
+
+The Table component renders a data table with support for sorting, row selection, and infinite scrolling.
+
+## Overview
+
+The Table component provides a flexible way to display tabular data with features like:
+
+- Column sorting with customizable sort direction
+- Row selection with checkboxes
+- Clickable rows for detailed view navigation
+- Infinite scrolling pagination
+- Loading states with spinner indicators
+- Keyboard accessibility
+
+It's built on top of the TanStack Table (formerly React Table) library and provides a streamlined API for common table operations.
+
+## Examples
+
+### Basic Table
+
+A standard table with data displayed in rows and columns.
+
+<Canvas of={TableStories.Default} />
+
+### Loading State
+
+The table displays a loading spinner when data is being fetched.
+
+<Canvas of={TableStories.Loading} />
+
+### Sortable Columns
+
+Columns can be sorted by clicking the column header.
+
+<Canvas of={TableStories.Sortable} />
+
+### Row Selection
+
+The table supports row selection with checkboxes.
+
+<Canvas of={TableStories.RowSelection} />
+
+### Row Click Handler
+
+Rows can be made clickable to navigate to a detailed view or perform an action.
+
+<Canvas of={TableStories.RowClickable} />
+
+### Empty Table
+
+The table handles the case when no data is available.
+
+<Canvas of={TableStories.Empty} />
+
+## Properties
+
+<Controls of={TableStories.Default} />
+
+## Usage Guidelines
+
+- Use the `primaryKeyField` prop to specify a unique identifier for each row
+- Implement `onRowClick` for navigation to detail views
+- Use `onRowSelectionChange` to handle bulk operations on selected rows
+- Provide the `sort` object and `onSortClick` handler for sortable columns
+- Use `loading` to indicate data fetching states
+- Implement `fetchNextPage` for infinite scrolling pagination
+
+## Column Configuration
+
+Columns should be defined using the TanStack Table column API. The basic structure is:
+
+```tsx
+const columns = [
+	{
+		id: 'columnId', // Unique identifier for the column
+		header: 'Column Name', // Text or component for the column header
+		accessorKey: 'fieldName', // The data field to display in this column
+		cell: (info) => info.getValue(), // Optional custom cell renderer
+		enableSorting: true, // Enable sorting for this column
+	},
+];
+```
+
+## Accessibility
+
+- The table uses semantic HTML table elements for proper screen reader navigation
+- Loading states are properly announced to screen readers
+- Sort controls have appropriate ARIA attributes
+- Row selection uses standard checkboxes for keyboard accessibility
+
+## Implementation Notes
+
+- Built using TanStack Table v8 for performance and flexibility
+- Supports both controlled and uncontrolled sorting and selection
+- Handles infinite scrolling by detecting when the user scrolls near the bottom of the table
+- Uses CSS Grid for layout to ensure proper column alignment
+- Follows Graphweaver's design system for consistent styling

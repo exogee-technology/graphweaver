@@ -1,0 +1,50 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as DetailPanelFieldLabelStories from './detail-panel-field-label.stories';
+
+<Meta of={DetailPanelFieldLabelStories} />
+
+# DetailPanelFieldLabel
+
+A label component for form fields in detail panels, with support for indicating required fields.
+
+## Overview
+
+The DetailPanelFieldLabel component provides consistent styling and behavior for field labels within detail panel forms. It displays the field name and optionally shows a required field indicator (\*) when the `required` prop is true.
+
+## Examples
+
+### Regular Field Label
+
+A standard field label without the required indicator.
+
+<Canvas of={DetailPanelFieldLabelStories.Regular} />
+
+### Required Field Label
+
+A field label with the required field indicator (\*).
+
+<Canvas of={DetailPanelFieldLabelStories.Required} />
+
+### Long Field Name
+
+A field label with a longer text content.
+
+<Canvas of={DetailPanelFieldLabelStories.LongFieldName} />
+
+## Properties
+
+<Controls />
+
+## Usage Guidelines
+
+- Use this component for all form field labels within detail panels
+- Set the `required` prop to true for fields that must be filled
+- Associate the label with its input field using the same string for both the `fieldName` prop and the input's `id` attribute
+- The component automatically applies consistent styling to match the application's design system
+
+## Accessibility
+
+- The component properly associates labels with form controls using the HTML `for` attribute (via React's `htmlFor`)
+- Required fields are marked with an asterisk (\*) that is hidden from screen readers (using `aria-hidden="true"`)
+- Screen readers will still announce required fields if the associated form control has the `required` attribute
