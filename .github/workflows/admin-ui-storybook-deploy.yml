@@ -43,6 +43,10 @@ jobs:
         working-directory: src
         run: pnpm install
 
+      - name: Build vite-plugin-graphweaver
+        working-directory: src/packages/vite-plugin-graphweaver
+        run: pnpm build
+
       - name: Build Storybook
         working-directory: src/packages/admin-ui-components
         run: pnpm -r build-storybook
