@@ -45,7 +45,7 @@ jobs:
 
       - name: Build vite-plugin-graphweaver
         working-directory: src
-        run: pnpm turbo build --filter=vite-plugin-graphweaver --filter=@exogee/graphweaver-config
+        run: pnpm turbo build --filter=vite-plugin-graphweaver --filter=@exogee/graphweaver-config --filter=@exogee/graphweaver-apollo-client
 
       - name: Build Storybook
         working-directory: src/packages/admin-ui-components
