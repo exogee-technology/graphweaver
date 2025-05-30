@@ -65,9 +65,9 @@ export const WelcomePage = () => (
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				reach out to us on Slack
-			</a>
-			. We're here to help!
+				reach out to us on Slack.
+			</a>{' '}
+			We're here to help!
 		</p>
 		<Spacer height={30} />
 		<Button className={styles.button} href="/Album">
