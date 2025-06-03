@@ -60,9 +60,7 @@ export const defaultQuery = async ({
 		throw new Error('query must be a function or a DocumentNode for CSV export');
 	}
 
-	if (!query) {
-		query = listEntityForExport(selectedEntity, entityByName);
-	}
+	query ??= listEntityForExport(selectedEntity, entityByName);
 
 	return {
 		query,
