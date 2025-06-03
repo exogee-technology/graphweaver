@@ -60,17 +60,15 @@ export const ExportModal = <TData extends object>({
 					filters,
 				});
 
-				if (!queryOptions) {
-					queryOptions = await defaultQuery({
-						selectedEntity,
-						entityByName,
-						queryOverride: csvOverrides?.query,
-						pageNumber,
-						pageSize,
-						sort,
-						filters,
-					});
-				}
+				queryOptions ??= await defaultQuery({
+					selectedEntity,
+					entityByName,
+					queryOverride: csvOverrides?.query,
+					pageNumber,
+					pageSize,
+					sort,
+					filters,
+				});
 
 				const { data } = await apolloClient.query(queryOptions);
 
