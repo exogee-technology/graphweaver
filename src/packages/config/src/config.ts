@@ -39,8 +39,9 @@ export interface AdminUIAuthOptions {
 }
 
 export interface AdminUIOptions {
-	customPagesPath: string;
-	customFieldsPath: string;
+	customPagesPath?: string;
+	customFieldsPath?: string;
+	csvExportOverridesPath?: string;
 	auth?: AdminUIAuthOptions;
 }
 
@@ -120,6 +121,7 @@ export const defaultConfig = (): ConfigOptions => {
 		adminUI: {
 			customPagesPath: 'src/admin-ui/custom-pages',
 			customFieldsPath: 'src/admin-ui/custom-fields',
+			csvExportOverridesPath: 'src/admin-ui/csv-export-overrides',
 			auth: {
 				password: {
 					enableForgottenPassword: true,
