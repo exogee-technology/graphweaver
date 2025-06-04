@@ -17,8 +17,8 @@ export const loadCsvExportOverrides = async (projectRoot: string) => {
 		// @todo Validate import- we can't import typescript here but we could validate another way
 
 		return `export { csvExportOverrides } from '${resolvedCsvExportOverridesPath}';`;
-	} catch (error: any) {
-		console.warn('No CSV export overrides found: ', error);
+	} catch {
+		console.warn('No CSV export overrides found.');
 		return `export const csvExportOverrides = {};`;
 	}
 };
