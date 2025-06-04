@@ -6,9 +6,36 @@ import { DetailPanelInputComponentOption, Entity, EntityField, routeFor } from '
 import { cells } from '../table/cells';
 import { Checkbox } from '../checkbox';
 import { getExtensions } from '../detail-panel/fields/rich-text-field/utils';
+import { DateTime } from 'luxon';
 
 const columnHelper = createColumnHelper<any>();
 const richTextExtensions = getExtensions({});
+
+const formatValue = (field: EntityField, value: any) => {
+	if (!field.format) {
+		return value;
+	} else if (field.format?.type === 'date') {
+		let date = DateTime.fromISO(value);
+		if (field.format?.timezone) {
+			date = date.setZone(field.format.timezone as string);
+		}
+		if (field.format?.format) {
+			return date.toLocaleString(DateTime[field.format.format]);
+		}
+		return date.toLocaleString(DateTime.DATETIME_FULL);
+	} else if (field.format?.type === 'currency') {
+		return typeof value === 'string'
+			? parseFloat(value).toLocaleString('en-AU', {
+					style: 'currency',
+					currency: field.format.variant,
+				})
+			: value.toLocaleString('en-AU', {
+					style: 'currency',
+					currency: field.format.variant,
+				});
+	}
+	return value;
+};
 
 const cellForType = (field: EntityField, value: any, entityByType: (type: string) => Entity) => {
 	// Is there a specific definition for the cell type?
@@ -44,7 +71,7 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 
 	// Is it an array?
 	if (Array.isArray(value)) {
-		return value.join(', ');
+		return value.map((item) => formatValue(field, item)).join(', ');
 	}
 
 	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
@@ -59,7 +86,7 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 	}
 
 	// Ok, all we're left with is a simple value
-	return value;
+	return formatValue(field, value);
 };
 
 const isFieldSortable = (field: EntityField) => {

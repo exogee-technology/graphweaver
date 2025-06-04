@@ -116,6 +116,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						isReadOnly,
 						isRequired,
 					},
+					format: field.adminUIOptions?.format,
 					hideInTable: field.adminUIOptions?.hideInTable,
 					hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
 					hideInDetailForm: field.adminUIOptions?.hideInDetailForm,
