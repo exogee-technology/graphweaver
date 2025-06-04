@@ -4,6 +4,12 @@ import { tryToResolvePath } from './util';
 export const loadCustomPages = async (projectRoot: string) => {
 	try {
 		const { customPagesPath } = config(projectRoot).adminUI;
+		if (!customPagesPath) {
+			throw new Error(
+				'No custom pages path found. This should be specified by default, so this is an internal error. Please raise an issue on GitHub.'
+			);
+		}
+
 		const resolvedCustomPagesPath = await tryToResolvePath(customPagesPath);
 		if (!resolvedCustomPagesPath) throw new Error("Couldn't find a file that matched the path");
 
