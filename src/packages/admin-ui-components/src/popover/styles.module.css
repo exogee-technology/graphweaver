@@ -28,7 +28,7 @@
 	flex-shrink: 0;
 	white-space: nowrap;
 
-	font-family: 'Inter';
+	font-family: 'Inter', sans-serif;
 
 	font-style: normal;
 	font-weight: 500;
@@ -79,7 +79,7 @@
 	flex-shrink: 0;
 	white-space: nowrap;
 
-	font-family: 'Inter';
+	font-family: 'Inter', sans-serif;
 
 	font-style: normal;
 	font-weight: 500;

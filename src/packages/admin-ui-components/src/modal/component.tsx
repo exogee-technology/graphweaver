@@ -69,12 +69,16 @@ export const Modal = ({
 	return (
 		<>
 			{isOpen && (
-				<div ref={overlayRef} className={clsx(overlay ? styles.overlay : styles.noOverlay)}>
+				<div
+					ref={overlayRef}
+					className={clsx(overlay ? styles.overlay : styles.noOverlay)}
+					data-testid="modal-background"
+				>
 					<div
 						ref={modalRef}
 						className={clsx(className || [styles.wrapper, fullScreen && styles.fullScreen])}
 					>
-						<div className={styles.content}>
+						<div className={styles.content} data-testid="modal-content">
 							{title && (
 								<div className={styles.headerWrapper}>
 									<div className={styles.header}>
