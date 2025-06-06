@@ -1,17 +1,8 @@
-/* Theme variables - should match the global theme */
-:root {
-	--popover-font-family: 'Inter', sans-serif;
-	--popover-body-copy-color: #ede8f2;
-	--popover-body-copy-color-rgb: 237, 232, 242;
-	--popover-detail-bg-color: #171221;
-	--popover-detail-border-color: rgba(237, 232, 242, 0.1);
-	--popover-primary-color: #7038c2;
-	--popover-body-bg-color: #100a1c;
-}
+/* Theme variables - using global design system variables */
 
 .popoverWrapper {
 	display: inline-block;
-	font-family: var(--popover-font-family);
+	font-family: 'Inter', sans-serif;
 	/* No position or z-index - keeps natural table cell stacking */
 }
 
@@ -27,7 +18,7 @@
 }
 
 .trigger:focus-visible {
-	outline: 2px solid var(--popover-primary-color);
+	outline: 2px solid var(--primary-color);
 	outline-offset: 2px;
 	border-radius: 4px;
 }
@@ -35,8 +26,8 @@
 .popover {
 	position: absolute;
 	z-index: 1000;
-	background-color: var(--popover-detail-bg-color);
-	border: 1px solid var(--popover-detail-border-color);
+	background-color: var(--detail-bg-color);
+	border: 1px solid var(--detail-border-color);
 	border-radius: 12px;
 	padding: 0;
 	min-width: 160px;
@@ -53,8 +44,8 @@
 .popoverPortal {
 	position: fixed;
 	z-index: 9999;
-	background-color: var(--popover-detail-bg-color);
-	border: 1px solid var(--popover-detail-border-color);
+	background-color: var(--detail-bg-color);
+	border: 1px solid var(--detail-border-color);
 	border-radius: 12px;
 	padding: 0;
 	min-width: 160px;
@@ -120,14 +111,15 @@
 	margin: 0 0 4px 0;
 	font-size: 14px;
 	font-weight: 600;
-	color: var(--popover-body-copy-color);
+	color: var(--body-copy-color);
 	line-height: 1.3;
 }
 
 .description {
 	margin: 0 0 8px 0;
 	font-size: 12px;
-	color: rgba(var(--popover-body-copy-color-rgb), 0.7);
+	color: var(--body-copy-color);
+	opacity: 0.7;
 	line-height: 1.4;
 }
 

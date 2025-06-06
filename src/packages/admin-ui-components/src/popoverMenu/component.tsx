@@ -101,8 +101,6 @@ export const PopoverMenu: React.FC<PopoverMenuProps> = ({
 		if (!triggerRef.current) return;
 
 		const triggerRect = triggerRef.current.getBoundingClientRect();
-		const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-		const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
 		// Get viewport dimensions
 		const viewportWidth = window.innerWidth;
@@ -116,43 +114,43 @@ export const PopoverMenu: React.FC<PopoverMenuProps> = ({
 		let left = 0;
 		let actualPlacement = placement;
 
-		// Calculate initial position based on placement
+		// Calculate initial position based on placement (viewport-relative for fixed positioning)
 		switch (placement) {
 			case 'top':
-				top = triggerRect.top + scrollY - offset - estimatedPopoverHeight;
-				left = triggerRect.left + scrollX + triggerRect.width / 2 - estimatedPopoverWidth / 2;
+				top = triggerRect.top - offset - estimatedPopoverHeight;
+				left = triggerRect.left + triggerRect.width / 2 - estimatedPopoverWidth / 2;
 				break;
 			case 'top-start':
-				top = triggerRect.top + scrollY - offset - estimatedPopoverHeight;
-				left = triggerRect.left + scrollX;
+				top = triggerRect.top - offset - estimatedPopoverHeight;
+				left = triggerRect.left;
 				break;
 			case 'top-end':
-				top = triggerRect.top + scrollY - offset - estimatedPopoverHeight;
-				left = triggerRect.right + scrollX - estimatedPopoverWidth;
+				top = triggerRect.top - offset - estimatedPopoverHeight;
+				left = triggerRect.right - estimatedPopoverWidth;
 				break;
 			case 'bottom':
-				top = triggerRect.bottom + scrollY + offset;
-				left = triggerRect.left + scrollX + triggerRect.width / 2 - estimatedPopoverWidth / 2;
+				top = triggerRect.bottom + offset;
+				left = triggerRect.left + triggerRect.width / 2 - estimatedPopoverWidth / 2;
 				break;
 			case 'bottom-start':
-				top = triggerRect.bottom + scrollY + offset;
-				left = triggerRect.left + scrollX;
+				top = triggerRect.bottom + offset;
+				left = triggerRect.left;
 				break;
 			case 'bottom-end':
-				top = triggerRect.bottom + scrollY + offset;
-				left = triggerRect.right + scrollX - estimatedPopoverWidth;
+				top = triggerRect.bottom + offset;
+				left = triggerRect.right - estimatedPopoverWidth;
 				break;
 			case 'left':
-				top = triggerRect.top + scrollY + triggerRect.height / 2 - estimatedPopoverHeight / 2;
-				left = triggerRect.left + scrollX - offset - estimatedPopoverWidth;
+				top = triggerRect.top + triggerRect.height / 2 - estimatedPopoverHeight / 2;
+				left = triggerRect.left - offset - estimatedPopoverWidth;
 				break;
 			case 'right':
-				top = triggerRect.top + scrollY + triggerRect.height / 2 - estimatedPopoverHeight / 2;
-				left = triggerRect.right + scrollX + offset;
+				top = triggerRect.top + triggerRect.height / 2 - estimatedPopoverHeight / 2;
+				left = triggerRect.right + offset;
 				break;
 			default:
-				top = triggerRect.bottom + scrollY + offset;
-				left = triggerRect.left + scrollX;
+				top = triggerRect.bottom + offset;
+				left = triggerRect.left;
 		}
 
 		// Viewport collision detection and adjustment
@@ -169,7 +167,7 @@ export const PopoverMenu: React.FC<PopoverMenuProps> = ({
 		if (top < margin) {
 			// If top placement would go above viewport, try flipping to bottom
 			if (actualPlacement.includes('top')) {
-				top = triggerRect.bottom + scrollY + offset;
+				top = triggerRect.bottom + offset;
 				actualPlacement = actualPlacement.replace('top', 'bottom') as typeof placement;
 			} else {
 				top = margin;
@@ -177,7 +175,7 @@ export const PopoverMenu: React.FC<PopoverMenuProps> = ({
 		} else if (top + estimatedPopoverHeight > viewportHeight - margin) {
 			// If bottom placement would go below viewport, try flipping to top
 			if (actualPlacement.includes('bottom')) {
-				top = triggerRect.top + scrollY - offset - estimatedPopoverHeight;
+				top = triggerRect.top - offset - estimatedPopoverHeight;
 				actualPlacement = actualPlacement.replace('bottom', 'top') as typeof placement;
 
 				// Double-check if flipped position is still too high
