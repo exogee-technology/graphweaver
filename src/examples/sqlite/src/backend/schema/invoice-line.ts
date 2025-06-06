@@ -20,7 +20,11 @@ export class InvoiceLine {
 	@RelationshipField<InvoiceLine>(() => Track, { id: (entity) => entity.track?.trackId })
 	track!: Track;
 
-	@Field(() => String)
+	@Field(() => String, {
+		adminUIOptions: {
+			format: { type: 'currency', variant: 'AUD' },
+		},
+	})
 	unitPrice!: string;
 
 	@Field(() => Number)
