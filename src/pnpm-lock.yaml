@@ -1329,6 +1329,9 @@ importers:
       '@opentelemetry/sdk-trace-base':
         specifier: 1.30.1
         version: 1.30.1(@opentelemetry/api@1.9.0)
+      '@types/luxon':
+        specifier: 3.6.2
+        version: 3.6.2
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0

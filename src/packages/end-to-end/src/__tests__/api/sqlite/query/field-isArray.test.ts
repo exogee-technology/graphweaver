@@ -130,7 +130,7 @@ test('Should return isArray = true if field property is defined as array', async
 	});
 	assert(response.body.kind === 'single');
 	const result = response.body.singleResult.data?.result;
-	expect(result?.entities).toHaveLength(12);
+	expect(result?.entities).toHaveLength(13);
 
 	const artistEntity = result?.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();

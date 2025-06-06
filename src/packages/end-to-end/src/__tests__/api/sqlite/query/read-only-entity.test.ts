@@ -113,7 +113,7 @@ test('Should return isReadOnly attribute for each entity in getAdminUiMetadata',
 	});
 	assert(response.body.kind === 'single');
 	const result = response.body.singleResult.data?.result;
-	expect(result?.entities).toHaveLength(12);
+	expect(result?.entities).toHaveLength(13);
 
 	const albumEntity = result?.entities.find((entity) => entity.name === 'Album');
 	expect(albumEntity).not.toBeNull();
