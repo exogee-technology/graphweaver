@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import {
 	ChangeEvent,
+	JSX,
 	memo,
 	MouseEvent,
 	useCallback,
@@ -8,7 +9,6 @@ import {
 	useId,
 	useRef,
 	useState,
-	JSX,
 } from 'react';
 import styles from './styles.module.css';
 
@@ -69,16 +69,15 @@ interface SelectProps {
 
 /**
  * Converts a value to an array if it isn't already.
- * @template T - The type of the value
- * @param {T} value - The value to convert
- * @returns {Array} - The value as an array
+ * @param value - The value to convert
+ * @returns SelectOption[] - The value as an array of SelectOption
  */
-function arrayify<T>(value: T): any[] {
+function arrayify(value: SelectOption | SelectOption[] | undefined): SelectOption[] {
 	if (Array.isArray(value)) return value;
 	if (value !== null && value !== undefined) return [value];
 	return [];
 }
-
+// ... existing code ...
 /**
  * Option item component for the dropdown
  */
@@ -116,7 +115,7 @@ export const Select = ({
 	onChange,
 	onOpen,
 	mode,
-	value = [],
+	value,
 	placeholder = 'Select',
 	loading = false,
 	autoFocus = false,
@@ -158,14 +157,6 @@ export const Select = ({
 		(option: SelectOption, e: MouseEvent) => {
 			e.stopPropagation();
 
-			// Debug the clicked option to trace issues with specific values
-			console.log('Option clicked:', {
-				value: option.value,
-				stringValue: String(option.value),
-				label: option.label,
-				type: typeof option.value,
-			});
-
 			let newSelected: SelectOption[];
 
 			if (mode === SelectMode.MULTI) {
@@ -175,7 +166,6 @@ export const Select = ({
 				const isSelected = valueArray.some((item) => {
 					const itemStrValue = String(item.value).trim();
 					const matches = itemStrValue === optionStrValue;
-					console.log('Comparing values:', { itemStrValue, optionStrValue, matches });
 					return matches;
 				});
 
@@ -192,16 +182,6 @@ export const Select = ({
 				setTimeout(() => setIsOpen(false), 50);
 			}
 
-			// Debug what we're sending up
-			console.log(
-				'Sending new selection:',
-				newSelected.map((opt) => ({
-					value: opt.value,
-					stringValue: String(opt.value),
-					label: opt.label,
-				}))
-			);
-
 			onChange(newSelected);
 		},
 		[mode, valueArray, onChange]
@@ -211,12 +191,6 @@ export const Select = ({
 	const handleChange = useCallback(
 		(e: ChangeEvent<HTMLSelectElement>) => {
 			const selectedItems: SelectOption[] = [];
-
-			// Log all selected options for debugging
-			console.log('Native select changed:', {
-				selectedOptions: Array.from(e.target.selectedOptions).map((o) => o.value),
-				currentValue: value,
-			});
 
 			// Get all selected option elements from the DOM
 			for (let i = 0; i < e.target.selectedOptions.length; i++) {
@@ -235,6 +209,8 @@ export const Select = ({
 				if (option) {
 					selectedItems.push(option);
 				} else {
+					// We want to log this.
+					// eslint-disable-next-line no-console
 					console.warn(`Could not find matching option for value: "${optionValue}"`);
 				}
 			}
@@ -346,7 +322,7 @@ export const Select = ({
 				{/* Custom display */}
 				<div
 					className={clsx(styles.customSelect, disabled && styles.disabled)}
-					onClick={(e) => toggleDropdown(e as any)}
+					onClick={(e) => toggleDropdown(e)}
 					aria-haspopup="listbox"
 					aria-expanded={isOpen}
 				>

@@ -1,0 +1,154 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as PopoverMenuStories from './popoverMenu.stories';
+import { PopoverMenu } from './component';
+
+<Meta of={PopoverMenuStories} />
+
+# PopoverMenu
+
+PopoverMenu is a flexible dropdown/popover component that displays contextual content in an overlay positioned relative to a trigger element. It features smooth animations, intelligent positioning, and comprehensive accessibility support.
+
+## Overview
+
+The PopoverMenu component is a powerful overlay element that can be used to:
+
+- Display contextual menus and actions
+- Show additional information or details
+- Create dropdown navigation menus
+- Implement tooltips with interactive content
+- Build complex UI patterns like date pickers or color selectors
+
+## Examples
+
+### Basic Usage
+
+The simplest implementation with a trigger button and content.
+
+<Canvas of={PopoverMenuStories.Default} />
+
+### With Header Content
+
+Add a title to organize your popover content with clear hierarchy.
+
+<Canvas of={PopoverMenuStories.WithTitle} />
+
+### Full Header with Description
+
+Combine title and description for comprehensive context.
+
+<Canvas of={PopoverMenuStories.WithTitleAndDescription} />
+
+### Render Props Pattern
+
+Use render props to create dynamic content that can interact with the popover state.
+
+<Canvas of={PopoverMenuStories.RenderPropsContent} />
+
+## Positioning
+
+### Different Placements
+
+#### Top Placement
+
+Position the popover above the trigger element.
+
+<Canvas of={PopoverMenuStories.TopPlacement} />
+
+#### Side Placements
+
+Position the popover to the left or right of the trigger.
+
+<Canvas of={PopoverMenuStories.LeftPlacement} />
+
+<Canvas of={PopoverMenuStories.RightPlacement} />
+
+#### Bottom End Placement
+
+Align the popover to the end of the trigger element.
+
+<Canvas of={PopoverMenuStories.BottomEndPlacement} />
+
+## Advanced Features
+
+### Controlled State
+
+Take full control of the popover's open/close state programmatically.
+
+<Canvas of={PopoverMenuStories.Controlled} />
+
+### Custom Styling
+
+Apply custom styles to both trigger and popover content.
+
+<Canvas of={PopoverMenuStories.CustomStyling} />
+
+### Configuration Options
+
+#### Without Portal
+
+Render the popover inline instead of using a portal (useful for specific layout constraints).
+
+<Canvas of={PopoverMenuStories.NoPortal} />
+
+#### Disable Click Outside
+
+Prevent the popover from closing when clicking outside (useful for persistent menus).
+
+<Canvas of={PopoverMenuStories.NoCloseOnOutside} />
+
+#### Custom Offset
+
+Adjust the spacing between trigger and popover content.
+
+<Canvas of={PopoverMenuStories.LargeOffset} />
+
+## Properties
+
+<Controls of={PopoverMenuStories.Default} />
+
+## Usage Guidelines
+
+### When to Use
+
+- **Contextual Actions**: Display relevant actions for specific UI elements
+- **Space-Efficient Information**: Show additional details without cluttering the interface
+- **Progressive Disclosure**: Reveal advanced options or secondary actions
+- **Interactive Tooltips**: Provide rich, interactive content on hover or click
+
+### Best Practices
+
+- Keep content focused and relevant to the trigger context
+- Use clear, descriptive titles when the content needs explanation
+- Choose appropriate placement based on available screen space
+- Consider using render props for dynamic content that needs popover state
+- Enable portal mode (default) for popovers in table cells or constrained containers
+- Provide keyboard navigation within complex popover content
+
+### Accessibility Considerations
+
+- The component automatically handles focus management and keyboard navigation
+- Use semantic HTML within popover content for screen reader compatibility
+- Ensure sufficient color contrast for all content
+- Provide descriptive titles for complex popover content
+- Test keyboard navigation (Tab, Escape, Enter, Space) thoroughly
+
+## Technical Features
+
+### Intelligent Positioning
+
+- **Viewport Collision Detection**: Automatically adjusts position to stay within viewport bounds
+- **Placement Flipping**: Switches between top/bottom or left/right when space is limited
+- **Scroll Awareness**: Maintains position during page scrolling
+
+### Performance Optimizations
+
+- **Portal Rendering**: Renders outside DOM hierarchy to prevent style conflicts
+- **Animation Optimization**: Uses Framer Motion for smooth, performant transitions
+- **Event Handling**: Efficient cleanup of global event listeners
+
+### Customization Options
+
+- **Flexible Content**: Supports both static ReactNode and dynamic render functions
+- **Styling Control**: Multiple className props for granular style customization
+- **Behavior Configuration**: Extensive props for controlling interaction behavior

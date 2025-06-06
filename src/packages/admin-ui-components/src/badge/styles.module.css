@@ -1,0 +1,80 @@
+.badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	border: none;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	outline: none;
+	white-space: nowrap;
+}
+
+.badge:focus {
+	outline: 2px solid rgba(112, 56, 194, 0.3);
+	outline-offset: 1px;
+}
+
+.primary {
+	background-color: #7038c2;
+	color: white;
+}
+
+.primary:hover {
+	background-color: #8a4dd8;
+}
+
+.primary:active {
+	background-color: #5d2fa0;
+	transform: translateY(1px);
+}
+
+.secondary {
+	background-color: #853af2;
+	color: white;
+}
+
+.secondary:hover {
+	background-color: #9954f5;
+}
+
+.secondary:active {
+	background-color: #7229d9;
+	transform: translateY(1px);
+}
+
+.greyscale {
+	background-color: #4a4a4a;
+	color: white;
+}
+
+.greyscale:hover {
+	background-color: #5a5a5a;
+}
+
+.greyscale:active {
+	background-color: #3a3a3a;
+	transform: translateY(1px);
+}
+
+.text {
+	line-height: 1;
+}
+
+.iconPrefix,
+.iconSuffix {
+	display: flex;
+	align-items: center;
+	line-height: 1;
+}
+
+.iconPrefix {
+	margin-right: 2px;
+}
+
+.iconSuffix {
+	margin-left: 2px;
+}
