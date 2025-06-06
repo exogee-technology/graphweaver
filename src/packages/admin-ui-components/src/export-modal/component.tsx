@@ -1,24 +1,17 @@
-import { apolloClient } from '../apollo';
 import { useEffect, useState, useRef } from 'react';
+import { QueryOptions } from '@apollo/client';
 import { Row } from '@tanstack/react-table';
+import toast from 'react-hot-toast';
+import { csvExportOverrides } from 'virtual:graphweaver-admin-ui-csv-export-overrides';
 
-import styles from './styles.module.css';
-
+import { apolloClient } from '../apollo';
 import { Button } from '../button';
 import { Modal } from '../modal';
 import { Spinner } from '../spinner';
+import { exportToCSV, useSelectedEntity, useSchema, Filter, SortEntity } from '../utils';
 
-import toast from 'react-hot-toast';
-
-import {
-	exportToCSV,
-	useSelectedEntity,
-	useSchema,
-	getOrderByQuery,
-	Filter,
-	SortEntity,
-} from '../utils';
-import { listEntityForExport } from './graphql';
+import { defaultQuery } from './graphql';
+import styles from './styles.module.css';
 
 const DEFAULT_EXPORT_PAGE_SIZE = 200;
 
@@ -39,32 +32,45 @@ export const ExportModal = <TData extends object>({
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
+	const csvOverrides = csvExportOverrides[selectedEntity.name];
 	const pageSize = selectedEntity.attributes.exportPageSize || DEFAULT_EXPORT_PAGE_SIZE;
+
+	if (csvOverrides?.query && csvOverrides?.queryOptions) {
+		throw new Error(
+			`Both query and queryOptions were specified for the '${selectedEntity.name}' entity CSV export override options. You can specify query, or queryOptions, but not both.`
+		);
+	}
 
 	const fetchAll = async () => {
 		try {
 			let pageNumber = 0;
 			let hasNextPage = true;
 
-			const allResults: Row<TData>[] = [];
+			let allResults: Row<TData>[] = [];
 
 			while (hasNextPage) {
 				if (abortRef.current) return;
 
-				const primaryKeyField = selectedEntity.primaryKeyField;
-
-				const { data } = await apolloClient.query({
-					query: listEntityForExport(selectedEntity, entityByName),
-					variables: {
-						pagination: {
-							offset: pageNumber * pageSize,
-							limit: pageSize,
-							orderBy: getOrderByQuery({ primaryKeyField, sort }),
-						},
-						...(filters ? { filter: filters } : {}),
-					},
-					fetchPolicy: 'no-cache',
+				let queryOptions: QueryOptions<any, any> | undefined = await csvOverrides?.queryOptions?.({
+					selectedEntity,
+					entityByName,
+					pageNumber,
+					pageSize,
+					sort,
+					filters,
 				});
+
+				queryOptions ??= await defaultQuery({
+					selectedEntity,
+					entityByName,
+					queryOverride: csvOverrides?.query,
+					pageNumber,
+					pageSize,
+					sort,
+					filters,
+				});
+
+				const { data } = await apolloClient.query(queryOptions);
 
 				if (data && data.result.length > 0) allResults.push(...data.result);
 
@@ -76,6 +82,10 @@ export const ExportModal = <TData extends object>({
 					const totalPages = Math.ceil(data.aggregate.count / pageSize);
 					setDisplayTotalPages(totalPages);
 				}
+			}
+
+			if (csvOverrides?.mapResults) {
+				allResults = await csvOverrides.mapResults(allResults);
 			}
 
 			exportToCSV(selectedEntity.name, allResults);

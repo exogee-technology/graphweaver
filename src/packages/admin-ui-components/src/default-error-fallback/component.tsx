@@ -50,9 +50,8 @@ export const DefaultErrorFallback = ({ error }: FallbackProps) => {
 							href="https://github.com/exogee-technology/graphweaver/issues/new/choose"
 							target="_blank"
 						>
-							open a GitHub issue
+							open a GitHub issue.
 						</a>
-						.
 					</p>
 					<Spacer height={40} />
 					<Button

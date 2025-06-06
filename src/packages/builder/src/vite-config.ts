@@ -92,11 +92,11 @@ export const viteConfig = async ({
 				'@tiptap/starter-kit',
 			],
 			exclude: [
-				// This can't be bundled because it's virtual and supplied by
-				// our vite plugin directly.
-				'virtual:graphweaver-user-supplied-custom-pages',
-				'virtual:graphweaver-user-supplied-custom-fields',
+				// This can't be bundled because it's virtual and supplied by our vite plugin directly.
+				'virtual:graphweaver-admin-ui-csv-export-overrides',
 				'virtual:graphweaver-auth-ui-components',
+				'virtual:graphweaver-user-supplied-custom-fields',
+				'virtual:graphweaver-user-supplied-custom-pages',
 			],
 		},
 		plugins: [react(), graphweaver()],

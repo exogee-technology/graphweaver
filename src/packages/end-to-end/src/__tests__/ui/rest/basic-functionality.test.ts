@@ -24,7 +24,7 @@ test('Ensure vehicles can be listed and that they have pilots', async ({ page })
 	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText(
 		'pilots*Luke SkywalkerWedge Antilles'
 	);
-	await page.locator('._overlay_1slpl_1').click();
+	await page.getByTestId('modal-background').click();
 	await page.getByRole('cell', { name: 'AT-ST' }).click();
 	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText('pilots*Chewbacca');
 });
