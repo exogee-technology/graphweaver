@@ -19,7 +19,7 @@ const formatValue = (field: EntityField, value: any) => {
 		if (field.format?.timezone) {
 			date = date.setZone(field.format.timezone as string);
 		}
-		if (field.format?.format) {
+		if (field.format?.format && DateTime[field.format.format]) {
 			return date.toLocaleString(DateTime[field.format.format]);
 		}
 		return date.toLocaleString(DateTime.DATETIME_FULL);
