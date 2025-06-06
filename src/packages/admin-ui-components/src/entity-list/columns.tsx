@@ -8,7 +8,6 @@ import { Checkbox } from '../checkbox';
 import { getExtensions } from '../detail-panel/fields/rich-text-field/utils';
 import { DateTime } from 'luxon';
 
-const columnHelper = createColumnHelper<Record<string, unknown>>();
 const richTextExtensions = getExtensions({});
 
 // Constants
@@ -128,14 +127,15 @@ const isFieldSortable = (field: EntityField): boolean => {
 	return true;
 };
 
-const addRowCheckboxColumn = () => {
-	return columnHelper.accessor('select', {
+const addRowCheckboxColumn = <T extends Record<string, unknown>>() => {
+	const columnHelper = createColumnHelper<T>();
+	return columnHelper.accessor('select' as any, {
 		id: 'select',
 		enableSorting: false,
 		size: CHECKBOX_COLUMN_WIDTH,
 		minSize: CHECKBOX_COLUMN_WIDTH,
 		maxSize: CHECKBOX_COLUMN_WIDTH,
-		header: ({ table }) => (
+		header: ({ table }: { table: any }) => (
 			<Checkbox
 				{...{
 					checked: table.getIsAllRowsSelected(),
@@ -144,7 +144,7 @@ const addRowCheckboxColumn = () => {
 				}}
 			/>
 		),
-		cell: ({ row }) => (
+		cell: ({ row }: { row: any }) => (
 			<Checkbox
 				{...{
 					checked: row.getIsSelected(),
@@ -157,7 +157,10 @@ const addRowCheckboxColumn = () => {
 	});
 };
 
-export const convertEntityToColumns = (entity: Entity, entityByType: (type: string) => Entity) => {
+export const convertEntityToColumns = <T extends Record<string, unknown>>(
+	entity: Entity,
+	entityByType: (type: string) => Entity
+) => {
 	// Input validation
 	if (!entity?.fields) {
 		console.warn('Entity has no fields:', entity);
@@ -168,13 +171,15 @@ export const convertEntityToColumns = (entity: Entity, entityByType: (type: stri
 		throw new Error('entityByType must be a function');
 	}
 
+	const columnHelper = createColumnHelper<T>();
+
 	const entityColumns = entity.fields
 		.filter((field) => !field.hideInTable)
 		.map((field) =>
-			columnHelper.accessor(field.name, {
+			columnHelper.accessor(field.name as any, {
 				id: field.name,
 				header: () => field.name,
-				cell: (info) => cellForType(field, info.getValue(), entityByType),
+				cell: (info: CellContext<T, unknown>) => cellForType(field, info.getValue(), entityByType),
 				enableSorting: isFieldSortable(field),
 			})
 		);
@@ -195,10 +200,10 @@ export const convertEntityToColumns = (entity: Entity, entityByType: (type: stri
 
 	// Ok, now we can merge our custom fields in
 	for (const customField of customFieldsToShow) {
-		const column = columnHelper.accessor(customField.name, {
+		const column = columnHelper.accessor(customField.name as any, {
 			id: customField.name,
 			header: () => customField.name,
-			cell: (info: CellContext<unknown, unknown>) =>
+			cell: (info: CellContext<T, unknown>) =>
 				customField.component?.({ context: 'table', entity: info.row.original }),
 			enableSorting: false,
 		});
@@ -207,7 +212,7 @@ export const convertEntityToColumns = (entity: Entity, entityByType: (type: stri
 
 	// Add the row selection column if the entity is not read-only
 	if (!entity.attributes.isReadOnly) {
-		return [addRowCheckboxColumn(), ...entityColumns];
+		return [addRowCheckboxColumn<T>(), ...entityColumns];
 	}
 
 	return entityColumns;
