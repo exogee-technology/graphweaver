@@ -10,16 +10,16 @@ The Form module provides a powerful hook-based approach to creating forms with b
 
 ## Overview
 
-The `createForm` hook generates a set of components and utilities for building forms with minimal boilerplate. It uses [@tanstack/react-form](https://tanstack.com/form/latest) under the hood and provides integration with [Zod](https://github.com/colinhacks/zod) for schema validation.
+The `useCreateForm` hook generates a set of components and utilities for building forms with minimal boilerplate. It uses [@tanstack/react-form](https://tanstack.com/form/latest) under the hood and provides integration with [Zod](https://github.com/colinhacks/zod) for schema validation.
 
 ## Key Concepts
 
-### The `createForm` Hook
+### The `useCreateForm` Hook
 
-The `createForm` hook is the main entry point for creating forms. It takes a configuration object and returns components and utilities for building your form.
+The `useCreateForm` hook is the main entry point for creating forms. It takes a configuration object and returns components and utilities for building your form.
 
 ```tsx
-const { Form, Field, canSubmit, reset, getValues, setValue, instance } = createForm({
+const { Form, Field, canSubmit, reset, getValues, setValue, instance } = useCreateForm({
   defaultValues: { name: '', email: '' },
   zodSchema: z.object({...}),  // Optional
   onSubmit: (values) => {...},
@@ -89,12 +89,12 @@ The `Field` component accepts the following props:
 
 ## Using Zod Validation
 
-The `createForm` hook accepts an optional Zod schema for validation. When provided, the form will validate against this schema and prevent submission until all validation passes.
+The `useCreateForm` hook accepts an optional Zod schema for validation. When provided, the form will validate against this schema and prevent submission until all validation passes.
 
 ```tsx
 import { z } from 'zod';
 
-const { Form, Field } = createForm({
+const { Form, Field } = useCreateForm({
 	defaultValues: { name: '', email: '', age: 0 },
 	zodSchema: z.object({
 		name: z.string().min(2, 'Name must be at least 2 characters'),

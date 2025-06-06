@@ -202,46 +202,48 @@ export const BottomEndPlacement: Story = {
 	},
 };
 
-// Controlled example
-export const Controlled: Story = {
-	render: (args) => {
-		const [isOpen, setIsOpen] = useState(false);
+// Controlled example component
+const ControlledPopoverMenu = (args: any) => {
+	const [isOpen, setIsOpen] = useState(false);
 
-		return (
-			<div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-				<PopoverMenu
-					{...args}
-					open={isOpen}
-					onOpenChange={setIsOpen}
-					trigger={
-						<button
-							style={{
-								padding: '8px 16px',
-								border: '1px solid #ccc',
-								borderRadius: '4px',
-								cursor: 'pointer',
-							}}
-						>
-							Controlled Menu
-						</button>
-					}
-					content={<SampleMenuContent />}
-				/>
-				<button
-					onClick={() => setIsOpen(!isOpen)}
-					style={{
-						padding: '4px 8px',
-						border: '1px solid #007bff',
-						borderRadius: '4px',
-						cursor: 'pointer',
-						color: '#007bff',
-					}}
-				>
-					{isOpen ? 'Close' : 'Open'} Externally
-				</button>
-			</div>
-		);
-	},
+	return (
+		<div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+			<PopoverMenu
+				{...args}
+				open={isOpen}
+				onOpenChange={setIsOpen}
+				trigger={
+					<button
+						style={{
+							padding: '8px 16px',
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
+					>
+						Controlled Menu
+					</button>
+				}
+				content={<SampleMenuContent />}
+			/>
+			<button
+				onClick={() => setIsOpen(!isOpen)}
+				style={{
+					padding: '4px 8px',
+					border: '1px solid #007bff',
+					borderRadius: '4px',
+					cursor: 'pointer',
+					color: '#007bff',
+				}}
+			>
+				{isOpen ? 'Close' : 'Open'} Externally
+			</button>
+		</div>
+	);
+};
+
+export const Controlled: Story = {
+	render: (args) => <ControlledPopoverMenu {...args} />,
 };
 
 export const CustomStyling: Story = {

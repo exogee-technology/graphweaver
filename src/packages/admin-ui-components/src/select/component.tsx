@@ -90,16 +90,32 @@ const OptionItem = memo(
 		option: SelectOption;
 		isSelected: boolean;
 		onSelect: (option: SelectOption, e: MouseEvent) => void;
-	}) => (
-		<div
-			className={clsx(styles.option, isSelected && styles.selected)}
-			onClick={(e) => onSelect(option, e)}
-			role="option"
-			aria-selected={isSelected}
-		>
-			{option.label}
-		</div>
-	)
+	}) => {
+		const handleKeyDown = (e: React.KeyboardEvent) => {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				// Create a synthetic mouse event for compatibility with existing handler
+				const syntheticEvent = {
+					stopPropagation: () => {},
+					preventDefault: () => {},
+				} as MouseEvent;
+				onSelect(option, syntheticEvent);
+			}
+		};
+
+		return (
+			<div
+				className={clsx(styles.option, isSelected && styles.selected)}
+				onClick={(e) => onSelect(option, e)}
+				onKeyDown={handleKeyDown}
+				role="option"
+				aria-selected={isSelected}
+				tabIndex={0}
+			>
+				{option.label}
+			</div>
+		);
+	}
 );
 
 OptionItem.displayName = 'OptionItem';
@@ -265,6 +281,17 @@ export const Select = ({
 		[disabled, loading, isOpen, onOpen]
 	);
 
+	// Handle keyboard events for custom select
+	const handleCustomSelectKeyDown = useCallback(
+		(e: React.KeyboardEvent) => {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				toggleDropdown();
+			}
+		},
+		[toggleDropdown]
+	);
+
 	// Outside click handler
 	useEffect(() => {
 		if (!isOpen) return undefined;
@@ -323,8 +350,11 @@ export const Select = ({
 				<div
 					className={clsx(styles.customSelect, disabled && styles.disabled)}
 					onClick={(e) => toggleDropdown(e)}
+					onKeyDown={handleCustomSelectKeyDown}
 					aria-haspopup="listbox"
 					aria-expanded={isOpen}
+					tabIndex={disabled ? -1 : 0}
+					role="combobox"
 				>
 					<div className={styles.displayText} data-placeholder={placeholder}>
 						{displayText}

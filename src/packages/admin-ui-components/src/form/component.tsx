@@ -44,7 +44,7 @@ FieldInfo.displayName = 'FieldInfo';
  * @example
  * ```tsx
  * // Create a form with validation
- * const { Form, Field, canSubmit } = createForm({
+ * const { Form, Field, canSubmit } = useCreateForm({
  *   defaultValues: { name: '', email: '', age: 0 },
  *   zodSchema: z.object({
  *     name: z.string().min(2),
@@ -66,7 +66,7 @@ FieldInfo.displayName = 'FieldInfo';
  * );
  * ```
  */
-export const createForm = <T extends Record<string, any>>(props: {
+export const useCreateForm = <T extends Record<string, any>>(props: {
 	/** Initial values for the form fields */
 	defaultValues: T;
 	/** Optional Zod schema for validation */
@@ -202,7 +202,10 @@ export const createForm = <T extends Record<string, any>>(props: {
 			mode?: SelectMode;
 		}) => {
 			// Create memoized validation function to prevent unnecessary rerenders
-			const validationFn = validation ? useCallback(validation, [validation]) : undefined;
+			// Always call useCallback to follow Rules of Hooks, but pass undefined when no validation
+			const validationFn = useCallback(validation || (() => undefined), [validation]);
+			// Only use the validation function if validation was provided
+			const actualValidationFn = validation ? validationFn : undefined;
 
 			// Create a stable reference to options to prevent rerenders when options are passed inline
 			const stableOptions = useMemo(
@@ -219,7 +222,7 @@ export const createForm = <T extends Record<string, any>>(props: {
 					<form.Field
 						name={name}
 						validators={{
-							onChange: validationFn,
+							onChange: actualValidationFn,
 						}}
 					>
 						{(field) => {

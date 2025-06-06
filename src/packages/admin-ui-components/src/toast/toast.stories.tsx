@@ -127,7 +127,7 @@ export const Success: Story = {
 };
 
 // Error Toast
-export const Error: Story = {
+export const ErrorToast: Story = {
 	args: {
 		type: 'error',
 		message: 'Something went wrong. Please try again.',
@@ -144,23 +144,26 @@ export const Loading: Story = {
 	},
 };
 
+// Component for Multiple story
+const MultipleToastsDemo = () => {
+	useEffect(() => {
+		// Simulate multiple toasts
+		const showToasts = () => {
+			toast.success('User profile updated successfully!');
+			setTimeout(() => toast.error('Failed to save preferences.'), 300);
+			setTimeout(() => toast.loading('Synchronizing data...'), 600);
+		};
+
+		// Show toasts after a brief delay
+		const timer = setTimeout(showToasts, 300);
+
+		return () => clearTimeout(timer);
+	}, []);
+
+	return <ToastDemo autoTrigger={false} />;
+};
+
 // Multiple Toasts
 export const Multiple: Story = {
-	render: () => {
-		useEffect(() => {
-			// Simulate multiple toasts
-			const showToasts = () => {
-				toast.success('User profile updated successfully!');
-				setTimeout(() => toast.error('Failed to save preferences.'), 300);
-				setTimeout(() => toast.loading('Synchronizing data...'), 600);
-			};
-
-			// Show toasts after a brief delay
-			const timer = setTimeout(showToasts, 300);
-
-			return () => clearTimeout(timer);
-		}, []);
-
-		return <ToastDemo autoTrigger={false} />;
-	},
+	render: () => <MultipleToastsDemo />,
 };

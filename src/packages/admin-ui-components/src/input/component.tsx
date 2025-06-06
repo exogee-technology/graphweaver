@@ -77,7 +77,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 		const [internalValue, setInternalValue] = useState<string>(
 			value !== undefined ? String(value) : defaultValue !== undefined ? String(defaultValue) : ''
 		);
-		const id = providedId || useId();
+		// Always call useId to follow Rules of Hooks, then use providedId if available
+		const generatedId = useId();
+		const id = providedId || generatedId;
 
 		// Determine actual input type based on password visibility state
 		const actualType = type === 'password' && passwordVisible ? 'text' : type;

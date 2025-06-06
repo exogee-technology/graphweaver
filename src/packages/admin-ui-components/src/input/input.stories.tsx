@@ -81,7 +81,7 @@ export const Password: Story = {
 };
 
 // Number input
-export const Number: Story = {
+export const NumberInput: Story = {
 	args: {
 		label: 'Quantity',
 		type: 'number',

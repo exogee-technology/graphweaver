@@ -1,12 +1,12 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
-import { createForm } from './component';
+import { useCreateForm } from './component';
 import { z } from 'zod';
 import { SelectMode } from '../select';
 
-// This is a wrapper component to demonstrate the createForm hook
+// This is a wrapper component to demonstrate the useCreateForm hook
 function FormDemoWrapper({ zodSchema, cols = 1 }: { zodSchema?: boolean; cols?: number }) {
-	const { Form, Field, canSubmit } = createForm({
+	const { Form, Field, canSubmit } = useCreateForm({
 		defaultValues: {
 			name: '',
 			email: '',

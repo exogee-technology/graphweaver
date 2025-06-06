@@ -53,25 +53,28 @@ export const DisabledChecked: Story = {
 	},
 };
 
+// Component for Controlled story
+const ControlledSwitch = () => {
+	const [checked, setChecked] = useState(false);
+	return (
+		<div
+			style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'flex-start' }}
+		>
+			<Switch
+				label="Controlled switch"
+				checked={checked}
+				onChange={(newChecked) => setChecked(newChecked)}
+			/>
+			<div style={{ fontSize: '14px', color: '#e0dde5' }}>
+				Current state: {checked ? 'On' : 'Off'}
+			</div>
+		</div>
+	);
+};
+
 // Controlled switch
 export const Controlled: Story = {
-	render: () => {
-		const [checked, setChecked] = useState(false);
-		return (
-			<div
-				style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'flex-start' }}
-			>
-				<Switch
-					label="Controlled switch"
-					checked={checked}
-					onChange={(newChecked) => setChecked(newChecked)}
-				/>
-				<div style={{ fontSize: '14px', color: '#e0dde5' }}>
-					Current state: {checked ? 'On' : 'Off'}
-				</div>
-			</div>
-		);
-	},
+	render: () => <ControlledSwitch />,
 };
 
 // No label
@@ -101,69 +104,72 @@ export const MultipleOptions: Story = {
 	},
 };
 
-// Switch with form integration
-export const InForm: Story = {
-	render: () => {
-		const [formData, setFormData] = useState({ notifications: true, darkMode: false });
-		const [submitted, setSubmitted] = useState(false);
+// Component for InForm story
+const SwitchInForm = () => {
+	const [formData, setFormData] = useState({ notifications: true, darkMode: false });
+	const [submitted, setSubmitted] = useState(false);
 
-		const handleSubmit = (e: React.FormEvent) => {
-			e.preventDefault();
-			setSubmitted(true);
-			// In a real app, you would submit the form data here
-			console.log('Form submitted with:', formData);
-		};
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		setSubmitted(true);
+		// In a real app, you would submit the form data here
+		console.log('Form submitted with:', formData);
+	};
 
-		return (
-			<div style={{ minWidth: '300px' }}>
-				<form
-					onSubmit={handleSubmit}
-					style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+	return (
+		<div style={{ minWidth: '300px' }}>
+			<form
+				onSubmit={handleSubmit}
+				style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+			>
+				<Switch
+					label="Enable notifications"
+					name="notifications"
+					checked={formData.notifications}
+					onChange={(checked) => setFormData({ ...formData, notifications: checked })}
+				/>
+				<Switch
+					label="Dark mode"
+					name="darkMode"
+					checked={formData.darkMode}
+					onChange={(checked) => setFormData({ ...formData, darkMode: checked })}
+				/>
+				<button
+					type="submit"
+					style={{
+						padding: '8px 16px',
+						background: '#7C5DC7',
+						color: 'white',
+						border: 'none',
+						borderRadius: '4px',
+						cursor: 'pointer',
+						marginTop: '10px',
+					}}
 				>
-					<Switch
-						label="Enable notifications"
-						name="notifications"
-						checked={formData.notifications}
-						onChange={(checked) => setFormData({ ...formData, notifications: checked })}
-					/>
-					<Switch
-						label="Dark mode"
-						name="darkMode"
-						checked={formData.darkMode}
-						onChange={(checked) => setFormData({ ...formData, darkMode: checked })}
-					/>
-					<button
-						type="submit"
+					Save Settings
+				</button>
+
+				{submitted && (
+					<div
 						style={{
-							padding: '8px 16px',
-							background: '#7C5DC7',
-							color: 'white',
-							border: 'none',
-							borderRadius: '4px',
-							cursor: 'pointer',
 							marginTop: '10px',
+							padding: '10px',
+							background: 'rgba(124, 93, 199, 0.1)',
+							borderRadius: '4px',
 						}}
 					>
-						Save Settings
-					</button>
+						<p style={{ fontSize: '14px', color: '#e0dde5', margin: 0 }}>Form submitted with:</p>
+						<pre style={{ fontSize: '12px', color: '#e0dde5', margin: 0 }}>
+							{JSON.stringify(formData, null, 2)}
+						</pre>
+					</div>
+				)}
+			</form>
+		</div>
+	);
+};
 
-					{submitted && (
-						<div
-							style={{
-								marginTop: '10px',
-								padding: '10px',
-								background: 'rgba(124, 93, 199, 0.1)',
-								borderRadius: '4px',
-							}}
-						>
-							<p style={{ fontSize: '14px', color: '#e0dde5', margin: 0 }}>Form submitted with:</p>
-							<pre style={{ fontSize: '12px', color: '#e0dde5', margin: 0 }}>
-								{JSON.stringify(formData, null, 2)}
-							</pre>
-						</div>
-					)}
-				</form>
-			</div>
-		);
-	},
+// Switch with form integration
+export const InForm: Story = {
+	render: () => <SwitchInForm />,
 };
