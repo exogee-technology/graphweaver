@@ -8,39 +8,58 @@ import { Checkbox } from '../checkbox';
 import { getExtensions } from '../detail-panel/fields/rich-text-field/utils';
 import { DateTime } from 'luxon';
 
-const columnHelper = createColumnHelper<any>();
+const columnHelper = createColumnHelper<Record<string, unknown>>();
 const richTextExtensions = getExtensions({});
 
-const formatValue = (field: EntityField, value: any) => {
+// Constants
+const CHECKBOX_COLUMN_WIDTH = 48;
+
+const formatValue = (field: EntityField, value: unknown): string | number | null => {
 	if (!field.format) {
-		return value;
+		return value as string | number | null;
 	} else if (field.format?.type === 'date') {
-		let date = DateTime.fromISO(value);
-		if (field.format?.timezone) {
-			date = date.setZone(field.format.timezone as string);
+		if (!value) return null;
+
+		try {
+			let date = DateTime.fromISO(value as string);
+			if (!date.isValid) {
+				console.warn(`Invalid date value: ${value} for field: ${field.name}`);
+				return value as string;
+			}
+
+			if (field.format?.timezone) {
+				date = date.setZone(field.format.timezone ?? 'UTC');
+			}
+			if (field.format?.format && DateTime[field.format.format as keyof typeof DateTime]) {
+				return date.toLocaleString(DateTime[field.format.format as keyof typeof DateTime] as any);
+			}
+			return date.toLocaleString(DateTime.DATETIME_FULL);
+		} catch (error) {
+			console.error('Date formatting error:', error, { value, fieldName: field.name });
+			return value as string;
 		}
-		if (field.format?.format && DateTime[field.format.format]) {
-			return date.toLocaleString(DateTime[field.format.format]);
-		}
-		return date.toLocaleString(DateTime.DATETIME_FULL);
 	} else if (field.format?.type === 'currency') {
 		return typeof value === 'string'
 			? parseFloat(value).toLocaleString('en-AU', {
 					style: 'currency',
 					currency: field.format.variant,
 				})
-			: value.toLocaleString('en-AU', {
+			: (value as number).toLocaleString('en-AU', {
 					style: 'currency',
 					currency: field.format.variant,
 				});
 	}
-	return value;
+	return value as string | number | null;
 };
 
-const cellForType = (field: EntityField, value: any, entityByType: (type: string) => Entity) => {
+const cellForType = (
+	field: EntityField,
+	value: unknown,
+	entityByType: (type: string) => Entity
+): React.ReactNode => {
 	// Is there a specific definition for the cell type?
 	if (cells[field.type as keyof typeof cells]) {
-		return cells[field.type as keyof typeof cells](value);
+		return cells[field.type as keyof typeof cells](value as any);
 	}
 
 	// If not, is it a relationship?
@@ -77,11 +96,11 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
 		if (!value) return null;
 		try {
-			const json = generateJSON(value, richTextExtensions);
+			const json = generateJSON(value as string, richTextExtensions);
 			return <div>{generateText(json, richTextExtensions)}</div>;
-		} catch (e) {
-			console.error(e);
-			return <div>{value}</div>;
+		} catch (error) {
+			console.error('Rich text rendering error:', error, { value, fieldName: field.name });
+			return <div title="Failed to render rich text">{String(value)}</div>;
 		}
 	}
 
@@ -89,7 +108,7 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 	return formatValue(field, value);
 };
 
-const isFieldSortable = (field: EntityField) => {
+const isFieldSortable = (field: EntityField): boolean => {
 	if (field.type === 'JSON') {
 		return false;
 	}
@@ -113,9 +132,9 @@ const addRowCheckboxColumn = () => {
 	return columnHelper.accessor('select', {
 		id: 'select',
 		enableSorting: false,
-		size: 48,
-		minSize: 48,
-		maxSize: 48,
+		size: CHECKBOX_COLUMN_WIDTH,
+		minSize: CHECKBOX_COLUMN_WIDTH,
+		maxSize: CHECKBOX_COLUMN_WIDTH,
 		header: ({ table }) => (
 			<Checkbox
 				{...{
@@ -139,6 +158,16 @@ const addRowCheckboxColumn = () => {
 };
 
 export const convertEntityToColumns = (entity: Entity, entityByType: (type: string) => Entity) => {
+	// Input validation
+	if (!entity?.fields) {
+		console.warn('Entity has no fields:', entity);
+		return [];
+	}
+
+	if (typeof entityByType !== 'function') {
+		throw new Error('entityByType must be a function');
+	}
+
 	const entityColumns = entity.fields
 		.filter((field) => !field.hideInTable)
 		.map((field) =>
