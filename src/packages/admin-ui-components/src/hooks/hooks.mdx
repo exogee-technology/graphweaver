@@ -1,0 +1,68 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Hooks/Introduction" />
+
+# Hooks
+
+React hooks for enhanced functionality in the Graphweaver Admin UI.
+
+## Introduction
+
+Hooks are reusable pieces of stateful logic that can be used across components. The Graphweaver Admin UI provides several custom hooks to handle common patterns like autofocusing, debouncing, and more.
+
+## Available Hooks
+
+### useAutoFocus
+
+A hook that automatically focuses an HTML element after it's mounted. Particularly useful for inputs in forms or modals.
+
+```tsx
+import { useAutoFocus } from '@exogee/graphweaver-admin-ui-components';
+
+function MyComponent() {
+	// Pass true to enable auto-focusing
+	const inputRef = useAutoFocus<HTMLInputElement>(true);
+
+	return <input ref={inputRef} />;
+}
+```
+
+[View documentation →](/docs/hooks-useautofocus--example)
+
+### useDebounce
+
+A hook that debounces a value, which is useful for delaying expensive operations until user input has stopped for a specified period.
+
+```tsx
+import { useDebounce } from '@exogee/graphweaver-admin-ui-components';
+
+function MyComponent() {
+	const [inputValue, setInputValue] = useState('');
+	const [debouncedValue, setDebouncedValue] = useState('');
+
+	// Debounce with 500ms delay
+	useDebounce(inputValue, setDebouncedValue, 500);
+
+	// Now you can use debouncedValue for expensive operations
+	useEffect(() => {
+		if (debouncedValue) {
+			fetchData(debouncedValue);
+		}
+	}, [debouncedValue]);
+
+	return <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />;
+}
+```
+
+[View documentation →](/docs/hooks-usedebounce--example)
+
+## Best Practices
+
+- Use hooks to extract and reuse common logic between components
+- Keep hook logic simple and focused on a single concern
+- Name hooks with the "use" prefix to follow React conventions
+- Consider performance implications when using hooks in frequently re-rendered components
+
+## TypeScript Support
+
+All hooks are fully typed with TypeScript, providing better development experience through autocomplete and type checking.

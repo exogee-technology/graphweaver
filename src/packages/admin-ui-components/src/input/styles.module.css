@@ -1,29 +1,142 @@
 .inputWrapper {
 	display: flex;
 	flex-direction: column;
+	gap: 4px;
+	width: 100%;
+}
+
+.label {
+	font-size: 14px;
+	color: var(--body-copy-color, #e0dde5);
+	font-weight: 500;
+}
+
+.required {
+	color: var(--color-red, #f44336);
+	margin-left: 4px;
 }
 
 .input {
 	display: flex;
 	flex-direction: row;
+	align-items: center;
+	position: relative;
 	gap: 8px;
 	z-index: 2;
 }
 
 .input input {
 	all: unset;
-	color: hsl(0, 0%, 50%);
+	color: var(--body-copy-color, #e0dde5);
 	font-size: 100%;
-	background-color: var(--select-background);
-	border-color: var(--select-border-color);
+	background-color: var(--select-background, rgba(237, 232, 242, 0.05));
+	border-color: var(--select-border-color, rgba(255, 255, 255, 0.1));
 	border-radius: 6px;
 	border-style: solid;
 	border-width: 1px;
 	min-height: 33px;
 	padding-left: 10px;
+	padding-right: 10px;
+	width: 100%;
+	transition:
+		background-color 0.2s,
+		border-color 0.2s,
+		box-shadow 0.2s;
+}
+
+.input input:hover:not(:disabled) {
+	background-color: rgba(237, 232, 242, 0.15);
+}
+
+.input input:focus {
+	border-color: rgba(124, 93, 199, 0.8);
+	box-shadow: 0 0 0 2px rgba(124, 93, 199, 0.4);
+}
+
+.input input:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 .inputHighlighted input {
-	background-color: var(--primary-color);
-	color: var(--body-copy-color);
+	background-color: var(--primary-color, rgba(124, 93, 199, 0.2));
+	color: var(--body-copy-color, #e0dde5);
+}
+
+.inputError input {
+	border-color: var(--color-red, #f44336);
+	box-shadow: 0 0 0 1px rgba(244, 67, 54, 0.4);
+}
+
+.errorMessage {
+	color: var(--color-red, #f44336);
+	font-size: 12px;
+	margin-top: 4px;
+}
+
+/* Password toggle button */
+.passwordToggle {
+	position: absolute;
+	right: 8px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: var(--body-copy-color, #e0dde5);
+	opacity: 0.7;
+	transition: opacity 0.2s;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.passwordToggle:hover {
+	opacity: 1;
+}
+
+/* Numeric input controls */
+.numberControls {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	right: 8px;
+	height: 70%;
+}
+
+.numberButton {
+	all: unset;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	height: 50%;
+	color: var(--body-copy-color, #e0dde5);
+	opacity: 0.7;
+	transition: opacity 0.2s;
+}
+
+.numberButton:hover {
+	opacity: 1;
+}
+
+.numberButton:disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+}
+
+/* Ensure input with password toggle or number controls has enough padding */
+input[type='password'],
+input[type='number'] {
+	padding-right: 40px;
+}
+
+/* Hide native number input spinners */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type='number'] {
+	-moz-appearance: textfield; /* Firefox */
 }

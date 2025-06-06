@@ -1,0 +1,61 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as ColStories from './col.stories';
+import { Col } from './component';
+
+<Meta of={ColStories} />
+
+# Col
+
+The Col component defines a column that can span a specified number of grid spaces, designed to be used within a Grid layout.
+
+## Overview
+
+The Col component provides:
+
+- Control over how many grid columns an element should span
+- Integration with the Grid component for creating complex layouts
+- Consistent spacing and sizing in grid layouts
+
+## Examples
+
+### Default Column
+
+A basic column that spans a single grid space.
+
+<Canvas of={ColStories.Default} />
+
+### Spanning Multiple Columns
+
+Columns can span multiple grid spaces to create wider elements.
+
+<Canvas of={ColStories.SpanMultipleColumns} />
+
+### Multiple Columns in Grid
+
+Demonstrate how multiple columns work together in a grid layout.
+
+<Canvas of={ColStories.MultipleColumnsInGrid} />
+
+### Full Width Column
+
+A column that spans the entire width of the grid.
+
+<Canvas of={ColStories.FullWidthColumn} />
+
+## Properties
+
+<Controls of={ColStories.Default} />
+
+## Usage Guidelines
+
+- Use Col components within a Grid component to create complex layouts
+- Adjust the span property to control how much horizontal space the column occupies
+- The total span of all columns in a row should not exceed the number of columns in the parent Grid
+- For rows that need to wrap, the Grid will automatically create a new row when the total span exceeds its column count
+
+## Implementation Notes
+
+- Utilizes CSS Grid for positioning and sizing
+- The span property directly maps to the CSS grid-column property
+- Columns automatically adjust based on the parent Grid's configuration

@@ -1,0 +1,78 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as GraphQlViewerStories from './graphql-viewer.stories';
+
+<Meta of={GraphQlViewerStories} />
+
+# GraphQlViewer
+
+A syntax-highlighted viewer for displaying GraphQL queries, mutations, and other operations.
+
+## Overview
+
+The GraphQlViewer component provides syntax highlighting for GraphQL code using PrismJS. It's designed to display GraphQL queries in a readable, properly formatted way with syntax coloring.
+
+## Examples
+
+### Simple Query
+
+A basic GraphQL query example:
+
+<Canvas of={GraphQlViewerStories.SimpleQuery} />
+
+### Query with Variables
+
+A query that includes variables and directives:
+
+<Canvas of={GraphQlViewerStories.QueryWithVariables} />
+
+### Complex Query with Fragments
+
+A more complex query that uses fragments for reusable selections:
+
+<Canvas of={GraphQlViewerStories.ComplexQuery} />
+
+### Mutation
+
+An example of a GraphQL mutation operation:
+
+<Canvas of={GraphQlViewerStories.Mutation} />
+
+### Query with Errors
+
+Example showing how to document potential errors in GraphQL:
+
+<Canvas of={GraphQlViewerStories.WithErrors} />
+
+## Properties
+
+<Controls />
+
+## Usage Guidelines
+
+- Use this component whenever you need to display GraphQL queries or operations in your documentation
+- The component automatically handles syntax highlighting and line numbers
+- You can include comments in your GraphQL to provide additional context (using the # symbol)
+- For variables or expected responses, use comments to document them
+
+## Implementation Notes
+
+The GraphQlViewer uses:
+
+- `react-syntax-highlighter` with PrismJS for syntax highlighting
+- The Coldark Dark theme for consistent coloring
+- Line numbers to make code more readable
+
+## Styling
+
+The component is styled with a dark background (#14111a) to provide good contrast for the code. It includes:
+
+- Automatic overflow handling with scrollbars
+- Full height rendering
+- Line numbers for reference
+
+## Accessibility
+
+- The syntax highlighting provides good color contrast for readability
+- Code is displayed in a way that can be navigated with keyboard and screen readers
+- Line numbers help users reference specific parts of the query

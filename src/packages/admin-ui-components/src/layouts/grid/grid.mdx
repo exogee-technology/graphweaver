@@ -1,0 +1,63 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as GridStories from './grid.stories';
+import { Grid } from './component';
+
+<Meta of={GridStories} />
+
+# Grid
+
+The Grid component creates a responsive CSS grid layout for arranging content in rows and columns.
+
+## Overview
+
+The Grid component provides:
+
+- A flexible grid system with customizable number of columns
+- Adjustable spacing between grid items
+- Automatic distribution of Row children across columns when desired
+- Support for varying column widths using the Col component
+
+## Examples
+
+### Default Grid
+
+A standard 12-column grid with three equally-sized columns.
+
+<Canvas of={GridStories.Default} />
+
+### Custom Column Count
+
+The grid can be configured with any number of columns to create different layouts.
+
+<Canvas of={GridStories.CustomColumns} />
+
+### Custom Gap
+
+Adjust the spacing between grid items by changing the gap property.
+
+<Canvas of={GridStories.CustomGap} />
+
+### With Rows Auto-Distribution
+
+When maxRowsPerColumn is specified, Row children are automatically distributed across columns.
+
+<Canvas of={GridStories.WithRows} />
+
+## Properties
+
+<Controls of={GridStories.Default} />
+
+## Usage Guidelines
+
+- Use Grid as a container for organizing content in rows and columns
+- Combine with Col components to create elements of varying widths
+- Use the maxRowsPerColumn property with Row children to automatically distribute content across columns
+- The default 12-column grid provides flexibility for most layouts, but you can customize the column count for specific needs
+
+## Implementation Notes
+
+- Built on CSS Grid for consistent cross-browser support
+- Row children are automatically distributed based on the maxRowsPerColumn property
+- The component handles both traditional grid layouts (with Col children) and row-based layouts (with Row children)
+- Gaps between grid items are controlled via the gap property

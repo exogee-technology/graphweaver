@@ -1,0 +1,191 @@
+/* Theme variables - using global design system variables */
+
+.popoverWrapper {
+	display: inline-block;
+	font-family: 'Inter', sans-serif;
+	/* No position or z-index - keeps natural table cell stacking */
+}
+
+/* Only apply positioning when NOT using portal mode */
+.popoverWrapperPositioned {
+	position: relative;
+}
+
+.trigger {
+	cursor: pointer;
+	outline: none;
+	/* No z-index set - stays at table cell level */
+}
+
+.trigger:focus-visible {
+	outline: 2px solid var(--primary-color);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+.popover {
+	position: absolute;
+	z-index: 1000;
+	background-color: var(--detail-bg-color);
+	border: 1px solid var(--detail-border-color);
+	border-radius: 12px;
+	padding: 0;
+	min-width: 160px;
+	max-width: 320px;
+	box-shadow:
+		0 10px 38px -10px rgba(16, 10, 28, 0.8),
+		0 10px 20px -15px rgba(16, 10, 28, 0.6);
+	transform-origin: var(--radix-popover-content-transform-origin);
+	animation-duration: 0.2s;
+	animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Portal mode - uses fixed positioning to escape parent constraints */
+.popoverPortal {
+	position: fixed;
+	z-index: 9999;
+	background-color: var(--detail-bg-color);
+	border: 1px solid var(--detail-border-color);
+	border-radius: 12px;
+	padding: 0;
+	min-width: 160px;
+	max-width: 320px;
+	box-shadow:
+		0 10px 38px -10px rgba(16, 10, 28, 0.8),
+		0 10px 20px -15px rgba(16, 10, 28, 0.6);
+	animation-duration: 0.2s;
+	animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Positioning classes */
+.positionTop {
+	bottom: calc(100% + var(--offset, 8px));
+	left: 0;
+}
+
+.positionBottom {
+	top: calc(100% + var(--offset, 8px));
+	left: 0;
+}
+
+.positionLeft {
+	right: calc(100% + var(--offset, 8px));
+	top: 0;
+}
+
+.positionRight {
+	left: calc(100% + var(--offset, 8px));
+	top: 0;
+}
+
+.positionTopStart {
+	bottom: calc(100% + var(--offset, 8px));
+	left: 0;
+}
+
+.positionTopEnd {
+	bottom: calc(100% + var(--offset, 8px));
+	right: 0;
+}
+
+.positionBottomStart {
+	top: calc(100% + var(--offset, 8px));
+	left: 0;
+}
+
+.positionBottomEnd {
+	top: calc(100% + var(--offset, 8px));
+	right: 0;
+}
+
+.header {
+	padding: 12px 12px 0 12px;
+	margin-bottom: 0;
+}
+
+.header:not(:has(+ .content)) {
+	padding-bottom: 12px;
+}
+
+.title {
+	margin: 0 0 4px 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--body-copy-color);
+	line-height: 1.3;
+}
+
+.description {
+	margin: 0 0 8px 0;
+	font-size: 12px;
+	color: var(--body-copy-color);
+	opacity: 0.7;
+	line-height: 1.4;
+}
+
+.content {
+	padding: 12px;
+}
+
+/* When there's a header, adjust content padding */
+.header + .content {
+	padding-top: 6px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.popover {
+		min-width: 280px;
+		max-width: calc(100vw - 32px);
+	}
+
+	/* Adjust positioning on mobile to prevent overflow */
+	.positionTopEnd,
+	.positionBottomEnd {
+		right: auto;
+		left: 0;
+		transform: translateX(calc(-100% + 100px));
+	}
+}
+
+/* Animation support for older browsers */
+@media (prefers-reduced-motion: reduce) {
+	.popover {
+		animation: none;
+	}
+}
+
+/* Focus management */
+.popover:focus {
+	outline: none;
+}
+
+.popover[data-state='open'] {
+	animation-name: slideIn;
+}
+
+.popover[data-state='closed'] {
+	animation-name: slideOut;
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes slideOut {
+	from {
+		opacity: 1;
+		transform: scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+}

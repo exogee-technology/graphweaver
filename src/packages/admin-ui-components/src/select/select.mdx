@@ -1,0 +1,93 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as SelectStories from './select.stories';
+import { Select } from './component';
+
+<Meta of={SelectStories} />
+
+# Select
+
+The Select component allows users to choose one or multiple options from a dropdown list. It provides a flexible way to handle selection in both single and multi-select modes.
+
+## Overview
+
+The Select component is a versatile form input that can be used to:
+
+- Select a single option from a list
+- Select multiple options from a list
+- Handle loading states for asynchronous data fetching
+- Provide a clean UI for selection in forms
+
+## Examples
+
+### Single Select
+
+The standard single-select dropdown lets users choose one option.
+
+<Canvas of={SelectStories.SingleSelect} />
+
+### Single Select with Preselected Value
+
+A single-select dropdown with a pre-selected value.
+
+<Canvas of={SelectStories.SingleWithValue} />
+
+### Multi Select
+
+The multi-select dropdown allows users to choose multiple options.
+
+<Canvas of={SelectStories.MultiSelect} />
+
+### Multi Select with Preselected Values
+
+A multi-select dropdown with pre-selected values.
+
+<Canvas of={SelectStories.MultiWithValues} />
+
+### States
+
+#### Loading State
+
+Display a loading indicator when options are being fetched asynchronously.
+
+<Canvas of={SelectStories.Loading} />
+
+#### Disabled State
+
+Use the `disabled` prop to make a select unclickable.
+
+<Canvas of={SelectStories.Disabled} />
+
+#### Empty State
+
+How the select appears when no options are available.
+
+<Canvas of={SelectStories.NoOptions} />
+
+#### Required Field
+
+Mark a select as required with the `required` prop.
+
+<Canvas of={SelectStories.Required} />
+
+## Properties
+
+<Controls of={SelectStories.SingleSelect} />
+
+## Usage Guidelines
+
+- Use single select (`SelectMode.SINGLE`) when users should choose exactly one option
+- Use multi-select (`SelectMode.MULTI`) when users need to choose multiple options
+- Provide clear labels to indicate what the user is selecting
+- Use placeholder text to provide guidance on what to select
+- Handle loading states appropriately when fetching options asynchronously
+- Consider keyboard navigation for accessibility
+- Include a "No options available" state for empty option lists
+
+## Accessibility
+
+- The Select component implements both a custom UI and a native select element for optimal accessibility
+- The component is keyboard accessible and can be navigated using Tab, Enter, and arrow keys
+- ARIA attributes are properly applied for screen readers
+- Focus states are visually apparent with a highlight around the select
+- Required fields are properly marked both visually and via HTML attributes

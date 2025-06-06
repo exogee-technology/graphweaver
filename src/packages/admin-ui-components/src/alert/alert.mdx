@@ -1,0 +1,64 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as AlertStories from './alert.stories';
+import { Alert } from './alert';
+
+<Meta of={AlertStories} />
+
+# Alert
+
+Alerts display important messages about the state of the application, providing contextual feedback to users about their actions.
+
+## Overview
+
+The Alert component is a versatile notification element that can be used to:
+
+- Provide feedback about an operation's outcome
+- Highlight important information
+- Warn users about potential issues
+- Signal errors that need attention
+
+## Examples
+
+### Error Alert
+
+Use the error severity to communicate critical issues that need immediate attention.
+
+<Canvas of={AlertStories.ErrorAlert} />
+
+### Warning Alert
+
+Use the warning severity to highlight potential issues or important considerations.
+
+<Canvas of={AlertStories.Warning} />
+
+### Info Alert
+
+Use the info severity to provide neutral, informational content.
+
+<Canvas of={AlertStories.Info} />
+
+### Success Alert
+
+Use the success severity to confirm a successful operation or action.
+
+<Canvas of={AlertStories.Success} />
+
+## Properties
+
+<Controls of={AlertStories.ErrorAlert} />
+
+## Usage Guidelines
+
+- Use alerts sparingly to avoid overwhelming users
+- Choose the appropriate severity level based on the message's importance
+- Keep alert messages concise and actionable
+- Position alerts in a consistent location within the interface
+- For transient feedback, consider using a toast notification instead
+
+## Accessibility
+
+- Alert colors are designed with appropriate contrast ratios
+- Icons help convey the severity visually
+- The component is designed to be accessible to screen readers
+- Critical alerts should be announced appropriately to assistive technologies

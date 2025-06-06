@@ -1,0 +1,67 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as SpinnerStories from './spinner.stories';
+import { Spinner } from './component';
+
+<Meta of={SpinnerStories} />
+
+# Spinner
+
+The Spinner component is used to indicate a loading state, showing the user that content is being processed or loaded.
+
+## Overview
+
+The Spinner component provides visual feedback to users when:
+
+- Data is being fetched from an API
+- A process is running in the background
+- Content is being loaded or rendered
+- The application is transitioning between states
+
+It helps improve user experience by signaling that the application is working rather than frozen.
+
+## Examples
+
+### Large Spinner (Default)
+
+The default large spinner provides high visibility for primary loading states.
+
+<Canvas of={SpinnerStories.Large} />
+
+### Small Spinner
+
+The small spinner is useful for inline loading indicators or when space is limited.
+
+<Canvas of={SpinnerStories.Small} />
+
+### In Container
+
+The spinner automatically centers itself within its container, making it easy to position.
+
+<Canvas of={SpinnerStories.InContainer} />
+
+### Size Comparison
+
+A comparison of the available spinner sizes.
+
+<Canvas of={SpinnerStories.MultipleSizes} />
+
+## Properties
+
+<Controls of={SpinnerStories.Large} />
+
+## Usage Guidelines
+
+- Use the large spinner for primary loading states that affect a significant portion of the UI
+- Use the small spinner for inline loading or when space is constrained
+- The spinner is designed to be centered in its container by default
+- Use the spinner to indicate background processes that take more than a moment to complete
+- For buttons or other interactive elements, consider using the loading state of those components instead
+
+## Implementation Notes
+
+- The spinner is created using CSS animations for smooth performance
+- It automatically centers itself within its parent container
+- The component uses CSS variables to control its size
+- The spinner animation continues indefinitely until the component is unmounted
+- The spinner uses a semi-transparent white color that works well on dark backgrounds
