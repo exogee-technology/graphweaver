@@ -29,7 +29,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Error: Story = {
+export const ErrorAlert: Story = {
 	args: {
 		severity: 'error',
 		children: 'This is an error alert. Something went wrong!',
