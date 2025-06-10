@@ -28,6 +28,12 @@ export const SCHEMA_QUERY = gql`
 						type
 						options
 					}
+					format {
+						type
+						timezone
+						format
+						variant
+					}
 					attributes {
 						isReadOnly
 						isRequired

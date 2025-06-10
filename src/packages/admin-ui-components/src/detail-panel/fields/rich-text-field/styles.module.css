@@ -118,8 +118,6 @@
 
 .richText :global .tiptap pre {
 	white-space: revert;
-	white-space: revert;
-	white-space: revert;
 	word-wrap: revert;
 }
 

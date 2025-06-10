@@ -27,10 +27,20 @@ export class Employee {
 	})
 	employee?: Employee;
 
-	@Field(() => ISODateStringScalar, { nullable: true })
+	@Field(() => ISODateStringScalar, {
+		nullable: true,
+		adminUIOptions: {
+			format: { type: 'date', timezone: 'Australia/Sydney', format: 'DATE_MED' },
+		},
+	})
 	birthDate?: Date;
 
-	@Field(() => ISODateStringScalar, { nullable: true })
+	@Field(() => ISODateStringScalar, {
+		nullable: true,
+		adminUIOptions: {
+			format: { type: 'date', timezone: 'Australia/Sydney', format: 'DATE_MED_WITH_WEEKDAY' },
+		},
+	})
 	hireDate?: Date;
 
 	@Field(() => String, { nullable: true })

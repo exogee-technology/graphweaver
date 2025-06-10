@@ -78,6 +78,7 @@ export const applyDefaultMetadataACL = () => {
 		'AdminUiFieldMetadata',
 		'AdminUiFilterMetadata',
 		'DetailPanelInputComponent',
+		'AdminUiFieldFormatMetadata',
 	];
 
 	for (const entity of metadataEntities) {

@@ -4,7 +4,11 @@ import { GraphQLID, GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphq
 import { ResolveTree } from 'graphql-parse-resolve-info';
 import { ComplexityEstimator } from 'graphql-query-complexity';
 import { EntityMetadata } from './metadata';
-import { DetailPanelInputComponent, DetailPanelInputComponentOption } from './decorators';
+import {
+	CellFormatOptions,
+	DetailPanelInputComponent,
+	DetailPanelInputComponentOption,
+} from './decorators';
 
 export type { Instrumentation } from '@opentelemetry/instrumentation';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -255,6 +259,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		filterType?: AdminUIFilterType;
 		filterOptions?: Record<string, unknown>;
 		detailPanelInputComponent?: DetailPanelInputComponentOption | DetailPanelInputComponent;
+		format?: CellFormatOptions;
 	};
 	apiOptions?: {
 		excludeFromBuiltInWriteOperations?: boolean;

@@ -2,7 +2,7 @@ import { SVGProps } from 'react';
 
 export const CloseButtonIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
-		enable-background="new 0 0 47.971 47.971"
+		enableBackground="new 0 0 47.971 47.971"
 		fill="#7038c2"
 		version="1.1"
 		viewBox="0 0 47.971 47.971"

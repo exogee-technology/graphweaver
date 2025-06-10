@@ -1,0 +1,89 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as BadgeStories from './badge.stories';
+import { Badge } from './component';
+
+<Meta of={BadgeStories} />
+
+# Badge
+
+Badges are small status indicators that provide quick recognition and visual context for content. They can display text, icons, or both to communicate important information at a glance.
+
+## Overview
+
+The Badge component is a versatile labeling element that can be used to:
+
+- Indicate status or category
+- Display counts or notifications
+- Highlight important attributes
+- Tag content with metadata
+- Trigger actions when interactive
+
+## Examples
+
+### Variants
+
+#### Primary Badge
+
+The primary badge uses the main brand color for high-importance labels.
+
+<Canvas of={BadgeStories.Primary} />
+
+#### Secondary Badge
+
+The secondary badge provides a softer appearance for medium-importance labels.
+
+<Canvas of={BadgeStories.Secondary} />
+
+#### Greyscale Badge
+
+The greyscale badge offers a neutral appearance for low-emphasis labels.
+
+<Canvas of={BadgeStories.Greyscale} />
+
+### With Icons
+
+#### Icon Prefix
+
+Add an icon before the text to provide additional visual context.
+
+<Canvas of={BadgeStories.WithIconPrefix} />
+
+#### Icon Suffix
+
+Add an icon after the text for supplementary information.
+
+<Canvas of={BadgeStories.WithIconSuffix} />
+
+#### Both Icons
+
+Combine prefix and suffix icons for maximum visual impact.
+
+<Canvas of={BadgeStories.WithBothIcons} />
+
+### Interactive Badge
+
+Badges can be clickable to trigger actions or navigation.
+
+<Canvas of={BadgeStories.Clickable} />
+
+## Properties
+
+<Controls of={BadgeStories.Primary} />
+
+## Usage Guidelines
+
+- Use badges to provide quick visual context without cluttering the interface
+- Choose variants based on importance: primary for critical info, secondary for moderate importance, greyscale for neutral labels
+- Keep text concise; badges work best with 1-2 words
+- Use icons to enhance meaning but ensure they're universally understood
+- Make badges interactive only when they serve a clear purpose (filtering, navigation, etc.)
+- Maintain consistent badge usage throughout your application
+
+## Accessibility
+
+- Interactive badges are keyboard accessible and can be activated using the Enter or Space keys
+- Ensure sufficient color contrast for all badge variants
+- When using icons, consider adding aria-labels for screen readers
+- Avoid relying solely on color to communicate information
+- Keep badge text descriptive and meaningful for assistive technologies

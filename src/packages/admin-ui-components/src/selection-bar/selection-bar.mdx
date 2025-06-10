@@ -1,0 +1,60 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as SelectionBarStories from './selection-bar.stories';
+import { SelectionBar } from './component';
+
+<Meta of={SelectionBarStories} />
+
+# Selection Bar
+
+The Selection Bar component displays a floating action bar when one or more table rows are selected, showing the count of selected items and providing actions that can be performed on the selected rows.
+
+## Overview
+
+The Selection Bar is used to:
+
+- Display the number of currently selected rows in a table
+- Provide a way to deselect all rows at once
+- Present a dropdown of actions that can be performed on the selected rows (such as deletion)
+
+It's typically used in conjunction with tables that have selectable rows, providing a non-intrusive way to manage batch operations.
+
+## Examples
+
+### Default
+
+The standard Selection Bar with two selected rows.
+
+<Canvas of={SelectionBarStories.Default} />
+
+### Single Row Selected
+
+The Selection Bar when only one row is selected. Notice how the text adapts to singular form.
+
+<Canvas of={SelectionBarStories.SingleRowSelected} />
+
+### Multiple Rows Selected
+
+The Selection Bar with multiple rows selected, showing the count.
+
+<Canvas of={SelectionBarStories.MultipleRowsSelected} />
+
+## Properties
+
+<Controls of={SelectionBarStories.Default} />
+
+## Usage Guidelines
+
+- Use the Selection Bar when implementing tables with selectable rows
+- The component should only be displayed when at least one row is selected
+- Position it at the bottom of the viewport, so it doesn't block the table content
+- Keep action options clear and concise
+- Make destructive actions (like delete) visually distinct
+- Always provide a way to cancel the selection
+
+## Implementation Notes
+
+- The Selection Bar is fixed at the bottom of the viewport
+- It uses the `Popover` component for the actions dropdown
+- It automatically handles singular/plural text based on selection count
+- The component should be conditionally rendered based on the presence of selected rows

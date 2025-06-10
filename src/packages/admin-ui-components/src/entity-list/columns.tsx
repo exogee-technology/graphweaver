@@ -6,14 +6,59 @@ import { DetailPanelInputComponentOption, Entity, EntityField, routeFor } from '
 import { cells } from '../table/cells';
 import { Checkbox } from '../checkbox';
 import { getExtensions } from '../detail-panel/fields/rich-text-field/utils';
+import { DateTime } from 'luxon';
 
-const columnHelper = createColumnHelper<any>();
 const richTextExtensions = getExtensions({});
 
-const cellForType = (field: EntityField, value: any, entityByType: (type: string) => Entity) => {
+// Constants
+const CHECKBOX_COLUMN_WIDTH = 48;
+
+const formatValue = (field: EntityField, value: unknown): string | number | null => {
+	if (!field.format) {
+		return value as string | number | null;
+	} else if (field.format?.type === 'date') {
+		if (!value) return null;
+
+		try {
+			let date = DateTime.fromISO(value as string);
+			if (!date.isValid) {
+				console.warn(`Invalid date value: ${value} for field: ${field.name}`);
+				return value as string;
+			}
+
+			if (field.format?.timezone) {
+				date = date.setZone(field.format.timezone ?? 'UTC');
+			}
+			if (field.format?.format && DateTime[field.format.format as keyof typeof DateTime]) {
+				return date.toLocaleString(DateTime[field.format.format as keyof typeof DateTime] as any);
+			}
+			return date.toLocaleString(DateTime.DATETIME_FULL);
+		} catch (error) {
+			console.error('Date formatting error:', error, { value, fieldName: field.name });
+			return value as string;
+		}
+	} else if (field.format?.type === 'currency') {
+		return typeof value === 'string'
+			? parseFloat(value).toLocaleString('en-AU', {
+					style: 'currency',
+					currency: field.format.variant,
+				})
+			: (value as number).toLocaleString('en-AU', {
+					style: 'currency',
+					currency: field.format.variant,
+				});
+	}
+	return value as string | number | null;
+};
+
+const cellForType = (
+	field: EntityField,
+	value: unknown,
+	entityByType: (type: string) => Entity
+): React.ReactNode => {
 	// Is there a specific definition for the cell type?
 	if (cells[field.type as keyof typeof cells]) {
-		return cells[field.type as keyof typeof cells](value);
+		return cells[field.type as keyof typeof cells](value as any);
 	}
 
 	// If not, is it a relationship?
@@ -44,25 +89,25 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 
 	// Is it an array?
 	if (Array.isArray(value)) {
-		return value.join(', ');
+		return value.map((item) => formatValue(field, item)).join(', ');
 	}
 
 	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
 		if (!value) return null;
 		try {
-			const json = generateJSON(value, richTextExtensions);
+			const json = generateJSON(value as string, richTextExtensions);
 			return <div>{generateText(json, richTextExtensions)}</div>;
-		} catch (e) {
-			console.error(e);
-			return <div>{value}</div>;
+		} catch (error) {
+			console.error('Rich text rendering error:', error, { value, fieldName: field.name });
+			return <div title="Failed to render rich text">{String(value)}</div>;
 		}
 	}
 
 	// Ok, all we're left with is a simple value
-	return value;
+	return formatValue(field, value);
 };
 
-const isFieldSortable = (field: EntityField) => {
+const isFieldSortable = (field: EntityField): boolean => {
 	if (field.type === 'JSON') {
 		return false;
 	}
@@ -82,14 +127,15 @@ const isFieldSortable = (field: EntityField) => {
 	return true;
 };
 
-const addRowCheckboxColumn = () => {
-	return columnHelper.accessor('select', {
+const addRowCheckboxColumn = <T extends Record<string, unknown>>() => {
+	const columnHelper = createColumnHelper<T>();
+	return columnHelper.accessor('select' as any, {
 		id: 'select',
 		enableSorting: false,
-		size: 48,
-		minSize: 48,
-		maxSize: 48,
-		header: ({ table }) => (
+		size: CHECKBOX_COLUMN_WIDTH,
+		minSize: CHECKBOX_COLUMN_WIDTH,
+		maxSize: CHECKBOX_COLUMN_WIDTH,
+		header: ({ table }: { table: any }) => (
 			<Checkbox
 				{...{
 					checked: table.getIsAllRowsSelected(),
@@ -98,7 +144,7 @@ const addRowCheckboxColumn = () => {
 				}}
 			/>
 		),
-		cell: ({ row }) => (
+		cell: ({ row }: { row: any }) => (
 			<Checkbox
 				{...{
 					checked: row.getIsSelected(),
@@ -111,14 +157,29 @@ const addRowCheckboxColumn = () => {
 	});
 };
 
-export const convertEntityToColumns = (entity: Entity, entityByType: (type: string) => Entity) => {
+export const convertEntityToColumns = <T extends Record<string, unknown>>(
+	entity: Entity,
+	entityByType: (type: string) => Entity
+) => {
+	// Input validation
+	if (!entity?.fields) {
+		console.warn('Entity has no fields:', entity);
+		return [];
+	}
+
+	if (typeof entityByType !== 'function') {
+		throw new Error('entityByType must be a function');
+	}
+
+	const columnHelper = createColumnHelper<T>();
+
 	const entityColumns = entity.fields
 		.filter((field) => !field.hideInTable)
 		.map((field) =>
-			columnHelper.accessor(field.name, {
+			columnHelper.accessor(field.name as any, {
 				id: field.name,
 				header: () => field.name,
-				cell: (info) => cellForType(field, info.getValue(), entityByType),
+				cell: (info: CellContext<T, unknown>) => cellForType(field, info.getValue(), entityByType),
 				enableSorting: isFieldSortable(field),
 			})
 		);
@@ -139,10 +200,10 @@ export const convertEntityToColumns = (entity: Entity, entityByType: (type: stri
 
 	// Ok, now we can merge our custom fields in
 	for (const customField of customFieldsToShow) {
-		const column = columnHelper.accessor(customField.name, {
+		const column = columnHelper.accessor(customField.name as any, {
 			id: customField.name,
 			header: () => customField.name,
-			cell: (info: CellContext<unknown, unknown>) =>
+			cell: (info: CellContext<T, unknown>) =>
 				customField.component?.({ context: 'table', entity: info.row.original }),
 			enableSorting: false,
 		});
@@ -151,7 +212,7 @@ export const convertEntityToColumns = (entity: Entity, entityByType: (type: stri
 
 	// Add the row selection column if the entity is not read-only
 	if (!entity.attributes.isReadOnly) {
-		return [addRowCheckboxColumn(), ...entityColumns];
+		return [addRowCheckboxColumn<T>(), ...entityColumns];
 	}
 
 	return entityColumns;

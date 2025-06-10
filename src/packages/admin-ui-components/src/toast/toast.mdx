@@ -1,0 +1,107 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as ToastStories from './toast.stories';
+
+<Meta of={ToastStories} />
+
+# Toast
+
+The Toast component provides a way to display brief, non-blocking notifications to users.
+
+## Overview
+
+Toasts are used throughout the application to:
+
+- Confirm successful operations
+- Alert users to errors and failures
+- Indicate that operations are in progress
+- Provide temporary feedback without disrupting user flow
+
+The Toast component is built on top of the react-hot-toast library, with custom styling to match Graphweaver's design system.
+
+## Examples
+
+### Interactive Demo
+
+Try out the different toast types by clicking the buttons.
+
+<Canvas of={ToastStories.Interactive} />
+
+### Success Toast
+
+Used to confirm that an operation has completed successfully.
+
+<Canvas of={ToastStories.Success} />
+
+### Error Toast
+
+Used to notify users when something has gone wrong.
+
+<Canvas of={ToastStories.ErrorToast} />
+
+### Loading Toast
+
+Used to indicate that an operation is in progress.
+
+<Canvas of={ToastStories.Loading} />
+
+### Multiple Toasts
+
+The system can display multiple toasts simultaneously, stacking them neatly.
+
+<Canvas of={ToastStories.Multiple} />
+
+## Usage
+
+```tsx
+import { toast } from '@/components/toast';
+
+// Success message
+toast.success('Item created successfully');
+
+// Error message
+toast.error('Failed to save changes');
+
+// Loading indicator
+toast.loading('Uploading file...');
+
+// Dismiss a specific toast by ID
+const toastId = toast.loading('Processing...');
+// Later:
+toast.dismiss(toastId);
+
+// Dismiss all toasts
+toast.dismiss();
+```
+
+## Toast Types
+
+The component supports three main types of toasts:
+
+- **Success**: Green checkmark icon with dark background. Used for confirmations.
+- **Error**: Red background with no icon. Used for error messages.
+- **Loading**: Spinner animation. Used for operations in progress.
+
+## Component Configuration
+
+The toast component comes with the following default configuration:
+
+- Success toasts appear for 60 seconds by default
+- Error toasts appear for 100 seconds by default
+- All toasts include a close button for manual dismissal
+- Toasts appear in the bottom-right corner of the screen
+- Toast width is fixed at 320px for consistency
+
+## Accessibility
+
+- Toasts use appropriate ARIA attributes for screen readers
+- The component preserves focus order when toasts appear and disappear
+- Toast messages are concise and descriptive
+- Toasts can be manually dismissed by clicking the close icon
+
+## Implementation Notes
+
+- The component uses react-hot-toast for rendering and managing toasts
+- Custom styling is applied to match Graphweaver's design system
+- The DismissibleToast component should be included once in your application layout
+- Toast duration can be customized when triggered

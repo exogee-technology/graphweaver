@@ -1,0 +1,142 @@
+import { Canvas, Meta, Story } from '@storybook/blocks';
+
+import * as LoaderStories from './loader.stories';
+
+<Meta of={LoaderStories} />
+
+# Loader
+
+A visually appealing loading indicator component with an animated blob effect.
+
+## Overview
+
+The Loader component provides a visual indication that content is loading. It uses CSS animations to create a fluid, morphing blob effect with gradient colors. The animation starts at a random point in its cycle to ensure visual variety.
+
+## Examples
+
+### Default
+
+Basic usage of the loader component:
+
+<Canvas of={LoaderStories.Default} />
+
+### In Small Container
+
+The loader adapts to smaller containers:
+
+<Canvas of={LoaderStories.InSmallContainer} />
+
+### In Large Container
+
+The loader in a larger container:
+
+<Canvas of={LoaderStories.InLargeContainer} />
+
+### Loading Page
+
+A typical usage example in a page loading context:
+
+<Canvas of={LoaderStories.LoadingPage} />
+
+### Multiple Loaders
+
+Multiple loaders can be used in different contexts:
+
+<Canvas of={LoaderStories.MultipleLoaders} />
+
+## Usage Guidelines
+
+### Basic Usage
+
+The Loader component doesn't accept any props and is designed to be simple to use:
+
+```jsx
+import { Loader } from '@exogee/graphweaver-admin-ui-components';
+
+// Basic usage
+<Loader />
+
+// In a container
+<div style={{ height: '300px', position: 'relative' }}>
+  <Loader />
+</div>
+```
+
+### With Loading State
+
+Commonly used to indicate loading states in your application:
+
+```jsx
+import { useState, useEffect } from 'react';
+import { Loader } from '@exogee/graphweaver-admin-ui-components';
+
+function DataComponent() {
+	const [data, setData] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		fetchData().then((result) => {
+			setData(result);
+			setLoading(false);
+		});
+	}, []);
+
+	if (loading) {
+		return (
+			<div style={{ height: '300px', position: 'relative' }}>
+				<Loader />
+			</div>
+		);
+	}
+
+	return <div>{/* Render data */}</div>;
+}
+```
+
+### With Suspense
+
+Works well with React's Suspense feature:
+
+```jsx
+import { Suspense } from 'react';
+import { Loader } from '@exogee/graphweaver-admin-ui-components';
+
+function App() {
+	return (
+		<Suspense fallback={<Loader />}>
+			<DataComponent />
+		</Suspense>
+	);
+}
+```
+
+## Implementation Details
+
+The Loader component uses several CSS animations to create its morphing blob effect:
+
+1. **Morphing Animation (blobbing)**: Changes the border radius values to create a fluid, organic shape that continuously transforms
+2. **Size Animations (width-smoosh, height-smoosh)**: Subtly changes the width and height at different rates to enhance the organic feel
+3. **Gradient Background**: Uses a linear gradient that shifts with the animations
+4. **Shadow Effect**: Creates a soft, blurred shadow beneath the blob for depth
+5. **Random Start Point**: Begins the animation at a random point in the cycle for visual variety
+
+## Accessibility
+
+- The loader has a `data-testid="loader"` attribute for easy testing
+- For screen readers, you should accompany the Loader with appropriate text context:
+
+```jsx
+<div role="status" aria-live="polite">
+	<span className="sr-only">Loading...</span>
+	<Loader />
+</div>
+```
+
+## Customization
+
+The Loader inherits colors from CSS variables, making it adaptable to your theme:
+
+- `--primary-color`: Used in the gradient
+- `--body-copy-color`: Used in the gradient
+
+You can wrap the Loader in a container with specific dimensions to control its size context.

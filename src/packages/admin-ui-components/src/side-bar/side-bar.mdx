@@ -1,0 +1,64 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as SideBarStories from './side-bar.stories';
+
+<Meta of={SideBarStories} />
+
+# Side Bar
+
+The Side Bar component provides the main navigation interface for the Graphweaver Admin UI, displaying available data sources, entities, and dashboard links.
+
+## Overview
+
+The Side Bar is a core navigation component that:
+
+- Displays the Graphweaver logo and branding
+- Lists available data sources and their entities
+- Groups entities by their backend/data source
+- Provides navigation to custom dashboards
+- Includes authentication controls like sign out
+- Offers analytics access when available
+
+It serves as the primary navigation control for the entire application, allowing users to move between different data entities and custom pages.
+
+## Examples
+
+### Default
+
+The standard Side Bar with expanded data sources and navigational elements.
+
+<Canvas of={SideBarStories.Default} />
+
+### Authenticated View
+
+The Side Bar with the sign out button visible when a user is authenticated.
+
+<Canvas of={SideBarStories.Authenticated} />
+
+## Component Structure
+
+The Side Bar is composed of several key sections:
+
+1. **Header** - Contains the Graphweaver logo that links to the homepage
+2. **Dashboards** - Lists custom pages defined by the application
+3. **Data Sources** - Groups entities by their backend/data source
+   - Each backend can be expanded/collapsed
+   - Entities are sorted alphabetically
+4. **Analytics** - Provides access to the Trace functionality if available
+5. **Footer** - Contains authentication controls or branding
+
+## Usage Guidelines
+
+- The Side Bar is typically rendered as a fixed element on the left side of the application
+- Data sources are expandable/collapsable to manage space
+- The currently selected entity is highlighted for better user orientation
+- Custom dashboards and pages appear at the top for easy access
+- Authentication controls (sign out button) appear at the bottom when a user is logged in
+
+## Implementation Notes
+
+- The component dynamically loads available entities from the GraphQL schema
+- Custom dashboards are loaded through the virtual module 'virtual:graphweaver-user-supplied-custom-pages'
+- Entity visibility can be controlled with the `hideInSideBar` property
+- The component handles loading states gracefully
+- Authentication state is managed through localStorage

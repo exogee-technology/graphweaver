@@ -1,9 +1,10 @@
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { DetailPanelInputComponentOption, Entity, Field } from '../decorators';
-import { AdminUiFilterMetadata } from './filter';
+import { graphweaverMetadata } from '../metadata';
 import { AdminUiFieldAttributeMetadata } from './field-attribute';
 import { AdminUiFieldExtensionsMetadata } from './field-extensions';
-import { graphweaverMetadata } from '../metadata';
-import { GraphQLJSON } from '@exogee/graphweaver-scalars';
+import { AdminUiFieldFormatMetadata } from './field-format';
+import { AdminUiFilterMetadata } from './filter';
 
 graphweaverMetadata.collectEnumInformation({
 	name: 'DetailPanelInputComponentOption',
@@ -39,6 +40,9 @@ export class AdminUiFieldMetadata {
 
 	@Field(() => AdminUiFilterMetadata, { nullable: true })
 	filter?: AdminUiFilterMetadata;
+
+	@Field(() => AdminUiFieldFormatMetadata, { nullable: true })
+	format?: AdminUiFieldFormatMetadata;
 
 	@Field(() => AdminUiFieldAttributeMetadata, { nullable: true })
 	attributes?: AdminUiFieldAttributeMetadata;

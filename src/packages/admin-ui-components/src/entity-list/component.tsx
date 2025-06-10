@@ -27,7 +27,11 @@ import { QueryResponse, queryForEntityPage } from './graphql';
 import { ExportModal } from '../export-modal';
 import styles from './styles.module.css';
 
-export const EntityList = <TData extends object>({ children }: { children: React.ReactNode }) => {
+export const EntityList = <TData extends Record<string, unknown>>({
+	children,
+}: {
+	children: React.ReactNode;
+}) => {
 	const { entity: entityName, id } = useParams();
 	if (!entityName) throw new Error('There should always be an entity at this point.');
 
@@ -50,7 +54,7 @@ export const EntityList = <TData extends object>({ children }: { children: React
 		supportsPseudoCursorPagination,
 	} = entity;
 	const columns = useMemo(
-		() => convertEntityToColumns(entity, entityByType),
+		() => convertEntityToColumns<TData>(entity, entityByType),
 		[fields, entityByType]
 	);
 
@@ -85,7 +89,7 @@ export const EntityList = <TData extends object>({ children }: { children: React
 		return <ErrorView message="Error! Unable to load entity." />;
 	}
 
-	const handleRowClick = <T extends object>(row: Row<T>) => {
+	const handleRowClick = <T extends Record<string, unknown>>(row: Row<T>) => {
 		setLocation(
 			routeFor({
 				entity,

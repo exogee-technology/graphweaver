@@ -1,7 +1,7 @@
 .detailPanelFieldLabel {
 	flex: none;
 
-	font-family: 'Inter';
+	font-family: 'Inter', sans-serif;
 	font-style: normal;
 	font-size: 14px;
 	line-height: 150%;
@@ -12,7 +12,7 @@
 }
 
 .required {
-	font-family: 'Inter';
+	font-family: 'Inter', sans-serif;
 	font-style: normal;
 	font-size: 14px;
 	line-height: 150%;

@@ -1,0 +1,87 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/blocks';
+
+import * as CheckboxStories from './checkbox.stories';
+import { Checkbox } from './component';
+
+<Meta of={CheckboxStories} />
+
+# Checkbox
+
+Checkboxes allow users to select one or more items from a set or mark an option as checked/unchecked.
+
+## Overview
+
+The Checkbox component is a form control that can be used to:
+
+- Allow users to make binary choices (yes/no, true/false)
+- Select multiple options from a list
+- Toggle a single setting on or off
+- Present a tri-state (indeterminate) selection
+
+## Examples
+
+### Basic Checkbox States
+
+#### Unchecked
+
+The default, unchecked state of the checkbox.
+
+<Canvas of={CheckboxStories.Unchecked} />
+
+#### Checked
+
+The selected state of the checkbox.
+
+<Canvas of={CheckboxStories.Checked} />
+
+#### Disabled
+
+Checkboxes can be disabled to prevent user interaction.
+
+<Canvas of={CheckboxStories.Disabled} />
+
+#### Disabled and Checked
+
+A checkbox can be both disabled and checked simultaneously.
+
+<Canvas of={CheckboxStories.DisabledChecked} />
+
+#### Indeterminate
+
+The indeterminate state is used to represent a group where some but not all items are selected.
+
+<Canvas of={CheckboxStories.Indeterminate} />
+
+### Styling and Context
+
+#### With Custom Label
+
+Checkboxes can be paired with custom-styled labels.
+
+<Canvas of={CheckboxStories.WithCustomLabel} />
+
+#### Within Forms
+
+Checkboxes are often used within forms for accepting terms or selecting options.
+
+<Canvas of={CheckboxStories.InForm} />
+
+## Properties
+
+<Controls of={CheckboxStories.Unchecked} />
+
+## Usage Guidelines
+
+- Use checkboxes when users need to select multiple items from a list
+- For single on/off choices, consider using the Switch component instead
+- Always provide clear, descriptive labels for checkboxes
+- Group related checkboxes together
+- For mutually exclusive options, use radio buttons instead
+- Use the indeterminate state to indicate partially selected groups
+
+## Accessibility
+
+- Checkboxes are keyboard accessible and can be toggled using the Space key
+- Labels should be descriptive and properly associated with the checkbox
+- The component has appropriate ARIA roles for screen readers
+- Disabled checkboxes are removed from the tab order
