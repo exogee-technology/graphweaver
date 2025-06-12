@@ -14,7 +14,16 @@ export class Artist {
 	})
 	artistId!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
+	@Field(() => String, {
+		nullable: true,
+		adminUIOptions: {
+			summaryField: true,
+			filterOptions: {
+				caseInsensitive: true,
+				substringMatch: true,
+			},
+		},
+	})
 	name?: string;
 
 	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
