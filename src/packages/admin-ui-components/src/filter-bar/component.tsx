@@ -54,8 +54,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		// for now the workaround is to reduce the number of filters to 5
 		const fields = entity.fields
 			// filter out rowEntity.fields with the JSON and Media types because they're not filterable
-			.filter((field) => field.type !== 'JSON' && field.type !== 'GraphweaverMedia')
-			.slice(0, 5);
+			.filter((field) => field.type !== 'JSON' && field.type !== 'GraphweaverMedia');
 
 		return fields;
 	}, [entityName]);
@@ -165,9 +164,32 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	if (filterComponents.length === 0) return null;
 
 	return (
-		<div className={styles.filterBarWrapper} data-testid="filter-bar">
+		<div
+			className={styles.filterBarWrapper}
+			data-testid="filter-bar"
+			style={{ display: 'flex', alignItems: 'center', gap: '16px' }}
+		>
+			{/* Left: Icon */}
 			{iconBefore}
-			{...filterComponents}
+
+			{/* Middle: Scrollable filter components */}
+			<div
+				style={{
+					display: 'flex',
+					gap: '16px',
+					overflowX: 'auto',
+					flex: 1,
+					minWidth: 0,
+				}}
+			>
+				{filterComponents.map((component, index) => (
+					<div key={index} style={{ width: '150px', flexShrink: 0 }}>
+						{component}
+					</div>
+				))}
+			</div>
+
+			{/* Right: Clear Filters button */}
 			<Button onClick={clearAllFilters}>Clear Filters</Button>
 		</div>
 	);
