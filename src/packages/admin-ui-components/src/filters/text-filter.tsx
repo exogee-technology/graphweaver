@@ -28,7 +28,7 @@ export const TextFilter = ({
 		<Input
 			key={fieldName}
 			inputMode="text"
-			name={fieldName}
+			fieldName={fieldName}
 			placeholder={fieldName}
 			value={value}
 			onChange={(fieldName: string, newValue?: string) => {

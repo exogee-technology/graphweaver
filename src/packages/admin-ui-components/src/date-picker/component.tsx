@@ -54,6 +54,8 @@ export const DatePicker = ({
 		inputDisplayText(luxonStartDate, luxonEndDate)
 	);
 	const datePickerRef = useRef<HTMLDivElement>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
+	const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
 	const handleDateRangeSelect = (start?: DateTime, end?: DateTime) => {
 		const shouldHandleTimeBehindTheScenes =
@@ -124,6 +126,24 @@ export const DatePicker = ({
 		}
 	};
 
+	const calculatePopupPosition = () => {
+		if (inputRef.current) {
+			const rect = inputRef.current.getBoundingClientRect();
+			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+			const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+			setPopupPosition({
+				top: rect.bottom + scrollTop,
+				left: rect.left + scrollLeft,
+			});
+		}
+	};
+
+	const handleInputClick = () => {
+		calculatePopupPosition();
+		setIsOpen((isOpen) => !isOpen);
+	};
+
 	const clear = () => {
 		handleDateRangeSelect(undefined, undefined);
 		setIsOpen(false);
@@ -136,22 +156,31 @@ export const DatePicker = ({
 			}
 		};
 
+		const handleResize = () => {
+			if (isOpen) {
+				calculatePopupPosition();
+			}
+		};
+
 		document.addEventListener('mousedown', handleOutsideClick);
+		window.addEventListener('resize', handleResize);
 
 		return () => {
 			document.removeEventListener('mousedown', handleOutsideClick);
+			window.removeEventListener('resize', handleResize);
 		};
-	}, []);
+	}, [isOpen]);
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.inputSelector}>
 				<input
+					ref={inputRef}
 					className={clsx(
 						(startDate || dateInputValue.length) && styles.inputFieldActive,
 						styles.inputField
 					)}
-					onClick={() => setIsOpen((isOpen) => !isOpen)}
+					onClick={handleInputClick}
 					placeholder={placeholder}
 					value={dateInputValue}
 					onChange={handleInputFieldChange}
@@ -169,7 +198,16 @@ export const DatePicker = ({
 				)}
 			</div>
 			{isOpen && (
-				<div className={styles.popup} ref={datePickerRef}>
+				<div
+					className={styles.popup}
+					ref={datePickerRef}
+					style={{
+						position: 'fixed',
+						top: `${popupPosition.top}px`,
+						left: `${popupPosition.left}px`,
+						zIndex: 9999,
+					}}
+				>
 					{isRangePicker ? (
 						<DayPicker
 							mode="range"

@@ -49,13 +49,9 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
-		// @todo - currently the filters are not fitting on the screen
-		// we plan to redo this filter bar so that it is a drop down
-		// for now the workaround is to reduce the number of filters to 5
 		const fields = entity.fields
 			// filter out rowEntity.fields with the JSON and Media types because they're not filterable
-			.filter((field) => field.type !== 'JSON' && field.type !== 'GraphweaverMedia')
-			.slice(0, 5);
+			.filter((field) => field.type !== 'JSON' && field.type !== 'GraphweaverMedia');
 
 		return fields;
 	}, [entityName]);
@@ -132,24 +128,40 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				filter: temporaryFilters,
 			};
 
+			let component = null;
+			let width = '150px'; // default width
+
 			switch (field.filter.type) {
 				case AdminUIFilterType.TEXT:
-					return <TextFilter key={field.name} {...options} />;
+					component = <TextFilter key={field.name} {...options} />;
+					width = '200px';
+					break;
 				case AdminUIFilterType.DROP_DOWN_TEXT:
-					return <DropdownTextFilter key={field.name} {...options} />;
+					component = <DropdownTextFilter key={field.name} {...options} />;
+					width = '250px';
+					break;
 				case AdminUIFilterType.BOOLEAN:
-					return <BooleanFilter key={field.name} {...options} />;
+					component = <BooleanFilter key={field.name} {...options} />;
+					width = '150px';
+					break;
 				case AdminUIFilterType.RELATIONSHIP:
-					return <RelationshipFilter key={field.name} {...options} />;
+					component = <RelationshipFilter key={field.name} {...options} />;
+					width = '200px';
+					break;
 				case AdminUIFilterType.ENUM:
-					return <EnumFilter key={field.name} {...options} />;
+					component = <EnumFilter key={field.name} {...options} />;
+					width = '200px';
+					break;
 				case AdminUIFilterType.NUMERIC:
-					return <NumericFilter key={field.name} {...options} />;
+					component = <NumericFilter key={field.name} {...options} />;
+					width = '200px';
+					break;
 				case AdminUIFilterType.NUMERIC_RANGE:
-					return <NumericRangeFilter key={field.name} {...options} />;
+					component = <NumericRangeFilter key={field.name} {...options} />;
+					width = '200px';
+					break;
 				case AdminUIFilterType.DATE_RANGE:
-				case AdminUIFilterType.DATE_TIME_RANGE:
-					return (
+					component = (
 						<DateRangeFilter
 							key={field.name}
 							{...options}
@@ -157,7 +169,22 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 							fieldType={field.type}
 						/>
 					);
+					width = '220px';
+					break;
+				case AdminUIFilterType.DATE_TIME_RANGE:
+					component = (
+						<DateRangeFilter
+							key={field.name}
+							{...options}
+							filterType={field.filter.type}
+							fieldType={field.type}
+						/>
+					);
+					width = '250px';
+					break;
 			}
+
+			return { component, width };
 		});
 	}, [entityName, temporaryFilters]);
 
@@ -165,9 +192,22 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	if (filterComponents.length === 0) return null;
 
 	return (
-		<div className={styles.filterBarWrapper} data-testid="filter-bar">
-			{iconBefore}
-			{...filterComponents}
+		<div className={styles.filterBarContent} data-testid="filter-bar">
+			{/* Left: Icon */}
+			{iconBefore && <div className={styles.iconWrapper}>{iconBefore}</div>}
+
+			{/* Middle: Scrollable filter components */}
+			<div className={styles.filterScrollContainer}>
+				{filterComponents
+					.filter((item): item is { component: React.ReactElement; width: string } => item !== null)
+					.map(({ component, width }, index) => (
+						<div key={index} className={styles.filterComponentWrapper} style={{ width }}>
+							{component}
+						</div>
+					))}
+			</div>
+
+			{/* Right: Clear Filters button */}
 			<Button onClick={clearAllFilters}>Clear Filters</Button>
 		</div>
 	);

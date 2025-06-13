@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
 import { useCombobox } from 'downshift';
 
@@ -54,6 +54,8 @@ export const ComboBox = ({
 }: SelectProps) => {
 	const valueArray = arrayify(value);
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
+	const selectBoxRef = useRef<HTMLDivElement>(null);
+	const dropdownRef = useRef<HTMLUListElement>(null);
 	const {
 		isOpen,
 		getMenuProps,
@@ -104,6 +106,18 @@ export const ComboBox = ({
 		if (isOpen) onOpen?.();
 	}, [isOpen]);
 
+	// Position dropdown when opened
+	useEffect(() => {
+		if (isOpen && selectBoxRef.current && dropdownRef.current) {
+			const selectRect = selectBoxRef.current.getBoundingClientRect();
+			const dropdown = dropdownRef.current;
+
+			dropdown.style.top = `${selectRect.bottom + window.scrollY + 2}px`;
+			dropdown.style.left = `${selectRect.left + window.scrollX}px`;
+			dropdown.style.width = `${Math.max(selectRect.width, 150)}px`;
+		}
+	}, [isOpen]);
+
 	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
 		if (e.key === 'Backspace' || e.key === 'Delete') onChange([]);
 	};
@@ -114,6 +128,7 @@ export const ComboBox = ({
 	return (
 		<div className={styles.select} data-testid={testId}>
 			<div
+				ref={selectBoxRef}
 				className={clsx(styles.selectBox, isOpen && styles.open)}
 				onClick={() => !disabled && toggleMenu()}
 				data-testid={testId ? `${testId}-box` : undefined}
@@ -156,7 +171,7 @@ export const ComboBox = ({
 				</span>
 			</div>
 
-			<ul className={styles.optionsDropdown} {...getMenuProps()}>
+			<ul ref={dropdownRef} className={styles.optionsDropdown} {...getMenuProps()}>
 				{isOpen &&
 					(loading ? (
 						<Spinner />
