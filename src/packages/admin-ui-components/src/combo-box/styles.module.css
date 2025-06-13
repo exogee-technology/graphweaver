@@ -9,6 +9,7 @@
 	position: relative;
 	width: 100%;
 	flex: 1;
+	overflow: visible;
 }
 
 .selectBox {
@@ -108,13 +109,16 @@
 .optionsDropdown {
 	background: #271f36;
 	border-radius: 4px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 	max-height: 185px;
 	overflow-y: auto;
-	position: absolute;
-	left: 0;
-	right: 0;
-	z-index: 3;
+	position: fixed;
+	z-index: 9999;
+	border: 1px solid var(--select-border-color);
+	margin-top: 2px;
+	display: none;
+	min-width: 250px;
+	width: 250px;
 }
 
 .optionsDropdown .selectedOptions {
@@ -122,7 +126,7 @@
 	gap: 10px;
 }
 
-.selectBox.open .optionsDropdown {
+.select:has(.selectBox.open) .optionsDropdown {
 	display: block;
 }
 
