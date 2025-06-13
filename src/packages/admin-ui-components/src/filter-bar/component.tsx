@@ -49,9 +49,6 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
-		// @todo - currently the filters are not fitting on the screen
-		// we plan to redo this filter bar so that it is a drop down
-		// for now the workaround is to reduce the number of filters to 5
 		const fields = entity.fields
 			// filter out rowEntity.fields with the JSON and Media types because they're not filterable
 			.filter((field) => field.type !== 'JSON' && field.type !== 'GraphweaverMedia');
