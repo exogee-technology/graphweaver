@@ -4,16 +4,10 @@ import { ConnectionOptions, DatabaseType } from '../../database';
 const pad = '\t';
 
 const importLineForDatabaseType = (databaseType: DatabaseType) => {
-	if (databaseType === 'mssql')
-		return `import { ${driverForDatabaseType(databaseType)} } from '@mikro-orm/mssql';`;
-	if (databaseType === 'mysql')
-		return `import { ${driverForDatabaseType(databaseType)} } from '@mikro-orm/mysql';`;
-	if (databaseType === 'postgresql')
-		return `import { ${driverForDatabaseType(databaseType)} } from '@mikro-orm/postgresql';`;
-	if (databaseType === 'sqlite')
-		return `import { ${driverForDatabaseType(databaseType)} } from 'mikro-orm-sqlite-wasm';`;
+	const packageName =
+		databaseType === 'sqlite' ? 'mikro-orm-sqlite-wasm' : `@mikro-orm/${databaseType}`;
 
-	throw new Error(`Unsupported database type: ${databaseType}`);
+	return `import { ${driverForDatabaseType(databaseType)} } from '${packageName}';`;
 };
 
 const driverForDatabaseType = (databaseType: DatabaseType) => {
