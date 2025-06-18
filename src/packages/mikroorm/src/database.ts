@@ -20,7 +20,7 @@ type EntityManager =
 	| MyEntityManager<MySqlDriver>
 	| SqliteEntityManager<SqliteDriver>;
 
-export type DatabaseType = 'mysql' | 'postgresql' | 'sqlite';
+export type DatabaseType = 'mssql' | 'mysql' | 'postgresql' | 'sqlite';
 
 export interface ConnectionOptions {
 	mikroOrmConfig?: Options | (() => Options | Promise<Options>);

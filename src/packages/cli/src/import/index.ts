@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { startIntrospection } from '@exogee/graphweaver-builder';
+import { Source, startIntrospection } from '@exogee/graphweaver-builder';
 import ora from 'ora-classic';
 
 import { GRAPHWEAVER_TARGET_VERSION, MIKRO_ORM_TARGET_VERSION } from '../init/constants';
@@ -29,7 +29,7 @@ export const isIntrospectionError = (
 	);
 };
 
-const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') => {
+const checkForMissingDependencies = (source: Source) => {
 	// We want to read the package.json of gw app so we can ignore this error
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const packageJson = require(path.join(process.cwd(), 'package.json'));
@@ -63,7 +63,7 @@ const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') 
 };
 
 export const importDataSource = async (
-	source: 'mysql' | 'postgresql' | 'sqlite',
+	source: Source,
 	dbName?: string,
 	host?: string,
 	port?: number,

@@ -17,6 +17,7 @@ import {
 export enum Backend {
 	Postgres = 'Postgres',
 	Mysql = 'Mysql',
+	Mssql = 'Mssql',
 	Rest = 'Rest',
 	Sqlite = 'Sqlite',
 }
@@ -84,20 +85,24 @@ export const init = async ({
 				default: initialBackends,
 				choices: [
 					{
-						value: Backend.Postgres,
-						name: 'MikroORM - PostgreSQL Backend',
-					},
-					{
 						value: Backend.Mysql,
-						name: 'MikroORM - MySQL Backend',
+						name: 'MySQL Backend',
 					},
 					{
-						value: Backend.Sqlite,
-						name: 'MikroORM - SQLite Backend',
+						value: Backend.Postgres,
+						name: 'PostgreSQL Backend',
 					},
 					{
 						value: Backend.Rest,
 						name: 'REST Backend',
+					},
+					{
+						value: Backend.Mssql,
+						name: 'SQL Server Backend',
+					},
+					{
+						value: Backend.Sqlite,
+						name: 'SQLite Backend',
 					},
 				],
 				validate: (answer) => {

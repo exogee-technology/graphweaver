@@ -10,6 +10,16 @@ import { ReferenceKind, Utils } from '@mikro-orm/core';
 import pluralize from 'pluralize';
 import { identifierForEnumValue, pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
 import { BaseFile } from './base-file';
+import { DatabaseType } from '../../database';
+
+const friendlyNameForDatabaseType = (type: DatabaseType) => {
+	if (type === 'mssql') return 'SQL Server';
+	if (type === 'mysql') return 'MySQL';
+	if (type === 'postgresql') return 'PostgreSQL';
+	if (type === 'sqlite') return 'SQLite';
+
+	throw new Error('Unimplemented database type: ' + type);
+};
 
 export class SchemaEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -21,6 +31,7 @@ export class SchemaEntityFile extends BaseFile {
 		protected readonly meta: EntityMetadata,
 		protected readonly namingStrategy: NamingStrategy,
 		protected readonly platform: Platform,
+		protected readonly databaseType: DatabaseType,
 		protected readonly entityLookup: Map<string, EntityMetadata<any>>
 	) {
 		super(meta, namingStrategy, platform);
@@ -69,7 +80,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		this.coreImports.add('Entity');
-		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection),\n})\n`;
+		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection, { backendDisplayName: '${friendlyNameForDatabaseType(this.databaseType)}' }),\n})\n`;
 		file += `export class ${this.meta.className} {\n`;
 		file += `${classBody}}\n`;
 		const imports = [

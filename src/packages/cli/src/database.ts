@@ -1,5 +1,21 @@
 import { DatabaseOptions, Source } from '@exogee/graphweaver-builder';
 
+const defaultUserForSource = (source: Source) => {
+	if (source === 'mssql') return 'sa';
+	if (source === 'mysql') return 'root';
+	if (source === 'postgresql') return 'postgres';
+
+	return 'root';
+};
+
+const defaultPortForSource = (source: Source) => {
+	if (source === 'mssql') return 1433;
+	if (source === 'mysql') return 3306;
+	if (source === 'postgresql') return 5432;
+
+	return 3306;
+};
+
 export const promptForDatabaseOptions = async ({
 	source,
 	dbName,
@@ -16,7 +32,7 @@ export const promptForDatabaseOptions = async ({
 				type: 'list',
 				name: 'source',
 				message: `What is the data source?`,
-				choices: ['mysql', 'postgresql', 'sqlite'],
+				choices: ['mssql', 'mysql', 'postgresql', 'sqlite'],
 			},
 		]);
 		source = prompt.source;
@@ -34,7 +50,7 @@ export const promptForDatabaseOptions = async ({
 		}
 	}
 
-	if (source === 'postgresql' || source === 'mysql') {
+	if (source === 'postgresql' || source === 'mssql' || source === 'mysql') {
 		if (typeof dbName === 'undefined') {
 			prompts.push({
 				type: 'input',
@@ -54,7 +70,7 @@ export const promptForDatabaseOptions = async ({
 			prompts.push({
 				type: 'input',
 				name: 'port',
-				default: source === 'postgresql' ? 5432 : 3306,
+				default: defaultPortForSource(source),
 				message: `What is the port?`,
 			});
 		}
@@ -62,7 +78,7 @@ export const promptForDatabaseOptions = async ({
 			prompts.push({
 				type: 'input',
 				name: 'user',
-				default: source === 'postgresql' ? 'postgres' : 'root',
+				default: defaultUserForSource(source),
 				message: `What is the username to access the database server?`,
 			});
 		}

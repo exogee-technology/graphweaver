@@ -202,12 +202,21 @@ export type AdminUiFieldExtensionsMetadata = {
   key?: Maybe<Scalars['String']['output']>;
 };
 
+export type AdminUiFieldFormatMetadata = {
+  __typename?: 'AdminUiFieldFormatMetadata';
+  format?: Maybe<Scalars['String']['output']>;
+  timezone?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+  variant?: Maybe<Scalars['String']['output']>;
+};
+
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   detailPanelInputComponent?: Maybe<DetailPanelInputComponent>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  format?: Maybe<AdminUiFieldFormatMetadata>;
   hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
   hideInFilterBar?: Maybe<Scalars['Boolean']['output']>;
   hideInTable?: Maybe<Scalars['Boolean']['output']>;

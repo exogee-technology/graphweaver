@@ -21,6 +21,15 @@ export const packagesForBackend = (backend: Backend, version?: string): Record<s
 				mysql2: '3.10.3',
 			};
 
+		case Backend.Mssql:
+			return {
+				'@exogee/graphweaver-mikroorm': graphweaverVersion(version, '@exogee/graphweaver-mikroorm'),
+				'@mikro-orm/core': MIKRO_ORM_TARGET_VERSION,
+				'@mikro-orm/knex': MIKRO_ORM_TARGET_VERSION,
+				'@mikro-orm/mssql': MIKRO_ORM_TARGET_VERSION,
+				tedious: '18.6.1',
+			};
+
 		case Backend.Sqlite:
 			return {
 				'@exogee/graphweaver-mikroorm': graphweaverVersion(version, '@exogee/graphweaver-mikroorm'),
