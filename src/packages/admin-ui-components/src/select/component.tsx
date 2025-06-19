@@ -77,18 +77,29 @@ const OptionItem = memo(
 		option: SelectOption;
 		/** Whether this option is currently selected */
 		isSelected: boolean;
-		/** Callback when this option is clicked */
-		onSelect: (o: SelectOption, e: MouseEvent) => void;
-	}) => (
-		<div
-			className={clsx(styles.option, isSelected && styles.selected)}
-			onClick={(e) => onSelect(option, e)}
-			role="option"
-			aria-selected={isSelected}
-		>
-			{option.label}
-		</div>
-	)
+		/** Callback when this option is clicked or selected via keyboard */
+		onSelect: (o: SelectOption, e: MouseEvent | React.KeyboardEvent) => void;
+	}) => {
+		const handleKeyDown = (e: React.KeyboardEvent) => {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				onSelect(option, e);
+			}
+		};
+
+		return (
+			<div
+				className={clsx(styles.option, isSelected && styles.selected)}
+				onClick={(e) => onSelect(option, e)}
+				onKeyDown={handleKeyDown}
+				tabIndex={0}
+				role="option"
+				aria-selected={isSelected}
+			>
+				{option.label}
+			</div>
+		);
+	}
 );
 OptionItem.displayName = 'OptionItem';
 
@@ -161,7 +172,7 @@ export const Select = ({
 				: `${valueArray.length} Selected`;
 
 	const handleOptionClick = useCallback(
-		(option: SelectOption, e: MouseEvent) => {
+		(option: SelectOption, e: MouseEvent | React.KeyboardEvent) => {
 			e.stopPropagation();
 			let newSelected: SelectOption[];
 			if (mode === SelectMode.MULTI) {

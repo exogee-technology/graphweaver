@@ -232,7 +232,7 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 											type="text"
 											placeholder={placeholder}
 											onChange={(_, val: string) => {
-												field.handleChange(val as any);
+												field.handleChange(val as unknown as T[DeepKeys<T>]);
 											}}
 											value={stringValue}
 										/>
@@ -247,11 +247,11 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 												// Convert empty string to undefined or 0, otherwise to number
 												if (val === '') {
 													// Default to 0 for numeric fields when empty - more predictable
-													field.handleChange(0 as any);
+													field.handleChange(0 as unknown as T[DeepKeys<T>]);
 												} else {
 													const numValue = Number(val);
 													if (!isNaN(numValue)) {
-														field.handleChange(numValue as any);
+														field.handleChange(numValue as unknown as T[DeepKeys<T>]);
 													}
 												}
 											}}
@@ -271,7 +271,7 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 														typeof defaultValues[name as keyof T] === 'number'
 															? defaultValues[name as keyof T]
 															: 0;
-													field.handleChange(defaultVal as any);
+													field.handleChange(defaultVal as unknown as T[DeepKeys<T>]);
 												}
 											}}
 										/>
@@ -286,13 +286,13 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 											onChange={(selected) => {
 												if (mode === SelectMode.MULTI) {
 													const primitives = selected.map((opt) => opt.value);
-													// TODO: We should be able to remove this any.
-													// eslint-disable-next-line @typescript-eslint/no-explicit-any
-													field.handleChange(primitives as any);
+													// Cast to unknown first, then to field type for type safety
+													field.handleChange(primitives as unknown as T[DeepKeys<T>]);
 												} else {
-													// TODO: We should be able to remove this any.
-													// eslint-disable-next-line @typescript-eslint/no-explicit-any
-													field.handleChange((selected[0]?.value ?? null) as any);
+													// Cast to unknown first, then to field type for type safety
+													field.handleChange(
+														(selected[0]?.value ?? null) as unknown as T[DeepKeys<T>]
+													);
 												}
 											}}
 										/>
@@ -301,8 +301,8 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 									{type === 'switch' && (
 										<Switch
 											name={field.name}
-											onChange={(val: any) => {
-												field.handleChange(!!val as any);
+											onChange={(val: unknown) => {
+												field.handleChange(!!val as unknown as T[DeepKeys<T>]);
 											}}
 											checked={!!currentValue}
 										/>
@@ -311,8 +311,8 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 									{type === 'checkbox' && (
 										<Checkbox
 											name={field.name}
-											onChange={(val: any) => {
-												field.handleChange(!!val as any);
+											onChange={(val: unknown) => {
+												field.handleChange(!!val as unknown as T[DeepKeys<T>]);
 											}}
 											checked={!!currentValue}
 										/>
