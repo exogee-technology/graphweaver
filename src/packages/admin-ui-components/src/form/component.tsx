@@ -233,6 +233,19 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 							const stringValue =
 								currentValue === null || currentValue === undefined ? '' : String(currentValue);
 
+							// For select, find the matching option(s) based on current value
+							const getSelectValue = () => {
+								if (mode === SelectMode.MULTI) {
+									if (Array.isArray(currentValue)) {
+										return options.filter((opt) => currentValue.includes(opt.value));
+									}
+									return [];
+								} else {
+									const matchingOption = options.find((opt) => opt.value === currentValue);
+									return matchingOption || undefined;
+								}
+							};
+
 							return (
 								<div className={styles.formField}>
 									{label && (
@@ -296,44 +309,21 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 									{type === 'select' && (
 										<Select
 											placeholder={placeholder}
-											options={stableOptions}
+											options={options}
 											mode={mode}
-											onChange={(selected: SelectOption[]) => {
-												// Always convert empty selections to undefined for form state
-												if (selected.length === 0) {
-													field.handleChange(null as any);
-													return;
-												}
+											value={getSelectValue()}
+											onChange={(selected) => {
 												if (mode === SelectMode.MULTI) {
-													// For multi-select, extract just the values (not the whole option objects)
-													const values = selected.map((s) => s.value);
-													// Always ensure we're passing an array for multi-select
-													const valueToUpdate = values.length > 0 ? values : [];
-													field.handleChange(valueToUpdate as any);
-												} else if (selected.length > 0) {
-													// For single-select, take just the value of the first selected option
-													const selectedValue = selected[0].value;
-													field.handleChange(selectedValue as any);
+													const primitives = selected.map((opt) => opt.value);
+													// TODO: We should be able to remove this any.
+													// eslint-disable-next-line @typescript-eslint/no-explicit-any
+													field.handleChange(primitives as any);
+												} else {
+													// TODO: We should be able to remove this any.
+													// eslint-disable-next-line @typescript-eslint/no-explicit-any
+													field.handleChange((selected[0]?.value ?? null) as any);
 												}
 											}}
-											value={(() => {
-												// Pre-compute the value outside of useMemo to avoid hook rules violation
-												if (mode === SelectMode.MULTI) {
-													if (Array.isArray(currentValue)) {
-														return currentValue.map((val: any) => {
-															const foundOpt = findMatchingOption(val, stableOptions);
-															return foundOpt || { value: val, label: String(val) };
-														});
-													}
-													return [];
-												} else {
-													const foundOpt = findMatchingOption(currentValue, stableOptions);
-													if (foundOpt) return foundOpt;
-													return currentValue !== undefined && currentValue !== null
-														? { value: currentValue, label: String(currentValue) }
-														: undefined;
-												}
-											})()}
 										/>
 									)}
 
