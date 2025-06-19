@@ -63,7 +63,7 @@ export const PasswordLogin = ({ canResetPassword = true }: { canResetPassword?: 
 							placeholder="Username"
 							id="username"
 							name="username"
-							autofocus
+							autoFocus
 							className={styles.textInputField}
 						/>
 						<PasswordFieldComponent />
