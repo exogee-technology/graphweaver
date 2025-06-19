@@ -134,35 +134,6 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 	});
 
 	/**
-	 * Helper function to find matching option for a value
-	 * @param value - The current field value
-	 * @param options - Available options
-	 * @returns The matching option or undefined
-	 */
-	const findMatchingOption = (value: any, options: SelectOption[]): SelectOption | undefined => {
-		if (value === undefined || value === null) {
-			return undefined;
-		}
-
-		// Try to find an exact match first
-		let option = options.find((opt) => opt.value === value);
-
-		// If no direct match and comparing objects or strings
-		if (!option) {
-			if (typeof value === 'object' && value !== null) {
-				// For objects, try string comparison
-				option = options.find(
-					(opt) =>
-						JSON.stringify(opt.value) === JSON.stringify(value) ||
-						String(opt.value) === String(value)
-				);
-			}
-		}
-
-		return option;
-	};
-
-	/**
 	 * Field component for rendering form inputs with labels and validation
 	 *
 	 * @param props - Field configuration
@@ -233,6 +204,19 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 							const stringValue =
 								currentValue === null || currentValue === undefined ? '' : String(currentValue);
 
+							// For select, find the matching option(s) based on current value
+							const getSelectValue = () => {
+								if (mode === SelectMode.MULTI) {
+									if (Array.isArray(currentValue)) {
+										return stableOptions.filter((opt) => currentValue.includes(opt.value));
+									}
+									return [];
+								} else {
+									const matchingOption = stableOptions.find((opt) => opt.value === currentValue);
+									return matchingOption || undefined;
+								}
+							};
+
 							return (
 								<div className={styles.formField}>
 									{label && (
@@ -248,7 +232,7 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 											type="text"
 											placeholder={placeholder}
 											onChange={(_, val: string) => {
-												field.handleChange(val as any);
+												field.handleChange(val as unknown as T[DeepKeys<T>]);
 											}}
 											value={stringValue}
 										/>
@@ -263,11 +247,11 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 												// Convert empty string to undefined or 0, otherwise to number
 												if (val === '') {
 													// Default to 0 for numeric fields when empty - more predictable
-													field.handleChange(0 as any);
+													field.handleChange(0 as unknown as T[DeepKeys<T>]);
 												} else {
 													const numValue = Number(val);
 													if (!isNaN(numValue)) {
-														field.handleChange(numValue as any);
+														field.handleChange(numValue as unknown as T[DeepKeys<T>]);
 													}
 												}
 											}}
@@ -287,7 +271,7 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 														typeof defaultValues[name as keyof T] === 'number'
 															? defaultValues[name as keyof T]
 															: 0;
-													field.handleChange(defaultVal as any);
+													field.handleChange(defaultVal as unknown as T[DeepKeys<T>]);
 												}
 											}}
 										/>
@@ -298,50 +282,27 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 											placeholder={placeholder}
 											options={stableOptions}
 											mode={mode}
-											onChange={(selected: SelectOption[]) => {
-												// Always convert empty selections to undefined for form state
-												if (selected.length === 0) {
-													field.handleChange(null as any);
-													return;
-												}
+											value={getSelectValue()}
+											onChange={(selected) => {
 												if (mode === SelectMode.MULTI) {
-													// For multi-select, extract just the values (not the whole option objects)
-													const values = selected.map((s) => s.value);
-													// Always ensure we're passing an array for multi-select
-													const valueToUpdate = values.length > 0 ? values : [];
-													field.handleChange(valueToUpdate as any);
-												} else if (selected.length > 0) {
-													// For single-select, take just the value of the first selected option
-													const selectedValue = selected[0].value;
-													field.handleChange(selectedValue as any);
+													const primitives = selected.map((opt) => opt.value);
+													// Cast to unknown first, then to field type for type safety
+													field.handleChange(primitives as unknown as T[DeepKeys<T>]);
+												} else {
+													// Cast to unknown first, then to field type for type safety
+													field.handleChange(
+														(selected[0]?.value ?? null) as unknown as T[DeepKeys<T>]
+													);
 												}
 											}}
-											value={(() => {
-												// Pre-compute the value outside of useMemo to avoid hook rules violation
-												if (mode === SelectMode.MULTI) {
-													if (Array.isArray(currentValue)) {
-														return currentValue.map((val: any) => {
-															const foundOpt = findMatchingOption(val, stableOptions);
-															return foundOpt || { value: val, label: String(val) };
-														});
-													}
-													return [];
-												} else {
-													const foundOpt = findMatchingOption(currentValue, stableOptions);
-													if (foundOpt) return foundOpt;
-													return currentValue !== undefined && currentValue !== null
-														? { value: currentValue, label: String(currentValue) }
-														: undefined;
-												}
-											})()}
 										/>
 									)}
 
 									{type === 'switch' && (
 										<Switch
 											name={field.name}
-											onChange={(val: any) => {
-												field.handleChange(!!val as any);
+											onChange={(val: unknown) => {
+												field.handleChange(!!val as unknown as T[DeepKeys<T>]);
 											}}
 											checked={!!currentValue}
 										/>
@@ -350,8 +311,8 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 									{type === 'checkbox' && (
 										<Checkbox
 											name={field.name}
-											onChange={(val: any) => {
-												field.handleChange(!!val as any);
+											onChange={(val: unknown) => {
+												field.handleChange(!!val as unknown as T[DeepKeys<T>]);
 											}}
 											checked={!!currentValue}
 										/>

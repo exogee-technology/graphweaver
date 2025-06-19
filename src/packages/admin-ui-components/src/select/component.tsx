@@ -1,85 +1,71 @@
 import clsx from 'clsx';
-import {
-	ChangeEvent,
-	JSX,
-	memo,
-	MouseEvent,
-	useCallback,
-	useEffect,
-	useId,
-	useRef,
-	useState,
-} from 'react';
+import { JSX, memo, MouseEvent, useCallback, useEffect, useId, useRef, useState } from 'react';
 import styles from './styles.module.css';
 
 /**
  * Defines the selection mode for the Select component.
- * @enum {string}
  */
 export enum SelectMode {
-	/** Allow only one item to be selected */
+	/** Single selection mode - only one option can be selected at a time */
 	SINGLE = 'SINGLE',
-	/** Allow multiple items to be selected */
+	/** Multi selection mode - multiple options can be selected simultaneously */
 	MULTI = 'MULTI',
 }
 
 /**
  * Represents an option in the Select component.
- * @interface SelectOption
  */
 export interface SelectOption {
-	/** Unique identifier for the option */
+	/** The actual value of the option that will be used in form data */
 	value: unknown;
-	/** Display text for the option */
+	/** The display text for the option. If not provided, the value will be stringified and used */
 	label?: string;
 }
 
 /**
  * Props for the Select component.
- * @interface SelectProps
  */
 interface SelectProps {
-	/** Array of options to display in the dropdown */
+	/** Array of available options to choose from */
 	options: SelectOption[];
-	/** Callback fired when selection changes */
+	/** Callback function called when the selection changes */
 	onChange: (selected: SelectOption[]) => void;
-	/** Selection mode: single or multiple */
+	/** Selection mode - single or multi selection */
 	mode: SelectMode;
-	/** Callback fired when dropdown opens */
+	/** Optional callback triggered when the dropdown opens (useful for lazy loading) */
 	onOpen?: () => void;
-	/** Currently selected value(s) */
+	/** Currently selected value(s). Can be a single option or array of options */
 	value?: SelectOption | SelectOption[];
-	/** Text to display when no option is selected */
+	/** Placeholder text shown when no option is selected */
 	placeholder?: string;
-	/** Whether the dropdown is in loading state */
+	/** Whether the select is in a loading state */
 	loading?: boolean;
-	/** Whether the select should be focused on mount */
-	autoFocus?: boolean;
 	/** Whether the select is disabled */
 	disabled?: boolean;
-	/** Test ID for component testing */
+	/** Test ID for automated testing */
 	['data-testid']?: string;
-	/** Label for the select element */
+	/** Optional label displayed above the select */
 	label?: string;
-	/** Whether the select is required */
+	/** Whether the field is required (shows asterisk in label) */
 	required?: boolean;
-	/** CSS class name */
+	/** Additional CSS class name for styling */
 	className?: string;
 }
 
 /**
- * Converts a value to an array if it isn't already.
- * @param value - The value to convert
- * @returns SelectOption[] - The value as an array of SelectOption
+ * Utility function to normalize value prop into an array format.
+ * @param value - The value to convert, can be undefined, single option, or array of options
+ * @returns Array of SelectOption objects
  */
 function arrayify(value: SelectOption | SelectOption[] | undefined): SelectOption[] {
 	if (Array.isArray(value)) return value;
-	if (value !== null && value !== undefined) return [value];
+	if (value != null) return [value];
 	return [];
 }
-// ... existing code ...
+
 /**
- * Option item component for the dropdown
+ * Individual option item component rendered within the dropdown.
+ * Memoized for performance optimization.
  */
 const OptionItem = memo(
 	({
@@ -87,19 +73,17 @@ const OptionItem = memo(
 		isSelected,
 		onSelect,
 	}: {
+		/** The option data to render */
 		option: SelectOption;
+		/** Whether this option is currently selected */
 		isSelected: boolean;
-		onSelect: (option: SelectOption, e: MouseEvent) => void;
+		/** Callback when this option is clicked or selected via keyboard */
+		onSelect: (o: SelectOption, e: MouseEvent | React.KeyboardEvent) => void;
 	}) => {
 		const handleKeyDown = (e: React.KeyboardEvent) => {
 			if (e.key === 'Enter' || e.key === ' ') {
 				e.preventDefault();
-				// Create a synthetic mouse event for compatibility with existing handler
-				const syntheticEvent = {
-					stopPropagation: () => {},
-					preventDefault: () => {},
-				} as MouseEvent;
-				onSelect(option, syntheticEvent);
+				onSelect(option, e);
 			}
 		};
 
@@ -108,23 +92,55 @@ const OptionItem = memo(
 				className={clsx(styles.option, isSelected && styles.selected)}
 				onClick={(e) => onSelect(option, e)}
 				onKeyDown={handleKeyDown}
+				tabIndex={0}
 				role="option"
 				aria-selected={isSelected}
-				tabIndex={0}
 			>
 				{option.label}
 			</div>
 		);
 	}
 );
-
 OptionItem.displayName = 'OptionItem';
 
 /**
- * A hybrid select component that uses native select for accessibility with custom styling.
+ * A customizable Select component that supports both single and multi-selection modes.
  *
- * @param {SelectProps} props - The component props
- * @returns {JSX.Element} The rendered component
+ * Features:
+ * - Single and multi-selection modes
+ * - Keyboard navigation support
+ * - Loading states
+ * - Disabled state
+ * - Custom placeholder text
+ * - Optional labels with required indicators
+ * - Accessible with proper ARIA attributes
+ * - Click outside to close functionality
+ *
+ * @example
+ * // Single selection
+ * <Select
+ *   options={[
+ *     { value: 'option1', label: 'Option 1' },
+ *     { value: 'option2', label: 'Option 2' }
+ *   ]}
+ *   mode={SelectMode.SINGLE}
+ *   onChange={(selected) => console.log(selected)}
+ *   placeholder="Choose an option"
+ * />
+ *
+ * @example
+ * // Multi selection with label
+ * <Select
+ *   options={options}
+ *   mode={SelectMode.MULTI}
+ *   onChange={(selected) => setSelectedOptions(selected)}
+ *   value={selectedOptions}
+ *   label="Select multiple options"
+ *   required
+ * />
+ *
+ * @param props - The component props
+ * @returns The rendered Select component
  */
 export const Select = ({
 	options,
@@ -134,7 +150,6 @@ export const Select = ({
 	value,
 	placeholder = 'Select',
 	loading = false,
-	autoFocus = false,
 	disabled = false,
 	['data-testid']: testId,
 	label,
@@ -142,191 +157,85 @@ export const Select = ({
 	className,
 }: SelectProps): JSX.Element => {
 	const id = useId();
-	const selectRef = useRef<HTMLSelectElement>(null);
-	const selectWrapperRef = useRef<HTMLDivElement>(null);
+	const wrapperRef = useRef<HTMLDivElement>(null);
+	const dropdownRef = useRef<HTMLDivElement>(null);
 	const [isFocused, setIsFocused] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
-	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	// Simplify value handling - only tracking what we need
 	const valueArray = arrayify(value);
-	const selectedValueStrings = valueArray.map((option) => String(option.value));
 
-	// For native select - always use strings
-	const selectValue =
-		mode === SelectMode.MULTI
-			? selectedValueStrings
-			: selectedValueStrings.length > 0
-				? selectedValueStrings[0]
-				: '';
-
-	// For display purposes
 	const displayText =
 		valueArray.length === 0
-			? '' // Empty for placeholder to appear via CSS
+			? ''
 			: valueArray.length === 1
 				? (valueArray[0].label ?? String(valueArray[0].value))
 				: `${valueArray.length} Selected`;
 
-	// Handle option clicks in custom dropdown
 	const handleOptionClick = useCallback(
-		(option: SelectOption, e: MouseEvent) => {
+		(option: SelectOption, e: MouseEvent | React.KeyboardEvent) => {
 			e.stopPropagation();
-
 			let newSelected: SelectOption[];
-
 			if (mode === SelectMode.MULTI) {
-				// Find if already selected - use normalized string comparison
-				const optionStrValue = String(option.value).trim();
-				// Log the comparison being made
-				const isSelected = valueArray.some((item) => {
-					const itemStrValue = String(item.value).trim();
-					const matches = itemStrValue === optionStrValue;
-					return matches;
+				const exists = valueArray.some((item) => {
+					// Use simple comparison for primitive values
+					return item.value === option.value;
 				});
-
-				if (isSelected) {
-					// Remove - also use normalized comparison
-					newSelected = valueArray.filter((item) => String(item.value).trim() !== optionStrValue);
-				} else {
-					// Add
-					newSelected = [...valueArray, option];
-				}
+				newSelected = exists
+					? valueArray.filter((item) => item.value !== option.value)
+					: [...valueArray, option];
 			} else {
-				// Single select - just replace
 				newSelected = [option];
-				setTimeout(() => setIsOpen(false), 50);
+				setIsOpen(false);
 			}
-
 			onChange(newSelected);
 		},
 		[mode, valueArray, onChange]
 	);
 
-	// Basic change handler for native select
-	const handleChange = useCallback(
-		(e: ChangeEvent<HTMLSelectElement>) => {
-			const selectedItems: SelectOption[] = [];
-
-			// Get all selected option elements from the DOM
-			for (let i = 0; i < e.target.selectedOptions.length; i++) {
-				const optionEl = e.target.selectedOptions[i];
-				// Find the matching option from our options array using normalized comparison
-				const optionValue = optionEl.value.trim();
-
-				// Try direct match first, then trimmed/normalized match
-				let option = options.find((opt) => String(opt.value) === optionValue);
-
-				// If no match, try more lenient comparison with trimming and normalization
-				if (!option) {
-					option = options.find((opt) => String(opt.value).trim() === optionValue);
-				}
-
-				if (option) {
-					selectedItems.push(option);
-				} else {
-					// We want to log this.
-					// eslint-disable-next-line no-console
-					console.warn(`Could not find matching option for value: "${optionValue}"`);
-				}
-			}
-
-			// Always call onChange with the full option objects
-			onChange(selectedItems);
-
-			// Auto close in single select mode
-			if (mode === SelectMode.SINGLE) {
-				setIsOpen(false);
-			}
-		},
-		[options, onChange, mode, value]
-	);
-
-	// Handle focus/blur
-	const handleFocus = useCallback(() => {
-		setIsFocused(true);
-		setIsOpen(true);
-		if (onOpen) onOpen();
-	}, [onOpen]);
-
-	const handleBlur = useCallback(() => {
-		// Delay the blur action to avoid conflicts with click events
-		setTimeout(() => {
-			const activeEl = document.activeElement;
-			const isInsideComponent =
-				dropdownRef.current?.contains(activeEl as Node) ||
-				selectWrapperRef.current?.contains(activeEl as Node);
-
-			if (!isInsideComponent && isOpen) {
-				setIsFocused(false);
-				setIsOpen(false);
-			}
-		}, 100);
-	}, [isOpen]);
-
-	// Toggle dropdown
 	const toggleDropdown = useCallback(
 		(e?: MouseEvent) => {
 			if (disabled || loading) return;
 			e?.stopPropagation();
-
-			const newIsOpen = !isOpen;
-			setIsOpen(newIsOpen);
-
-			if (newIsOpen) {
-				selectRef.current?.focus();
-				if (onOpen) onOpen();
+			const next = !isOpen;
+			setIsOpen(next);
+			if (next) {
+				onOpen?.();
 			}
 		},
 		[disabled, loading, isOpen, onOpen]
 	);
 
-	// Handle keyboard events for custom select
-	const handleCustomSelectKeyDown = useCallback(
+	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent) => {
+			if (disabled || loading) return;
+
 			if (e.key === 'Enter' || e.key === ' ') {
 				e.preventDefault();
 				toggleDropdown();
-			}
-		},
-		[toggleDropdown]
-	);
-
-	// Outside click handler
-	useEffect(() => {
-		if (!isOpen) return undefined;
-
-		const handleClickOutside = (e: globalThis.MouseEvent) => {
-			if (
-				!dropdownRef.current?.contains(e.target as Node) &&
-				!selectWrapperRef.current?.contains(e.target as Node)
-			) {
+			} else if (e.key === 'Escape' && isOpen) {
 				setIsOpen(false);
 			}
-		};
+		},
+		[disabled, loading, isOpen, toggleDropdown]
+	);
 
-		document.addEventListener('mousedown', handleClickOutside);
-		return () => document.removeEventListener('mousedown', handleClickOutside);
+	useEffect(() => {
+		if (!isOpen) return;
+		const onClickOutside = (e: Event) => {
+			if (
+				!dropdownRef.current?.contains(e.target as Node) &&
+				!wrapperRef.current?.contains(e.target as Node)
+			) {
+				setIsOpen(false);
+				setIsFocused(false);
+			}
+		};
+		document.addEventListener('mousedown', onClickOutside);
+		return () => document.removeEventListener('mousedown', onClickOutside);
 	}, [isOpen]);
 
-	// Auto focus if needed
-	useEffect(() => {
-		if (autoFocus && selectRef.current) {
-			selectRef.current.focus();
-		}
-	}, [autoFocus]);
-
-	// Check if an option is selected (for custom dropdown)
 	const isOptionSelected = useCallback(
-		(optionValue: unknown) => {
-			// Normalize the string value
-			const normalizedValue = String(optionValue).trim();
-
-			// Use normalized comparison
-			return valueArray.some((item) => {
-				return String(item.value).trim() === normalizedValue;
-			});
-		},
+		(val: unknown) => valueArray.some((item) => item.value === val),
 		[valueArray]
 	);
 
@@ -345,19 +254,20 @@ export const Select = ({
 					{required && <span className={styles.required}>*</span>}
 				</label>
 			)}
-			<div className={styles.selectWrapper} ref={selectWrapperRef}>
-				{/* Custom display */}
+			<div className={styles.selectWrapper} ref={wrapperRef}>
 				<div
 					className={clsx(styles.customSelect, disabled && styles.disabled)}
-					onClick={(e) => toggleDropdown(e)}
-					onKeyDown={handleCustomSelectKeyDown}
+					onClick={toggleDropdown}
+					onKeyDown={handleKeyDown}
+					tabIndex={disabled ? -1 : 0}
+					role="button"
 					aria-haspopup="listbox"
 					aria-expanded={isOpen}
-					tabIndex={disabled ? -1 : 0}
-					role="combobox"
+					aria-labelledby={label ? `${id}-label` : undefined}
+					data-testid={testId}
 				>
 					<div className={styles.displayText} data-placeholder={placeholder}>
-						{displayText}
+						{displayText || placeholder}
 					</div>
 					<div className={clsx(styles.arrow, isOpen && styles.open)}>
 						<svg width="12" height="12" fill="#e0dde5" viewBox="0 0 16 16">
@@ -366,40 +276,6 @@ export const Select = ({
 					</div>
 				</div>
 
-				{/* Native select element - keep this simple */}
-				<select
-					id={id}
-					ref={selectRef}
-					data-testid={testId}
-					className={styles.nativeSelect}
-					onChange={handleChange}
-					onFocus={handleFocus}
-					onBlur={handleBlur}
-					disabled={disabled || loading}
-					multiple={mode === SelectMode.MULTI}
-					required={required}
-					value={selectValue}
-					aria-label={label || placeholder}
-				>
-					{/* Empty option for placeholder */}
-					{(!selectedValueStrings.length || mode === SelectMode.MULTI) && placeholder && (
-						<option value="" disabled={required}>
-							{placeholder}
-						</option>
-					)}
-					{/* Map all options */}
-					{options.map((option) => (
-						<option
-							key={String(option.value)}
-							value={String(option.value)}
-							data-original-value={option.value}
-						>
-							{option.label || String(option.value)}
-						</option>
-					))}
-				</select>
-
-				{/* Custom dropdown */}
 				{isOpen && (
 					<div
 						className={styles.dropdown}
@@ -410,9 +286,9 @@ export const Select = ({
 						{loading ? (
 							<div className={styles.loadingItem}>Loading...</div>
 						) : options.length > 0 ? (
-							options.map((option) => (
+							options.map((option, index) => (
 								<OptionItem
-									key={`dropdown-${String(option.value)}`}
+									key={`${String(option.value)}-${index}`}
 									option={option}
 									isSelected={isOptionSelected(option.value)}
 									onSelect={handleOptionClick}
