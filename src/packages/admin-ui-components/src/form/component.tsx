@@ -134,35 +134,6 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 	});
 
 	/**
-	 * Helper function to find matching option for a value
-	 * @param value - The current field value
-	 * @param options - Available options
-	 * @returns The matching option or undefined
-	 */
-	const findMatchingOption = (value: any, options: SelectOption[]): SelectOption | undefined => {
-		if (value === undefined || value === null) {
-			return undefined;
-		}
-
-		// Try to find an exact match first
-		let option = options.find((opt) => opt.value === value);
-
-		// If no direct match and comparing objects or strings
-		if (!option) {
-			if (typeof value === 'object' && value !== null) {
-				// For objects, try string comparison
-				option = options.find(
-					(opt) =>
-						JSON.stringify(opt.value) === JSON.stringify(value) ||
-						String(opt.value) === String(value)
-				);
-			}
-		}
-
-		return option;
-	};
-
-	/**
 	 * Field component for rendering form inputs with labels and validation
 	 *
 	 * @param props - Field configuration
@@ -237,11 +208,11 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 							const getSelectValue = () => {
 								if (mode === SelectMode.MULTI) {
 									if (Array.isArray(currentValue)) {
-										return options.filter((opt) => currentValue.includes(opt.value));
+										return stableOptions.filter((opt) => currentValue.includes(opt.value));
 									}
 									return [];
 								} else {
-									const matchingOption = options.find((opt) => opt.value === currentValue);
+									const matchingOption = stableOptions.find((opt) => opt.value === currentValue);
 									return matchingOption || undefined;
 								}
 							};
@@ -309,7 +280,7 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 									{type === 'select' && (
 										<Select
 											placeholder={placeholder}
-											options={options}
+											options={stableOptions}
 											mode={mode}
 											value={getSelectValue()}
 											onChange={(selected) => {
