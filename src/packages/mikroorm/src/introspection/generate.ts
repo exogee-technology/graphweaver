@@ -218,6 +218,7 @@ const openConnection = async (type: DatabaseType, options: ConnectionOptions) =>
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const module = require(`@mikro-orm/${type}`);
 	const PLATFORMS = {
+		mssql: 'MsSqlDriver',
 		mysql: 'MySqlDriver',
 		postgresql: 'PostgreSqlDriver',
 		sqlite: 'SqliteDriver',
@@ -280,7 +281,13 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 		for (const meta of metadata) {
 			if (!meta.pivotTable) {
 				const dataEntityFile = new DataEntityFile(meta, namingStrategy, platform, databaseType);
-				const schemaEntityFile = new SchemaEntityFile(meta, namingStrategy, platform, entityLookup);
+				const schemaEntityFile = new SchemaEntityFile(
+					meta,
+					namingStrategy,
+					platform,
+					databaseType,
+					entityLookup
+				);
 				source.push(dataEntityFile, schemaEntityFile);
 				summaryOfEntities.push({
 					name: meta.className,

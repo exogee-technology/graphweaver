@@ -21,6 +21,7 @@ import { LoadStrategy, Reference, RequestContext, sql } from '@mikro-orm/core';
 import { AutoPath, PopulateHint, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 import { MySqlDriver } from '@mikro-orm/mysql';
+import { MsSqlDriver } from '@mikro-orm/mssql';
 import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
 import {
@@ -214,6 +215,8 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 				return 'mysql';
 			case PostgreSqlDriver.name:
 				return 'postgresql';
+			case MsSqlDriver.name:
+				return 'mssql';
 			default:
 				throw new Error(`This driver (${driver}) is not supported!`);
 		}

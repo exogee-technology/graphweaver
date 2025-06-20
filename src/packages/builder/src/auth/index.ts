@@ -5,7 +5,7 @@ import { generateAuthEnv } from './env';
 import { generateAdminPassword } from './password';
 import { generateApiKey } from './api-key';
 
-export type Source = 'mysql' | 'postgresql' | 'sqlite';
+export type Source = 'mysql' | 'postgresql' | 'sqlite' | 'mssql';
 
 export interface DatabaseOptions {
 	source?: Source;

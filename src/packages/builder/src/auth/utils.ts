@@ -20,6 +20,7 @@ export const openConnection = async (type: DatabaseType, options: ConnectionOpti
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const module = require(`@mikro-orm/${type}`);
 	const PLATFORMS = {
+		mssql: 'MsSqlDriver',
 		mysql: 'MySqlDriver',
 		postgresql: 'PostgreSqlDriver',
 		sqlite: 'SqliteDriver',

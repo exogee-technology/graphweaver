@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noUnusedLocals": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"target": "es2019",
+		"module": "CommonJS",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"jsx": "react-jsx"
+	},
+	"exclude": ["**/node_modules/**", "**/lib/**"],
+	"include": ["./src"],
+	"references": [
+		{ "path": "../../packages/admin-ui-components" },
+		{ "path": "../../packages/admin-ui" },
+		{ "path": "../../packages/builder" },
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/mikro-orm-sqlite-wasm" },
+		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/server" }
+	]
+}

@@ -43,7 +43,7 @@ yargs
 				.option('backend', {
 					type: 'array',
 					describe: 'Specify one or more data sources.',
-					choices: ['postgres', 'mysql', 'rest', 'sqlite'],
+					choices: ['postgres', 'mssql', 'mysql', 'rest', 'sqlite'],
 				})
 				.option('useVersion', {
 					type: 'string',
@@ -58,6 +58,8 @@ yargs
 						return Backend.Postgres;
 					case 'mysql':
 						return Backend.Mysql;
+					case 'mssql':
+						return Backend.Mssql;
 					case 'rest':
 						return Backend.Rest;
 					case 'sqlite':
@@ -83,7 +85,7 @@ yargs
 			yargs
 				.positional('source', {
 					type: 'string',
-					choices: ['mysql', 'postgresql', 'sqlite'],
+					choices: ['mssql', 'mysql', 'postgresql', 'sqlite'],
 					describe: 'The data source to import.',
 				})
 				.option('database', {
@@ -132,7 +134,12 @@ yargs
 			if (port) console.log(`Database Port: ${port}`);
 			if (user) console.log(`Database User: ${user}`);
 
-			if (source !== 'mysql' && source !== 'postgresql' && source !== 'sqlite') {
+			if (
+				source !== 'mssql' &&
+				source !== 'mysql' &&
+				source !== 'postgresql' &&
+				source !== 'sqlite'
+			) {
 				throw new Error(`Unsupported source: ${source}`);
 			}
 

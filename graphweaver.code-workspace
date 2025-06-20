@@ -41,6 +41,10 @@
       "path": "src/examples/rest-with-auth"
     },
     {
+      "name": "➡️ Example: SQL Server Database",
+      "path": "src/examples/sql-server"
+    },
+    {
       "name": "➡️ Example: SQLite Database",
       "path": "src/examples/sqlite"
     },

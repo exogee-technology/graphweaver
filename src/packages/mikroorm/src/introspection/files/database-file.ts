@@ -1,6 +1,24 @@
 import { Options } from '@mikro-orm/core';
 import { ConnectionOptions, DatabaseType } from '../../database';
 
+const pad = '\t';
+
+const importLineForDatabaseType = (databaseType: DatabaseType) => {
+	const packageName =
+		databaseType === 'sqlite' ? 'mikro-orm-sqlite-wasm' : `@mikro-orm/${databaseType}`;
+
+	return `import { ${driverForDatabaseType(databaseType)} } from '${packageName}';`;
+};
+
+const driverForDatabaseType = (databaseType: DatabaseType) => {
+	if (databaseType === 'mssql') return 'MsSqlDriver';
+	if (databaseType === 'mysql') return 'MySqlDriver';
+	if (databaseType === 'postgresql') return 'PostgreSqlDriver';
+	if (databaseType === 'sqlite') return 'SqliteDriver';
+
+	throw new Error(`Unsupported database type: ${databaseType}`);
+};
+
 export class DatabaseFile {
 	constructor(
 		protected readonly databaseType: DatabaseType,
@@ -16,18 +34,12 @@ export class DatabaseFile {
 	}
 
 	generate(): string {
-		const isPostgresql = this.databaseType === 'postgresql';
-		const isMySQL = this.databaseType === 'mysql';
-		const isSQLite = this.databaseType === 'sqlite';
 		const imports = [
-			...(isPostgresql ? [`import { PostgreSqlDriver } from '@mikro-orm/postgresql';`] : []),
-			...(isMySQL ? [`import { MySqlDriver } from '@mikro-orm/mysql';`] : []),
-			...(isSQLite ? [`import { SqliteDriver } from 'mikro-orm-sqlite-wasm';`] : []),
+			importLineForDatabaseType(this.databaseType),
 			`import { entities } from './entities';`,
 		];
-		const exports = [`export const connections = [connection];`];
 
-		const pad = '\t';
+		const exports = [`export const connections = [connection];`];
 
 		const config = this.connection.mikroOrmConfig as Options;
 
@@ -35,13 +47,9 @@ export class DatabaseFile {
 		connection.push(`${pad}connectionManagerId: '${this.databaseType}',`);
 		connection.push(`${pad}mikroOrmConfig: {`);
 		connection.push(`${pad}${pad}entities,`);
-		connection.push(
-			`${pad}${pad}driver: ${
-				isPostgresql ? 'PostgreSqlDriver' : isMySQL ? 'MySqlDriver' : 'SqliteDriver'
-			},`
-		);
+		connection.push(`${pad}${pad}driver: ${driverForDatabaseType(this.databaseType)},`);
 		connection.push(`${pad}${pad}dbName: process.env.DATABASE_NAME || '${config.dbName}',`);
-		if (!isSQLite) {
+		if (this.databaseType !== 'sqlite') {
 			connection.push(`${pad}${pad}host: process.env.DATABASE_HOST || '${config.host}',`);
 			connection.push(`${pad}${pad}user: process.env.DATABASE_USER || '${config.user}',`);
 			connection.push(
