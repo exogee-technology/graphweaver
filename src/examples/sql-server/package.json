@@ -2,6 +2,7 @@
 	"name": "sql-server",
 	"version": "0.1.0",
 	"description": "sql-server Graphweaver Project",
+	"private": true,
 	"scripts": {
 		"build": "graphweaver build",
 		"start": "graphweaver start",
