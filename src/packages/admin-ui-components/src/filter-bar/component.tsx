@@ -184,6 +184,12 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					break;
 			}
 
+			// Before returning the component, we need to handle the case where insufficient data has been made available to the component.
+			// If it is null, we should ommit it from the filter bar.
+			if (component === null) {
+				return null;
+			}
+
 			return { component, width };
 		});
 	}, [entityName, temporaryFilters]);
