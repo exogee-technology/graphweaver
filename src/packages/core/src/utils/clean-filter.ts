@@ -12,8 +12,8 @@ export const cleanFilter = <G>(filter: Filter<G> | undefined): Filter<G> | undef
 	let hasValidProperty = false;
 
 	for (const [key, value] of Object.entries(filter)) {
-		// Skip null and undefined values
-		if (value == null) continue;
+		// Skip only undefined values, preserve null values as they are valid filter criteria
+		if (value === undefined) continue;
 
 		// Handle _and and _or arrays
 		if ((key === '_and' || key === '_or') && Array.isArray(value)) {
@@ -46,6 +46,10 @@ export const cleanFilter = <G>(filter: Filter<G> | undefined): Filter<G> | undef
 
 			cleanedFilter[key] = cleanedArray;
 			hasValidProperty = true;
+		} else if (value === null) {
+			// Handle null values explicitly (since typeof null === 'object' in JavaScript)
+			cleanedFilter[key] = value;
+			hasValidProperty = true;
 		} else if (typeof value === 'object' && !Array.isArray(value)) {
 			// Recursively clean nested objects
 			const cleanedValue = cleanFilter(value);
@@ -54,7 +58,7 @@ export const cleanFilter = <G>(filter: Filter<G> | undefined): Filter<G> | undef
 				hasValidProperty = true;
 			}
 		} else {
-			// Keep primitive values as they are
+			// Keep all other primitive values as they are
 			cleanedFilter[key] = value;
 			hasValidProperty = true;
 		}

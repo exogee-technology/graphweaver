@@ -10,12 +10,14 @@ describe('cleanFilter', () => {
 		).toEqual(undefined);
 	});
 
-	it('should remove null values', () => {
+	it('should not remove simple null values', () => {
 		expect(
 			cleanFilter<{ name: string }>({
 				name: null,
 			} as any)
-		).toEqual(undefined);
+		).toEqual({
+			name: null,
+		});
 	});
 
 	it('should hoist _and and _or values with one item in them', () => {
