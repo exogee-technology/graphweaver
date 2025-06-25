@@ -46,11 +46,7 @@ export const cleanFilter = <G>(filter: Filter<G> | undefined): Filter<G> | undef
 
 			cleanedFilter[key] = cleanedArray;
 			hasValidProperty = true;
-		} else if (value === null) {
-			// Handle null values explicitly (since typeof null === 'object' in JavaScript)
-			cleanedFilter[key] = value;
-			hasValidProperty = true;
-		} else if (typeof value === 'object' && !Array.isArray(value)) {
+		} else if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
 			// Recursively clean nested objects
 			const cleanedValue = cleanFilter(value);
 			if (cleanedValue != null) {
