@@ -14,6 +14,7 @@ import { RequestContext } from './request-context';
 import { GraphweaverRequestEvent } from './types';
 
 import type { GraphweaverPlugin, GraphweaverPluginNextFunction } from './types';
+import { cleanFilter } from './utils';
 
 type LoaderMap = { [key: string]: DataLoader<string, unknown> };
 
@@ -72,14 +73,20 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 				} as Filter<G>;
 			}
 
-			const backendFilter =
+			let backendFilter: Filter<D> | undefined =
 				isTransformableGraphQLEntityClass(entity.target) && entity.target.toBackendEntityFilter
 					? entity.target.toBackendEntityFilter(listFilter)
 					: (listFilter as Filter<D>);
 
+			backendFilter = cleanFilter(backendFilter);
+
 			let records: D[];
 			if (entity.provider?.backendProviderConfig?.idListLoadingMethod !== 'findOne') {
-				records = await entity.provider!.find(backendFilter, undefined, entity as EntityMetadata);
+				records = await entity.provider!.find(
+					backendFilter ?? {},
+					undefined,
+					entity as EntityMetadata
+				);
 			} else {
 				records = (
 					await Promise.all(
@@ -153,10 +160,12 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 				} in (${keys.join(', ')})`
 			);
 
-			const backendFilter =
+			let backendFilter =
 				isTransformableGraphQLEntityClass(entity.target) && entity.target.toBackendEntityFilter
 					? entity.target.toBackendEntityFilter(filter ?? {})
 					: (filter as Filter<D> | undefined);
+
+			backendFilter = cleanFilter(backendFilter);
 
 			if (!entity.provider.entityType)
 				throw new Error('EntityType is required on provider at this stage.');

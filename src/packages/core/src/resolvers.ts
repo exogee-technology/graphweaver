@@ -27,7 +27,7 @@ import {
 } from '.';
 import { traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
-import { applyDefaultValues, hasId, isDefined, withTransaction } from './utils';
+import { applyDefaultValues, cleanFilter, hasId, isDefined, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
 import {
 	getGraphweaverMutationType,
@@ -166,7 +166,7 @@ const _list = async <G, D>(
 
 	let result = await QueryManager.find<D>({
 		entityMetadata: entity,
-		filter: transformedFilter,
+		filter: cleanFilter(transformedFilter),
 		pagination: hookParams.args?.pagination,
 	});
 	logger.trace({ result }, 'Got result');
@@ -409,9 +409,10 @@ const _deleteOne = async <G extends { name: string }>(
 		? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 		: params;
 
-	if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
+	const cleanedFilter = cleanFilter(hookParams.args.filter);
+	if (!cleanedFilter) throw new Error('No delete filter specified, cannot continue.');
 
-	const success = await entity.provider.deleteOne(hookParams.args.filter);
+	const success = await entity.provider.deleteOne(cleanedFilter);
 
 	if (hookManager) {
 		await hookManager.runHooks(HookRegister.AFTER_DELETE, {
@@ -464,9 +465,10 @@ const _deleteMany = async <G>(
 			? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 			: params;
 
-		if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
+		const cleanedFilter = cleanFilter(hookParams.args?.filter);
+		if (!cleanedFilter) throw new Error('No delete ids specified, cannot continue.');
 
-		const success = await entity.provider.deleteMany(hookParams.args?.filter);
+		const success = await entity.provider.deleteMany(cleanedFilter);
 
 		if (hookManager) {
 			await hookManager.runHooks(HookRegister.AFTER_DELETE, {
@@ -540,7 +542,7 @@ const _aggregate = async <G extends { name: string }>(
 
 	const flattenedFilter = await QueryManager.flattenFilter<any>({
 		entityMetadata: entity,
-		filter: transformedFilter,
+		filter: cleanFilter(transformedFilter),
 	});
 
 	const success = await entity.provider.aggregate(flattenedFilter, requestedAggregations);
@@ -652,7 +654,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		idValue,
 		field,
 		sourcePrimaryKeyField,
-		loaderFilter,
+		loaderFilter: cleanFilter(loaderFilter),
 		gqlEntityType,
 	});
 
@@ -919,7 +921,7 @@ export const aggregateRelationshipField = (
 			logger.trace('Aggregating with related field');
 
 			const result = await relatedEntityMetadata.provider?.aggregate?.(
-				hookParams.args?.filter,
+				cleanFilter(hookParams.args?.filter),
 				requestedAggregations
 			);
 
