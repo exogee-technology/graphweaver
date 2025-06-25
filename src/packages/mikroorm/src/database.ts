@@ -322,7 +322,6 @@ class ConnectionsManager {
 	};
 
 	public database(id: string) {
-		logger.trace(`Finding database connection for id "${id}"`);
 		return this.connections.get(id);
 	}
 
