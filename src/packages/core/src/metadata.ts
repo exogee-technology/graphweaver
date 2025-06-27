@@ -473,7 +473,7 @@ class Metadata {
 				existingMetadata.adminUIOptions.summaryField !== args.name
 			) {
 				throw new Error(
-					`Entities can only declare one summary field. An attempt was made to set ${args.name} as the summary field for ${entity.name} while ${entity.adminUiOptions.summaryField} is already set.`
+					`Entities can only declare one summary field. An attempt was made to set ${args.name} as the summary field for ${entity.name} while ${String(existingMetadata.adminUIOptions?.summaryField)} is already set.`
 				);
 			}
 
