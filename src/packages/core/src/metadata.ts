@@ -460,7 +460,7 @@ class Metadata {
 		if (args.primaryKeyField) {
 			if (existingMetadata.primaryKeyField && existingMetadata.primaryKeyField !== args.name) {
 				throw new Error(
-					`Entities can only declare one primary key field. An attempt was made to set ${args.name} as the primary key for ${entity.name} while ${entity.primaryKeyField} is already set.`
+					`Entities can only declare one primary key field. An attempt was made to set ${args.name} as the primary key for ${entity.name} while ${String(existingMetadata.primaryKeyField)} is already set.`
 				);
 			}
 
@@ -473,7 +473,7 @@ class Metadata {
 				existingMetadata.adminUIOptions.summaryField !== args.name
 			) {
 				throw new Error(
-					`Entities can only declare one summary field. An attempt was made to set ${args.name} as the summary field for ${entity.name} while ${entity.adminUiOptions.summaryField} is already set.`
+					`Entities can only declare one summary field. An attempt was made to set ${args.name} as the summary field for ${entity.name} while ${String(existingMetadata.adminUIOptions?.summaryField)} is already set.`
 				);
 			}
 
