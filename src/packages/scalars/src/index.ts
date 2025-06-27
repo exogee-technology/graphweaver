@@ -1,4 +1,4 @@
-export { GraphQLBigInt, GraphQLJSON, GraphQLJSONObject } from 'graphql-scalars';
+export { GraphQLBigInt, GraphQLJSON, GraphQLJSONObject, GraphQLByte } from 'graphql-scalars';
 
 export * from './date';
 export * from './decimal';

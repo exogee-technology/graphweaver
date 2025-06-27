@@ -13,5 +13,13 @@ export const pascalToCamelCaseString = (value: string) => {
 };
 
 // Anything that is not alphanumeric or an underscore is replaced with an underscore, then the value is uppercased
-export const identifierForEnumValue = (value: string) =>
-	value.replace(/[^a-z0-9_]/gi, '_').toUpperCase();
+export const identifierForEnumValue = (value: string) => {
+	const identifier = value.replace(/[^a-z0-9_]/gi, '_').toUpperCase();
+
+	// Enums have to have string identifiers.
+	if (/^[0-9]+$/.test(identifier)) {
+		return `_${identifier}`;
+	} else {
+		return identifier;
+	}
+};
