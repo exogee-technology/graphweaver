@@ -25,7 +25,7 @@ export class DataEntityIndexFile {
 
 		for (const meta of this.metadata) {
 			if (!meta.pivotTable && isEntityWithSinglePrimaryKey(meta)) {
-				const filename = `${pascalToKebabCaseString(meta.className)}.ts`;
+				const filename = pascalToKebabCaseString(meta.className);
 				exports.push(`export * from './${filename}';`);
 				imports.push(`import { ${meta.className} } from './${filename}';`);
 				file += `${padding}${meta.className},\n`;
