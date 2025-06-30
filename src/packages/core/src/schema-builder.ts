@@ -260,7 +260,7 @@ export const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 			} catch (e) {
 				console.error(e);
 				throw new Error(
-					`Could not map TypeScript type ${String(type)} to a GraphQL scalar for field ${field.name} on entity ${field.target.name}.`
+					`Could not map TypeScript type ${String(type)} to a GraphQL scalar for field ${field.name} on entity ${field.target.name}. Original Error: ${e}`
 				);
 			}
 		}
