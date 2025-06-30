@@ -35,6 +35,7 @@ import { BigIntType, ReferenceKind, UnknownType, Utils } from '@mikro-orm/core';
 import { DatabaseType } from '../../database';
 import { identifierForEnumValue, pascalToKebabCaseString } from '../utils';
 import { BaseFile } from './base-file';
+import { isEntityWithSinglePrimaryKey } from '../generate';
 
 export class DataEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -44,7 +45,8 @@ export class DataEntityFile extends BaseFile {
 		protected readonly meta: EntityMetadata,
 		protected readonly namingStrategy: NamingStrategy,
 		protected readonly platform: Platform,
-		protected readonly databaseType: DatabaseType
+		protected readonly databaseType: DatabaseType,
+		protected readonly entityLookup: Map<string, EntityMetadata<any>>
 	) {
 		super(meta, namingStrategy, platform);
 	}
@@ -61,8 +63,24 @@ export class DataEntityFile extends BaseFile {
 	generate(): string {
 		const enumDefinitions: string[] = [];
 		let classBody = '';
+		const generatedPropertyNames = new Set<string>();
 		const props = Object.values(this.meta.properties);
 		props.forEach((prop) => {
+			if (generatedPropertyNames.has(prop.name)) {
+				// We just gobble this property. It's a duplicate, but the Schema Entity File will complain about it,
+				// and we can leave that other file as the source of truth for moaning.
+				return;
+			}
+
+			// We're going to just skip any relationships to entities that don't have a single primary key.
+			// This is a limitation of the current implementation, but we'll fix it in the future.
+			const relatedEntity = this.entityLookup.get(prop.type);
+			if (relatedEntity && !isEntityWithSinglePrimaryKey(relatedEntity)) {
+				return;
+			}
+
+			generatedPropertyNames.add(prop.name);
+
 			const decorator = this.getPropertyDecorator(prop);
 			const definition = this.getPropertyDefinition(prop);
 
@@ -165,7 +183,8 @@ export class DataEntityFile extends BaseFile {
 			return `${padding}${file} = ${prop.runtimeType}.${identifierForEnumValue(prop.default)};\n`;
 		}
 
-		return `${padding}${prop.name} = ${prop.default};\n`;
+		// The JSON.stringify here is for escaping things that can break JS if unescaped.
+		return `${padding}${prop.name} = ${JSON.stringify(prop.default)};\n`;
 	}
 
 	protected getEnumClassDefinition(enumClassName: string, enumValues: string[]): string {
@@ -289,9 +308,9 @@ export class DataEntityFile extends BaseFile {
 		if ([`''`, ''].includes(prop.default)) {
 			options.default = `''`;
 		} else if (prop.defaultRaw === this.quote(prop.default)) {
-			options.default = this.quote(prop.default);
+			options.default = JSON.stringify(this.quote(prop.default)).slice(1, -1);
 		} else {
-			options.defaultRaw = `\`${prop.default}\``;
+			options.defaultRaw = `\`${JSON.stringify(prop.default).slice(1, -1)}\``;
 		}
 	}
 

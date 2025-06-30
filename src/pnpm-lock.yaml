@@ -7,11 +7,11 @@ settings:
 overrides:
   d3-color: 3.1.0
   '@babel/traverse': 7.23.2
-  '@mikro-orm/core': 6.4.14
-  '@mikro-orm/knex': 6.4.14
-  '@mikro-orm/postgresql': 6.4.14
-  '@mikro-orm/mysql': 6.4.14
-  '@mikro-orm/sqlite': 6.4.14
+  '@mikro-orm/core': 6.4.16
+  '@mikro-orm/knex': 6.4.16
+  '@mikro-orm/postgresql': 6.4.16
+  '@mikro-orm/mysql': 6.4.16
+  '@mikro-orm/sqlite': 6.4.16
 
 importers:
 
@@ -81,14 +81,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -176,17 +176,17 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.0)(pg@8.13.3)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.13.3)
       '@mikro-orm/mysql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)
       '@mikro-orm/postgresql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.0)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -286,14 +286,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -341,14 +341,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
       '@okta/okta-auth-js':
         specifier: 7.11.1
         version: 7.11.1(encoding@0.1.13)
@@ -384,14 +384,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/mysql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -436,11 +436,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/mysql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -506,14 +506,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/storage-provider
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(pg@8.13.3)
       '@mikro-orm/postgresql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -564,14 +564,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.1)(tedious@18.6.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(tedious@18.6.1)
       '@mikro-orm/mssql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -584,7 +584,7 @@ importers:
         version: 22.13.14
       graphweaver:
         specifier: 2.16.1
-        version: 2.16.1(@emotion/is-prop-valid@0.8.8)(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.14)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(encoding@0.1.13)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.40.1)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tedious@18.6.1)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.1)
+        version: 2.16.1(@emotion/is-prop-valid@0.8.8)(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.16)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(encoding@0.1.13)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.40.1)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tedious@18.6.1)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.1)
       typescript:
         specifier: 5.8.3
         version: 5.8.3
@@ -613,14 +613,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
       '@nivo/bar':
         specifier: 0.88.0
         version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1488,14 +1488,14 @@ importers:
         specifier: workspace:*
         version: link:../storage-provider
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@mikro-orm/postgresql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)
       '@mikro-orm/sqlite':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -1602,11 +1602,11 @@ importers:
   packages/mikro-orm-sqlite-wasm:
     dependencies:
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
       node-sqlite3-wasm:
         specifier: 0.8.37
         version: 0.8.37
@@ -1661,24 +1661,24 @@ importers:
         version: 0.2.2
     optionalDependencies:
       '@mikro-orm/knex':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)(tedious@18.6.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/mssql':
-        specifier: ^6.4.14
-        version: 6.4.16(@mikro-orm/core@6.4.14)(pg@8.14.1)
+        specifier: ^6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/mysql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
       '@mikro-orm/postgresql':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)
       '@mikro-orm/sqlite':
-        specifier: 6.4.14
-        version: 6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)
+        specifier: 6.4.16
+        version: 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
     devDependencies:
       '@mikro-orm/core':
-        specifier: 6.4.14
-        version: 6.4.14
+        specifier: 6.4.16
+        version: 6.4.16
       '@types/node':
         specifier: 22.13.14
         version: 22.13.14
@@ -3392,7 +3392,7 @@ packages:
   '@exogee/graphweaver-mikroorm@2.16.1':
     resolution: {integrity: sha512-e8xNb1AA8iwCu6tqdr/yNK7RJoyB4x5EyWsAWb6XpnnXGe3pH6XyiXeEUu342uWVIMLcZDcMF/5XkaUntE3xZw==}
     peerDependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       graphql: '16'
 
   '@exogee/graphweaver-scalars@2.16.1':
@@ -4214,15 +4214,15 @@ packages:
     resolution: {integrity: sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==}
     engines: {node: '>=14.0.0'}
 
-  '@mikro-orm/core@6.4.14':
-    resolution: {integrity: sha512-e7nd4rnfegszdmJOXS5RIPMoHQ5KWeoZvQR7A0rdBLsuhoI0Pot6N++O1kE5uX87EJfWFX2KQhKlgkfzSk+3Yg==}
+  '@mikro-orm/core@6.4.16':
+    resolution: {integrity: sha512-BW/My1VlI0R25Eojdh0UiET8J+mEruThksGVfllEnjJQ0uwGs3mm/TbMclv0g+d7Qp4+mpzDQU4+lIo8okHYsw==}
     engines: {node: '>= 18.12.0'}
 
-  '@mikro-orm/knex@6.4.14':
-    resolution: {integrity: sha512-1c6sIRSQDKmOBYB91D4o4hyTTpaAga0SAdaZaFTaKn92SWxH3kwgJNgsFjL+9GZkhPpizE8DdxUBEYhdWY4wLw==}
+  '@mikro-orm/knex@6.4.16':
+    resolution: {integrity: sha512-2xQodj3uh8maPGsLR7PZMmECtdyLutGxzzrGrrhSX2b+7v9k4MeMazTi4/627hJvivdUpuofypW5zMpw3TU1vQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       better-sqlite3: '*'
       libsql: '*'
       mariadb: '*'
@@ -4234,35 +4234,29 @@ packages:
       mariadb:
         optional: true
 
-  '@mikro-orm/mssql@6.4.14':
-    resolution: {integrity: sha512-m1xLnC/8GrPrUG1SSRTjMkBmuRVqO6tI87KrzH6kctTjYTLIykJq/n4FPopts1bPeat+ckffy6hn0UiWQQOcyw==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': 6.4.14
-
   '@mikro-orm/mssql@6.4.16':
     resolution: {integrity: sha512-hZtZZCTSmWRXj+rlJG9WTwG6GLiR1GCgZW6CWayLBUNRkJAQvhpzL76yjOLdXmyXqYaXbqKee4+UKtuCQar8rQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
 
-  '@mikro-orm/mysql@6.4.14':
-    resolution: {integrity: sha512-fLhEof7Jw/ZBEwWPs6x94rEKLq8mGUXd+V/VbvcaOa/gwxPwtxugUIAYtm1Fj/ksdYMrswGfTw6gPRqjNJ3yBQ==}
+  '@mikro-orm/mysql@6.4.16':
+    resolution: {integrity: sha512-YYCEWtVRjCOU642QD/1iENmPJw8tpP1WpL4hZuRhWClIZp+D2K1U1y6UCdthGKMxqgOPf48ehJBU49aAC7kmnw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
 
-  '@mikro-orm/postgresql@6.4.14':
-    resolution: {integrity: sha512-yLUlHTofw+T8e44vSQXGBrgXYpGPvML/UJ26ysH4gQrTQOG5eQC4wC3cf2sC5aOJ7t/HPouhJAT4U76C+rABBQ==}
+  '@mikro-orm/postgresql@6.4.16':
+    resolution: {integrity: sha512-i14CvyLrtMhQJMk/X3xTT2Mgc8j0VtSWPqhKBN+euiPxbee4u5k39TlJAly72k3luknFBCzpKCh3ZNSGDZ+j4Q==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
 
-  '@mikro-orm/sqlite@6.4.14':
-    resolution: {integrity: sha512-U1EyhPfFoJsPyzY7ObRa0drtefSpZMQSraGdL1tO29rO6Oeo+yXyzQKBK3RWL1AS1F8He3PF1+y+AKI3lWnSbA==}
+  '@mikro-orm/sqlite@6.4.16':
+    resolution: {integrity: sha512-mwmv+ZkZiA8HMt+UvA7jI/3qv4R3Sz1zOcLfAo9QMov2DdnPxJYkDxQ+9fAnrswurOzoo0ApqUGZ4hF6J0djfw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
 
   '@motionone/animation@10.18.0':
     resolution: {integrity: sha512-9z2p5GFGCm0gBsZbi8rVMOAJCtw1WqBTIPw3ozk06gDvZInBPIsQcHgYogEJ4yuHJ+akuW8g1SEIOpTOvYs8hw==}
@@ -7775,10 +7769,6 @@ packages:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
     engines: {node: '>=14'}
 
-  foreground-child@3.3.1:
-    resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
-    engines: {node: '>=14'}
-
   form-data-encoder@1.7.2:
     resolution: {integrity: sha512-qfqtYan3rxrnCk1VYaA4H+Ms9xdpPqvLZa6xmMgFvhO32x7/3J/ExcTd6qpxM0vH2GdMI+poehyBZvqfMTto8A==}
 
@@ -7951,10 +7941,6 @@ packages:
   glob@10.4.3:
     resolution: {integrity: sha512-Q38SGlYRpVtDBPSWEylRyctn7uDeTp4NQERTLiCT1FqA9JXPYWqAVmQU6qh4r/zMM5ehxTcbaO8EjhWnvEhmyg==}
     engines: {node: '>=18'}
-    hasBin: true
-
-  glob@10.4.5:
-    resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
     hasBin: true
 
   glob@11.0.1:
@@ -9189,8 +9175,8 @@ packages:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
     engines: {node: '>=8.6'}
 
-  mikro-orm@6.4.14:
-    resolution: {integrity: sha512-5Rbr2DO8yYsk9OavFjPvsK1JW8HX0arN3CVCYKBMCjQfrIgMmSC/rLEhn6+ZQGiqv/5J00e+/kTtZ9BNQtfEdw==}
+  mikro-orm@6.4.16:
+    resolution: {integrity: sha512-a+19cRuEPEJ3qf5Vpv4HO9TAxo/I6/rP1bZT93ln8YtNzAbCrcLC766EG6upLS6Sf7OLqdq0cXs5mUN9ESQQrg==}
     engines: {node: '>= 18.12.0'}
 
   mime-db@1.52.0:
@@ -9772,28 +9758,28 @@ packages:
   pg-connection-string@2.7.0:
     resolution: {integrity: sha512-PI2W9mv53rXJQEOb8xNR8lH7Hr+EKa6oJa38zsK0S/ky2er16ios1wLKhZyxzD7jUReiWokc9WK5nxSnC7W1TA==}
 
-  pg-connection-string@2.8.5:
-    resolution: {integrity: sha512-Ni8FuZ8yAF+sWZzojvtLE2b03cqjO5jNULcHFfM9ZZ0/JXrgom5pBREbtnAw7oxsxJqHw9Nz/XWORUEL3/IFow==}
+  pg-connection-string@2.9.1:
+    resolution: {integrity: sha512-nkc6NpDcvPVpZXxrreI/FOtX3XemeLl8E0qFr6F2Lrm/I8WOnaWNhIPK2Z7OHpw7gh5XJThi6j6ppgNoaT1w4w==}
 
   pg-int8@1.0.1:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
     engines: {node: '>=4.0.0'}
+
+  pg-pool@3.10.1:
+    resolution: {integrity: sha512-Tu8jMlcX+9d8+QVzKIvM/uJtp07PKr82IUOYEphaWcoBhIYkoHpLXN3qO59nAI11ripznDsEzEv8nUxBVWajGg==}
+    peerDependencies:
+      pg: '>=8.0'
 
   pg-pool@3.7.1:
     resolution: {integrity: sha512-xIOsFoh7Vdhojas6q3596mXFsR8nwBQBXX5JiV7p9buEVAGqYL4yFzclON5P9vFrpu1u7Zwl2oriyDa89n0wbw==}
     peerDependencies:
       pg: '>=8.0'
 
-  pg-pool@3.9.6:
-    resolution: {integrity: sha512-rFen0G7adh1YmgvrmE5IPIqbb+IgEzENUm+tzm6MLLDSlPRoZVhzU1WdML9PV2W5GOdRA9qBKURlbt1OsXOsPw==}
-    peerDependencies:
-      pg: '>=8.0'
+  pg-protocol@1.10.2:
+    resolution: {integrity: sha512-Ci7jy8PbaWxfsck2dwZdERcDG2A0MG8JoQILs+uZNjABFuBuItAZCWUNz8sXRDMoui24rJw7WlXqgpMdBSN/vQ==}
 
   pg-protocol@1.7.1:
     resolution: {integrity: sha512-gjTHWGYWsEgy9MsY0Gp6ZJxV24IjDqdpTW7Eh0x+WfJLFsm/TJx1MzL6T0D88mBvkpxotCQ6TwW6N+Kko7lhgQ==}
-
-  pg-protocol@1.9.5:
-    resolution: {integrity: sha512-DYTWtWpfd5FOro3UnAfwvhD8jh59r2ig8bPtc9H8Ds7MscE/9NYruUQWFAOuraRl29jwcT2kyMFQ3MxeaVjUhg==}
 
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
@@ -9808,8 +9794,8 @@ packages:
       pg-native:
         optional: true
 
-  pg@8.14.1:
-    resolution: {integrity: sha512-0TdbqfjwIun9Fm/r89oB7RFQ0bLgduAhiIqIXOsyKoiC/L54DbuAAzIEN/9Op0f1Po9X7iCPXGoa/Ah+2aI8Xw==}
+  pg@8.16.0:
+    resolution: {integrity: sha512-7SKfdvP8CTNXjMUzfcVTaI+TDzBEeaUnVwiVGZQD1Hh33Kpev7liQba9uLd4CfN8r9mCVsD0JIpq03+Unpz+kg==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
       pg-native: '>=3.0.1'
@@ -10421,10 +10407,6 @@ packages:
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     deprecated: Rimraf versions prior to v4 are no longer supported
-    hasBin: true
-
-  rimraf@5.0.10:
-    resolution: {integrity: sha512-l0OE8wL34P4nJH/H2ffoaniAokM2qSmrtXHmlpvYr5AVVX8msAyW0l8NVJFDxlSK4u3Uh/f41cQheDVdnYijwQ==}
     hasBin: true
 
   rimraf@5.0.8:
@@ -12675,7 +12657,7 @@ snapshots:
       '@babel/traverse': 7.23.2
       '@babel/types': 7.26.10
       convert-source-map: 2.0.0
-      debug: 4.4.0
+      debug: 4.4.1
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -13197,7 +13179,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.24.7
       '@babel/parser': 7.26.10
       '@babel/types': 7.26.10
-      debug: 4.4.0
+      debug: 4.4.1
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -13513,7 +13495,7 @@ snapshots:
   '@eslint/config-array@0.19.2':
     dependencies:
       '@eslint/object-schema': 2.1.6
-      debug: 4.4.0
+      debug: 4.4.1
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -13527,7 +13509,7 @@ snapshots:
   '@eslint/eslintrc@3.3.1':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.0
+      debug: 4.4.1
       espree: 10.3.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -13875,11 +13857,11 @@ snapshots:
     dependencies:
       '@apollo/client': 3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(graphql@16.10.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
 
-  '@exogee/graphweaver-builder@2.16.1(@emotion/is-prop-valid@0.8.8)(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.14)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(encoding@0.1.13)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.40.1)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tedious@18.6.1)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.1)':
+  '@exogee/graphweaver-builder@2.16.1(@emotion/is-prop-valid@0.8.8)(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.16)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(encoding@0.1.13)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.40.1)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tedious@18.6.1)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.1)':
     dependencies:
       '@exogee/graphweaver-admin-ui': 2.16.1(@emotion/is-prop-valid@0.8.8)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(graphql@16.10.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
       '@exogee/graphweaver-config': 2.16.1
-      '@exogee/graphweaver-mikroorm': 2.16.1(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.14)(encoding@0.1.13)(graphql@16.10.0)(tedious@18.6.1)
+      '@exogee/graphweaver-mikroorm': 2.16.1(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.16)(encoding@0.1.13)(graphql@16.10.0)(tedious@18.6.1)
       '@graphql-codegen/add': 5.0.3(graphql@16.10.0)
       '@graphql-codegen/cli': 5.0.6(@types/node@22.13.14)(encoding@0.1.13)(graphql@16.10.0)(typescript@5.8.3)
       '@graphql-codegen/near-operation-file-preset': 3.0.0(encoding@0.1.13)(graphql@16.10.0)
@@ -13959,14 +13941,14 @@ snapshots:
     dependencies:
       lodash: 4.17.21
 
-  '@exogee/graphweaver-mikroorm@2.16.1(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.14)(encoding@0.1.13)(graphql@16.10.0)(tedious@18.6.1)':
+  '@exogee/graphweaver-mikroorm@2.16.1(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.16)(encoding@0.1.13)(graphql@16.10.0)(tedious@18.6.1)':
     dependencies:
       '@apollo/server': 4.11.3(encoding@0.1.13)(graphql@16.10.0)
       '@aws-sdk/client-secrets-manager': 3.782.0
       '@exogee/graphweaver': 2.16.1(encoding@0.1.13)
       '@exogee/graphweaver-server': 2.16.1(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(encoding@0.1.13)
       '@exogee/logger': 2.16.1
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       dataloader: 2.2.3
       decimal.js: 10.5.0
       dotenv: 16.4.7
@@ -13974,10 +13956,10 @@ snapshots:
       pluralize: 8.0.0
       reflect-metadata: 0.2.2
     optionalDependencies:
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.1)(tedious@18.6.1)
-      '@mikro-orm/mysql': 6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)
-      '@mikro-orm/postgresql': 6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)
-      '@mikro-orm/sqlite': 6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)
+      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(tedious@18.6.1)
+      '@mikro-orm/mysql': 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
+      '@mikro-orm/postgresql': 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
+      '@mikro-orm/sqlite': 6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)
     transitivePeerDependencies:
       - '@envelop/core'
       - '@escape.tech/graphql-armor-types'
@@ -15417,19 +15399,19 @@ snapshots:
 
   '@metamask/detect-provider@2.0.0': {}
 
-  '@mikro-orm/core@6.4.14':
+  '@mikro-orm/core@6.4.16':
     dependencies:
       dataloader: 2.2.3
       dotenv: 16.5.0
       esprima: 4.0.1
       fs-extra: 11.3.0
       globby: 11.1.0
-      mikro-orm: 6.4.14
+      mikro-orm: 6.4.16
       reflect-metadata: 0.2.2
 
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.0)(pg@8.13.3)':
+  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.13.3)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
       knex: 3.1.0(mysql2@3.14.0)(pg@8.13.3)
       sqlstring: 2.3.3
@@ -15442,11 +15424,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.0)(pg@8.14.1)':
+  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.14.0)(pg@8.14.1)
+      knex: 3.1.0(mysql2@3.14.0)(pg@8.16.0)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -15457,9 +15439,9 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.1)(pg@8.13.3)':
+  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(pg@8.13.3)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
       knex: 3.1.0(mysql2@3.14.1)(pg@8.13.3)
       sqlstring: 2.3.3
@@ -15472,25 +15454,9 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.1)(pg@8.14.1)':
+  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(tedious@18.6.1)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
-      fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.14.1)(pg@8.14.1)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.1)(tedious@18.6.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
       knex: 3.1.0(mysql2@3.14.1)(tedious@18.6.1)
       sqlstring: 2.3.3
@@ -15503,9 +15469,9 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)':
+  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
       knex: 3.1.0(pg@8.13.3)(sqlite3@5.1.7)
       sqlstring: 2.3.3
@@ -15518,11 +15484,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)(sqlite3@5.1.7)':
+  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)(tedious@18.6.1)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.14.1)(sqlite3@5.1.7)
+      knex: 3.1.0(pg@8.16.0)(tedious@18.6.1)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -15534,39 +15500,9 @@ snapshots:
       - tedious
     optional: true
 
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)(tedious@18.6.1)':
+  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(sqlite3@5.1.7)(tedious@18.6.1)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.14.1)(tedious@18.6.1)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)(tedious@19.0.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.14
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.14.1)(tedious@19.0.0)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.4.14(@mikro-orm/core@6.4.14)(sqlite3@5.1.7)(tedious@18.6.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.14
+      '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
       knex: 3.1.0(sqlite3@5.1.7)(tedious@18.6.1)
       sqlstring: 2.3.3
@@ -15578,12 +15514,26 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-    optional: true
 
-  '@mikro-orm/mssql@6.4.14(@mikro-orm/core@6.4.14)':
+  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(tedious@19.0.0)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)(tedious@19.0.0)
+      '@mikro-orm/core': 6.4.16
+      fs-extra: 11.3.0
+      knex: 3.1.0(tedious@19.0.0)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/mssql@6.4.16(@mikro-orm/core@6.4.16)':
+    dependencies:
+      '@mikro-orm/core': 6.4.16
+      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(tedious@19.0.0)
       tedious: 19.0.0
       tsqlstring: 1.0.1
     transitivePeerDependencies:
@@ -15597,28 +15547,10 @@ snapshots:
       - sqlite3
       - supports-color
 
-  '@mikro-orm/mssql@6.4.16(@mikro-orm/core@6.4.14)(pg@8.14.1)':
+  '@mikro-orm/mysql@6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)(tedious@19.0.0)
-      tedious: 19.0.0
-      tsqlstring: 1.0.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-    optional: true
-
-  '@mikro-orm/mysql@6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)':
-    dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.1)(pg@8.13.3)
+      '@mikro-orm/core': 6.4.16
+      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(pg@8.13.3)
       mysql2: 3.14.1
     transitivePeerDependencies:
       - better-sqlite3
@@ -15631,27 +15563,10 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/mysql@6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)':
+  '@mikro-orm/mysql@6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.1)(pg@8.14.1)
-      mysql2: 3.14.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
-  '@mikro-orm/mysql@6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.1)(tedious@18.6.1)
+      '@mikro-orm/core': 6.4.16
+      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(tedious@18.6.1)
       mysql2: 3.14.1
     transitivePeerDependencies:
       - better-sqlite3
@@ -15664,11 +15579,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/postgresql@6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.0)':
+  '@mikro-orm/postgresql@6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(mysql2@3.14.0)(pg@8.14.1)
-      pg: 8.14.1
+      '@mikro-orm/core': 6.4.16
+      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+      pg: 8.16.0
       postgres-array: 3.0.4
       postgres-date: 2.1.0
       postgres-interval: 4.0.2
@@ -15683,11 +15598,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/postgresql@6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)':
+  '@mikro-orm/postgresql@6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)(tedious@18.6.1)
-      pg: 8.14.1
+      '@mikro-orm/core': 6.4.16
+      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)(tedious@18.6.1)
+      pg: 8.16.0
       postgres-array: 3.0.4
       postgres-date: 2.1.0
       postgres-interval: 4.0.2
@@ -15701,50 +15616,12 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-
-  '@mikro-orm/sqlite@6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)':
-    dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(pg@8.13.3)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - supports-color
-      - tedious
-
-  '@mikro-orm/sqlite@6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(pg@8.14.1)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - supports-color
-      - tedious
     optional: true
 
-  '@mikro-orm/sqlite@6.4.14(@mikro-orm/core@6.4.14)(tedious@18.6.1)':
+  '@mikro-orm/sqlite@6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)':
     dependencies:
-      '@mikro-orm/core': 6.4.14
-      '@mikro-orm/knex': 6.4.14(@mikro-orm/core@6.4.14)(sqlite3@5.1.7)(tedious@18.6.1)
+      '@mikro-orm/core': 6.4.16
+      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       fs-extra: 11.3.0
       sqlite3: 5.1.7
       sqlstring-sqlite: 0.1.1
@@ -15759,7 +15636,25 @@ snapshots:
       - pg-native
       - supports-color
       - tedious
-    optional: true
+
+  '@mikro-orm/sqlite@6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)':
+    dependencies:
+      '@mikro-orm/core': 6.4.16
+      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(sqlite3@5.1.7)(tedious@18.6.1)
+      fs-extra: 11.3.0
+      sqlite3: 5.1.7
+      sqlstring-sqlite: 0.1.1
+    transitivePeerDependencies:
+      - better-sqlite3
+      - bluebird
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - supports-color
+      - tedious
 
   '@motionone/animation@10.18.0':
     dependencies:
@@ -17935,7 +17830,7 @@ snapshots:
       '@typescript-eslint/types': 8.29.1
       '@typescript-eslint/typescript-estree': 8.29.1(typescript@5.8.3)
       '@typescript-eslint/visitor-keys': 8.29.1
-      debug: 4.4.0
+      debug: 4.4.1
       eslint: 9.23.0(jiti@2.4.2)
       typescript: 5.8.3
     transitivePeerDependencies:
@@ -17950,7 +17845,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.29.1(typescript@5.8.3)
       '@typescript-eslint/utils': 8.29.1(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.3)
-      debug: 4.4.0
+      debug: 4.4.1
       eslint: 9.23.0(jiti@2.4.2)
       ts-api-utils: 2.1.0(typescript@5.8.3)
       typescript: 5.8.3
@@ -17963,7 +17858,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.29.1
       '@typescript-eslint/visitor-keys': 8.29.1
-      debug: 4.4.0
+      debug: 4.4.1
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -19979,7 +19874,7 @@ snapshots:
       '@babel/core': 7.26.9
       '@babel/runtime': 7.26.10
       core-js: 3.41.0
-      debug: 4.4.0
+      debug: 4.4.1
       glob-to-regexp: 0.4.1
       is-subset: 0.1.1
       lodash.isequal: 4.5.0
@@ -20078,11 +19973,6 @@ snapshots:
       is-callable: 1.2.7
 
   foreground-child@3.3.0:
-    dependencies:
-      cross-spawn: 7.0.6
-      signal-exit: 4.1.0
-
-  foreground-child@3.3.1:
     dependencies:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
@@ -20290,15 +20180,6 @@ snapshots:
       package-json-from-dist: 1.0.1
       path-scurry: 1.11.1
 
-  glob@10.4.5:
-    dependencies:
-      foreground-child: 3.3.1
-      jackspeak: 3.4.3
-      minimatch: 9.0.5
-      minipass: 7.1.2
-      package-json-from-dist: 1.0.1
-      path-scurry: 1.11.1
-
   glob@11.0.1:
     dependencies:
       foreground-child: 3.3.0
@@ -20472,9 +20353,9 @@ snapshots:
 
   graphql@16.10.0: {}
 
-  graphweaver@2.16.1(@emotion/is-prop-valid@0.8.8)(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.14)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(encoding@0.1.13)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.40.1)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tedious@18.6.1)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.1):
+  graphweaver@2.16.1(@emotion/is-prop-valid@0.8.8)(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.16)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(encoding@0.1.13)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.40.1)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tedious@18.6.1)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.1):
     dependencies:
-      '@exogee/graphweaver-builder': 2.16.1(@emotion/is-prop-valid@0.8.8)(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.14)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(encoding@0.1.13)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.40.1)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tedious@18.6.1)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.1)
+      '@exogee/graphweaver-builder': 2.16.1(@emotion/is-prop-valid@0.8.8)(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.16)(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))(@tiptap/pm@2.11.7)(@types/node@22.13.14)(@types/react@19.0.12)(encoding@0.1.13)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.2))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.40.1)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tedious@18.6.1)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.1)
       '@exogee/graphweaver-config': 2.16.1
       chokidar: 4.0.3
       esbuild: 0.25.1
@@ -20974,7 +20855,7 @@ snapshots:
 
   istanbul-lib-source-maps@4.0.1:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.1
       istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -21531,7 +21412,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(mysql2@3.14.0)(pg@8.14.1):
+  knex@3.1.0(mysql2@3.14.0)(pg@8.16.0):
     dependencies:
       colorette: 2.0.19
       commander: 10.0.1
@@ -21549,7 +21430,7 @@ snapshots:
       tildify: 2.0.0
     optionalDependencies:
       mysql2: 3.14.0
-      pg: 8.14.1
+      pg: 8.16.0
     transitivePeerDependencies:
       - supports-color
 
@@ -21574,29 +21455,6 @@ snapshots:
       pg: 8.13.3
     transitivePeerDependencies:
       - supports-color
-
-  knex@3.1.0(mysql2@3.14.1)(pg@8.14.1):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      mysql2: 3.14.1
-      pg: 8.14.1
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
 
   knex@3.1.0(mysql2@3.14.1)(tedious@18.6.1):
     dependencies:
@@ -21642,7 +21500,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(pg@8.14.1)(sqlite3@5.1.7):
+  knex@3.1.0(pg@8.16.0)(tedious@18.6.1):
     dependencies:
       colorette: 2.0.19
       commander: 10.0.1
@@ -21659,55 +21517,11 @@ snapshots:
       tarn: 3.0.2
       tildify: 2.0.0
     optionalDependencies:
-      pg: 8.14.1
-      sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
-  knex@3.1.0(pg@8.14.1)(tedious@18.6.1):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.14.1
+      pg: 8.16.0
       tedious: 18.6.1
     transitivePeerDependencies:
       - supports-color
-
-  knex@3.1.0(pg@8.14.1)(tedious@19.0.0):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.14.1
-      tedious: 19.0.0
-    transitivePeerDependencies:
-      - supports-color
+    optional: true
 
   knex@3.1.0(sqlite3@5.1.7)(tedious@18.6.1):
     dependencies:
@@ -21730,7 +21544,27 @@ snapshots:
       tedious: 18.6.1
     transitivePeerDependencies:
       - supports-color
-    optional: true
+
+  knex@3.1.0(tedious@19.0.0):
+    dependencies:
+      colorette: 2.0.19
+      commander: 10.0.1
+      debug: 4.3.4
+      escalade: 3.2.0
+      esm: 3.2.25
+      get-package-type: 0.1.0
+      getopts: 2.3.0
+      interpret: 2.2.0
+      lodash: 4.17.21
+      pg-connection-string: 2.6.2
+      rechoir: 0.8.0
+      resolve-from: 5.0.0
+      tarn: 3.0.2
+      tildify: 2.0.0
+    optionalDependencies:
+      tedious: 19.0.0
+    transitivePeerDependencies:
+      - supports-color
 
   leven@3.1.0: {}
 
@@ -22073,7 +21907,7 @@ snapshots:
       braces: 3.0.3
       picomatch: 2.3.1
 
-  mikro-orm@6.4.14: {}
+  mikro-orm@6.4.16: {}
 
   mime-db@1.52.0: {}
 
@@ -22643,21 +22477,21 @@ snapshots:
 
   pg-connection-string@2.7.0: {}
 
-  pg-connection-string@2.8.5: {}
+  pg-connection-string@2.9.1: {}
 
   pg-int8@1.0.1: {}
+
+  pg-pool@3.10.1(pg@8.16.0):
+    dependencies:
+      pg: 8.16.0
 
   pg-pool@3.7.1(pg@8.13.3):
     dependencies:
       pg: 8.13.3
 
-  pg-pool@3.9.6(pg@8.14.1):
-    dependencies:
-      pg: 8.14.1
+  pg-protocol@1.10.2: {}
 
   pg-protocol@1.7.1: {}
-
-  pg-protocol@1.9.5: {}
 
   pg-types@2.2.0:
     dependencies:
@@ -22677,11 +22511,11 @@ snapshots:
     optionalDependencies:
       pg-cloudflare: 1.1.1
 
-  pg@8.14.1:
+  pg@8.16.0:
     dependencies:
-      pg-connection-string: 2.8.5
-      pg-pool: 3.9.6(pg@8.14.1)
-      pg-protocol: 1.9.5
+      pg-connection-string: 2.9.1
+      pg-pool: 3.10.1(pg@8.16.0)
+      pg-protocol: 1.10.2
       pg-types: 2.2.0
       pgpass: 1.0.5
     optionalDependencies:
@@ -23326,10 +23160,6 @@ snapshots:
       glob: 7.2.3
     optional: true
 
-  rimraf@5.0.10:
-    dependencies:
-      glob: 10.4.5
-
   rimraf@5.0.8:
     dependencies:
       glob: 10.4.3
@@ -23518,7 +23348,7 @@ snapshots:
     dependencies:
       axios: 1.10.0
       axios-proxy-builder: 0.1.2
-      rimraf: 5.0.10
+      rimraf: 5.0.8
       xml2js: 0.6.2
     transitivePeerDependencies:
       - debug
@@ -23822,7 +23652,7 @@ snapshots:
     dependencies:
       component-emitter: 1.3.1
       cookiejar: 2.1.4
-      debug: 4.4.0
+      debug: 4.4.1
       fast-safe-stringify: 2.1.1
       form-data: 4.0.2
       formidable: 2.1.2

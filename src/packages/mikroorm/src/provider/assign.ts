@@ -11,6 +11,7 @@ import {
 import { logger } from '@exogee/logger';
 
 import { ConnectionManager } from '../database';
+import { isEntityWithSinglePrimaryKey } from '../introspection/generate';
 
 interface AssignOptions {
 	// Whether this assign should be allowed to create new entities.
@@ -63,12 +64,12 @@ export const assign = async <T extends AnyEntity<T>>(
 			}
 
 			const relatedEntity = em.getMetadata().find(propertyMetadata.entity());
-			if (relatedEntity?.primaryKeys.length !== 1) {
+			if (!isEntityWithSinglePrimaryKey(relatedEntity)) {
 				throw new Error(
 					`Entity ${propertyMetadata.entity()} has multiple primary keys, which is not yet supported.`
 				);
 			}
-			const [relatedPrimaryKeyField] = relatedEntity.primaryKeys;
+			const [relatedPrimaryKeyField] = relatedEntity?.primaryKeys ?? [];
 
 			const visitedEntities = new Set<T>();
 
@@ -158,7 +159,7 @@ export const assign = async <T extends AnyEntity<T>>(
 						`Could not find entity ${propertyMetadata.entity()} in MikroORM metadata.`
 					);
 				}
-				if (relatedEntity.primaryKeys.length !== 1) {
+				if (!isEntityWithSinglePrimaryKey(relatedEntity)) {
 					throw new Error(
 						`Entity ${propertyMetadata.entity()} has ${relatedEntity.primaryKeys.length} primary keys, but we only support 1.`
 					);

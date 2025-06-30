@@ -11,6 +11,7 @@ import pluralize from 'pluralize';
 import { identifierForEnumValue, pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
 import { BaseFile } from './base-file';
 import { DatabaseType } from '../../database';
+import { isEntityWithSinglePrimaryKey } from '../generate';
 
 const friendlyNameForDatabaseType = (type: DatabaseType) => {
 	if (type === 'mssql') return 'SQL Server';
@@ -26,6 +27,7 @@ export class SchemaEntityFile extends BaseFile {
 	protected readonly scalarImports = new Set<string>();
 	protected readonly entityImports = new Set<string>();
 	protected readonly enumImports = new Set<string>();
+	public readonly errors: string[] = [];
 
 	constructor(
 		protected readonly meta: EntityMetadata,
@@ -49,8 +51,29 @@ export class SchemaEntityFile extends BaseFile {
 	generate(): string {
 		const enumDefinitions: string[] = [];
 		let classBody = '';
+		const generatedPropertyNames = new Set<string>();
 		const props = Object.values(this.meta.properties);
 		props.forEach((prop) => {
+			const relatedEntity = this.entityLookup.get(prop.type);
+			if (relatedEntity) {
+				// These are not supported yet, just skip them.
+				if (!isEntityWithSinglePrimaryKey(relatedEntity)) {
+					this.errors.push(
+						` - Warning: Composite primary keys are not supported. ${this.meta.className} entity references ${prop.type} entity with composite primary key.`
+					);
+					return;
+				}
+			}
+
+			if (generatedPropertyNames.has(prop.name)) {
+				this.errors.push(
+					` - Warning: Property ${prop.name} on ${this.meta.className} entity is not unique. Additional instances of this property were ignored.`
+				);
+				return;
+			}
+
+			generatedPropertyNames.add(prop.name);
+
 			const decorator = this.getPropertyDecorator(prop);
 			const definition = this.getPropertyDefinition(prop);
 
@@ -195,6 +218,11 @@ export class SchemaEntityFile extends BaseFile {
 			return 'GraphQLBigInt';
 		}
 
+		if (prop.runtimeType === 'Buffer') {
+			this.scalarImports.add('GraphQLByte');
+			return 'GraphQLByte';
+		}
+
 		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
 			this.scalarImports.add('GraphQLJSON');
 			return `GraphQLJSON`;
@@ -257,6 +285,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.primary) {
+			console.log('prop is primary: ', prop);
 			options.primaryKeyField = true;
 		}
 
@@ -288,7 +317,7 @@ export class SchemaEntityFile extends BaseFile {
 				`Internal Error: Related entity ${prop.type} should exist but could not be found in the entity lookup.`
 			);
 		}
-		if (relatedEntity.primaryKeys.length !== 1) {
+		if (!isEntityWithSinglePrimaryKey(relatedEntity)) {
 			throw new Error(`Composite primary keys are not supported.`);
 		}
 		const [primaryKey] = relatedEntity.getPrimaryProps();

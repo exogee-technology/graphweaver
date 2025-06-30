@@ -1,4 +1,4 @@
-import { DatabaseSchema, AbstractSqlPlatform, DatabaseTable } from '@mikro-orm/knex';
+import { DatabaseSchema, AbstractSqlPlatform } from '@mikro-orm/knex';
 import {
 	EntityMetadata,
 	EntityProperty,
@@ -36,7 +36,7 @@ export class IntrospectionError extends Error {
 
 const hasErrorMessage = (error: any): error is { message: string } => error.message;
 
-const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
+const generateBidirectionalRelations = (metadata: EntityMetadata[]) => {
 	const nonPrimaryKeyReferenceErrors: string[] = [];
 
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
@@ -92,12 +92,7 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 		}
 	}
 
-	if (nonPrimaryKeyReferenceErrors.length) {
-		throw new IntrospectionError(
-			`Unsupported Relationship${nonPrimaryKeyReferenceErrors.length === 1 ? '' : 's'} Detected`,
-			`\n${nonPrimaryKeyReferenceErrors.join('\n')}\n\nForeign keys in Graphweaver currently need to reference the primary key of the other table.`
-		);
-	}
+	return { errors: nonPrimaryKeyReferenceErrors };
 };
 
 const detectManyToManyRelations = (metadata: EntityMetadata[]) => {
@@ -147,37 +142,12 @@ const generateSingularTypeReferences = (metadata: EntityMetadata[]): void => {
 };
 
 // Convert properties like FirstName to firstName
-const convertToCamelCasePropertyNames = (metadata: EntityMetadata[]): void => {
+const normalisePropertyNames = (metadata: EntityMetadata[]): void => {
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		const props = Object.values(meta.properties);
 		props.forEach((prop) => {
-			prop.name = pascalToCamelCaseString(prop.name);
+			prop.name = pascalToCamelCaseString(prop.name).replace(/\W/g, '_');
 		});
-	}
-};
-
-const assertUniqueForeignKeys = (table: DatabaseTable): void => {
-	const uniqueForeignKeys = new Set();
-	const definedForeignKeys = Object.values(table.getForeignKeys());
-
-	for (const foreignKey of definedForeignKeys) {
-		const { localTableName, referencedTableName, columnNames, referencedColumnNames } = foreignKey;
-		const serializedValue = JSON.stringify({
-			localTableName,
-			columnNames: columnNames.sort(),
-			referencedTableName,
-			referencedColumnNames: referencedColumnNames.sort(),
-		});
-
-		if (uniqueForeignKeys.has(serializedValue)) {
-			throw new Error(
-				`\n\nImport Failed: Duplicate foreign keys detected on column/s (${columnNames.toString()}) in table "${
-					table.name
-				}".`
-			);
-		}
-
-		uniqueForeignKeys.add(serializedValue);
 	}
 };
 
@@ -193,10 +163,7 @@ const convertSchemaToMetadata = async (
 	const metadata = schema
 		.getTables()
 		.sort((a, b) => a.name.localeCompare(b.name))
-		.map((table) => {
-			assertUniqueForeignKeys(table);
-			return table.getEntityDeclaration(namingStrategy, helper, 'never');
-		});
+		.map((table) => table.getEntityDeclaration(namingStrategy, helper, 'never'));
 
 	if (metadata.length === 0) {
 		throw new IntrospectionError(
@@ -205,13 +172,13 @@ const convertSchemaToMetadata = async (
 		);
 	}
 
-	convertToCamelCasePropertyNames(metadata);
+	normalisePropertyNames(metadata);
 	detectManyToManyRelations(metadata);
 	generateIdentifiedReferences(metadata);
-	generateBidirectionalRelations(metadata);
+	const { errors } = generateBidirectionalRelations(metadata);
 	generateSingularTypeReferences(metadata);
 
-	return metadata;
+	return { metadata, errors };
 };
 
 const openConnection = async (type: DatabaseType, options: ConnectionOptions) => {
@@ -245,6 +212,11 @@ type File =
 	| DataSourceIndexFile
 	| DatabaseFile;
 
+export const isEntityWithSinglePrimaryKey = (meta?: EntityMetadata) => {
+	if (!meta) return false;
+	return meta.primaryKeys.length === 1;
+};
+
 export const generate = async (databaseType: DatabaseType, options: ConnectionOptions) => {
 	try {
 		await openConnection(databaseType, options);
@@ -265,7 +237,7 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 		console.log('Fetching database schema...');
 		const schema = await DatabaseSchema.create(connection, platform, config);
 		console.log('Building metadata...');
-		const metadata = await convertSchemaToMetadata(schema, platform, namingStrategy);
+		const { metadata, errors } = await convertSchemaToMetadata(schema, platform, namingStrategy);
 
 		// Build a lookup for efficient cross-referencing later.
 		const entityLookup = new Map<string, EntityMetadata<any>>();
@@ -279,8 +251,14 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 			[];
 
 		for (const meta of metadata) {
-			if (!meta.pivotTable) {
-				const dataEntityFile = new DataEntityFile(meta, namingStrategy, platform, databaseType);
+			if (!meta.pivotTable && isEntityWithSinglePrimaryKey(meta)) {
+				const dataEntityFile = new DataEntityFile(
+					meta,
+					namingStrategy,
+					platform,
+					databaseType,
+					entityLookup
+				);
 				const schemaEntityFile = new SchemaEntityFile(
 					meta,
 					namingStrategy,
@@ -294,6 +272,14 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 					entityFilePath: `${dataEntityFile.getBasePath()}${dataEntityFile.getBaseName()}`,
 					schemaFilePath: `${schemaEntityFile.getBasePath()}${schemaEntityFile.getBaseName()}`,
 				});
+			} else if (meta.primaryKeys.length > 1) {
+				errors.push(
+					`Entity ${meta.className} has either more than one primary key. We have skipped it and relations to it because Graphweaver does not support entities with multiple primary keys yet.`
+				);
+			} else if (meta.primaryKeys.length === 0) {
+				errors.push(
+					`Entity ${meta.className} has no primary key. We have skipped it and relations to it because Graphweaver does not support entities with no primary key yet.`
+				);
 			}
 		}
 
@@ -312,6 +298,7 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 				name: file.getBaseName(),
 				contents: file.generate(),
 				needOverwriteWarning: !![DatabaseFile, SchemaIndexFile].some((cls) => file instanceof cls),
+				errors: 'errors' in file ? file.errors : [],
 			};
 		});
 
@@ -322,6 +309,15 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 		console.log(
 			`\nImported ${summaryOfEntities.length} entities, creating the above files in your Graphweaver project. \n`
 		);
+
+		for (const file of files) {
+			errors.push(...file.errors);
+		}
+
+		if (errors.length) {
+			console.log(`\nWarning ${errors.length} errors detected:\n`);
+			console.log(errors.join('\n'));
+		}
 
 		return files;
 	} catch (err) {

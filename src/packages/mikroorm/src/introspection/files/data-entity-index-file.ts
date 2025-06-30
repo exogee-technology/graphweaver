@@ -1,5 +1,7 @@
 import { EntityMetadata } from '@mikro-orm/core';
 import { DatabaseType } from '../../database';
+import { isEntityWithSinglePrimaryKey } from '../generate';
+import { pascalToKebabCaseString } from '../utils';
 
 export class DataEntityIndexFile {
 	constructor(
@@ -22,8 +24,8 @@ export class DataEntityIndexFile {
 		const exports: string[] = [];
 
 		for (const meta of this.metadata) {
-			if (!meta.pivotTable) {
-				const filename = meta.className.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase();
+			if (!meta.pivotTable && isEntityWithSinglePrimaryKey(meta)) {
+				const filename = pascalToKebabCaseString(meta.className);
 				exports.push(`export * from './${filename}';`);
 				imports.push(`import { ${meta.className} } from './${filename}';`);
 				file += `${padding}${meta.className},\n`;

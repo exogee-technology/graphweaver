@@ -54,7 +54,7 @@ import {
 	likeOperations,
 	mathOperations,
 } from './operations';
-import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
+import { GraphQLByte, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 
 export type GraphweaverSchemaExtension = Readonly<GraphQLObjectTypeExtensions<any, any>> & {
 	graphweaverSchemaInfo:
@@ -255,7 +255,14 @@ export const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 			return unwrapType(type.ofType);
 		}
 		if (isGraphQLScalarForTypeScriptType(type)) {
-			return graphQLScalarForTypeScriptType(type);
+			try {
+				return graphQLScalarForTypeScriptType(type);
+			} catch (e) {
+				console.error(e);
+				throw new Error(
+					`Could not map TypeScript type ${String(type)} to a GraphQL scalar for field ${field.name} on entity ${field.target.name}. Original Error: ${e}`
+				);
+			}
 		}
 		return type;
 	};
@@ -279,14 +286,17 @@ const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
 	if (isScalarType(type)) return type;
 
 	switch (type) {
-		case String:
-			return GraphQLString;
-		case Number:
-			return GraphQLFloat;
 		case Boolean:
 			return GraphQLBoolean;
+		case Buffer:
+			return GraphQLByte;
 		case Date:
 			return ISODateStringScalar;
+		case Number:
+			return GraphQLFloat;
+		case String:
+			return GraphQLString;
+
 		default:
 			throw new Error(`Could not map TypeScript type ${String(type)} to a GraphQL scalar.`);
 	}
@@ -330,27 +340,34 @@ const graphQLTypeForInput = (
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
 				for (const field of Object.values(input.fields)) {
-					// Let's try to resolve the GraphQL type involved here.
-					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(field.getType);
-					let graphQLType: GraphQLInputTypes | undefined = undefined;
+					try {
+						// Let's try to resolve the GraphQL type involved here.
+						const { fieldType, isList, metadata } = getFieldTypeWithMetadata(field.getType);
+						let graphQLType: GraphQLInputTypes | undefined = undefined;
 
-					if (isInputMetadata(metadata)) {
-						graphQLType = graphQLTypeForInput(metadata, entityFilter);
-					} else {
-						graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
+						if (isInputMetadata(metadata)) {
+							graphQLType = graphQLTypeForInput(metadata, entityFilter);
+						} else {
+							graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
+						}
+
+						// If it's an array, wrap it in a list and make it not nullable within the list.
+						if (isList) {
+							graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
+						}
+
+						// And finally, if it's not marked as nullable, wrap whatever it is in Non Null.
+						if (!field.nullable) {
+							graphQLType = new GraphQLNonNull(graphQLType);
+						}
+
+						fields[field.name] = { type: graphQLType };
+					} catch (e) {
+						logger.error(e);
+						throw new Error(
+							`Error while generating schema for input type. Field: ${field.name}, Type: ${String(field.getType())}, Input: ${input.name}. Original Error: ${e}`
+						);
 					}
-
-					// If it's an array, wrap it in a list and make it not nullable within the list.
-					if (isList) {
-						graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
-					}
-
-					// And finally, if it's not marked as nullable, wrap whatever it is in Non Null.
-					if (!field.nullable) {
-						graphQLType = new GraphQLNonNull(graphQLType);
-					}
-
-					fields[field.name] = { type: graphQLType };
 				}
 
 				return fields;
@@ -390,51 +407,58 @@ export const graphQLTypeForEntity = (
 					let resolve = undefined;
 					const args: ObjMap<GraphQLArgumentConfig> = {};
 
-					if (isEntityMetadata(metadata)) {
-						// If the entity filter says no, we don't need to build out this field.
-						if (entityFilter && !entityFilter(metadata)) continue;
+					try {
+						if (isEntityMetadata(metadata)) {
+							// If the entity filter says no, we don't need to build out this field.
+							if (entityFilter && !entityFilter(metadata)) continue;
 
-						graphQLType = graphQLTypeForEntity(metadata, entityFilter);
+							graphQLType = graphQLTypeForEntity(metadata, entityFilter);
 
-						if (metadata.provider) {
-							resolve = resolvers.baseResolver(resolvers.listRelationshipField);
+							if (metadata.provider) {
+								resolve = resolvers.baseResolver(resolvers.listRelationshipField);
 
-							if (metadata.provider.backendProviderConfig?.filter) {
-								args['filter'] = {
-									type: filterTypeForEntity(metadata, entityFilter),
-								};
+								if (metadata.provider.backendProviderConfig?.filter) {
+									args['filter'] = {
+										type: filterTypeForEntity(metadata, entityFilter),
+									};
+								}
+							} else {
+								resolve = resolvers.baseResolver(resolvers.listRelationshipFieldWithoutProvider);
 							}
 						} else {
-							resolve = resolvers.baseResolver(resolvers.listRelationshipFieldWithoutProvider);
+							// Ok, it's some kind of in-built scalar we need to map.
+							graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
 						}
-					} else {
-						// Ok, it's some kind of in-built scalar we need to map.
-						graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
-					}
 
-					// If it's an array, wrap it in a list and make it not nullable within the list.
-					if (isList) {
-						graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
-					}
+						// If it's an array, wrap it in a list and make it not nullable within the list.
+						if (isList) {
+							graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
+						}
 
-					// And finally, if it's not marked as nullable, wrap whatever it is in Non Null.
-					if (!field.nullable) {
-						graphQLType = new GraphQLNonNull(graphQLType);
-					}
+						// And finally, if it's not marked as nullable, wrap whatever it is in Non Null.
+						if (!field.nullable) {
+							graphQLType = new GraphQLNonNull(graphQLType);
+						}
 
-					if (fields[field.name]) {
-						throw new Error(`Duplicate field '${field.name}' on entity ${entity.name}.`);
-					}
+						if (fields[field.name]) {
+							throw new Error(`Duplicate field '${field.name}' on entity ${entity.name}.`);
+						}
 
-					fields[field.name] = {
-						type: graphQLType,
-						args,
-						// Typecast should not be required here as we know the context object, but this will get us building.
-						resolve: resolve as any,
-						extensions: {
-							directives: field.directives ?? {},
-						},
-					};
+						fields[field.name] = {
+							type: graphQLType,
+							args,
+							// Typecast should not be required here as we know the context object, but this will get us building.
+							resolve: resolve as any,
+							extensions: {
+								directives: field.directives ?? {},
+							},
+						};
+					} catch (e) {
+						logger.error(e);
+						throw new Error(
+							`Error while generating schema for entity. Field: ${field.name}, Type: ${String(field.getType())}, Entity: ${entity.name}. Original Error: ${e}`
+						);
+					}
 
 					// If the it's a related entity and the provider supports it, we should add aggregation to the relationship.
 					if (
@@ -871,32 +895,39 @@ class SchemaBuilderImplementation {
 		if (!args) return map;
 
 		for (const [name, details] of Object.entries(args)) {
-			const getType = isArgMetadata(details) ? details.type : details;
+			try {
+				const getType = isArgMetadata(details) ? details.type : details;
 
-			const { fieldType, metadata, isList } = getFieldTypeWithMetadata(getType);
+				const { fieldType, metadata, isList } = getFieldTypeWithMetadata(getType);
 
-			let inputType: GraphQLInputTypes;
-			if (isInputMetadata(metadata)) {
-				inputType = graphQLTypeForInput(metadata, entityFilter);
-			} else {
-				inputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
+				let inputType: GraphQLInputTypes;
+				if (isInputMetadata(metadata)) {
+					inputType = graphQLTypeForInput(metadata, entityFilter);
+				} else {
+					inputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
+				}
+
+				if (isArgMetadata(details) && !details.nullable) {
+					inputType = new GraphQLNonNull(inputType);
+				}
+
+				if (isList) {
+					inputType = new GraphQLList(inputType);
+				}
+
+				map[name] = {
+					type: inputType,
+					// Apply the default value if there is one.
+					...(isArgMetadata(details) && details.defaultValue
+						? { defaultValue: details.defaultValue }
+						: {}),
+				};
+			} catch (e) {
+				logger.error(e);
+				throw new Error(
+					`Error while generating schema for args. Name: ${name}, Details: ${details}, Args: ${JSON.stringify(args)}. Original Error: ${e}`
+				);
 			}
-
-			if (isArgMetadata(details) && !details.nullable) {
-				inputType = new GraphQLNonNull(inputType);
-			}
-
-			if (isList) {
-				inputType = new GraphQLList(inputType);
-			}
-
-			map[name] = {
-				type: inputType,
-				// Apply the default value if there is one.
-				...(isArgMetadata(details) && details.defaultValue
-					? { defaultValue: details.defaultValue }
-					: {}),
-			};
 		}
 
 		return map;
@@ -973,43 +1004,50 @@ class SchemaBuilderImplementation {
 						throw new Error(`Duplicate query name: ${customQuery.name}.`);
 					}
 
-					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(customQuery.getType);
-					const customArgs = this.graphQLTypeForArgs(entityFilter, customQuery.args);
+					try {
+						const { fieldType, isList, metadata } = getFieldTypeWithMetadata(customQuery.getType);
+						const customArgs = this.graphQLTypeForArgs(entityFilter, customQuery.args);
 
-					if (isEntityMetadata(metadata)) {
-						// If the entity filter says no, we will ignore their custom query because it references
-						// an entity that is filtered out of this schema.
-						if (entityFilter && !entityFilter(metadata)) continue;
+						if (isEntityMetadata(metadata)) {
+							// If the entity filter says no, we will ignore their custom query because it references
+							// an entity that is filtered out of this schema.
+							if (entityFilter && !entityFilter(metadata)) continue;
 
-						const graphQLType = graphQLTypeForEntity(metadata, entityFilter);
+							const graphQLType = graphQLTypeForEntity(metadata, entityFilter);
 
-						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
-						// a user or system defined additional query, so by definition it needs to be included here.
-						fields[customQuery.name] = {
-							...customQuery,
-							args: customArgs,
-							type: isList ? new GraphQLList(graphQLType) : graphQLType,
-							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
-							extensions: {
-								directives: customQuery.directives ?? {},
-							},
-						};
-					} else {
-						const type: GraphQLOutputType = graphQLTypeForScalarEnumOrUnion(
-							metadata,
-							fieldType,
-							entityFilter
+							// We're no longer checking for `excludeFromBuiltInOperations` here because this is
+							// a user or system defined additional query, so by definition it needs to be included here.
+							fields[customQuery.name] = {
+								...customQuery,
+								args: customArgs,
+								type: isList ? new GraphQLList(graphQLType) : graphQLType,
+								resolve: trace(resolvers.baseResolver(customQuery.resolver)),
+								extensions: {
+									directives: customQuery.directives ?? {},
+								},
+							};
+						} else {
+							const type: GraphQLOutputType = graphQLTypeForScalarEnumOrUnion(
+								metadata,
+								fieldType,
+								entityFilter
+							);
+
+							fields[customQuery.name] = {
+								...customQuery,
+								args: customArgs,
+								type: isList ? new GraphQLList(type) : type,
+								resolve: trace(resolvers.baseResolver(customQuery.resolver)),
+								extensions: {
+									directives: customQuery.directives ?? {},
+								},
+							};
+						}
+					} catch (e) {
+						logger.error(e);
+						throw new Error(
+							`Error while generating schema for custom query. Name: ${customQuery.name}, Type: ${String(customQuery.getType())}, Args: ${JSON.stringify(customQuery.args)}. Original Error: ${e}`
 						);
-
-						fields[customQuery.name] = {
-							...customQuery,
-							args: customArgs,
-							type: isList ? new GraphQLList(type) : type,
-							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
-							extensions: {
-								directives: customQuery.directives ?? {},
-							},
-						};
 					}
 				}
 				return fields;
