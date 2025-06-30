@@ -363,9 +363,9 @@ const graphQLTypeForInput = (
 
 						fields[field.name] = { type: graphQLType };
 					} catch (e) {
-						console.error(e);
+						logger.error(e);
 						throw new Error(
-							`Error while generating schema for input type. Field: ${field.name}, Type: ${String(field.getType())}, Input: ${input.name}.`
+							`Error while generating schema for input type. Field: ${field.name}, Type: ${String(field.getType())}, Input: ${input.name}. Original Error: ${e}`
 						);
 					}
 				}
@@ -454,9 +454,9 @@ export const graphQLTypeForEntity = (
 							},
 						};
 					} catch (e) {
-						console.error(e);
+						logger.error(e);
 						throw new Error(
-							`Error while generating schema for entity. Field: ${field.name}, Type: ${String(field.getType())}, Entity: ${entity.name}.`
+							`Error while generating schema for entity. Field: ${field.name}, Type: ${String(field.getType())}, Entity: ${entity.name}. Original Error: ${e}`
 						);
 					}
 
@@ -923,9 +923,9 @@ class SchemaBuilderImplementation {
 						: {}),
 				};
 			} catch (e) {
-				console.error(e);
+				logger.error(e);
 				throw new Error(
-					`Error while generating schema for args. Name: ${name}, Details: ${details}, Args: ${JSON.stringify(args)}.`
+					`Error while generating schema for args. Name: ${name}, Details: ${details}, Args: ${JSON.stringify(args)}. Original Error: ${e}`
 				);
 			}
 		}
@@ -1044,9 +1044,9 @@ class SchemaBuilderImplementation {
 							};
 						}
 					} catch (e) {
-						console.error(e);
+						logger.error(e);
 						throw new Error(
-							`Error while generating schema for custom query. Name: ${customQuery.name}, Type: ${String(customQuery.getType())}, Args: ${JSON.stringify(customQuery.args)}.`
+							`Error while generating schema for custom query. Name: ${customQuery.name}, Type: ${String(customQuery.getType())}, Args: ${JSON.stringify(customQuery.args)}. Original Error: ${e}`
 						);
 					}
 				}
