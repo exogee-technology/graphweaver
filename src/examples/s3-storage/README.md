@@ -8,21 +8,25 @@ For running locally it is handy to have a local S3 env. For this we recommend ru
 
 ** An alternative option is to use Localstack, see details below **
 
-Once Minio is installed and start the server with the following command:
+Once Minio is installed you can start the server with the following command:
 
-`minio server ~/data --address :9003`
+`MINIO_ROOT_USER=root MINIO_ROOT_PASSWORD=<choose a password> minio server ~/data --address :9003 --console-address :50003`
 
 Create a new bucket here:
 
-[http://127.0.0.1:54902/browser/add-bucket](http://127.0.0.1:54902/browser/add-bucket)
+[http://127.0.0.1:50003/browser/add-bucket](http://127.0.0.1:50003/browser/add-bucket)
 
 Update the env variable `AWS_S3_BUCKET` with the new bucket name.
 
-Lastly, you need to create a user and access id / secret:
+Lastly, you need to create a user and access id / secret. This requires using the `mc` CLI tool to access the API. Configure the client to talk to the API with a `local` alias:
 
-[http://127.0.0.1:54902/identity/users](http://127.0.0.1:54902/identity/users)
+`mc alias set local http://192.168.0.180:9003 root <your root password>`
 
-Save these values to the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` env vars.
+You then need to create the API key to access the bucket:
+
+`mc admin accesskey create local`
+
+This will generate the key that you need. Save these values to the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` env vars.
 
 To run the example make sure that you have a local PostgreSQL database and that you seed the database as below.
 
