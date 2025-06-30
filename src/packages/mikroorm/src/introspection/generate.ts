@@ -146,7 +146,7 @@ const normalisePropertyNames = (metadata: EntityMetadata[]): void => {
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		const props = Object.values(meta.properties);
 		props.forEach((prop) => {
-			prop.name = pascalToCamelCaseString(prop.name).replace(/[^a-zA-Z0-9_]/g, '_');
+			prop.name = pascalToCamelCaseString(prop.name).replace(/\W/g, '_');
 		});
 	}
 };

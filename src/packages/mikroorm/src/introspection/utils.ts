@@ -17,7 +17,7 @@ export const identifierForEnumValue = (value: string) => {
 	const identifier = value.replace(/[^a-z0-9_]/gi, '_').toUpperCase();
 
 	// Enums have to have string identifiers.
-	if (/^[0-9]+$/.test(identifier)) {
+	if (/^\d+$/.test(identifier)) {
 		return `_${identifier}`;
 	} else {
 		return identifier;
