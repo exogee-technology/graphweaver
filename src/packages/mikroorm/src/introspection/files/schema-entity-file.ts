@@ -6,7 +6,6 @@ import type {
 	Platform,
 } from '@mikro-orm/core';
 import { ReferenceKind, Utils } from '@mikro-orm/core';
-
 import pluralize from 'pluralize';
 import { identifierForEnumValue, pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
 import { BaseFile } from './base-file';
@@ -103,7 +102,18 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		this.coreImports.add('Entity');
-		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection, { backendDisplayName: '${friendlyNameForDatabaseType(this.databaseType)}' }),\n})\n`;
+
+		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection, { backendDisplayName: '${friendlyNameForDatabaseType(this.databaseType)}'})`;
+
+		if (props.length === 1 && props[0].primary) {
+			// Special case. If there's a single primary key field in this entity, right now that requires that it's a client side generated primary key.
+			// There's no reason this has to be the case, but it's a current limitation, so we should generate a working project for them.
+			// We should be able to remove this in the future and allow users to use it both ways.
+			file += `,\n\tapiOptions: { clientGeneratedPrimaryKeys: true },\n})\n`;
+		} else {
+			file += `\n})\n`;
+		}
+
 		file += `export class ${this.meta.className} {\n`;
 		file += `${classBody}}\n`;
 		const imports = [
