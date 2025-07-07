@@ -44,7 +44,7 @@
 		"vite-plugin-graphweaver": "workspace:*"
 	},
 	"devDependencies": {
-		"@types/jsonwebtoken": "9.0.9",
+		"@types/jsonwebtoken": "9.0.10",
 		"@types/node": "22.13.14",
 		"@types/omgopass": "3.2.3",
 		"jsonwebtoken": "9.0.2",
