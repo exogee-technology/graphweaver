@@ -41,7 +41,7 @@
 		"graphiql": "3.8.3",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.6.1",
-		"motion": "12.16.0",
+		"motion": "12.23.3",
 		"papaparse": "5.5.2",
 		"react-day-picker": "9.6.4",
 		"react-error-boundary": "5.0.0",
