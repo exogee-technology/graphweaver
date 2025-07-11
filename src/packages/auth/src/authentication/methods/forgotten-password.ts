@@ -205,6 +205,11 @@ export class ForgottenPassword extends BaseAuthMethod {
 		args: { username },
 		context,
 	}: ResolverOptions<{ username: string }, AuthorizationContext>): Promise<boolean> {
+		// If they have an expired token we don't care on this mutation. Importantly this is at the top
+		// so it doesn't disclose any information to the user about which stage in this process failed if
+		// a part fails.
+		context.skipLoginRedirect = true;
+
 		const { url, link } = (await this.generateForgottenPasswordLink(username, context)) ?? {};
 
 		// fail silently
@@ -221,7 +226,13 @@ export class ForgottenPassword extends BaseAuthMethod {
 
 	async resetPassword({
 		args: { token, password },
-	}: ResolverOptions<{ token: string; password: string }>): Promise<boolean> {
+		context,
+	}: ResolverOptions<{ token: string; password: string }, AuthorizationContext>): Promise<boolean> {
+		// If they have an expired token we don't care on this mutation. Importantly this is at the top
+		// so it doesn't disclose any information to the user about which stage in this process failed if
+		// a part fails.
+		context.skipLoginRedirect = true;
+
 		const link = await this.getForgottenPasswordLink(token);
 
 		if (!link) {
