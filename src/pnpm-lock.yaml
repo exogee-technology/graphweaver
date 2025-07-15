@@ -85,7 +85,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -290,7 +290,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -345,7 +345,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -388,7 +388,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/mysql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -510,7 +510,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(pg@8.13.3)
       '@mikro-orm/postgresql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -617,7 +617,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -871,8 +871,8 @@ importers:
         specifier: 3.6.1
         version: 3.6.1
       motion:
-        specifier: 12.16.0
-        version: 12.16.0(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 12.23.6
+        version: 12.23.6(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       papaparse:
         specifier: 5.5.2
         version: 5.5.2
@@ -1603,7 +1603,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -1665,16 +1665,16 @@ importers:
         version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/mssql':
         specifier: ^6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/mysql':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/postgresql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
     devDependencies:
       '@mikro-orm/core':
         specifier: 6.4.16
@@ -2026,7 +2026,7 @@ packages:
     resolution: {integrity: sha512-jKRlf+sBMMdKYrjMoiWKne42Eb6paBfDOr08KJnUaeaiyWFj+/040FjVPQI7YGLfdwnYIsl1NUUqS2UdgezJDg==}
     engines: {node: '>=14.16.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^16.6.0
 
   '@apollo/usage-reporting-protobuf@4.1.1':
     resolution: {integrity: sha512-u40dIUePHaSKVshcedO7Wp+mPiZsaU6xjv9J+VyxpoU/zL6Jle+9zWeG98tr/+SZ0nZ4OXhrbb8SNr0rAPpIDA==}
@@ -2101,7 +2101,7 @@ packages:
     resolution: {integrity: sha512-mBDFOGvAoVlWaWqs3hm1AciGHSQE1rqFc/liZTyYz/Oek9yZdT5H26pH2zAFuEiTiBVPPyMuqf5VjOFPI2DGsQ==}
     hasBin: true
     peerDependencies:
-      graphql: 16.11.0
+      graphql: '*'
 
   '@as-integrations/aws-lambda@3.1.0':
     resolution: {integrity: sha512-V7H9ICXgt5KDKfEjYSRB59lEVfQqi7oSIZEeBGzPrmfhSPIHyFCNJyHi1hXdJmRb6GHpCNmtffmqRgsB0i9k3w==}
@@ -2973,8 +2973,8 @@ packages:
   '@codemirror/state@6.5.2':
     resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
 
-  '@codemirror/view@6.38.0':
-    resolution: {integrity: sha512-yvSchUwHOdupXkd7xJ0ob36jdsSR/I+/C+VbY0ffBiL5NiSTEBDfB1ZGWbbIlDd5xgdUkody+lukAdOxYrOBeg==}
+  '@codemirror/view@6.38.1':
+    resolution: {integrity: sha512-RmTOkE7hRU3OVREqFVITWHz6ocgBjv08GoePscAakgVQfciA3SGCEk7mb9IzwW61cKKmlTpHXG6DUE5Ubx+MGQ==}
 
   '@date-fns/tz@1.2.0':
     resolution: {integrity: sha512-LBrd7MiJZ9McsOgxqWX7AaxrDjcFVjWH/tIKJd7pnR7McaslGYOP1QmmiBXdJH/H/yLCT+rcQ7FaPBUxRGUtrg==}
@@ -3548,7 +3548,7 @@ packages:
   '@graphiql/react@0.28.2':
     resolution: {integrity: sha512-6PE2Ff9dXpyQMHy3oKzCjT738kY2+wdQ4Xce8+1K+G2yMGZ716Fo0i4vW3S6ErHVI4S/C76gFTQlv/pzxU5ylg==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
 
@@ -3628,7 +3628,7 @@ packages:
   '@graphql-codegen/plugin-helpers@3.1.2':
     resolution: {integrity: sha512-emOQiHyIliVOIjKVKdsI5MXj312zmRDwmHpyUTZMjfpvxq/UVAHUJIVdVf+lnjjrI+LXBTgMlTWTgHQfmICxjg==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
   '@graphql-codegen/plugin-helpers@5.1.0':
     resolution: {integrity: sha512-Y7cwEAkprbTKzVIe436TIw4w03jorsMruvCvu0HJkavaKMQbWY+lQ1RIuROgszDbxAyM35twB5/sUvYG5oW+yg==}
@@ -3640,7 +3640,7 @@ packages:
     resolution: {integrity: sha512-28GHODK2HY1NhdyRcPP3sCz0Kqxyfiz7boIZ8qIxFYmpLYnlDgiYok5fhFLVSZihyOpCs4Fa37gVHf/Q4I2FEg==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
   '@graphql-codegen/schema-ast@4.1.0':
     resolution: {integrity: sha512-kZVn0z+th9SvqxfKYgztA6PM7mhnSZaj4fiuBWvMTqA+QqQ9BBed6Pz41KuD/jr0gJtnlr2A4++/0VlpVbCTmQ==}
@@ -3724,7 +3724,7 @@ packages:
     resolution: {integrity: sha512-SEH/OWR+sHbknqZyROCFHcRrbZeUAyjCsgpVWCRjqjqRbiJiXq6TxNIIOmpXgkrXWW/2Ev4Wms6YSGJXjdCs6Q==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
   '@graphql-tools/executor-graphql-ws@2.0.5':
     resolution: {integrity: sha512-gI/D9VUzI1Jt1G28GYpvm5ckupgJ5O8mi5Y657UyuUozX34ErfVdZ81g6oVcKFQZ60LhCzk7jJeykK48gaLhDw==}
@@ -3823,13 +3823,13 @@ packages:
   '@graphql-tools/relay-operation-optimizer@6.5.18':
     resolution: {integrity: sha512-mc5VPyTeV+LwiM+DNvoDQfPqwQYhPV/cl5jOBjTgSniyaq8/86aODfMkrE2OduhQ5E00hqrkuL2Fdrgk0w1QJg==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
   '@graphql-tools/relay-operation-optimizer@7.0.19':
     resolution: {integrity: sha512-xnjLpfzw63yIX1bo+BVh4j1attSwqEkUbpJ+HAhdiSUa3FOQFfpWgijRju+3i87CwhjBANqdTZbcsqLT1hEXig==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
   '@graphql-tools/schema@10.0.23':
     resolution: {integrity: sha512-aEGVpd1PCuGEwqTXCStpEkmheTHNdMayiIKH1xDWqYp9i8yKv9FRDgkGrY4RD8TNxnf7iII+6KOBGaJ3ygH95A==}
@@ -3840,7 +3840,7 @@ packages:
   '@graphql-tools/schema@9.0.19':
     resolution: {integrity: sha512-oBRPoNBtCkk0zbUsyP4GaIzCt8C0aCI4ycIRUL67KK5pOHljKLBBtGT+Jr6hkzA74C8Gco8bpZPe7aWFjiaK2w==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
   '@graphql-tools/url-loader@8.0.31':
     resolution: {integrity: sha512-QGP3py6DAdKERHO5D38Oi+6j+v0O3rkBbnLpyOo87rmIRbwE6sOkL5JeHegHs7EEJ279fBX6lMt8ry0wBMGtyA==}
@@ -3873,7 +3873,7 @@ packages:
   '@graphql-typed-document-node/core@3.2.0':
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
   '@grpc/grpc-js@1.12.6':
     resolution: {integrity: sha512-JXUj6PI0oqqzTGvKtzOkxtpsyPRNsrmhh41TtIz/zEB6J+AUiZZ0dxWzcMwO9Ns5rmSPuMdghlTbUuqIM48d3Q==}
@@ -5282,6 +5282,7 @@ packages:
   '@smithy/middleware-endpoint@4.1.14':
     resolution: {integrity: sha512-+BGLpK5D93gCcSEceaaYhUD/+OCGXM1IDaq/jKUQ+ujB0PTWlWN85noodKw/IPFZhIKFCNEe19PGd/reUMeLSQ==}
     engines: {node: '>=18.0.0'}
+    deprecated: Please upgrade to @smithy/middleware-endpoint@4.1.15 or higher to fix a bug preventing the resolution of ENV and config file custom endpoints https://github.com/smithy-lang/smithy-typescript/issues/1645
 
   '@smithy/middleware-retry@4.1.15':
     resolution: {integrity: sha512-iKYUJpiyTQ33U2KlOZeUb0GwtzWR3C0soYcKuCnTmJrvt6XwTPQZhMfsjJZNw7PpQ3TU4Ati1qLSrkSJxnnSMQ==}
@@ -7923,10 +7924,6 @@ packages:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
     engines: {node: '>=14'}
 
-  foreground-child@3.3.1:
-    resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
-    engines: {node: '>=14'}
-
   form-data-encoder@1.7.2:
     resolution: {integrity: sha512-qfqtYan3rxrnCk1VYaA4H+Ms9xdpPqvLZa6xmMgFvhO32x7/3J/ExcTd6qpxM0vH2GdMI+poehyBZvqfMTto8A==}
 
@@ -7959,8 +7956,8 @@ packages:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
 
-  framer-motion@12.16.0:
-    resolution: {integrity: sha512-xryrmD4jSBQrS2IkMdcTmiS4aSKckbS7kLDCuhUn9110SQKG1w3zlq1RTqCblewg+ZYe+m3sdtzQA6cRwo5g8Q==}
+  framer-motion@12.23.6:
+    resolution: {integrity: sha512-dsJ389QImVE3lQvM8Mnk99/j8tiZDM/7706PCqvkQ8sSCnpmWxsgX+g0lj7r5OBVL0U36pIecCTBoIWcM2RuKw==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -8099,10 +8096,6 @@ packages:
   glob@10.4.3:
     resolution: {integrity: sha512-Q38SGlYRpVtDBPSWEylRyctn7uDeTp4NQERTLiCT1FqA9JXPYWqAVmQU6qh4r/zMM5ehxTcbaO8EjhWnvEhmyg==}
     engines: {node: '>=18'}
-    hasBin: true
-
-  glob@10.4.5:
-    resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
     hasBin: true
 
   glob@11.0.1:
@@ -9484,17 +9477,31 @@ packages:
   module-details-from-path@1.0.3:
     resolution: {integrity: sha512-ySViT69/76t8VhE1xXHK6Ch4NcDd26gx0MzKXLO+F7NOtnqH68d9zF94nT8ZWSxXh8ELOERsnJO/sWt1xZYw5A==}
 
-  motion-dom@12.16.0:
-    resolution: {integrity: sha512-Z2nGwWrrdH4egLEtgYMCEN4V2qQt1qxlKy/uV7w691ztyA41Q5Rbn0KNGbsNVDZr9E8PD2IOQ3hSccRnB6xWzw==}
+  motion-dom@12.23.6:
+    resolution: {integrity: sha512-G2w6Nw7ZOVSzcQmsdLc0doMe64O/Sbuc2bVAbgMz6oP/6/pRStKRiVRV4bQfHp5AHYAKEGhEdVHTM+R3FDgi5w==}
 
-  motion-utils@12.12.1:
-    resolution: {integrity: sha512-f9qiqUHm7hWSLlNW8gS9pisnsN7CRFRD58vNjptKdsqFLpkVnX00TNeD6Q0d27V9KzT7ySFyK1TZ/DShfVOv6w==}
+  motion-utils@12.23.6:
+    resolution: {integrity: sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==}
 
   motion@10.16.2:
     resolution: {integrity: sha512-p+PurYqfUdcJZvtnmAqu5fJgV2kR0uLFQuBKtLeFVTrYEVllI99tiOTSefVNYuip9ELTEkepIIDftNdze76NAQ==}
 
   motion@12.16.0:
     resolution: {integrity: sha512-P3HA83fnPMEGBLfKdD5vDdjH1Aa3wM3jT3+HX3fCVpy/4/lJiqvABajLgZenBu+rzkFzmeaPkvT7ouf9Tq5tVQ==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
+  motion@12.23.6:
+    resolution: {integrity: sha512-6U55IW5i6Vut2ryKEhrZKg55490k9d6qdGXZoNSf98oQgDj5D7bqTnVJotQ6UW3AS6QfbW6KSLa7/e1gy+a07g==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -10583,10 +10590,6 @@ packages:
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
-  rimraf@5.0.10:
-    resolution: {integrity: sha512-l0OE8wL34P4nJH/H2ffoaniAokM2qSmrtXHmlpvYr5AVVX8msAyW0l8NVJFDxlSK4u3Uh/f41cQheDVdnYijwQ==}
-    hasBin: true
-
   rimraf@5.0.8:
     resolution: {integrity: sha512-XSh0V2/yNhDEi8HwdIefD8MLgs4LQXPag/nEJWs3YUc3Upn+UHa1GyIkEg9xSSNt7HnkO5FjTvmcRzgf+8UZuw==}
     engines: {node: '>=18'}
@@ -11021,7 +11024,7 @@ packages:
   superagent@8.1.2:
     resolution: {integrity: sha512-6WTxW1EB6yCxV5VFOIPQruWGHqc3yI7hEmZK6h+pyk69Lk/Ut7rLUY6W/ONF2MjBuGjvmMiIpsrVJ2vjrHlslA==}
     engines: {node: '>=6.4.0 <13 || >=14'}
-    deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
+    deprecated: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
 
   supertest-graphql@1.1.4:
     resolution: {integrity: sha512-01No6WtLVu1sOxFgInAP/mG2Qn9eWwGIbM42Gih329ff1XtfMoCpbSNUmBq6SS116BEXuj17VJmaCIxC8DMQIA==}
@@ -13825,7 +13828,7 @@ snapshots:
   '@codemirror/language@6.0.0':
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.0
+      '@codemirror/view': 6.38.1
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
@@ -13835,7 +13838,7 @@ snapshots:
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.38.0':
+  '@codemirror/view@6.38.1':
     dependencies:
       '@codemirror/state': 6.5.2
       crelt: 1.0.6
@@ -16196,22 +16199,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(pg@8.16.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.16
-      fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.14.1)(pg@8.16.0)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
   '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(tedious@18.6.1)':
     dependencies:
       '@mikro-orm/core': 6.4.16
@@ -16257,22 +16244,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)(sqlite3@5.1.7)':
-    dependencies:
-      '@mikro-orm/core': 6.4.16
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.16.0)(sqlite3@5.1.7)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
   '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)(tedious@18.6.1)':
     dependencies:
       '@mikro-orm/core': 6.4.16
@@ -16289,27 +16260,11 @@ snapshots:
       - tedious
     optional: true
 
-  '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)(tedious@19.0.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.16
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.16.0)(tedious@19.0.0)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
   '@mikro-orm/knex@6.4.16(@mikro-orm/core@6.4.16)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.13.3)(sqlite3@5.1.7)
+      knex: 3.1.0(sqlite3@5.1.7)(tedious@18.6.1)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -16356,7 +16311,7 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.16.0)(tedious@19.0.0)
+      knex: 3.1.0(tedious@19.0.0)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -16383,24 +16338,6 @@ snapshots:
       - pg-native
       - sqlite3
       - supports-color
-
-  '@mikro-orm/mssql@6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.16
-      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)(tedious@19.0.0)
-      tedious: 19.0.0
-      tsqlstring: 1.0.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-    optional: true
 
   '@mikro-orm/mysql@6.4.16(@mikro-orm/core@6.4.16)':
     dependencies:
@@ -16433,23 +16370,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-
-  '@mikro-orm/mysql@6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.16
-      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(pg@8.16.0)
-      mysql2: 3.14.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
 
   '@mikro-orm/mysql@6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)':
     dependencies:
@@ -16563,26 +16483,6 @@ snapshots:
       - pg-native
       - supports-color
       - tedious
-
-  '@mikro-orm/sqlite@6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.16
-      '@mikro-orm/knex': 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - supports-color
-      - tedious
-    optional: true
 
   '@mikro-orm/sqlite@6.4.16(@mikro-orm/core@6.4.16)(tedious@18.6.1)':
     dependencies:
@@ -20983,11 +20883,6 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  foreground-child@3.3.1:
-    dependencies:
-      cross-spawn: 7.0.6
-      signal-exit: 4.1.0
-
   form-data-encoder@1.7.2: {}
 
   form-data@4.0.2:
@@ -21032,10 +20927,10 @@ snapshots:
 
   forwarded@0.2.0: {}
 
-  framer-motion@12.16.0(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  framer-motion@12.23.6(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
-      motion-dom: 12.16.0
-      motion-utils: 12.12.1
+      motion-dom: 12.23.6
+      motion-utils: 12.23.6
       tslib: 2.8.1
     optionalDependencies:
       '@emotion/is-prop-valid': 0.8.8
@@ -21185,15 +21080,6 @@ snapshots:
   glob@10.4.3:
     dependencies:
       foreground-child: 3.3.0
-      jackspeak: 3.4.3
-      minimatch: 9.0.5
-      minipass: 7.1.2
-      package-json-from-dist: 1.0.1
-      path-scurry: 1.11.1
-
-  glob@10.4.5:
-    dependencies:
-      foreground-child: 3.3.1
       jackspeak: 3.4.3
       minimatch: 9.0.5
       minipass: 7.1.2
@@ -22491,29 +22377,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(mysql2@3.14.1)(pg@8.16.0):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      mysql2: 3.14.1
-      pg: 8.16.0
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
   knex@3.1.0(mysql2@3.14.1)(tedious@18.6.1):
     dependencies:
       colorette: 2.0.19
@@ -22558,29 +22421,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(pg@8.16.0)(sqlite3@5.1.7):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.16.0
-      sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
   knex@3.1.0(pg@8.16.0)(tedious@18.6.1):
     dependencies:
       colorette: 2.0.19
@@ -22604,28 +22444,6 @@ snapshots:
       - supports-color
     optional: true
 
-  knex@3.1.0(pg@8.16.0)(tedious@19.0.0):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.16.0
-      tedious: 19.0.0
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(sqlite3@5.1.7)(tedious@18.6.1):
     dependencies:
       colorette: 2.0.19
@@ -22647,7 +22465,27 @@ snapshots:
       tedious: 18.6.1
     transitivePeerDependencies:
       - supports-color
-    optional: true
+
+  knex@3.1.0(tedious@19.0.0):
+    dependencies:
+      colorette: 2.0.19
+      commander: 10.0.1
+      debug: 4.3.4
+      escalade: 3.2.0
+      esm: 3.2.25
+      get-package-type: 0.1.0
+      getopts: 2.3.0
+      interpret: 2.2.0
+      lodash: 4.17.21
+      pg-connection-string: 2.6.2
+      rechoir: 0.8.0
+      resolve-from: 5.0.0
+      tarn: 3.0.2
+      tildify: 2.0.0
+    optionalDependencies:
+      tedious: 19.0.0
+    transitivePeerDependencies:
+      - supports-color
 
   leven@3.1.0: {}
 
@@ -23106,11 +22944,11 @@ snapshots:
 
   module-details-from-path@1.0.3: {}
 
-  motion-dom@12.16.0:
+  motion-dom@12.23.6:
     dependencies:
-      motion-utils: 12.12.1
+      motion-utils: 12.23.6
 
-  motion-utils@12.12.1: {}
+  motion-utils@12.23.6: {}
 
   motion@10.16.2:
     dependencies:
@@ -23123,7 +22961,16 @@ snapshots:
 
   motion@12.16.0(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
-      framer-motion: 12.16.0(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      framer-motion: 12.23.6(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      tslib: 2.8.1
+    optionalDependencies:
+      '@emotion/is-prop-valid': 0.8.8
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  motion@12.23.6(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      framer-motion: 12.23.6(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       tslib: 2.8.1
     optionalDependencies:
       '@emotion/is-prop-valid': 0.8.8
@@ -24251,10 +24098,6 @@ snapshots:
       glob: 7.2.3
     optional: true
 
-  rimraf@5.0.10:
-    dependencies:
-      glob: 10.4.5
-
   rimraf@5.0.8:
     dependencies:
       glob: 10.4.3
@@ -24445,7 +24288,7 @@ snapshots:
     dependencies:
       axios: 1.10.0
       axios-proxy-builder: 0.1.2
-      rimraf: 5.0.10
+      rimraf: 5.0.8
       xml2js: 0.6.2
     transitivePeerDependencies:
       - debug
