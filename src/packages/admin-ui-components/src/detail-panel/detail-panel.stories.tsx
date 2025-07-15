@@ -426,17 +426,6 @@ export const JSONFieldStory: Story = {
 	},
 };
 
-export const MediaFieldStory: Story = {
-	render: () => renderField(mockFields.find((f) => f.name === 'avatar')!),
-	parameters: {
-		docs: {
-			description: {
-				story: 'Media field for file uploads',
-			},
-		},
-	},
-};
-
 export const RichTextFieldStory: Story = {
 	render: () => renderField(mockFields.find((f) => f.name === 'bio')!),
 	parameters: {
@@ -454,17 +443,6 @@ export const MarkdownFieldStory: Story = {
 		docs: {
 			description: {
 				story: 'Markdown field with markdown editor',
-			},
-		},
-	},
-};
-
-export const RelationshipFieldStory: Story = {
-	render: () => renderField(mockFields.find((f) => f.name === 'company')!),
-	parameters: {
-		docs: {
-			description: {
-				story: 'Relationship field for selecting related entities',
 			},
 		},
 	},
