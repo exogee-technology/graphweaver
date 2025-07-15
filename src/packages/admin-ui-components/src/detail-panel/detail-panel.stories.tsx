@@ -1,6 +1,235 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { DetailPanel } from './component';
+import { Formik, Form } from 'formik';
+import { Entity, EntityField, AdminUIFilterType, DetailPanelInputComponentOption } from '../utils';
+
+// Import field components for rendering
+import {
+	BooleanField,
+	EnumField,
+	JSONField,
+	RelationshipField,
+	LinkField,
+	MediaField,
+	TextField,
+	DateField,
+	RichTextField,
+} from './fields';
+
+// Mock enum for enum field
+const mockEnum = {
+	name: 'Status',
+	values: [
+		{ name: 'ACTIVE', value: 'ACTIVE' },
+		{ name: 'INACTIVE', value: 'INACTIVE' },
+		{ name: 'PENDING', value: 'PENDING' },
+	],
+};
+
+// Mock entity for the fields
+const mockEntity: Entity = {
+	name: 'User',
+	fields: [],
+	plural: 'Users',
+	primaryKeyField: 'id',
+	fieldForDetailPanelNavigationId: 'id',
+	supportedAggregationTypes: [],
+	supportsPseudoCursorPagination: false,
+	hideInSideBar: false,
+	attributes: {
+		isReadOnly: false,
+		exportPageSize: 100,
+		clientGeneratedPrimaryKeys: false,
+	},
+};
+
+// Mock field definitions
+const mockFields: EntityField[] = [
+	{
+		name: 'id',
+		type: 'ID!',
+		attributes: { isReadOnly: true, isRequired: true },
+	},
+	{
+		name: 'name',
+		type: 'String',
+		attributes: { isReadOnly: false, isRequired: true },
+	},
+	{
+		name: 'age',
+		type: 'Number',
+		attributes: { isReadOnly: false, isRequired: false },
+	},
+	{
+		name: 'active',
+		type: 'Boolean',
+		attributes: { isReadOnly: false, isRequired: false },
+	},
+	{
+		name: 'dateOfBirth',
+		type: 'Date',
+		attributes: { isReadOnly: false, isRequired: false },
+	},
+	{
+		name: 'createdAt',
+		type: 'DateScalar',
+		attributes: { isReadOnly: false, isRequired: false },
+	},
+	{
+		name: 'status',
+		type: 'Status',
+		attributes: { isReadOnly: false, isRequired: false },
+	},
+	{
+		name: 'metadata',
+		type: 'JSON',
+		attributes: { isReadOnly: false, isRequired: false },
+	},
+	{
+		name: 'avatar',
+		type: 'GraphweaverMedia',
+		attributes: { isReadOnly: false, isRequired: false },
+	},
+	{
+		name: 'bio',
+		type: 'String',
+		attributes: { isReadOnly: false, isRequired: false },
+		detailPanelInputComponent: {
+			name: DetailPanelInputComponentOption.RICH_TEXT,
+			options: {},
+		},
+	},
+	{
+		name: 'notes',
+		type: 'String',
+		attributes: { isReadOnly: false, isRequired: false },
+		detailPanelInputComponent: {
+			name: DetailPanelInputComponentOption.MARKDOWN,
+			options: {},
+		},
+	},
+	{
+		name: 'company',
+		type: 'Company',
+		relationshipType: 'MANY_TO_ONE',
+		attributes: { isReadOnly: false, isRequired: false },
+	},
+	{
+		name: 'companyReadOnly',
+		type: 'Company',
+		relationshipType: 'MANY_TO_ONE',
+		attributes: { isReadOnly: true, isRequired: false },
+	},
+];
+
+// Mock function to render a field
+const renderField = (field: EntityField, autoFocus = false) => {
+	const panelMode = { CREATE: 'CREATE', EDIT: 'EDIT' };
+
+	const getField = ({
+		field,
+		autoFocus,
+	}: {
+		entity: Entity;
+		field: EntityField;
+		autoFocus: boolean;
+		panelMode: string;
+	}) => {
+		const isReadonly = field.attributes?.isReadOnly || false;
+
+		if (field.type === 'JSON') {
+			return <JSONField name={field.name} autoFocus={autoFocus} disabled={isReadonly} />;
+		}
+
+		if (field.type === 'Boolean') {
+			return <BooleanField field={field} autoFocus={autoFocus} disabled={isReadonly} />;
+		}
+
+		if (field.type === 'Date' || field.type === 'DateScalar') {
+			return (
+				<DateField
+					field={field}
+					filterType={
+						field.type === 'DateScalar'
+							? AdminUIFilterType.DATE_RANGE
+							: AdminUIFilterType.DATE_TIME_RANGE
+					}
+					fieldType={field.type}
+				/>
+			);
+		}
+
+		if (field.type === 'GraphweaverMedia') {
+			return <MediaField field={field} autoFocus={autoFocus} />;
+		}
+
+		if (field.relationshipType) {
+			// If the field is readonly and a relationship, show a link to the entity/entities
+			if (isReadonly) {
+				return <LinkField name={field.name} field={field} />;
+			} else {
+				return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
+			}
+		}
+
+		// Mock enum handling
+		if (field.type === 'Status') {
+			return (
+				<EnumField
+					name={field.name}
+					typeEnum={mockEnum}
+					multiple={field.isArray}
+					autoFocus={autoFocus}
+					disabled={isReadonly}
+				/>
+			);
+		}
+
+		if (
+			field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT ||
+			field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN
+		) {
+			return (
+				<RichTextField
+					key={field.name}
+					field={field}
+					isReadOnly={!!isReadonly}
+					options={field.detailPanelInputComponent?.options ?? {}}
+					asMarkdown={
+						field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN
+					}
+				/>
+			);
+		}
+
+		const fieldType = field.type === 'Number' ? 'number' : 'text';
+
+		return (
+			<TextField name={field.name} type={fieldType} disabled={isReadonly} autoFocus={autoFocus} />
+		);
+	};
+
+	return (
+		<Formik
+			initialValues={{
+				[field.name]: field.type === 'Boolean' ? false : field.type === 'Number' ? 0 : '',
+			}}
+			onSubmit={() => {}}
+		>
+			<Form>
+				<div style={{ padding: '20px', maxWidth: '400px' }}>
+					<div style={{ marginBottom: '16px' }}>
+						<label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px' }}>
+							{field.name} ({field.type})
+						</label>
+						{getField({ entity: mockEntity, field, autoFocus, panelMode: panelMode.EDIT })}
+					</div>
+				</div>
+			</Form>
+		</Formik>
+	);
+};
 
 /**
  * Note: This is a complex component that depends on many parts of the application.
@@ -114,6 +343,146 @@ The DetailPanel relies on:
 - React hooks for state management
 - Custom hooks from the utils module for schema and entity information
 `,
+			},
+		},
+	},
+};
+
+// Individual field stories
+export const StringField: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'name')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'String field with text input',
+			},
+		},
+	},
+};
+
+export const NumberField: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'age')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Number field with numeric input',
+			},
+		},
+	},
+};
+
+export const BooleanFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'active')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Boolean field with checkbox input',
+			},
+		},
+	},
+};
+
+export const DateFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'dateOfBirth')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Date field with date picker',
+			},
+		},
+	},
+};
+
+export const DateScalarFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'createdAt')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Date scalar field with date range picker',
+			},
+		},
+	},
+};
+
+export const EnumFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'status')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Enum field with dropdown selection',
+			},
+		},
+	},
+};
+
+export const JSONFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'metadata')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'JSON field with JSON editor',
+			},
+		},
+	},
+};
+
+export const RichTextFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'bio')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Rich text field with WYSIWYG editor',
+			},
+		},
+	},
+};
+
+export const MarkdownFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'notes')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Markdown field with markdown editor',
+			},
+		},
+	},
+};
+
+export const LinkFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'companyReadOnly')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Link field for read-only relationships',
+			},
+		},
+	},
+};
+
+export const AllFields: Story = {
+	render: () => (
+		<div
+			style={{
+				display: 'grid',
+				gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+				gap: '20px',
+				padding: '20px',
+			}}
+		>
+			{mockFields.map((field) => (
+				<div
+					key={field.name}
+					style={{ border: '1px solid #eee', borderRadius: '4px', padding: '16px' }}
+				>
+					{renderField(field)}
+				</div>
+			))}
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: 'All available field types rendered together',
 			},
 		},
 	},
