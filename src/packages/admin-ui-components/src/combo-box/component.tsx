@@ -138,9 +138,11 @@ export const ComboBox = ({
 						<div className={styles.selectedOptions}>
 							<div className={styles.optionPill} tabIndex={0} onKeyDown={handleOnPillKeyDown}>
 								<span className={styles.optionPillLabel}>
-									{valueArray.length > 1 || !valueArray[0].label
+									{valueArray.length > 1
 										? `${valueArray.length} Selected`
-										: valueArray[0].label}
+										: (valueArray[0].label ??
+											options.find((option) => option.value === valueArray[0])?.label ??
+											'1 Selected')}
 								</span>
 								<span className={styles.deleteOption} onClick={() => onChange([])}>
 									&times;
