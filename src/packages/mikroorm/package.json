@@ -51,6 +51,9 @@
 		"@mikro-orm/mysql": {
 			"optional": true
 		},
+		"@mikro-orm/knex": {
+			"optional": true
+		},
 		"@mikro-orm/postgresql": {
 			"optional": true
 		},
