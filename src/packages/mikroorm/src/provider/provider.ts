@@ -17,11 +17,14 @@ import {
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { LoadStrategy, Reference, RequestContext, sql } from '@mikro-orm/core';
-import { AutoPath, PopulateHint, PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { SqliteDriver } from '@mikro-orm/sqlite';
-import { MySqlDriver } from '@mikro-orm/mysql';
-import { MsSqlDriver } from '@mikro-orm/mssql';
+import {
+	AutoPath,
+	LoadStrategy,
+	PopulateHint,
+	Reference,
+	RequestContext,
+	sql,
+} from '@mikro-orm/core';
 import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
 import {
@@ -208,15 +211,17 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 	private getDbType(): DatabaseType {
 		const driver = this.em.getDriver().constructor.name;
+		// This used to import the actual drivers, but since they're optional it makes more sense
+		// to just use the strings.
 		switch (driver) {
-			case SqliteDriver.name:
-				return 'sqlite';
-			case MySqlDriver.name:
-				return 'mysql';
-			case PostgreSqlDriver.name:
-				return 'postgresql';
-			case MsSqlDriver.name:
+			case 'MsSqlDriver':
 				return 'mssql';
+			case 'MySqlDriver':
+				return 'mysql';
+			case 'PostgreSqlDriver':
+				return 'postgresql';
+			case 'SqliteDriver':
+				return 'sqlite';
 			default:
 				throw new Error(`This driver (${driver}) is not supported!`);
 		}

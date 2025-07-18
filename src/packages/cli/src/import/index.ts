@@ -39,6 +39,7 @@ const checkForMissingDependencies = (source: Source) => {
 	const requiredDependencies = [
 		'@exogee/graphweaver-mikroorm',
 		'@mikro-orm/core',
+		'@mikro-orm/knex',
 		`@mikro-orm/${source}`,
 	];
 
