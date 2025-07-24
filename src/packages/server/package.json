@@ -40,7 +40,7 @@
 		"@types/graphql-deduplicator": "2.0.2",
 		"esbuild": "0.25.1",
 		"glob": "11.0.1",
-		"vitest": "3.0.9",
+		"vitest": "3.2.4",
 		"typescript": "5.8.3"
 	},
 	"keywords": [
