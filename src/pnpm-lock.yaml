@@ -898,8 +898,8 @@ importers:
         specifier: 3.6.0
         version: 3.6.0(react@19.1.0)
       zod:
-        specifier: 3.24.4
-        version: 3.24.4
+        specifier: 4.0.8
+        version: 4.0.8
     devDependencies:
       '@storybook/addon-essentials':
         specifier: 8.6.12
@@ -12051,6 +12051,12 @@ packages:
   zod@3.24.4:
     resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
 
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
+  zod@4.0.8:
+    resolution: {integrity: sha512-+MSh9cZU9r3QKlHqrgHMTSr3QwMGv4PLfR0M4N/sYWV5/x67HgXEhIGObdBkpnX8G78pTgWnIrBL2lZcNJOtfg==}
+
 snapshots:
 
   '@adobe/css-tools@4.4.2': {}
@@ -16116,7 +16122,7 @@ snapshots:
     dependencies:
       '@jimp/types': 1.6.0
       '@jimp/utils': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-blur@1.6.0':
     dependencies:
@@ -16126,7 +16132,7 @@ snapshots:
   '@jimp/plugin-circle@1.6.0':
     dependencies:
       '@jimp/types': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-color@1.6.0':
     dependencies:
@@ -16134,7 +16140,7 @@ snapshots:
       '@jimp/types': 1.6.0
       '@jimp/utils': 1.6.0
       tinycolor2: 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-contain@1.6.0':
     dependencies:
@@ -16143,7 +16149,7 @@ snapshots:
       '@jimp/plugin-resize': 1.6.0
       '@jimp/types': 1.6.0
       '@jimp/utils': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-cover@1.6.0':
     dependencies:
@@ -16151,20 +16157,20 @@ snapshots:
       '@jimp/plugin-crop': 1.6.0
       '@jimp/plugin-resize': 1.6.0
       '@jimp/types': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-crop@1.6.0':
     dependencies:
       '@jimp/core': 1.6.0
       '@jimp/types': 1.6.0
       '@jimp/utils': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-displace@1.6.0':
     dependencies:
       '@jimp/types': 1.6.0
       '@jimp/utils': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-dither@1.6.0':
     dependencies:
@@ -16174,12 +16180,12 @@ snapshots:
     dependencies:
       '@jimp/types': 1.6.0
       '@jimp/utils': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-flip@1.6.0':
     dependencies:
       '@jimp/types': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-hash@1.6.0':
     dependencies:
@@ -16197,7 +16203,7 @@ snapshots:
   '@jimp/plugin-mask@1.6.0':
     dependencies:
       '@jimp/types': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-print@1.6.0':
     dependencies:
@@ -16210,18 +16216,18 @@ snapshots:
       parse-bmfont-binary: 1.0.6
       parse-bmfont-xml: 1.1.6
       simple-xml-to-json: 1.2.3
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-quantize@1.6.0':
     dependencies:
       image-q: 4.0.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-resize@1.6.0':
     dependencies:
       '@jimp/core': 1.6.0
       '@jimp/types': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-rotate@1.6.0':
     dependencies:
@@ -16230,7 +16236,7 @@ snapshots:
       '@jimp/plugin-resize': 1.6.0
       '@jimp/types': 1.6.0
       '@jimp/utils': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/plugin-threshold@1.6.0':
     dependencies:
@@ -16239,11 +16245,11 @@ snapshots:
       '@jimp/plugin-hash': 1.6.0
       '@jimp/types': 1.6.0
       '@jimp/utils': 1.6.0
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/types@1.6.0':
     dependencies:
-      zod: 3.24.4
+      zod: 3.25.76
 
   '@jimp/utils@1.6.0':
     dependencies:
@@ -26015,3 +26021,7 @@ snapshots:
   zen-observable@0.8.15: {}
 
   zod@3.24.4: {}
+
+  zod@3.25.76: {}
+
+  zod@4.0.8: {}
