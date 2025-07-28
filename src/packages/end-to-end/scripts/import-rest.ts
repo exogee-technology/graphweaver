@@ -55,6 +55,13 @@ async function main() {
 		await execAsync('pwd');
 		await execAsync('pnpm i --ignore-workspace --no-lockfile');
 
+		// On Windows, add a small delay to allow filesystem operations to complete
+		// This prevents race conditions with pnpm symlink creation
+		if (process.platform === 'win32') {
+			console.log('Waiting for filesystem operations to complete on Windows...');
+			await new Promise((resolve) => setTimeout(resolve, 500));
+		}
+
 		const tsJson = JSON.parse(await fs.promises.readFile('tsconfig.json', 'utf-8'));
 		delete tsJson.references;
 		await fs.promises.writeFile('tsconfig.json', JSON.stringify(tsJson, null, 2));
