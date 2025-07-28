@@ -43,6 +43,13 @@ async function main() {
 		await execAsync('pwd');
 		await execAsync('pnpm i --ignore-workspace --no-lockfile');
 
+		// On Windows, add a small delay to allow filesystem operations to complete
+		// This prevents race conditions with pnpm symlink creation
+		if (process.platform === 'win32') {
+			console.log('Waiting for filesystem operations to complete on Windows...');
+			await new Promise((resolve) => setTimeout(resolve, 500));
+		}
+
 		// Copy the database
 		await fs.promises.mkdir('databases');
 		await copyFile('../databases/database.sqlite', 'databases/database.sqlite');
