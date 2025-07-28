@@ -25,7 +25,7 @@
 		"format": "pnpm prettier",
 		"lint:fix": "eslint . --fix",
 		"lint": "eslint .",
-		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build:packages && pnpm packages:pack",
+		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build:packages && sleep 0.5 && pnpm packages:pack",
 		"packages:pack": "turbo --filter \"!./examples/**\" package:pack -- --pack-destination ../../.packs",
 		"prettier": "prettier --write .",
 		"publish:dry": "pnpm build && pnpm -r publish --no-git-checks --access public --dry-run",
