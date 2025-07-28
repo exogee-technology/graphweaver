@@ -50,7 +50,7 @@
 		"react-syntax-highlighter": "15.6.1",
 		"tiptap-markdown": "0.8.10",
 		"wouter": "3.6.0",
-		"zod": "3.24.4"
+		"zod": "4.0.10"
 	},
 	"peerDependencies": {
 		"formik": "^2.4.6",
