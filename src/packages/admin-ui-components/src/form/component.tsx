@@ -95,7 +95,7 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 						// Return an object with field-specific errors
 						const fieldErrors: Record<string, string> = {};
 
-						error.errors.forEach((err) => {
+						error.issues.forEach((err) => {
 							const fieldPath = String(err.path[0]);
 							fieldErrors[fieldPath] = err.message;
 						});
