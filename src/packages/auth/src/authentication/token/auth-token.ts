@@ -1,14 +1,15 @@
-import jwt, { Algorithm, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
 import { logger } from '@exogee/logger';
+import jwt, { Algorithm, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 import ms, { StringValue } from 'ms';
 
-import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
-import { AuthToken } from '../entities/token';
-import { UserProfile } from '../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../types';
+import { UserProfile } from '../../user-profile';
+import { AuthToken } from '../entities/token';
+import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
 
 const expiresIn = process.env.AUTH_JWT_EXPIRES_IN ?? '8h';
+const expiresInExtended = process.env.AUTH_JWT_EXPIRES_IN_EXTENDED ?? '7d';
 const mfaExpiresIn = process.env.AUTH_JWT_CHALLENGE_EXPIRES_IN ?? '30m';
 // Decode the two environment variables above from base64 and save as vars
 const publicKey = process.env.AUTH_PUBLIC_KEY_PEM_BASE64
@@ -68,14 +69,14 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 		}
 	}
 
-	async generateToken(user: UserProfile<unknown>) {
+	async generateToken(user: UserProfile<unknown>, extended = false) {
 		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		const payload = { sub: user.id, amr: [AuthenticationMethod.PASSWORD] };
 
 		try {
 			const authToken = jwt.sign(payload, privateKey, {
 				algorithm,
-				expiresIn: expiresIn as StringValue,
+				expiresIn: (extended ? expiresInExtended : expiresIn) as StringValue,
 			});
 			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 			return token;
