@@ -20,8 +20,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@aws-sdk/client-s3": "3.850.0",
-		"@aws-sdk/s3-request-presigner": "3.850.0",
+		"@aws-sdk/client-s3": "3.859.0",
+		"@aws-sdk/s3-request-presigner": "3.859.0",
 		"@exogee/logger": "workspace:*",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*"
