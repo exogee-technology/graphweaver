@@ -25,17 +25,26 @@ const isObjectWithKeys = <T extends Record<string, unknown>, K extends keyof T, 
 };
 
 export const transformValueForForm = (field: EntityField, value: unknown, entityByType: (entityType: string) => Entity) => {
-	console.log({ name: field.name, field, value });
-	if (field.relationshipType === 'MANY_TO_ONE') {
+	if (field.relationshipType) {
 		const relatedEntity = entityByType(field.type);
-		const relatedEntityPrimaryKeyField = relatedEntity.primaryKeyField;
-		const relatedEntitySummaryField = relatedEntity.summaryField ?? relatedEntityPrimaryKeyField;
+		const relatedEntityPrimaryKeyField = relatedEntity?.primaryKeyField;
+		const relatedEntitySummaryField = relatedEntity?.summaryField ?? relatedEntityPrimaryKeyField;
 
-		if (isObjectWithKeys(value, relatedEntityPrimaryKeyField, relatedEntitySummaryField)) {
-			return {
-				value: value[relatedEntityPrimaryKeyField],
-				label: value[relatedEntitySummaryField],
-			};
+		if (field.relationshipType === 'MANY_TO_ONE') {
+			if (isObjectWithKeys(value, relatedEntityPrimaryKeyField, relatedEntitySummaryField)) {
+				return {
+					value: value[relatedEntityPrimaryKeyField],
+					label: value[relatedEntitySummaryField],
+				};
+			}
+		} else if (field.relationshipType === 'MANY_TO_MANY') {
+			if (Array.isArray(value)) {
+				return value.map((item) => ({
+					value: item[relatedEntityPrimaryKeyField],
+					label: item[relatedEntitySummaryField],
+				}));
+			}
+			return value;
 		}
 	}
 	return value;

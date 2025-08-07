@@ -314,6 +314,8 @@ const DetailForm = ({
 					);
 				}
 
+				// console.log({ transformedValues });
+
 				await onSubmit(transformedValues, actions);
 			} catch (error: any) {
 				console.error(error);
@@ -336,7 +338,9 @@ const DetailForm = ({
 			onSubmit={submit}
 			onReset={onCancel}
 		>
-			{({ isSubmitting }) => (
+			{({ isSubmitting, values }) => { 
+				// console.log({ values });
+				return (
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
@@ -373,7 +377,7 @@ const DetailForm = ({
 					</div>
 					<PersistForm name={persistName} />
 				</Form>
-			)}
+			)}}
 		</Formik>
 	);
 };
@@ -425,10 +429,6 @@ export const DetailPanel = () => {
 		customFields?.get(selectedEntity.name) || authCustomFields?.get(selectedEntity.name) || [];
 
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
-		// We don't show Many to Many relationships in the form yet because we don't have
-		// a good editing interface for them.
-		if (field.relationshipType === 'MANY_TO_MANY') return false;
-
 		// We also don't show the related ID field for the same reason
 		if (field.relationshipType && field.name === selectedEntity.primaryKeyField) return false;
 
@@ -464,9 +464,7 @@ export const DetailPanel = () => {
 		{} as Record<string, any>
 	);
 
-	// if (initialValues?.id) {
-	// 	console.log({ initialValues });
-	// }
+	// console.log({ initialValues });
 
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));

@@ -53,7 +53,6 @@ export const ComboBox = ({
 	['data-testid']: testId,
 }: SelectProps) => {
 	const valueArray = arrayify(value);
-	console.log({ options, valueArray })
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 	const dropdownRef = useRef<HTMLUListElement>(null);

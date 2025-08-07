@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
 
-import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
+import { ComboBox, SelectMode, SelectOption } from '../../combo-box';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 import { useDataTransform } from '../use-data-transform';
@@ -34,14 +34,15 @@ export const RelationshipField = ({
 	useDataTransform({
 		field,
 		transform: async (value: unknown) => {
-			if (value === null || value === undefined || (Array.isArray(value) && value.length === 0)) {
-				return undefined;
+			if (value === null || value === undefined) {
+				return value;
 			}
 
 			let arrayifiedValue = value;
 			if (!Array.isArray(arrayifiedValue)) arrayifiedValue = [value];
 
 			const mappedResults = (arrayifiedValue as SelectOption[]).map((item) => ({
+				// NOTE: Just the ID should be fine to create a valid link record
 				[relatedEntity.primaryKeyField]: item.value,
 			}));
 
@@ -72,12 +73,27 @@ export const RelationshipField = ({
 		return { label: item[label], value: item[relatedEntity.primaryKeyField] };
 	});
 
+	const onChange = (value: SelectOption | SelectOption[]) => {
+		let result: SelectOption | SelectOption[] | null = value;
+
+		if (mode(field) === SelectMode.SINGLE) {
+			if (Array.isArray(value)) {
+				if (value.length === 0) {
+					result = null;
+				} else {
+					result = value[0];
+				}
+			}
+		}
+		helpers.setValue(result);
+	};
+
 	if (data?.result) {
 		return (
 			<ComboBox
 				options={options}
 				value={value}
-				onChange={helpers.setValue}
+				onChange={onChange}
 				mode={mode(field)}
 				autoFocus={autoFocus}
 			/>
