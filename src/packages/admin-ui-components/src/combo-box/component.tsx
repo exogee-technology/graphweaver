@@ -125,8 +125,6 @@ export const ComboBox = ({
 	// Store the selected ids in an array for easy lookup
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [value]);
 
-	// console.log(isOpen, options.length);
-
 	return (
 		<div className={styles.select} data-testid={testId}>
 			<div
