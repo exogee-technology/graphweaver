@@ -38,7 +38,7 @@ import {
 import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 import styles from './styles.module.css';
 import { dataTransforms } from './use-data-transform';
-import { isValueEmpty, parseValueForForm } from './util';
+import { isValueEmpty, parseValueForForm, transformValueForForm } from './util';
 
 interface ResultBaseType {
 	id: string;
@@ -91,6 +91,7 @@ const filterFieldsForSubmission = (initialValues: Record<string, any>, values: R
 		}
 
 		if (!isEqual(initialValues[key], value) || field?.attributes?.isRequired) {
+			// if (!isEqual(initialValues[key], value) || field?.attributes?.isRequired || field?.apiOptions?.requiredForUpdate) {
 			result[key] = value;
 		}
 	}
@@ -455,12 +456,17 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce(
 		(acc, field) => {
 			const result = savedSessionState ?? data?.result;
-			const value = parseValueForForm(field.type, result?.[field.name as keyof typeof result]);
-			acc[field.name] = value ?? field.initialValue ?? undefined;
+			const value = parseValueForForm(field.type, result?.[field.name as keyof typeof result], selectedEntity);
+			const transformedValue = transformValueForForm(field, value, entityByType);
+			acc[field.name] = transformedValue ?? field.initialValue ?? undefined;
 			return acc;
 		},
 		{} as Record<string, any>
 	);
+
+	// if (initialValues?.id) {
+	// 	console.log({ initialValues });
+	// }
 
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));

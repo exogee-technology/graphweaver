@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
 import { useCombobox } from 'downshift';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { ChevronDownIcon } from '../assets';
-import { Spinner } from '../spinner';
 import { useAutoFocus } from '../hooks';
+import { Spinner } from '../spinner';
 import styles from './styles.module.css';
 
 export enum SelectMode {
@@ -53,6 +53,7 @@ export const ComboBox = ({
 	['data-testid']: testId,
 }: SelectProps) => {
 	const valueArray = arrayify(value);
+	console.log({ options, valueArray })
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 	const dropdownRef = useRef<HTMLUListElement>(null);
@@ -124,6 +125,8 @@ export const ComboBox = ({
 
 	// Store the selected ids in an array for easy lookup
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [value]);
+
+	// console.log(isOpen, options.length);
 
 	return (
 		<div className={styles.select} data-testid={testId}>
