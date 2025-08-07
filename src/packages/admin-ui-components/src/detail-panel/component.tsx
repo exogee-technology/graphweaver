@@ -335,7 +335,7 @@ const DetailForm = ({
 			onSubmit={submit}
 			onReset={onCancel}
 		>
-			{({ isSubmitting, values }) => { 
+			{({ isSubmitting }) => { 
 				return (
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
@@ -452,15 +452,13 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce(
 		(acc, field) => {
 			const result = savedSessionState ?? data?.result;
-			const value = parseValueForForm(field.type, result?.[field.name as keyof typeof result], selectedEntity);
+			const value = parseValueForForm(field.type, result?.[field.name as keyof typeof result]);
 			const transformedValue = transformValueForForm(field, value, entityByType);
 			acc[field.name] = transformedValue ?? field.initialValue ?? undefined;
 			return acc;
 		},
 		{} as Record<string, any>
 	);
-
-	// console.log({ initialValues });
 
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));
