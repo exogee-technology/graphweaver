@@ -91,7 +91,6 @@ const filterFieldsForSubmission = (initialValues: Record<string, any>, values: R
 		}
 
 		if (!isEqual(initialValues[key], value) || field?.attributes?.isRequired) {
-			// if (!isEqual(initialValues[key], value) || field?.attributes?.isRequired || field?.apiOptions?.requiredForUpdate) {
 			result[key] = value;
 		}
 	}
@@ -314,8 +313,6 @@ const DetailForm = ({
 					);
 				}
 
-				// console.log({ transformedValues });
-
 				await onSubmit(transformedValues, actions);
 			} catch (error: any) {
 				console.error(error);
@@ -339,7 +336,6 @@ const DetailForm = ({
 			onReset={onCancel}
 		>
 			{({ isSubmitting, values }) => { 
-				// console.log({ values });
 				return (
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
