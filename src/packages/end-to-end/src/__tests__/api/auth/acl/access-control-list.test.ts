@@ -163,7 +163,7 @@ describe('ACL - Access Control Lists', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
