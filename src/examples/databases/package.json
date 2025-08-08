@@ -37,8 +37,8 @@
 		"json-bigint-patch": "0.0.8",
 		"mysql2": "3.14.0",
 		"pg": "8.13.3",
-		"react": "19.1.0",
-		"react-dom": "19.1.0",
+		"react": "19.1.1",
+		"react-dom": "19.1.1",
 		"react-syntax-highlighter": "15.6.1"
 	},
 	"devDependencies": {
