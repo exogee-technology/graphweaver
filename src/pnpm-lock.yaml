@@ -85,7 +85,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -290,7 +290,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -345,7 +345,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -388,7 +388,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -510,7 +510,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(pg@8.13.3)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -617,22 +617,22 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       '@nivo/bar':
-        specifier: 0.88.0
-        version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 0.99.0
+        version: 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@nivo/core':
-        specifier: 0.88.0
-        version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 0.99.0
+        version: 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@nivo/line':
-        specifier: 0.88.0
-        version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 0.99.0
+        version: 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@nivo/pie':
-        specifier: 0.88.0
-        version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 0.99.0
+        version: 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -701,17 +701,20 @@ importers:
         specifier: workspace:*
         version: link:../../packages/logger
       '@nivo/bump':
-        specifier: 0.88.0
-        version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 0.99.0
+        version: 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@nivo/core':
-        specifier: 0.88.0
-        version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 0.99.0
+        version: 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@nivo/line':
-        specifier: 0.88.0
-        version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 0.99.0
+        version: 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming':
+        specifier: 0.99.0
+        version: 0.99.0(react@19.1.0)
       '@nivo/tooltip':
-        specifier: 0.88.0
-        version: 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 0.99.0
+        version: 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0
@@ -1330,19 +1333,19 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/mssql':
         specifier: '6'
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/mysql':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/postgresql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       chokidar:
         specifier: 4.0.3
         version: 4.0.3
@@ -1624,7 +1627,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -1686,19 +1689,19 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)(tedious@19.0.0)
       '@mikro-orm/mssql':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
       '@mikro-orm/mysql':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
       '@mikro-orm/postgresql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
       '@types/node':
         specifier: 22.13.14
         version: 22.13.14
@@ -2049,7 +2052,7 @@ packages:
     engines: {node: '>=14.16.0'}
     deprecated: Apollo Server v4 is deprecated and will transition to end-of-life on January 26, 2026. As long as you are already using a non-EOL version of Node.js, upgrading to v5 should take only a few minutes. See https://www.apollographql.com/docs/apollo-server/previous-versions for details.
     peerDependencies:
-      graphql: ^16.6.0
+      graphql: 16.11.0
 
   '@apollo/usage-reporting-protobuf@4.1.1':
     resolution: {integrity: sha512-u40dIUePHaSKVshcedO7Wp+mPiZsaU6xjv9J+VyxpoU/zL6Jle+9zWeG98tr/+SZ0nZ4OXhrbb8SNr0rAPpIDA==}
@@ -4464,68 +4467,81 @@ packages:
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
 
-  '@nivo/annotations@0.88.0':
-    resolution: {integrity: sha512-NXE+1oIUn+EGWMQpnpeRMLgi2wyuzhGDoJQY4OUHissCUiNotid2oNQ/PXJwN0toiu+/j9SyhzI32xr70OPi7Q==}
+  '@nivo/annotations@0.99.0':
+    resolution: {integrity: sha512-jCuuXPbvpaqaz4xF7k5dv0OT2ubn5Nt0gWryuTe/8oVsC/9bzSuK8bM9vBty60m9tfO+X8vUYliuaCDwGksC2g==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/arcs@0.88.0':
-    resolution: {integrity: sha512-q7MHxT71s/KKlDDtSJS4L9+/JIa5HPZZrDr3ZFECLnvp0TC1qzyFMtVevN2CsXopSTj8poN4uFXPWxYVXOq8vg==}
+  '@nivo/arcs@0.99.0':
+    resolution: {integrity: sha512-UcvWLQPl+A3APk2Gm74N5xDfT+ATnVs2XkP73WxhYPWJk+dBzF00cndA5g/dptOwdFBvvo62VgcCsNiwUsjKTw==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/axes@0.88.0':
-    resolution: {integrity: sha512-jF7aIxzTNayV5cI1J/b9Q1FfpMBxTXGk3OwSigXMSfYWlliskDn2u0qGRLiYhuXFdQAWIp4oXsO1GcAQ0eRVdg==}
+  '@nivo/axes@0.99.0':
+    resolution: {integrity: sha512-3KschnmEL0acRoa7INSSOSEFwJLm54aZwSev7/r8XxXlkgRBriu6ReZy/FG0wfN+ljZ4GMvx+XyIIf6kxzvrZg==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/bar@0.88.0':
-    resolution: {integrity: sha512-wckwuHWeCikxGvvdRfGL+dVFsUD9uHk1r9s7bWUfOD+p8BWhxtYqfXpHolEfgGg3UyPaHtpGA7P4zgE5vgo7gQ==}
+  '@nivo/bar@0.99.0':
+    resolution: {integrity: sha512-9yfMn7H6UF/TqtCwVZ/vihVAXUff9wWvSaeF2Z1DCfgr5S07qs31Qb2p0LZA+YgCWpaU7zqkeb3VZ4WCpZbrDA==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/bump@0.88.0':
-    resolution: {integrity: sha512-I/4LHIDjDpG7whSvc6nIgoFxENOGmzTSlnmCplMyGSmNKIZEyIgTl9jZLYWzl36/uoPSg+BYXfLeAmkvEdpwWQ==}
+  '@nivo/bump@0.99.0':
+    resolution: {integrity: sha512-NBaWhQFbCu0vgJJxHPpX4Q6i3iaqlXg6D2rW6GBNr7J1SUpJ2WbauzrOhFGt5EwwvV8vQbsStEyHKkhFfT94Nw==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/colors@0.88.0':
-    resolution: {integrity: sha512-IZ+leYIqAlo7dyLHmsQwujanfRgXyoQ5H7PU3RWLEn1PP0zxDKLgEjFEDADpDauuslh2Tx0L81GNkWR6QSP0Mw==}
+  '@nivo/canvas@0.99.0':
+    resolution: {integrity: sha512-UxA8zb+NPwqmNm81hoyUZSMAikgjU1ukLf4KybVNyV8ejcJM+BUFXsb8DxTcLdt4nmCFHqM56GaJQv2hnAHmzg==}
+
+  '@nivo/colors@0.99.0':
+    resolution: {integrity: sha512-hyYt4lEFIfXOUmQ6k3HXm3KwhcgoJpocmoGzLUqzk7DzuhQYJo+4d5jIGGU0N/a70+9XbHIdpKNSblHAIASD3w==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/core@0.88.0':
-    resolution: {integrity: sha512-XjUkA5MmwjLP38bdrJwn36Gj7T5SYMKD55LYQp/1nIJPdxqJ38dUfE4XyBDfIEgfP6yrHOihw3C63cUdnUBoiw==}
+  '@nivo/core@0.99.0':
+    resolution: {integrity: sha512-olCItqhPG3xHL5ei+vg52aB6o+6S+xR2idpkd9RormTTUniZb8U2rOdcQojOojPY5i9kVeQyLFBpV4YfM7OZ9g==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/legends@0.88.0':
-    resolution: {integrity: sha512-d4DF9pHbD8LmGJlp/Gp1cF4e8y2wfQTcw3jVhbZj9zkb7ZWB7JfeF60VHRfbXNux9bjQ9U78/SssQqueVDPEmg==}
+  '@nivo/legends@0.99.0':
+    resolution: {integrity: sha512-P16FjFqNceuTTZphINAh5p0RF0opu3cCKoWppe2aRD9IuVkvRm/wS5K1YwMCxDzKyKh5v0AuTlu9K6o3/hk8hA==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/line@0.88.0':
-    resolution: {integrity: sha512-hFTyZ3BdAZvq2HwdwMj2SJGUeodjEW+7DLtFMIIoVIxmjZlAs3z533HcJ9cJd3it928fDm8SF/rgHs0TztYf9Q==}
+  '@nivo/line@0.99.0':
+    resolution: {integrity: sha512-bAqTXSjpnpcGMs341qWFUi7hJTqQiNoSeJHsYPuPS3icuXPcp3WETQH+zRZACeEF79ZigeOWCW+dzODgne1y9w==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/pie@0.88.0':
-    resolution: {integrity: sha512-BE6dFWlGne1SnaEkFHNbg0sZBiwtcIqBFwmMRJ0F11SiKOzVeJyq3KiyY1I2ySSCx5VR1V8/MNBXzXFu3vJMAQ==}
+  '@nivo/pie@0.99.0':
+    resolution: {integrity: sha512-zUbo8UdLndp2RMljrOqitAKKEnl7YypkJrOzjKLk8jQGU7qqUKtgFoJIPhiBsvNPs3xtX2KwgtS1+JKNTNns7A==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/scales@0.88.0':
-    resolution: {integrity: sha512-HbpxkQp6tHCltZ1yDGeqdLcaJl5ze54NPjurfGtx/Uq+H5IQoBd4Tln49bUar5CsFAMsXw8yF1HQvASr7I1SIA==}
+  '@nivo/scales@0.99.0':
+    resolution: {integrity: sha512-g/2K4L6L8si6E2BWAHtFVGahtDKbUcO6xHJtlIZMwdzaJc7yB16EpWLK8AfI/A42KadLhJSJqBK3mty+c7YZ+w==}
 
-  '@nivo/tooltip@0.88.0':
-    resolution: {integrity: sha512-iEjVfQA8gumAzg/yUinjTwswygCkE5Iwuo8opwnrbpNIqMrleBV+EAKIgB0PrzepIoW8CFG/SJhoiRfbU8jhOw==}
+  '@nivo/text@0.99.0':
+    resolution: {integrity: sha512-ho3oZpAZApsJNjsIL5WJSAdg/wjzTBcwo1KiHBlRGUmD+yUWO8qp7V+mnYRhJchwygtRVALlPgZ/rlcW2Xr/MQ==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
-  '@nivo/voronoi@0.88.0':
-    resolution: {integrity: sha512-MyiNLvODthFoMjQ7Wjp693nogbTmVEx8Yn/7QkJhyPQbFyyA37TF/D1a/ox4h2OslXtP6K9QFN+42gB/zu7ixw==}
+  '@nivo/theming@0.99.0':
+    resolution: {integrity: sha512-KvXlf0nqBzh/g2hAIV9bzscYvpq1uuO3TnFN3RDXGI72CrbbZFTGzprPju3sy/myVsauv+Bb+V4f5TZ0jkYKRg==}
     peerDependencies:
-      react: '>= 16.14.0 < 19.0.0'
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
+
+  '@nivo/tooltip@0.99.0':
+    resolution: {integrity: sha512-weoEGR3xAetV4k2P6k96cdamGzKQ5F2Pq+uyDaHr1P3HYArM879Pl+x+TkU0aWjP6wgUZPx/GOBiV1Hb1JxIqg==}
+    peerDependencies:
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
+
+  '@nivo/voronoi@0.99.0':
+    resolution: {integrity: sha512-KfmMdidbYzhiUCki1FG4X4nHEFT4loK8G5bMBnmCl9U+S78W+gvkfrgD2Aoqp/Q9yKQvr3Y8UcZKSFZnn3HgjQ==}
+    peerDependencies:
+      react: ^16.14 || ^17.0 || ^18.0 || ^19.0
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -6000,6 +6016,9 @@ packages:
   '@types/d3-format@1.4.5':
     resolution: {integrity: sha512-mLxrC1MSWupOSncXN/HOlWUAAIffAEBaI4+PKy2uMPsKe4FNZlk7qrbTjmzJXITQQqBHivaks4Td18azgqnotA==}
 
+  '@types/d3-interpolate@3.0.4':
+    resolution: {integrity: sha512-mgLPETlrpVV1YRJIglr4Ez47g7Yxjl1lj7YKsiMCb27VJH9W8NVM6Bb9d8kkpG/uAQS5AmbA48q2IAolKKo1MA==}
+
   '@types/d3-path@3.1.0':
     resolution: {integrity: sha512-P2dlU/q51fkOc/Gfl3Ul9kicV7l+ra934qBFXCFhrZMOL6du1TM0pm1ThYvENukyOn5h9v+yMJ9Fn5JK4QozrQ==}
 
@@ -6167,9 +6186,6 @@ packages:
 
   '@types/pluralize@0.0.33':
     resolution: {integrity: sha512-JOqsl+ZoCpP4e8TDke9W79FDcSgPAR0l6pixx2JHkhnRjvShyYiAYw2LVsnA7K08Y6DeOnaU6ujmENO4os/cYg==}
-
-  '@types/prop-types@15.7.13':
-    resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
 
   '@types/qs@6.14.0':
     resolution: {integrity: sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ==}
@@ -10715,6 +10731,12 @@ packages:
     peerDependencies:
       react: '>= 0.14.0'
 
+  react-virtualized-auto-sizer@1.0.26:
+    resolution: {integrity: sha512-CblNyiNVw2o+hsa5/49NH2ogGxZ+t+3aweRvNSq7TVjDIlwk7ir4lencEg5HxHeSzwNarSkNkiu0qJSOXtxm5A==}
+    peerDependencies:
+      react: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
     engines: {node: '>=0.10.0'}
@@ -11309,7 +11331,7 @@ packages:
   superagent@8.1.2:
     resolution: {integrity: sha512-6WTxW1EB6yCxV5VFOIPQruWGHqc3yI7hEmZK6h+pyk69Lk/Ut7rLUY6W/ONF2MjBuGjvmMiIpsrVJ2vjrHlslA==}
     engines: {node: '>=6.4.0 <13 || >=14'}
-    deprecated: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
+    deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
 
   supertest-graphql@1.1.4:
     resolution: {integrity: sha512-01No6WtLVu1sOxFgInAP/mG2Qn9eWwGIbM42Gih329ff1XtfMoCpbSNUmBq6SS116BEXuj17VJmaCIxC8DMQIA==}
@@ -11754,6 +11776,12 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  use-debounce@10.0.5:
+    resolution: {integrity: sha512-Q76E3lnIV+4YT9AHcrHEHYmAd9LKwUAbPXDm7FlqVGDHiSOhX3RDjT8dm0AxbJup6WgOb1YEcKyCr11kBJR5KQ==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      react: '*'
 
   use-sidecar@1.1.3:
     resolution: {integrity: sha512-Fedw0aZvkhynoPYlA5WXrMCAMm+nSWdZt6lzJQ7Ok8S6Q+VsHmHpRWndVRJ8Be0ZbkfPc5LRYH+5XrzXcEeLRQ==}
@@ -16508,7 +16536,7 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.14.1)(tedious@18.6.1)
+      knex: 3.1.0(mysql2@3.14.1)(pg@8.16.0)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -16583,7 +16611,7 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.14.0)(pg@8.16.0)
+      knex: 3.1.0(pg@8.16.0)(tedious@19.0.0)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -16644,7 +16672,7 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
-      knex: 3.1.0(sqlite3@5.1.7)(tedious@18.6.1)
+      knex: 3.1.0(pg@8.13.3)(sqlite3@5.1.7)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -16999,20 +17027,24 @@ snapshots:
       '@tybys/wasm-util': 0.10.0
     optional: true
 
-  '@nivo/annotations@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/annotations@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/colors': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/colors': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
       '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       lodash: 4.17.21
       react: 19.1.0
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/arcs@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/arcs@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/colors': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/colors': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/text': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
+      '@react-spring/core': 9.7.4(react@19.1.0)
       '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@types/d3-shape': 3.1.6
       d3-shape: 3.2.0
@@ -17020,10 +17052,12 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/axes@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/axes@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/scales': 0.88.0
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/scales': 0.99.0
+      '@nivo/text': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
       '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@types/d3-format': 1.4.5
       '@types/d3-time-format': 2.3.4
@@ -17033,15 +17067,18 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/bar@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/bar@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/annotations': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/axes': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/colors': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/legends': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/scales': 0.88.0
-      '@nivo/tooltip': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/annotations': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/axes': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/canvas': 0.99.0
+      '@nivo/colors': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/legends': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/scales': 0.99.0
+      '@nivo/text': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
+      '@nivo/tooltip': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@types/d3-scale': 4.0.8
       '@types/d3-shape': 3.1.6
@@ -17052,15 +17089,17 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/bump@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/bump@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/axes': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/colors': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/legends': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/scales': 0.88.0
-      '@nivo/tooltip': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/voronoi': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/axes': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/colors': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/legends': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/scales': 0.99.0
+      '@nivo/text': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
+      '@nivo/tooltip': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/voronoi': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@types/d3-scale': 4.0.8
       '@types/d3-shape': 3.1.6
@@ -17070,25 +17109,27 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/colors@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/canvas@0.99.0': {}
+
+  '@nivo/colors@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
       '@types/d3-color': 3.1.3
       '@types/d3-scale': 4.0.8
       '@types/d3-scale-chromatic': 3.0.3
-      '@types/prop-types': 15.7.13
       d3-color: 3.1.0
       d3-scale: 4.0.2
       d3-scale-chromatic: 3.1.0
       lodash: 4.17.21
-      prop-types: 15.8.1
       react: 19.1.0
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/core@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/core@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/tooltip': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
+      '@nivo/tooltip': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@types/d3-shape': 3.1.6
       d3-color: 3.1.0
@@ -17099,72 +17140,96 @@ snapshots:
       d3-shape: 3.2.0
       d3-time-format: 3.0.0
       lodash: 4.17.21
-      prop-types: 15.8.1
       react: 19.1.0
+      react-virtualized-auto-sizer: 1.0.26(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      use-debounce: 10.0.5(react@19.1.0)
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/legends@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/legends@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/colors': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/colors': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/text': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
       '@types/d3-scale': 4.0.8
       d3-scale: 4.0.2
       react: 19.1.0
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/line@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/line@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/annotations': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/axes': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/colors': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/legends': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/scales': 0.88.0
-      '@nivo/tooltip': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/voronoi': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/annotations': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/axes': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/colors': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/legends': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/scales': 0.99.0
+      '@nivo/theming': 0.99.0(react@19.1.0)
+      '@nivo/tooltip': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/voronoi': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      d3-shape: 3.2.0
-      react: 19.1.0
-    transitivePeerDependencies:
-      - react-dom
-
-  '@nivo/pie@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      '@nivo/arcs': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/colors': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/legends': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/tooltip': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@types/d3-shape': 3.1.6
       d3-shape: 3.2.0
       react: 19.1.0
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/scales@0.88.0':
+  '@nivo/pie@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
+      '@nivo/arcs': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/colors': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/legends': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
+      '@nivo/tooltip': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@types/d3-shape': 3.1.6
+      d3-shape: 3.2.0
+      react: 19.1.0
+    transitivePeerDependencies:
+      - react-dom
+
+  '@nivo/scales@0.99.0':
+    dependencies:
+      '@types/d3-interpolate': 3.0.4
       '@types/d3-scale': 4.0.8
       '@types/d3-time': 1.1.4
       '@types/d3-time-format': 3.0.4
+      d3-interpolate: 3.0.1
       d3-scale: 4.0.2
       d3-time: 1.1.0
       d3-time-format: 3.0.0
       lodash: 4.17.21
 
-  '@nivo/tooltip@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/text@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
       '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react: 19.1.0
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/voronoi@0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@nivo/theming@0.99.0(react@19.1.0)':
     dependencies:
-      '@nivo/core': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@nivo/tooltip': 0.88.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      lodash: 4.17.21
+      react: 19.1.0
+
+  '@nivo/tooltip@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
+      '@react-spring/web': 9.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+    transitivePeerDependencies:
+      - react-dom
+
+  '@nivo/voronoi@0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@nivo/core': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@nivo/theming': 0.99.0(react@19.1.0)
+      '@nivo/tooltip': 0.99.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@types/d3-delaunay': 6.0.4
       '@types/d3-scale': 4.0.8
       d3-delaunay: 6.0.4
@@ -18915,6 +18980,10 @@ snapshots:
 
   '@types/d3-format@1.4.5': {}
 
+  '@types/d3-interpolate@3.0.4':
+    dependencies:
+      '@types/d3-color': 3.1.3
+
   '@types/d3-path@3.1.0': {}
 
   '@types/d3-scale-chromatic@3.0.3': {}
@@ -19087,8 +19156,6 @@ snapshots:
       '@types/node': 22.13.14
 
   '@types/pluralize@0.0.33': {}
-
-  '@types/prop-types@15.7.13': {}
 
   '@types/qs@6.14.0': {}
 
@@ -23106,6 +23173,7 @@ snapshots:
       tedious: 18.6.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   leven@3.1.0: {}
 
@@ -24570,6 +24638,11 @@ snapshots:
       react: 19.1.0
       refractor: 3.6.0
 
+  react-virtualized-auto-sizer@1.0.26(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
   react@19.1.0: {}
 
   readable-stream@2.3.8:
@@ -25720,6 +25793,10 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.12
+
+  use-debounce@10.0.5(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   use-sidecar@1.1.3(@types/react@19.0.12)(react@19.1.0):
     dependencies:
