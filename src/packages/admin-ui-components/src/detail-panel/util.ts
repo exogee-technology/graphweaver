@@ -37,7 +37,7 @@ export const transformValueForForm = (field: EntityField, value: unknown, entity
 					label: value[relatedEntitySummaryField],
 				};
 			}
-		} else if (field.relationshipType === 'MANY_TO_MANY') {
+		} else if (['MANY_TO_MANY', 'ONE_TO_MANY'].includes(field.relationshipType)) {
 			if (Array.isArray(value)) {
 				return value.map((item) => ({
 					value: item[relatedEntityPrimaryKeyField],
