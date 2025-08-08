@@ -1,12 +1,17 @@
-import { useMutation, useQuery, FetchResult } from '@apollo/client';
+import { FetchResult, useMutation, useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocation, useParams, useSearchParams } from 'wouter';
+import isEqual from 'react-fast-compare';
 import toast from 'react-hot-toast';
-import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { customFields as authCustomFields } from 'virtual:graphweaver-auth-ui-components';
+import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+import { useLocation, useParams, useSearchParams } from 'wouter';
+import { Button } from '../button';
+import { DetailPanelFieldLabel } from '../detail-panel-field-label';
+import { getEntityListQueryName } from '../entity-list/graphql';
 import { Modal } from '../modal';
+import { Spinner } from '../spinner';
 import {
 	AdminUIFilterType,
 	CustomField,
@@ -19,25 +24,21 @@ import {
 	useSchema,
 	useSelectedEntity,
 } from '../utils';
-import { Button } from '../button';
-import { Spinner } from '../spinner';
-import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 import {
 	BooleanField,
+	DateField,
 	EnumField,
 	JSONField,
-	RelationshipField,
 	LinkField,
 	MediaField,
-	TextField,
-	DateField,
+	RelationshipField,
 	RichTextField,
+	TextField,
 } from './fields';
-import { DetailPanelFieldLabel } from '../detail-panel-field-label';
-import { getEntityListQueryName } from '../entity-list/graphql';
-import { dataTransforms } from './use-data-transform';
-import { isValueEmpty, parseValueForForm } from './util';
+import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 import styles from './styles.module.css';
+import { dataTransforms } from './use-data-transform';
+import { isValueEmpty, parseValueForForm, transformValueForForm } from './util';
 
 interface ResultBaseType {
 	id: string;
@@ -71,6 +72,27 @@ const isFieldReadonly = (
 	if (panelMode !== PanelMode.CREATE && field.attributes?.isReadOnly) return true;
 
 	return false;
+};
+
+/**
+ * Filter out fields before submission. Don't include read only fields. Include fields that are required, or have been modified.
+ * 
+ * @param initialValues - The initial values of the form.
+ * @param values - The current values of the form.
+ * @param entity - The entity of the current form
+ */
+const filterFieldsForSubmission = (initialValues: Record<string, any>, values: Record<string, any>, entity: Entity) => {
+	const result: Record<string, any> = {};
+
+	for (const [key, value] of Object.entries(values)) {
+		const field = entity.fields.find((f) => f.name === key);
+
+		if (!isEqual(initialValues[key], value) || field?.attributes?.isRequired) {
+			result[key] = value;
+		}
+	}
+
+	return result;
 };
 
 const getField = ({
@@ -280,11 +302,11 @@ const DetailForm = ({
 	const submit = useCallback(
 		async (values: any, actions: FormikHelpers<any>) => {
 			try {
-				const transformedValues = values;
+				const transformedValues = filterFieldsForSubmission(initialValues, values, entity);
 
 				for (const transform of Object.values(dataTransforms)) {
 					transformedValues[transform.field.name] = await transform.transform(
-						values[transform.field.name]
+						transformedValues[transform.field.name]
 					);
 				}
 
@@ -310,7 +332,8 @@ const DetailForm = ({
 			onSubmit={submit}
 			onReset={onCancel}
 		>
-			{({ isSubmitting }) => (
+			{({ isSubmitting }) => { 
+				return (
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
@@ -347,7 +370,7 @@ const DetailForm = ({
 					</div>
 					<PersistForm name={persistName} />
 				</Form>
-			)}
+			)}}
 		</Formik>
 	);
 };
@@ -399,11 +422,7 @@ export const DetailPanel = () => {
 		customFields?.get(selectedEntity.name) || authCustomFields?.get(selectedEntity.name) || [];
 
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
-		// We don't show Many to Many relationships in the form yet because we don't have
-		// a good editing interface for them.
-		if (field.relationshipType === 'MANY_TO_MANY') return false;
-
-		// We also don't show the related ID field for the same reason
+		// Don't expose control of the primary key field
 		if (field.relationshipType && field.name === selectedEntity.primaryKeyField) return false;
 
 		// And we want to filter out any fields that will be overridden with custom fields.
@@ -431,7 +450,8 @@ export const DetailPanel = () => {
 		(acc, field) => {
 			const result = savedSessionState ?? data?.result;
 			const value = parseValueForForm(field.type, result?.[field.name as keyof typeof result]);
-			acc[field.name] = value ?? field.initialValue ?? undefined;
+			const transformedValue = transformValueForForm(field, value, entityByType);
+			acc[field.name] = transformedValue ?? field.initialValue ?? undefined;
 			return acc;
 		},
 		{} as Record<string, any>

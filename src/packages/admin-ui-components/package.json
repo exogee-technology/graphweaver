@@ -19,6 +19,7 @@
 		"build-storybook": "storybook build"
 	},
 	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
 	"source": "src/index.ts",
 	"directories": {
 		"lib": "lib"
@@ -45,6 +46,7 @@
 		"papaparse": "5.5.2",
 		"react-day-picker": "9.6.4",
 		"react-error-boundary": "5.0.0",
+		"react-fast-compare": "3.2.2",
 		"react-hot-toast": "2.5.2",
 		"react-resizable-panels": "2.1.7",
 		"react-syntax-highlighter": "15.6.1",

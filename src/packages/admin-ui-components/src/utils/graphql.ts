@@ -66,6 +66,9 @@ export const SCHEMA_QUERY = gql`
 	}
 `;
 
+const entitySelection = (relatedEntity: Entity) => 
+	[relatedEntity.primaryKeyField].concat(relatedEntity.summaryField ?? []).join('\n');
+
 export const generateGqlSelectForEntityFields = (
 	entity: Entity,
 	entityByType?: (entityType: string) => Entity
@@ -83,8 +86,7 @@ export const generateGqlSelectForEntityFields = (
 				if (!relatedEntity) throw new Error(`Related entity ${field.type} not found`);
 
 				return `${field.name} { 
-					value: ${relatedEntity.primaryKeyField}
-					label: ${relatedEntity?.summaryField ?? relatedEntity?.primaryKeyField}
+					${entitySelection(relatedEntity)}
 				}`;
 			}
 

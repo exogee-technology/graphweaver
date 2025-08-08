@@ -106,7 +106,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 
 				// Define field attributes
 				const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
-				const isRequired = !field.nullable;
+				const isRequired = !field.nullable || (field.apiOptions?.requiredForUpdate ?? false);
 
 				const fieldObject: AdminUiFieldMetadata = {
 					name: field.name,
@@ -137,8 +137,12 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
 
 					const relatedEntityField = Object.values(relatedObject.fields).find((field) => {
-						const fieldType = field.getType() as { name?: string };
-						return fieldType.name === (entity.target as { name?: string }).name;
+						const { isList: isOtherSideList, fieldType: fieldTypeOtherSide } =
+							getFieldTypeWithMetadata(field.getType);
+						const namesMatch =
+							(fieldTypeOtherSide as { name?: string }).name ===
+							(entity.target as { name?: string }).name;
+						return isOtherSideList && namesMatch;
 					});
 					if (Array.isArray(relatedEntityField?.getType())) {
 						fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;

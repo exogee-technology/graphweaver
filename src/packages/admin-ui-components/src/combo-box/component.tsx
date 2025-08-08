@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
 import { useCombobox } from 'downshift';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { ChevronDownIcon } from '../assets';
-import { Spinner } from '../spinner';
 import { useAutoFocus } from '../hooks';
+import { Spinner } from '../spinner';
 import styles from './styles.module.css';
 
 export enum SelectMode {
@@ -78,8 +78,12 @@ export const ComboBox = ({
 			setInputValue('');
 
 			if (mode === SelectMode.MULTI) {
-				if (change.selectedItem && !selectedIds.has(change.selectedItem.value)) {
-					onChange([...valueArray, change.selectedItem]);
+				if (change.selectedItem) {
+					if (selectedIds.has(change.selectedItem.value)) {
+						onChange(valueArray.filter((item) => item.value !== change.selectedItem?.value));
+					} else {
+						onChange([...valueArray, change.selectedItem]);
+					}
 				}
 			} else {
 				onChange(change.selectedItem ? [change.selectedItem] : []);

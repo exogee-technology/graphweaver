@@ -223,6 +223,8 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 						node[key as keyof typeof node] = fieldType.serialize({ value: childNode }) as
 							| G[keyof G]
 							| undefined;
+					} else if (childNode === null) {
+						// Handle a many to one relationship being unlinked. We are clearing the foreign key, so nothing to do here
 					} else if (isLinking(relatedEntityMetadata, childNode)) {
 						// If it's a linking entity or an array of linking entities, nothing to do here
 					} else if (Array.isArray(childNode)) {
