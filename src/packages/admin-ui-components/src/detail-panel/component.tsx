@@ -86,9 +86,6 @@ const filterFieldsForSubmission = (initialValues: Record<string, any>, values: R
 
 	for (const [key, value] of Object.entries(values)) {
 		const field = entity.fields.find((f) => f.name === key);
-		if (field?.attributes?.isReadOnly) {
-			continue;
-		}
 
 		if (!isEqual(initialValues[key], value) || field?.attributes?.isRequired) {
 			result[key] = value;
@@ -425,7 +422,7 @@ export const DetailPanel = () => {
 		customFields?.get(selectedEntity.name) || authCustomFields?.get(selectedEntity.name) || [];
 
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
-		// We also don't show the related ID field for the same reason
+		// Don't expose control of the primary key field
 		if (field.relationshipType && field.name === selectedEntity.primaryKeyField) return false;
 
 		// And we want to filter out any fields that will be overridden with custom fields.

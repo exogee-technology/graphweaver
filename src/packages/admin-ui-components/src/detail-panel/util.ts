@@ -15,7 +15,7 @@ export const parseValueForForm = (fieldType: string, value: unknown) => {
 
 	if (fieldType === 'JSON' && value) {
 		return JSON.stringify(value, null, 4);
-	 }
+	}
 
 	return value;
 };
