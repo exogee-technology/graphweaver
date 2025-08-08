@@ -1,6 +1,6 @@
-import type { Theme } from '@nivo/line';
+import type { PartialTheme } from '@nivo/theming';
 
-export const theme: Theme = {
+export const theme: PartialTheme = {
 	text: {
 		color: '#ede8f2',
 		fontFamily: 'Inter',
