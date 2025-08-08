@@ -91,8 +91,8 @@ describe('Security', () => {
 			`,
 		});
 
-		expect(spyOnArtistDataProvider).not.toBeCalled();
-		expect(spyOnAlbumDataProvider).not.toBeCalled();
+		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toContain(
@@ -132,8 +132,8 @@ describe('Security', () => {
 			`,
 		});
 
-		expect(spyOnArtistDataProvider).not.toBeCalled();
-		expect(spyOnAlbumDataProvider).not.toBeCalled();
+		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toContain(
