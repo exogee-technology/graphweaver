@@ -1,4 +1,4 @@
-import { PointTooltip } from '@nivo/line';
+import { PointTooltip } from '@nivo/core';
 import styles from './styles.module.css';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

@@ -1,4 +1,4 @@
-import { Theme } from '@nivo/core';
+import type { Theme } from '@nivo/line';
 
 export const theme: Theme = {
 	text: {
