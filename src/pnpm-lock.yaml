@@ -85,7 +85,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -290,7 +290,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -345,7 +345,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -388,7 +388,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/mysql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -510,7 +510,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.1)(pg@8.13.3)
       '@mikro-orm/postgresql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -617,7 +617,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -841,8 +841,8 @@ importers:
         specifier: 0.11.1
         version: 0.11.1(@types/node@24.0.12)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.3))(graphql@16.10.0)
       '@tanstack/react-form':
-        specifier: 1.11.1
-        version: 1.11.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 1.19.1
+        version: 1.19.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@tanstack/react-table':
         specifier: 8.21.2
         version: 8.21.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1627,7 +1627,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -1689,7 +1689,7 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.13.3)(sqlite3@5.1.7)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(mysql2@3.14.0)(pg@8.16.0)
       '@mikro-orm/mssql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
@@ -2052,7 +2052,7 @@ packages:
     engines: {node: '>=14.16.0'}
     deprecated: Apollo Server v4 is deprecated and will transition to end-of-life on January 26, 2026. As long as you are already using a non-EOL version of Node.js, upgrading to v5 should take only a few minutes. See https://www.apollographql.com/docs/apollo-server/previous-versions for details.
     peerDependencies:
-      graphql: 16.11.0
+      graphql: ^16.6.0
 
   '@apollo/usage-reporting-protobuf@4.1.1':
     resolution: {integrity: sha512-u40dIUePHaSKVshcedO7Wp+mPiZsaU6xjv9J+VyxpoU/zL6Jle+9zWeG98tr/+SZ0nZ4OXhrbb8SNr0rAPpIDA==}
@@ -5788,6 +5788,9 @@ packages:
   '@tanstack/form-core@1.11.1':
     resolution: {integrity: sha512-rnj6BU2xCELv6Owm6G6XNjvleQyIIXdYtdl6FF0SF5mWcc1yNic9qWSVAeiYtVy9LgK6i7XW7KuNYAgJDaLxbQ==}
 
+  '@tanstack/form-core@1.19.1':
+    resolution: {integrity: sha512-1c+/8ZlhuNroy6J9cMR+04K3muVO9ht3YZ4TNLlnBQjijv3nySugetzwW2O3Z77OI8FOJMSyUDsh8A9nB36f+g==}
+
   '@tanstack/react-form@1.11.1':
     resolution: {integrity: sha512-7Zi3QD30U+4HLW2UwSWxhiIpwOltRLFPFUY1BcF41xRkr/AMQN1PGgxRF/uOXu/Esydj7dMGunViuPcz41hY/A==}
     peerDependencies:
@@ -5800,8 +5803,17 @@ packages:
       vinxi:
         optional: true
 
-  '@tanstack/react-store@0.7.0':
-    resolution: {integrity: sha512-S/Rq17HaGOk+tQHV/yrePMnG1xbsKZIl/VsNWnNXt4XW+tTY8dTlvpJH2ZQ3GRALsusG5K6Q3unAGJ2pd9W/Ng==}
+  '@tanstack/react-form@1.19.1':
+    resolution: {integrity: sha512-ccrDBz7xMex45BvpFUvkjbG2dQk1k68CmEnWtHez2hFNCr0ZNYZYMRTFSwtoNL9gspmrMiI1vg/tEZblcKiYPQ==}
+    peerDependencies:
+      '@tanstack/react-start': ^1.130.10
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@tanstack/react-start':
+        optional: true
+
+  '@tanstack/react-store@0.7.3':
+    resolution: {integrity: sha512-3Dnqtbw9P2P0gw8uUM8WP2fFfg8XMDSZCTsywRPZe/XqqYW8PGkXKZTvP0AHkE4mpqP9Y43GpOg9vwO44azu6Q==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -5819,8 +5831,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@tanstack/store@0.7.0':
-    resolution: {integrity: sha512-CNIhdoUsmD2NolYuaIs8VfWM467RK6oIBAW4nPEKZhg1smZ+/CwtCdpURgp7nxSqOaV9oKkzdWD80+bC66F/Jg==}
+  '@tanstack/store@0.7.2':
+    resolution: {integrity: sha512-RP80Z30BYiPX2Pyo0Nyw4s1SJFH2jyM6f9i3HfX4pA+gm5jsnYryscdq2aIQLnL4TaGuQMO+zXmN9nh1Qck+Pg==}
 
   '@tanstack/table-core@8.21.2':
     resolution: {integrity: sha512-uvXk/U4cBiFMxt+p9/G7yUWI/UbHYbyghLCjlpWZ3mLeIZiUBSKcUnw9UnKkdRz7Z/N4UBuFLWQdJCjUe7HjvA==}
@@ -10961,10 +10973,6 @@ packages:
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
-  rimraf@5.0.10:
-    resolution: {integrity: sha512-l0OE8wL34P4nJH/H2ffoaniAokM2qSmrtXHmlpvYr5AVVX8msAyW0l8NVJFDxlSK4u3Uh/f41cQheDVdnYijwQ==}
-    hasBin: true
-
   rimraf@5.0.8:
     resolution: {integrity: sha512-XSh0V2/yNhDEi8HwdIefD8MLgs4LQXPag/nEJWs3YUc3Upn+UHa1GyIkEg9xSSNt7HnkO5FjTvmcRzgf+8UZuw==}
     engines: {node: '>=18'}
@@ -11410,7 +11418,7 @@ packages:
   superagent@8.1.2:
     resolution: {integrity: sha512-6WTxW1EB6yCxV5VFOIPQruWGHqc3yI7hEmZK6h+pyk69Lk/Ut7rLUY6W/ONF2MjBuGjvmMiIpsrVJ2vjrHlslA==}
     engines: {node: '>=6.4.0 <13 || >=14'}
-    deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
+    deprecated: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
 
   supertest-graphql@1.1.4:
     resolution: {integrity: sha512-01No6WtLVu1sOxFgInAP/mG2Qn9eWwGIbM42Gih329ff1XtfMoCpbSNUmBq6SS116BEXuj17VJmaCIxC8DMQIA==}
@@ -16779,7 +16787,7 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 6.4.16
       fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.13.3)(sqlite3@5.1.7)
+      knex: 3.1.0(sqlite3@5.1.7)(tedious@18.6.1)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -18788,21 +18796,35 @@ snapshots:
 
   '@tanstack/form-core@1.11.1':
     dependencies:
-      '@tanstack/store': 0.7.0
+      '@tanstack/store': 0.7.2
+
+  '@tanstack/form-core@1.19.1':
+    dependencies:
+      '@tanstack/store': 0.7.2
 
   '@tanstack/react-form@1.11.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@tanstack/form-core': 1.11.1
-      '@tanstack/react-store': 0.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@tanstack/react-store': 0.7.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       decode-formdata: 0.9.0
       devalue: 5.1.1
       react: 19.1.0
     transitivePeerDependencies:
       - react-dom
 
-  '@tanstack/react-store@0.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@tanstack/react-form@1.19.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@tanstack/store': 0.7.0
+      '@tanstack/form-core': 1.19.1
+      '@tanstack/react-store': 0.7.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      decode-formdata: 0.9.0
+      devalue: 5.1.1
+      react: 19.1.0
+    transitivePeerDependencies:
+      - react-dom
+
+  '@tanstack/react-store@0.7.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@tanstack/store': 0.7.2
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
       use-sync-external-store: 1.5.0(react@19.1.0)
@@ -18819,7 +18841,7 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@tanstack/store@0.7.0': {}
+  '@tanstack/store@0.7.2': {}
 
   '@tanstack/table-core@8.21.2': {}
 
@@ -23343,7 +23365,6 @@ snapshots:
       tedious: 18.6.1
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   leven@3.1.0: {}
 
@@ -24970,10 +24991,6 @@ snapshots:
       glob: 7.2.3
     optional: true
 
-  rimraf@5.0.10:
-    dependencies:
-      glob: 10.4.5
-
   rimraf@5.0.8:
     dependencies:
       glob: 10.4.3
@@ -25197,7 +25214,7 @@ snapshots:
     dependencies:
       axios: 1.11.0
       axios-proxy-builder: 0.1.2
-      rimraf: 5.0.10
+      rimraf: 5.0.8
       xml2js: 0.6.2
     transitivePeerDependencies:
       - debug
