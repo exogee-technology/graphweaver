@@ -153,6 +153,8 @@ export interface FieldOptions {
 	apiOptions?: {
 		// This marks the field as read only in the API.
 		excludeFromBuiltInWriteOperations?: boolean;
+		// This marks the field as required for update in the API.
+		requiredForUpdate?: boolean;
 	};
 
 	// This can be used by any plugin to store additional information
