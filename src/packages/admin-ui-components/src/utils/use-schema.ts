@@ -4,6 +4,7 @@ import { JSX, useEffect, useMemo } from 'react';
 
 import { PanelMode } from '../detail-panel';
 import { SCHEMA_QUERY } from './graphql';
+import { FieldHelperProps, FieldMetaProps } from 'formik';
 
 export interface Schema {
 	entities: Entity[];
@@ -157,10 +158,14 @@ export interface EntityAttributes {
 	clientGeneratedPrimaryKeys?: boolean;
 }
 
-export interface CustomFieldArgs<T = unknown> {
+export interface CustomFieldArgs<T = unknown, F = unknown> {
 	entity: T;
 	context: 'table' | 'detail-form';
 	panelMode: PanelMode;
+	formik?: {
+		meta: FieldMetaProps<F>;
+		helpers: FieldHelperProps<F>;
+	};
 }
 
 export interface CustomField<T = unknown> extends EntityField {
