@@ -34,7 +34,7 @@
 		"@tanstack/react-form": "1.11.1",
 		"@tanstack/react-table": "8.21.2",
 		"@tiptap/extension-link": "2.11.5",
-		"@tiptap/react": "2.11.7",
+		"@tiptap/react": "3.1.0",
 		"@tiptap/starter-kit": "2.11.7",
 		"@types/react-dom": "19.0.4",
 		"clsx": "2.1.1",
