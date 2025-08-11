@@ -1,6 +1,6 @@
 import { FetchResult, useMutation, useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
+import { Form, Formik, FormikHelpers, useField, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import toast from 'react-hot-toast';
@@ -211,11 +211,15 @@ const CustomFieldComponent = ({
 	field: CustomField;
 	entity: Record<string, any>;
 	panelMode: PanelMode;
-}) => (
-	<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
-		{field.component({ entity, context: 'detail-form', panelMode })}
-	</div>
-);
+}) => {
+	const [_, meta, helpers] = useField(field.name);
+
+	return (
+		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
+			{field.component({ entity, context: 'detail-form', panelMode, value: meta.value, setValue: helpers.setValue })}
+		</div>
+	)
+};
 
 const PersistForm = ({ name }: { name: string }) => {
 	const { values, isSubmitting, submitForm } = useFormikContext();

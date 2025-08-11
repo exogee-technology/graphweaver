@@ -4,6 +4,7 @@ import { JSX, useEffect, useMemo } from 'react';
 
 import { PanelMode } from '../detail-panel';
 import { SCHEMA_QUERY } from './graphql';
+import { FormikErrors } from 'formik';
 
 export interface Schema {
 	entities: Entity[];
@@ -161,6 +162,11 @@ export interface CustomFieldArgs<T = unknown> {
 	entity: T;
 	context: 'table' | 'detail-form';
 	panelMode: PanelMode;
+	value?: any;
+	setValue?: (
+		value: any,
+		shouldValidate?: boolean | undefined
+	) => Promise<void | FormikErrors<any>>;
 }
 
 export interface CustomField<T = unknown> extends EntityField {
