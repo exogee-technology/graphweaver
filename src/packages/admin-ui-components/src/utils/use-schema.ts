@@ -162,7 +162,7 @@ export interface CustomFieldArgs<T = unknown, F = unknown> {
 	entity: T;
 	context: 'table' | 'detail-form';
 	panelMode: PanelMode;
-	formikProps: {
+	formik?: {
 		meta: FieldMetaProps<F>;
 		helpers: FieldHelperProps<F>;
 	};

@@ -213,14 +213,14 @@ const CustomFieldComponent = ({
 	panelMode: PanelMode;
 }) => {
 	const [_, meta, helpers] = useField(field.name);
-	const formikProps = {
+	const formik = {
 		meta,
 		helpers,
 	}
 
 	return (
 		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
-			{field.component({ entity, context: 'detail-form', panelMode, formikProps, })}
+			{field.component({ entity, context: 'detail-form', panelMode, formik, })}
 		</div>
 	)
 };
