@@ -6,12 +6,15 @@
 		"esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
 		"forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
 		"strict": true /* Enable all strict type-checking options. */,
-		"skipLibCheck": true /* Skip type checking all .d.ts files. */
+		"skipLibCheck": true /* Skip type checking all .d.ts files. */,
+		"composite": true
 	},
 	"include": ["src/**/*"],
 	"references": [
+		{ "path": "../admin-ui-components" },
 		{ "path": "../admin-ui" },
 		{ "path": "../auth-ui-components" },
+		{ "path": "../apollo-client" },
 		{ "path": "../auth" },
 		{ "path": "../aws-cognito" },
 		{ "path": "../builder" },
