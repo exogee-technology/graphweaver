@@ -1,20 +1,19 @@
-import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
+import { Form, Formik } from 'formik';
+import { AdminUIFilterType, DetailPanelInputComponentOption, Entity, EntityField } from '../utils';
 import { DetailPanel } from './component';
-import { Formik, Form } from 'formik';
-import { Entity, EntityField, AdminUIFilterType, DetailPanelInputComponentOption } from '../utils';
 
 // Import field components for rendering
 import {
 	BooleanField,
+	DateField,
 	EnumField,
 	JSONField,
-	RelationshipField,
 	LinkField,
 	MediaField,
-	TextField,
-	DateField,
+	RelationshipField,
 	RichTextField,
+	TextField,
 } from './fields';
 
 // Mock enum for enum field
@@ -49,52 +48,52 @@ const mockFields: EntityField[] = [
 	{
 		name: 'id',
 		type: 'ID!',
-		attributes: { isReadOnly: true, isRequired: true },
+		attributes: { isReadOnly: true, isRequiredForCreate: false, isRequiredForUpdate: true },
 	},
 	{
 		name: 'name',
 		type: 'String',
-		attributes: { isReadOnly: false, isRequired: true },
+		attributes: { isReadOnly: false, isRequiredForCreate: true, isRequiredForUpdate: false },
 	},
 	{
 		name: 'age',
 		type: 'Number',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 	{
 		name: 'active',
 		type: 'Boolean',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 	{
 		name: 'dateOfBirth',
 		type: 'Date',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 	{
 		name: 'createdAt',
 		type: 'DateScalar',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 	{
 		name: 'status',
 		type: 'Status',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 	{
 		name: 'metadata',
 		type: 'JSON',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 	{
 		name: 'avatar',
 		type: 'GraphweaverMedia',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 	{
 		name: 'bio',
 		type: 'String',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 		detailPanelInputComponent: {
 			name: DetailPanelInputComponentOption.RICH_TEXT,
 			options: {},
@@ -103,7 +102,7 @@ const mockFields: EntityField[] = [
 	{
 		name: 'notes',
 		type: 'String',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 		detailPanelInputComponent: {
 			name: DetailPanelInputComponentOption.MARKDOWN,
 			options: {},
@@ -113,13 +112,13 @@ const mockFields: EntityField[] = [
 		name: 'company',
 		type: 'Company',
 		relationshipType: 'MANY_TO_ONE',
-		attributes: { isReadOnly: false, isRequired: false },
+		attributes: { isReadOnly: false, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 	{
 		name: 'companyReadOnly',
 		type: 'Company',
 		relationshipType: 'MANY_TO_ONE',
-		attributes: { isReadOnly: true, isRequired: false },
+		attributes: { isReadOnly: true, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 ];
 

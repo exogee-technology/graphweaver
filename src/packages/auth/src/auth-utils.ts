@@ -1,7 +1,15 @@
+import { Filter, graphweaverMetadata, isEntityMetadata } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
-import { Filter, graphweaverMetadata, isEntityMetadata } from '@exogee/graphweaver';
 
+import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
+import { FieldLocation, RestrictedFieldError } from './errors';
+import {
+	AclMap,
+	buildAccessControlEntryForUser,
+	buildFieldAccessControlEntryForUser,
+	evaluateAccessControlValue,
+} from './helper-functions';
 import {
 	AccessControlList,
 	AccessType,
@@ -10,14 +18,6 @@ import {
 	ConsolidatedAccessControlEntry,
 	ConsolidatedAccessControlValue,
 } from './types';
-import {
-	AclMap,
-	buildAccessControlEntryForUser,
-	buildFieldAccessControlEntryForUser,
-	evaluateAccessControlValue,
-} from './helper-functions';
-import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
-import { RestrictedFieldError, FieldLocation } from './errors';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
@@ -301,6 +301,12 @@ export async function checkAuthorization<G = unknown>(
 
 		if (isEntityMetadata(relatedEntityMetadata)) {
 			// Now we have a related entity, let's check and make sure we have permission
+			
+			// If a to-many relationship is being reset to an empty array, we don't need to check permissions
+			if (Array.isArray(value) && value.length === 0) {
+				continue
+			}
+
 			const accessType = requiredPermissionsForAction(value);
 			const values = Array.isArray(value) ? value : [value];
 			for (const item of values) {

@@ -81,13 +81,14 @@ const isFieldReadonly = (
  * @param values - The current values of the form.
  * @param entity - The entity of the current form
  */
-const filterFieldsForSubmission = (initialValues: Record<string, any>, values: Record<string, any>, entity: Entity) => {
+const filterFieldsForSubmission = (initialValues: Record<string, any>, values: Record<string, any>, entity: Entity, panelMode: PanelMode) => {
 	const result: Record<string, any> = {};
 
 	for (const [key, value] of Object.entries(values)) {
 		const field = entity.fields.find((f) => f.name === key);
+		const isRequired = panelMode === PanelMode.CREATE ? field?.attributes?.isRequiredForCreate : field?.attributes?.isRequiredForUpdate;
 
-		if (!isEqual(initialValues[key], value) || field?.attributes?.isRequired) {
+		if (!isEqual(initialValues[key], value) || isRequired) {
 			result[key] = value;
 		}
 	}
@@ -193,7 +194,7 @@ const DetailField = ({
 	autoFocus: boolean;
 	panelMode: PanelMode;
 }) => {
-	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
+	const isRequired = panelMode === PanelMode.CREATE ? field.attributes?.isRequiredForCreate : field.attributes?.isRequiredForUpdate;
 	return (
 		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
@@ -266,8 +267,9 @@ const DetailForm = ({
 		(values: any) => {
 			const errors: Record<string, string> = {};
 			for (const field of detailFields) {
+				const isRequired = panelMode === PanelMode.CREATE ? field.attributes?.isRequiredForCreate : field.attributes?.isRequiredForUpdate;
 				if (
-					field.attributes?.isRequired &&
+					isRequired &&
 					field.type !== 'ID' &&
 					field.type !== 'ID!' &&
 					field.type !== 'custom' &&
@@ -310,7 +312,7 @@ const DetailForm = ({
 	const submit = useCallback(
 		async (values: any, actions: FormikHelpers<any>) => {
 			try {
-				const transformedValues = filterFieldsForSubmission(initialValues, values, entity);
+				const transformedValues = filterFieldsForSubmission(initialValues, values, entity, panelMode);
 
 				for (const transform of Object.values(dataTransforms)) {
 					transformedValues[transform.field.name] = await transform.transform(

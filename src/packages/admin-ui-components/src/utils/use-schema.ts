@@ -2,9 +2,9 @@ import { InMemoryCache, useQuery } from '@apollo/client';
 import { generateTypePolicies } from '@exogee/graphweaver-apollo-client';
 import { JSX, useEffect, useMemo } from 'react';
 
+import { FieldHelperProps, FieldMetaProps } from 'formik';
 import { PanelMode } from '../detail-panel';
 import { SCHEMA_QUERY } from './graphql';
-import { FieldHelperProps, FieldMetaProps } from 'formik';
 
 export interface Schema {
 	entities: Entity[];
@@ -149,7 +149,8 @@ export interface EntityField {
 
 export interface EntityFieldAttributes {
 	isReadOnly: boolean;
-	isRequired: boolean;
+	isRequiredForCreate: boolean;
+	isRequiredForUpdate: boolean;
 }
 
 export interface EntityAttributes {

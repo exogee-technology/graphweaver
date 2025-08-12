@@ -8,5 +8,8 @@ export class AdminUiFieldAttributeMetadata {
 	isReadOnly!: boolean;
 
 	@Field(() => Boolean)
-	isRequired!: boolean;
+	isRequiredForCreate!: boolean;
+
+	@Field(() => Boolean)
+	isRequiredForUpdate!: boolean;
 }
