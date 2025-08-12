@@ -50,6 +50,10 @@ updates:
         patterns:
           - "@simplewebauthn*"
 
+      tiptap:
+        patterns:
+          - "@tiptap*"
+
       typescript-eslint:
         patterns:
           - "@typescript-eslint*"
