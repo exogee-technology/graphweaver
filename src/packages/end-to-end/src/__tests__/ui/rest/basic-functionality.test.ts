@@ -22,11 +22,11 @@ test('Ensure vehicles can be listed and that they have pilots', async ({ page })
 	await expect(page.locator('tbody')).toContainText('Luke Skywalker, Wedge Antilles');
 	await page.getByRole('cell', { name: 'Incom corporation', exact: true }).click();
 	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText(
-		'pilots*Luke SkywalkerWedge Antilles'
+		'pilotsLuke SkywalkerWedge Antilles'
 	);
 	await page.getByTestId('modal-background').click();
 	await page.getByRole('cell', { name: 'AT-ST' }).click();
-	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText('pilots*Chewbacca');
+	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText('pilotsChewbacca');
 });
 
 test('Ensure people can be filtered', async ({ page }) => {

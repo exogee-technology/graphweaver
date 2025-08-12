@@ -124,7 +124,8 @@ test('Should return isReadOnly attribute for each field in getAdminUiMetadata', 
 							}
 							attributes {
 								isReadOnly
-								isRequired
+								isRequiredForCreate
+								isRequiredForUpdate
 								__typename
 							}
 							__typename
