@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
-		"build:types": "tsc --emitDeclarationOnly",
+		"build:types": "tsc --build --emitDeclarationOnly",
 		"generate:schema": "tsx ./src/utils/generate-db-schema.ts",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",

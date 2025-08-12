@@ -173,7 +173,7 @@ export const requireSilent = (module: string) => {
 export const checkTypescriptTypes = async () => {
 	try {
 		console.log(`Checking Typescript types...`, process.cwd());
-		const child = spawn('tsc --noEmit', {
+		const child = spawn('tsc --build --noEmit', {
 			stdio: 'inherit',
 			shell: true,
 		});

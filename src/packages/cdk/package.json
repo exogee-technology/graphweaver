@@ -17,7 +17,7 @@
 		"cdk-synth": "dotenv -- cdk synth --verbose",
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
-		"build:types": "tsc --emitDeclarationOnly",
+		"build:types": "tsc --build --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
 		"test": "dotenv -- vitest",
 		"version": "npm version --no-git-tag-version",

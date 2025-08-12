@@ -7,7 +7,7 @@
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
-		"build:types": "tsc --emitDeclarationOnly",
+		"build:types": "tsc --build --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
 		"build:watch": "pnpm build:js --watch",
 		"prettier": "prettier --write .",

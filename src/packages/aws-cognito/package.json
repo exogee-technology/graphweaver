@@ -11,7 +11,7 @@
 	],
 	"scripts": {
 		"build:js": "node build.js",
-		"build:types": "tsc --emitDeclarationOnly",
+		"build:types": "tsc --build --emitDeclarationOnly",
 		"build": "pnpm build:js && pnpm build:types",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
