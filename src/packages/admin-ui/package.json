@@ -1,6 +1,7 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
 	"version": "2.19.0",
+	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
 	"license": "Apache-2.0",
