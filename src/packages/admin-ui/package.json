@@ -13,7 +13,7 @@
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
-		"build:types": "tsc --build --emitDeclarationOnly",
+		"build:types": "tsc --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
 		"test:prettier": "prettier --check .",
