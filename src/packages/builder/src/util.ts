@@ -175,7 +175,7 @@ export const checkTypescriptTypes = async () => {
 		console.log(`Building TypeScript types with project references...`, process.cwd());
 
 		// Step 1: Use tsc --build to respect project references and emit both .d.ts and .js files
-		const buildChild = spawn('tsc --build', {
+		const buildChild = spawn('npx', ['tsc', '--build'], {
 			stdio: 'inherit',
 			shell: true,
 		});
@@ -194,11 +194,8 @@ export const checkTypescriptTypes = async () => {
 		// Step 2: Clean up the JS files that TypeScript emitted (we only want .d.ts files)
 		console.log(`Cleaning up JavaScript files...`);
 		const { glob } = await import('glob');
-		const projectRoot = process.cwd();
-		const jsFiles = await glob('**/*.js', {
-			cwd: projectRoot,
-			ignore: ['node_modules/**', '.graphweaver/**'],
-			absolute: true,
+		const jsFiles = await glob('./**/*.js', {
+			ignore: ['./node_modules/**', './.graphweaver/**'],
 		});
 
 		let deletedCount = 0;
