@@ -172,17 +172,45 @@ export const requireSilent = (module: string) => {
 
 export const checkTypescriptTypes = async () => {
 	try {
-		console.log(`Checking Typescript types...`, process.cwd());
-		const child = spawn('tsc --build --noEmit', {
+		console.log(`Building TypeScript types with project references...`, process.cwd());
+
+		// Step 1: Use tsc --build to respect project references and emit both .d.ts and .js files
+		const buildChild = spawn('tsc --build', {
 			stdio: 'inherit',
 			shell: true,
 		});
-		child.on('exit', function (exitCode) {
-			if (exitCode !== 0) throw new Error('Typescript types failed check.');
-			console.log(`Typescript types passed.`);
+
+		await new Promise<void>((resolve, reject) => {
+			buildChild.on('exit', function (exitCode) {
+				if (exitCode !== 0) {
+					reject(new Error('TypeScript build failed.'));
+				} else {
+					console.log(`TypeScript build completed successfully.`);
+					resolve();
+				}
+			});
 		});
+
+		// Step 2: Clean up the JS files that TypeScript emitted (we only want .d.ts files)
+		console.log(`Cleaning up JavaScript files...`);
+		const { glob } = await import('glob');
+		const jsFiles = await glob('./**/*.js', {
+			ignore: ['./node_modules/**', './.graphweaver/**'],
+		});
+
+		let deletedCount = 0;
+		for (const jsFile of jsFiles) {
+			try {
+				await fs.promises.unlink(jsFile);
+				deletedCount++;
+			} catch (error) {
+				console.warn(`Could not delete ${jsFile}:`, error);
+			}
+		}
+
+		console.log(`Cleaned up ${deletedCount} JavaScript files.`);
 	} catch (error: any) {
-		console.error(`Checking of Typescript types failed: ${error}`);
-		throw new Error('Checking of Typescript types failed');
+		console.error(`TypeScript build process failed: ${error}`);
+		throw new Error('TypeScript build process failed');
 	}
 };
