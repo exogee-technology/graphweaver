@@ -194,8 +194,11 @@ export const checkTypescriptTypes = async () => {
 		// Step 2: Clean up the JS files that TypeScript emitted (we only want .d.ts files)
 		console.log(`Cleaning up JavaScript files...`);
 		const { glob } = await import('glob');
-		const jsFiles = await glob('./**/*.js', {
-			ignore: ['./node_modules/**', './.graphweaver/**'],
+		const projectRoot = process.cwd();
+		const jsFiles = await glob('**/*.js', {
+			cwd: projectRoot,
+			ignore: ['node_modules/**', '.graphweaver/**'],
+			absolute: true,
 		});
 
 		let deletedCount = 0;
