@@ -36,7 +36,8 @@ export const SCHEMA_QUERY = gql`
 					}
 					attributes {
 						isReadOnly
-						isRequired
+						isRequiredForCreate
+						isRequiredForUpdate
 					}
 					extensions {
 						key

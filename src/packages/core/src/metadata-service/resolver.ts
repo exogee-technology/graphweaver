@@ -104,9 +104,14 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					defaultFieldForDetailPanel = field.name;
 				}
 
+				const isToMany = isList && relatedObject?.type === 'entity'
+
+				const canNotBeEmpty = !isToMany && field.nullable !== true
+
 				// Define field attributes
 				const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
-				const isRequired = field.name === primaryKeyField || (field.apiOptions?.requiredForUpdate ?? false);
+				const isRequiredForCreate = field.apiOptions?.requiredForCreate === undefined ? canNotBeEmpty : field.apiOptions?.requiredForCreate;
+				const isRequiredForUpdate = field.name === primaryKeyField || (field.apiOptions?.requiredForUpdate ?? false);
 
 				const fieldObject: AdminUiFieldMetadata = {
 					name: field.name,
@@ -114,7 +119,8 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					isArray: isList,
 					attributes: {
 						isReadOnly,
-						isRequired,
+						isRequiredForCreate,
+						isRequiredForUpdate,
 					},
 					format: field.adminUIOptions?.format,
 					hideInTable: field.adminUIOptions?.hideInTable,
@@ -129,7 +135,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				};
 
 				// Check if we have an array of related entities
-				if (isList && relatedObject?.type === 'entity') {
+				if (isToMany) {
 					// Ok, it's a relationship to another object type that is an array, e.g. "to many".
 					// We'll default to one to many, then if we can find a field on the other side that points
 					// back to us and it's also an array, then it's a many to many.

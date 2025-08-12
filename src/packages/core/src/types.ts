@@ -262,6 +262,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		format?: CellFormatOptions;
 	};
 	apiOptions?: {
+		requiredForCreate?: boolean;
 		requiredForUpdate?: boolean;
 		excludeFromBuiltInWriteOperations?: boolean;
 	};

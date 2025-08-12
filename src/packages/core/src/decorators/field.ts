@@ -155,6 +155,8 @@ export interface FieldOptions {
 		excludeFromBuiltInWriteOperations?: boolean;
 		// This marks the field as required for update in the API.
 		requiredForUpdate?: boolean;
+		// This marks the field as required for create in the API.
+		requiredForCreate?: boolean;
 	};
 
 	// This can be used by any plugin to store additional information
