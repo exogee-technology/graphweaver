@@ -1,9 +1,9 @@
-import gql from 'graphql-tag';
-import assert from 'assert';
-import Graphweaver from '@exogee/graphweaver-server';
-import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
-import { Field, ID, Entity, AdminUiEntityMetadata } from '@exogee/graphweaver';
+import { AdminUiEntityMetadata, Entity, Field, ID } from '@exogee/graphweaver';
 import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import Graphweaver from '@exogee/graphweaver-server';
+import { Entity as DataEntity, PrimaryKey, Property } from '@mikro-orm/core';
+import assert from 'assert';
+import gql from 'graphql-tag';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -75,14 +75,14 @@ export class Customer {
 	@Field(() => String, { nullable: true, adminUIOptions: { readonly: true } })
 	address?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, apiOptions: { requiredForCreate: true } })
 	city?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, apiOptions: { requiredForUpdate: true } })
 	state?: string;
 
-	@Field(() => String, { nullable: true })
-	country?: string;
+	@Field(() => String, { nullable: false, apiOptions: { requiredForCreate: false } })
+	country!: string;
 
 	@Field(() => String, { nullable: true })
 	postalCode?: string;
@@ -160,17 +160,41 @@ test('Should return isReadOnly attribute for each field in getAdminUiMetadata', 
 	expect(fieldNameField).not.toBeNull();
 	expect(fieldNameField?.attributes).not.toBeNull();
 	expect(fieldNameField?.attributes?.isReadOnly).toEqual(false);
-	expect(fieldNameField?.attributes?.isRequired).toEqual(true);
+	expect(fieldNameField?.attributes?.isRequiredForCreate).toEqual(true);
+	expect(fieldNameField?.attributes?.isRequiredForUpdate).toEqual(false);
 
 	const companyField = customerEntity?.fields?.find((field) => field.name === 'company');
 	expect(companyField).not.toBeNull();
 	expect(companyField?.attributes).not.toBeNull();
 	expect(companyField?.attributes?.isReadOnly).toEqual(true);
-	expect(companyField?.attributes?.isRequired).toEqual(false);
+	expect(companyField?.attributes?.isRequiredForCreate).toEqual(false);
+	expect(companyField?.attributes?.isRequiredForUpdate).toEqual(false);
 
 	const addressField = customerEntity?.fields?.find((field) => field.name === 'address');
 	expect(addressField).not.toBeNull();
 	expect(addressField?.attributes).not.toBeNull();
 	expect(addressField?.attributes?.isReadOnly).toEqual(true);
-	expect(addressField?.attributes?.isRequired).toEqual(false);
+	expect(addressField?.attributes?.isRequiredForCreate).toEqual(false);
+	expect(addressField?.attributes?.isRequiredForUpdate).toEqual(false);
+
+	const cityField = customerEntity?.fields?.find((field) => field.name === 'city');
+	expect(cityField).not.toBeNull();
+	expect(cityField?.attributes).not.toBeNull();
+	expect(cityField?.attributes?.isReadOnly).toEqual(false);
+	expect(cityField?.attributes?.isRequiredForCreate).toEqual(true);
+	expect(cityField?.attributes?.isRequiredForUpdate).toEqual(false);
+
+	const stateField = customerEntity?.fields?.find((field) => field.name === 'state');
+	expect(stateField).not.toBeNull();
+	expect(stateField?.attributes).not.toBeNull();
+	expect(stateField?.attributes?.isReadOnly).toEqual(false);
+	expect(stateField?.attributes?.isRequiredForCreate).toEqual(false);
+	expect(stateField?.attributes?.isRequiredForUpdate).toEqual(true);
+
+	const countryField = customerEntity?.fields?.find((field) => field.name === 'country');
+	expect(countryField).not.toBeNull();
+	expect(countryField?.attributes).not.toBeNull();
+	expect(countryField?.attributes?.isReadOnly).toEqual(false);
+	expect(countryField?.attributes?.isRequiredForCreate).toEqual(false);
+	expect(countryField?.attributes?.isRequiredForUpdate).toEqual(false);
 });
