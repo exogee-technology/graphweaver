@@ -20,7 +20,7 @@ test('Check Select field shows correct number of selected items after adding add
 	await page.getByRole('cell', { name: '3', exact: true }).click();
 	await page
 		.locator('div')
-		.filter({ hasText: /^tracks\*3 Selected×$/ })
+		.filter({ hasText: /^tracks3 Selected×$/ })
 		.click({ delay: 1000 });
 	await page.getByRole('listbox').getByText('"40"').click();
 	await expect(page.locator('form')).toContainText('4 Selected');
@@ -34,7 +34,7 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	await page.getByRole('cell', { name: 'For Those About To Rock We' }).click();
 	await page
 		.locator('div')
-		.filter({ hasText: /^tracks\*10 Selected×$/ })
+		.filter({ hasText: /^tracks10 Selected×$/ })
 		.click({ delay: 1000 });
 	await page.getByText('"40"').click();
 	await expect(page.locator('form')).toContainText('11 Selected');
