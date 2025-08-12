@@ -1,4 +1,5 @@
 import { Field, FieldProps } from 'formik';
+import { useDataTransform } from '..';
 import { ComboBox, SelectMode, SelectOption } from '../../combo-box';
 import { EntityField } from '../../utils';
 
@@ -11,6 +12,15 @@ export const BooleanField = ({
 	autoFocus: boolean;
 	disabled?: boolean;
 }) => {
+	useDataTransform({
+		field,
+		transform: async (value: unknown) => {
+			if (!value || !Array.isArray(value)) return undefined;
+
+			return value[0]?.value;
+		},
+	});
+	
 	return (
 		<Field name={field.name}>
 			{({ field, form }: FieldProps) => (
