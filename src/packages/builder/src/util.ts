@@ -174,23 +174,9 @@ export const checkTypescriptTypes = async () => {
 	try {
 		console.log(`Checking Typescript types...`, process.cwd());
 
-		// Determine whether the current project uses TS project references
-		let useBuildMode = false;
-		try {
-			const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
-			const tsconfigRaw = await fs.promises.readFile(tsconfigPath, 'utf8');
-			const tsconfig = JSON.parse(tsconfigRaw);
-			useBuildMode = Array.isArray(tsconfig?.references) && tsconfig.references.length > 0;
-		} catch {
-			// If we can't read/parse tsconfig, fall back to normal type check
-			useBuildMode = false;
-		}
-
-		// Prefer build mode when project references exist so that dependencies are built leaf-first
-		const command = useBuildMode ? 'tsc -b' : 'tsc --noEmit';
-		if (useBuildMode) {
-			console.log('Detected TypeScript project references. Running in build mode (leaf-first).');
-		}
+		// Always use TypeScript build mode so project references are compiled in dependency order (leaf-first)
+		const command = 'tsc -b';
+		console.log('Running TypeScript in build mode (-b) to respect project references.');
 
 		await new Promise<void>((resolve, reject) => {
 			const child = spawn(command, {
