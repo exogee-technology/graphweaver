@@ -67,7 +67,8 @@ export type AdminUiEnumValueMetadata = {
 export type AdminUiFieldAttributeMetadata = {
   __typename?: 'AdminUiFieldAttributeMetadata';
   isReadOnly: Scalars['Boolean']['output'];
-  isRequired: Scalars['Boolean']['output'];
+  isRequiredForCreate: Scalars['Boolean']['output'];
+  isRequiredForUpdate: Scalars['Boolean']['output'];
 };
 
 export type AdminUiFieldExtensionsMetadata = {

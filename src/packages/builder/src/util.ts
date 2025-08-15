@@ -173,16 +173,43 @@ export const requireSilent = (module: string) => {
 export const checkTypescriptTypes = async () => {
 	try {
 		console.log(`Checking Typescript types...`, process.cwd());
-		const child = spawn('tsc --noEmit', {
-			stdio: 'inherit',
-			shell: true,
+
+		// Determine whether the current project uses TS project references
+		let useBuildMode = false;
+		try {
+			const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
+			const tsconfigRaw = await fs.promises.readFile(tsconfigPath, 'utf8');
+			const tsconfig = JSON.parse(tsconfigRaw);
+			useBuildMode = Array.isArray(tsconfig?.references) && tsconfig.references.length > 0;
+		} catch {
+			// If we can't read/parse tsconfig, fall back to normal type check
+			useBuildMode = false;
+		}
+
+		// Prefer build mode when project references exist so that dependencies are built leaf-first
+		const command = useBuildMode ? 'tsc -b' : 'tsc --noEmit';
+		if (useBuildMode) {
+			console.log('Detected TypeScript project references. Running in build mode (leaf-first).');
+		}
+
+		await new Promise<void>((resolve, reject) => {
+			const child = spawn(command, {
+				stdio: 'inherit',
+				shell: true,
+			});
+
+			child.on('error', (error) => {
+				reject(error);
+			});
+			child.on('exit', (exitCode) => {
+				if (exitCode !== 0) return reject(new Error('Typescript types failed check.'));
+				resolve();
+			});
 		});
-		child.on('exit', function (exitCode) {
-			if (exitCode !== 0) throw new Error('Typescript types failed check.');
-			console.log(`Typescript types passed.`);
-		});
+
+		console.log(`Typescript types passed.`);
 	} catch (error: any) {
-		console.error(`Checking of Typescript types failed: ${error}`);
+		console.error(`Checking of Typescript types failed: ${error?.message ?? error}`);
 		throw new Error('Checking of Typescript types failed');
 	}
 };
