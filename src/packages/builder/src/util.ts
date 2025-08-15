@@ -173,16 +173,29 @@ export const requireSilent = (module: string) => {
 export const checkTypescriptTypes = async () => {
 	try {
 		console.log(`Checking Typescript types...`, process.cwd());
-		const child = spawn('tsc --noEmit', {
-			stdio: 'inherit',
-			shell: true,
+
+		// Always use TypeScript build mode to respect project references, but do not emit files
+		const command = 'tsc -b --noEmit';
+		console.log('Running TypeScript in build mode with noEmit (-b --noEmit).');
+
+		await new Promise<void>((resolve, reject) => {
+			const child = spawn(command, {
+				stdio: 'inherit',
+				shell: true,
+			});
+
+			child.on('error', (error) => {
+				reject(error);
+			});
+			child.on('exit', (exitCode) => {
+				if (exitCode !== 0) return reject(new Error('Typescript types failed check.'));
+				resolve();
+			});
 		});
-		child.on('exit', function (exitCode) {
-			if (exitCode !== 0) throw new Error('Typescript types failed check.');
-			console.log(`Typescript types passed.`);
-		});
+
+		console.log(`Typescript types passed.`);
 	} catch (error: any) {
-		console.error(`Checking of Typescript types failed: ${error}`);
+		console.error(`Checking of Typescript types failed: ${error?.message ?? error}`);
 		throw new Error('Checking of Typescript types failed');
 	}
 };
