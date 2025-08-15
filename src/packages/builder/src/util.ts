@@ -174,9 +174,9 @@ export const checkTypescriptTypes = async () => {
 	try {
 		console.log(`Checking Typescript types...`, process.cwd());
 
-		// Always use TypeScript build mode so project references are compiled in dependency order (leaf-first)
-		const command = 'tsc -b';
-		console.log('Running TypeScript in build mode (-b) to respect project references.');
+		// Always use TypeScript build mode to respect project references, but do not emit files
+		const command = 'tsc -b --noEmit';
+		console.log('Running TypeScript in build mode with noEmit (-b --noEmit).');
 
 		await new Promise<void>((resolve, reject) => {
 			const child = spawn(command, {
