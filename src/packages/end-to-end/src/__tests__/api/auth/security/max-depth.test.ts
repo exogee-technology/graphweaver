@@ -8,7 +8,6 @@ import {
 	UserProfile,
 	ApplyAccessControlList,
 	setAddUserToContext,
-	StubAuthMethod_FOR_TESTING_ONLY,
 	__StubAuthMethod_FOR_TESTING_ONLY,
 } from '@exogee/graphweaver-auth';
 
