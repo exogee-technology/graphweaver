@@ -48,7 +48,7 @@
 		"class-validator": "0.14.1",
 		"dotenv-cli": "8.0.0",
 		"ethers": "5.8.0",
-		"graphql": "16.10.0",
+		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
 		"jimp": "1.6.0",
 		"promisify-child-process": "4.1.2",

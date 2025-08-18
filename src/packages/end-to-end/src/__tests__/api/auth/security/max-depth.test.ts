@@ -4,7 +4,12 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Field, ID, BaseDataProvider, RelationshipField, Entity } from '@exogee/graphweaver';
-import { UserProfile, ApplyAccessControlList, setAddUserToContext } from '@exogee/graphweaver-auth';
+import {
+	UserProfile,
+	ApplyAccessControlList,
+	setAddUserToContext,
+	__StubAuthMethod_FOR_TESTING_ONLY,
+} from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
 	id: '1',
@@ -62,6 +67,10 @@ setAddUserToContext(async () => user);
 const graphweaver = new Graphweaver();
 
 describe('Security', () => {
+	// The .toString() here is just so that SonarQube will stop complaining about an unused object instantiation.
+	// Instantiating an auth method has side effects, which we need for these tests.
+	new __StubAuthMethod_FOR_TESTING_ONLY().toString();
+
 	test('should check the depth of a query and error when it reaches seven.', async () => {
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
