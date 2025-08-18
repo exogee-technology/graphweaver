@@ -9,6 +9,7 @@ import {
 	ApplyAccessControlList,
 	setAddUserToContext,
 	StubAuthMethod_FOR_TESTING_ONLY,
+	__StubAuthMethod_FOR_TESTING_ONLY,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -69,7 +70,7 @@ const graphweaver = new Graphweaver();
 describe('Security', () => {
 	// The .toString() here is just so that SonarQube will stop complaining about an unused object instantiation.
 	// Instantiating an auth method has side effects, which we need for these tests.
-	new StubAuthMethod_FOR_TESTING_ONLY().toString();
+	new __StubAuthMethod_FOR_TESTING_ONLY().toString();
 
 	test('should check the depth of a query and error when it reaches seven.', async () => {
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');

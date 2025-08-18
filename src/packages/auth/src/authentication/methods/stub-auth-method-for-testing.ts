@@ -1,3 +1,3 @@
 import { BaseAuthMethod } from './base-auth-method';
 
-export class StubAuthMethod_FOR_TESTING_ONLY extends BaseAuthMethod {}
+export class __StubAuthMethod_FOR_TESTING_ONLY extends BaseAuthMethod {}
