@@ -30,7 +30,7 @@
 		"decimal.js": "10.6.0",
 		"esbuild": "0.25.1",
 		"glob": "11.0.3",
-		"graphql": "16.10.0",
+		"graphql": "16.11.0",
 		"typescript": "5.8.3"
 	},
 	"keywords": [

@@ -32,7 +32,7 @@
 		"class-validator": "0.14.1",
 		"decimal.js": "10.6.0",
 		"fastify": "5.4.0",
-		"graphql": "16.10.0",
+		"graphql": "16.11.0",
 		"graphql-deduplicator": "2.0.6"
 	},
 	"devDependencies": {

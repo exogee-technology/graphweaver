@@ -24,7 +24,7 @@
 		"@mikro-orm/knex": "6.4.16",
 		"@mikro-orm/sqlite": "6.4.16",
 		"@okta/okta-auth-js": "7.11.1",
-		"graphql": "16.10.0",
+		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
 		"mikro-orm-sqlite-wasm": "workspace:*",
 		"react": "19.1.0"
