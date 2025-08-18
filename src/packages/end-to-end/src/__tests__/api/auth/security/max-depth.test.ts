@@ -64,7 +64,7 @@ const graphweaver = new Graphweaver();
 
 describe('Security', () => {
 	class FakeAuthMethod extends BaseAuthMethod {}
-	new FakeAuthMethod();
+	new FakeAuthMethod().toString();
 
 	test('should check the depth of a query and error when it reaches seven.', async () => {
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
