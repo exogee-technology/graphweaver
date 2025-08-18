@@ -1087,7 +1087,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.13.5
-        version: 3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.3))(graphql@16.10.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
+        version: 3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.11.0))
       '@simplewebauthn/browser':
         specifier: 10.0.0
         version: 10.0.0
@@ -1102,7 +1102,7 @@ importers:
         version: 2.4.6(react@19.1.0)
       graphql:
         specifier: '16'
-        version: 16.10.0
+        version: 16.11.0
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@19.1.0)
@@ -1463,8 +1463,8 @@ importers:
         specifier: 16.11.0
         version: 16.11.0
       graphql-parse-resolve-info:
-        specifier: 4.13.0
-        version: 4.13.0(graphql@16.11.0)
+        specifier: 4.14.1
+        version: 4.14.1(graphql@16.11.0)
       graphql-query-complexity:
         specifier: 1.0.0
         version: 1.0.0(graphql@16.11.0)
@@ -8538,6 +8538,12 @@ packages:
     peerDependencies:
       graphql: '>=0.9 <0.14 || ^14.0.2 || ^15.4.0 || ^16.3.0'
 
+  graphql-parse-resolve-info@4.14.1:
+    resolution: {integrity: sha512-WKHukfEuZamP1ZONR84b8iT+4sJgEhtXMDArm1jpXEsU2vTb5EgkCZ4Obfl+v09oNTKXm0CJjPfBUZ5jcJ2Ykg==}
+    engines: {node: '>=8.6'}
+    peerDependencies:
+      graphql: '>=0.9 <0.14 || ^14.0.2 || ^15.4.0 || ^16.3.0'
+
   graphql-query-complexity@1.0.0:
     resolution: {integrity: sha512-Tj7mRIuKWjGomPaRW5E+ztY8bhYPf1v/7bkDPuzksrR3GqHeIS5jxzX8CfimlV3g9z0lT20RG9JgaUUjhRjtOA==}
     peerDependencies:
@@ -11411,7 +11417,7 @@ packages:
   superagent@8.1.2:
     resolution: {integrity: sha512-6WTxW1EB6yCxV5VFOIPQruWGHqc3yI7hEmZK6h+pyk69Lk/Ut7rLUY6W/ONF2MjBuGjvmMiIpsrVJ2vjrHlslA==}
     engines: {node: '>=6.4.0 <13 || >=14'}
-    deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
+    deprecated: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
 
   supertest-graphql@1.1.4:
     resolution: {integrity: sha512-01No6WtLVu1sOxFgInAP/mG2Qn9eWwGIbM42Gih329ff1XtfMoCpbSNUmBq6SS116BEXuj17VJmaCIxC8DMQIA==}
@@ -12295,30 +12301,6 @@ snapshots:
   '@apollo/cache-control-types@1.0.3(graphql@16.11.0)':
     dependencies:
       graphql: 16.11.0
-
-  '@apollo/client@3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.3))(graphql@16.10.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))':
-    dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
-      '@wry/caches': 1.0.1
-      '@wry/equality': 0.5.7
-      '@wry/trie': 0.5.0
-      graphql: 16.10.0
-      graphql-tag: 2.12.6(graphql@16.10.0)
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.18.1
-      prop-types: 15.8.1
-      rehackt: 0.1.0(@types/react@19.0.12)(react@19.1.0)
-      symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
-      tslib: 2.8.1
-      zen-observable-ts: 1.2.5
-    optionalDependencies:
-      graphql-ws: 6.0.5(graphql@16.10.0)(ws@8.18.3)
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      subscriptions-transport-ws: 0.11.0(graphql@16.10.0)
-    transitivePeerDependencies:
-      - '@types/react'
 
   '@apollo/client@3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.11.0)(ws@8.18.3))(graphql@16.10.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.11.0))':
     dependencies:
@@ -22749,15 +22731,15 @@ snapshots:
 
   graphql-parse-resolve-info@4.13.0(graphql@16.10.0):
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.1
       graphql: 16.10.0
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
 
-  graphql-parse-resolve-info@4.13.0(graphql@16.11.0):
+  graphql-parse-resolve-info@4.14.1(graphql@16.11.0):
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.1
       graphql: 16.11.0
       tslib: 2.8.1
     transitivePeerDependencies:
@@ -26381,19 +26363,6 @@ snapshots:
     dependencies:
       hey-listen: 1.0.8
       tslib: 2.8.1
-
-  subscriptions-transport-ws@0.11.0(graphql@16.10.0):
-    dependencies:
-      backo2: 1.0.2
-      eventemitter3: 3.1.2
-      graphql: 16.10.0
-      iterall: 1.3.0
-      symbol-observable: 1.2.0
-      ws: 7.5.10
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    optional: true
 
   subscriptions-transport-ws@0.11.0(graphql@16.11.0):
     dependencies:
