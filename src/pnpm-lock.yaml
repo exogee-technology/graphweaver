@@ -1463,8 +1463,8 @@ importers:
         specifier: 16.11.0
         version: 16.11.0
       graphql-parse-resolve-info:
-        specifier: 4.13.0
-        version: 4.13.0(graphql@16.11.0)
+        specifier: 4.14.1
+        version: 4.14.1(graphql@16.11.0)
       graphql-query-complexity:
         specifier: 1.0.0
         version: 1.0.0(graphql@16.11.0)
@@ -8546,6 +8546,12 @@ packages:
 
   graphql-parse-resolve-info@4.13.0:
     resolution: {integrity: sha512-VVJ1DdHYcR7hwOGQKNH+QTzuNgsLA8l/y436HtP9YHoX6nmwXRWq3xWthU3autMysXdm0fQUbhTZCx0W9ICozw==}
+    engines: {node: '>=8.6'}
+    peerDependencies:
+      graphql: '>=0.9 <0.14 || ^14.0.2 || ^15.4.0 || ^16.3.0'
+
+  graphql-parse-resolve-info@4.14.1:
+    resolution: {integrity: sha512-WKHukfEuZamP1ZONR84b8iT+4sJgEhtXMDArm1jpXEsU2vTb5EgkCZ4Obfl+v09oNTKXm0CJjPfBUZ5jcJ2Ykg==}
     engines: {node: '>=8.6'}
     peerDependencies:
       graphql: '>=0.9 <0.14 || ^14.0.2 || ^15.4.0 || ^16.3.0'
@@ -22751,15 +22757,15 @@ snapshots:
 
   graphql-parse-resolve-info@4.13.0(graphql@16.10.0):
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.1
       graphql: 16.10.0
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
 
-  graphql-parse-resolve-info@4.13.0(graphql@16.11.0):
+  graphql-parse-resolve-info@4.14.1(graphql@16.11.0):
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.1
       graphql: 16.11.0
       tslib: 2.8.1
     transitivePeerDependencies:
