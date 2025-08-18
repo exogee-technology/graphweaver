@@ -5,6 +5,7 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Field, ID, BaseDataProvider, RelationshipField, Entity } from '@exogee/graphweaver';
 import { UserProfile, ApplyAccessControlList, setAddUserToContext } from '@exogee/graphweaver-auth';
+import { BaseAuthMethod } from '@exogee/graphweaver-auth/src/authentication/methods/base-auth-method';
 
 const user = new UserProfile({
 	id: '1',
@@ -62,6 +63,9 @@ setAddUserToContext(async () => user);
 const graphweaver = new Graphweaver();
 
 describe('Security', () => {
+	class FakeAuthMethod extends BaseAuthMethod {}
+	new FakeAuthMethod();
+
 	test('should check the depth of a query and error when it reaches seven.', async () => {
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
