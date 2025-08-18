@@ -841,8 +841,8 @@ importers:
         specifier: 0.11.1
         version: 0.11.1(@types/node@24.0.12)(graphql-ws@6.0.5(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)
       '@tanstack/react-form':
-        specifier: 1.11.1
-        version: 1.11.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 1.19.2
+        version: 1.19.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@tanstack/react-table':
         specifier: 8.21.2
         version: 8.21.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1087,7 +1087,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.13.5
-        version: 3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.3))(graphql@16.10.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
+        version: 3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.11.0))
       '@simplewebauthn/browser':
         specifier: 10.0.0
         version: 10.0.0
@@ -1102,7 +1102,7 @@ importers:
         version: 2.4.6(react@19.1.0)
       graphql:
         specifier: '16'
-        version: 16.10.0
+        version: 16.11.0
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@19.1.0)
@@ -5796,6 +5796,9 @@ packages:
   '@tanstack/form-core@1.11.1':
     resolution: {integrity: sha512-rnj6BU2xCELv6Owm6G6XNjvleQyIIXdYtdl6FF0SF5mWcc1yNic9qWSVAeiYtVy9LgK6i7XW7KuNYAgJDaLxbQ==}
 
+  '@tanstack/form-core@1.19.2':
+    resolution: {integrity: sha512-g2VkZCHEQUxnPOtF+vNHQDGvmrXfMpvN1T27M+G2R/eeH2vImxEdzVzAVIR71DZ5X3QtC9rm+nR64MJrjI+yXQ==}
+
   '@tanstack/react-form@1.11.1':
     resolution: {integrity: sha512-7Zi3QD30U+4HLW2UwSWxhiIpwOltRLFPFUY1BcF41xRkr/AMQN1PGgxRF/uOXu/Esydj7dMGunViuPcz41hY/A==}
     peerDependencies:
@@ -5808,8 +5811,17 @@ packages:
       vinxi:
         optional: true
 
-  '@tanstack/react-store@0.7.0':
-    resolution: {integrity: sha512-S/Rq17HaGOk+tQHV/yrePMnG1xbsKZIl/VsNWnNXt4XW+tTY8dTlvpJH2ZQ3GRALsusG5K6Q3unAGJ2pd9W/Ng==}
+  '@tanstack/react-form@1.19.2':
+    resolution: {integrity: sha512-pfhyPXxuiq6U/GUaQQf6m8TdKUdmrygJkqY3A6R/0tiQFL/B/HsOeovPGxpwAdDof2V6hJd5+/XbDz0B76iVIQ==}
+    peerDependencies:
+      '@tanstack/react-start': ^1.130.10
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@tanstack/react-start':
+        optional: true
+
+  '@tanstack/react-store@0.7.3':
+    resolution: {integrity: sha512-3Dnqtbw9P2P0gw8uUM8WP2fFfg8XMDSZCTsywRPZe/XqqYW8PGkXKZTvP0AHkE4mpqP9Y43GpOg9vwO44azu6Q==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -5827,8 +5839,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@tanstack/store@0.7.0':
-    resolution: {integrity: sha512-CNIhdoUsmD2NolYuaIs8VfWM467RK6oIBAW4nPEKZhg1smZ+/CwtCdpURgp7nxSqOaV9oKkzdWD80+bC66F/Jg==}
+  '@tanstack/store@0.7.2':
+    resolution: {integrity: sha512-RP80Z30BYiPX2Pyo0Nyw4s1SJFH2jyM6f9i3HfX4pA+gm5jsnYryscdq2aIQLnL4TaGuQMO+zXmN9nh1Qck+Pg==}
 
   '@tanstack/table-core@8.21.2':
     resolution: {integrity: sha512-uvXk/U4cBiFMxt+p9/G7yUWI/UbHYbyghLCjlpWZ3mLeIZiUBSKcUnw9UnKkdRz7Z/N4UBuFLWQdJCjUe7HjvA==}
@@ -11411,7 +11423,7 @@ packages:
   superagent@8.1.2:
     resolution: {integrity: sha512-6WTxW1EB6yCxV5VFOIPQruWGHqc3yI7hEmZK6h+pyk69Lk/Ut7rLUY6W/ONF2MjBuGjvmMiIpsrVJ2vjrHlslA==}
     engines: {node: '>=6.4.0 <13 || >=14'}
-    deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
+    deprecated: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
 
   supertest-graphql@1.1.4:
     resolution: {integrity: sha512-01No6WtLVu1sOxFgInAP/mG2Qn9eWwGIbM42Gih329ff1XtfMoCpbSNUmBq6SS116BEXuj17VJmaCIxC8DMQIA==}
@@ -12295,30 +12307,6 @@ snapshots:
   '@apollo/cache-control-types@1.0.3(graphql@16.11.0)':
     dependencies:
       graphql: 16.11.0
-
-  '@apollo/client@3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.10.0)(ws@8.18.3))(graphql@16.10.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))':
-    dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
-      '@wry/caches': 1.0.1
-      '@wry/equality': 0.5.7
-      '@wry/trie': 0.5.0
-      graphql: 16.10.0
-      graphql-tag: 2.12.6(graphql@16.10.0)
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.18.1
-      prop-types: 15.8.1
-      rehackt: 0.1.0(@types/react@19.0.12)(react@19.1.0)
-      symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
-      tslib: 2.8.1
-      zen-observable-ts: 1.2.5
-    optionalDependencies:
-      graphql-ws: 6.0.5(graphql@16.10.0)(ws@8.18.3)
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      subscriptions-transport-ws: 0.11.0(graphql@16.10.0)
-    transitivePeerDependencies:
-      - '@types/react'
 
   '@apollo/client@3.13.5(@types/react@19.0.12)(graphql-ws@6.0.5(graphql@16.11.0)(ws@8.18.3))(graphql@16.10.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(subscriptions-transport-ws@0.11.0(graphql@16.11.0))':
     dependencies:
@@ -19471,21 +19459,35 @@ snapshots:
 
   '@tanstack/form-core@1.11.1':
     dependencies:
-      '@tanstack/store': 0.7.0
+      '@tanstack/store': 0.7.2
+
+  '@tanstack/form-core@1.19.2':
+    dependencies:
+      '@tanstack/store': 0.7.2
 
   '@tanstack/react-form@1.11.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@tanstack/form-core': 1.11.1
-      '@tanstack/react-store': 0.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@tanstack/react-store': 0.7.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       decode-formdata: 0.9.0
       devalue: 5.1.1
       react: 19.1.0
     transitivePeerDependencies:
       - react-dom
 
-  '@tanstack/react-store@0.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@tanstack/react-form@1.19.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@tanstack/store': 0.7.0
+      '@tanstack/form-core': 1.19.2
+      '@tanstack/react-store': 0.7.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      decode-formdata: 0.9.0
+      devalue: 5.1.1
+      react: 19.1.0
+    transitivePeerDependencies:
+      - react-dom
+
+  '@tanstack/react-store@0.7.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@tanstack/store': 0.7.2
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
       use-sync-external-store: 1.5.0(react@19.1.0)
@@ -19502,7 +19504,7 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@tanstack/store@0.7.0': {}
+  '@tanstack/store@0.7.2': {}
 
   '@tanstack/table-core@8.21.2': {}
 
@@ -26381,19 +26383,6 @@ snapshots:
     dependencies:
       hey-listen: 1.0.8
       tslib: 2.8.1
-
-  subscriptions-transport-ws@0.11.0(graphql@16.10.0):
-    dependencies:
-      backo2: 1.0.2
-      eventemitter3: 3.1.2
-      graphql: 16.10.0
-      iterall: 1.3.0
-      symbol-observable: 1.2.0
-      ws: 7.5.10
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    optional: true
 
   subscriptions-transport-ws@0.11.0(graphql@16.11.0):
     dependencies:
