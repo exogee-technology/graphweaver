@@ -7,4 +7,5 @@ export * from './okta';
 export * from './one-time-password';
 export * from './passkey';
 export * from './password';
+export * from './stub-auth-method-for-testing';
 export * from './web3';
