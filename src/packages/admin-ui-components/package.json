@@ -83,7 +83,7 @@
 		"graphql": "16.11.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"storybook": "8.6.12",
+		"storybook": "9.1.2",
 		"typescript": "5.8.3",
 		"vite": "6.3.5",
 		"vite-plugin-graphweaver": "workspace:*",
