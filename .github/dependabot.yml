@@ -50,6 +50,11 @@ updates:
         patterns:
           - "@simplewebauthn*"
 
+      storybook:
+        patterns:
+          - "storybook"
+          - "@storybook*"
+
       tiptap:
         patterns:
           - "@tiptap*"
