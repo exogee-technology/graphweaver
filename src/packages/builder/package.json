@@ -14,6 +14,17 @@
 		"test": "vitest"
 	},
 	"main": "lib/index.js",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./lib/index.d.ts",
+			"default": "./lib/index.js"
+		},
+		"./auth": {
+			"types": "./lib/auth/index.d.ts",
+			"default": "./lib/auth/index.js"
+		}
+	},
 	"source": "src/index.ts",
 	"dependencies": {
 		"@exogee/graphweaver-admin-ui": "workspace:*",
