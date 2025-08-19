@@ -1,4 +1,5 @@
-import { BigIntType, Entity, Ref, Index, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { BigIntType, Entity, Index, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import type { Ref } from '@mikro-orm/core';
 
 import type { AuditChange } from './audit-change';
 import { AuditChange as AuditChangeValue } from './audit-change';
