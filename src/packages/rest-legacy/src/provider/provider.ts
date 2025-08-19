@@ -1,12 +1,5 @@
-import {
-	BackendProvider as Provider,
-	Filter,
-	PaginationOptions,
-	BackendProviderConfig,
-	TraceMethod,
-	TraceOptions,
-	EntityMetadata,
-} from '@exogee/graphweaver';
+import type { BackendProvider as Provider, Filter, PaginationOptions, BackendProviderConfig, TraceOptions, EntityMetadata } from '@exogee/graphweaver';
+import { TraceMethod } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
 logger.warn(

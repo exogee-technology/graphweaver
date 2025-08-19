@@ -1,4 +1,5 @@
-import { DateTimeFormat, Entity, Field } from '../decorators';
+import type { DateTimeFormat } from '../decorators';
+import { Entity, Field } from '../decorators';
 
 @Entity('AdminUiFieldFormatMetadata', {
 	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },

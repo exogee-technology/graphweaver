@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { BuildOptions, PluginBuild, OnResolveArgs, OnLoadArgs } from 'esbuild';
+import { createRequire } from 'node:module';
 
 export interface AdditionalFunctionConfig {
 	handlerPath: string;
@@ -33,7 +34,7 @@ export const baseEsbuildConfig: BuildOptions = {
 	sourcemap: true,
 	platform: 'node',
 	target: ['node18'],
-	format: 'cjs',
+	format: 'esm',
 	keepNames: true,
 };
 
@@ -54,8 +55,11 @@ export const getExternalModules = (): string[] => {
 
 	// The end user might explicitly require these, so we'll exclude them from the list of external modules.
 	const requiredModules = new Set([
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		...Object.keys(require(path.join(process.cwd(), './package.json')).dependencies),
+		...Object.keys(
+			JSON.parse(
+				fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8')
+			).dependencies ?? {}
+		),
 	]);
 
 	for (const value of requiredModules) {
@@ -160,13 +164,13 @@ export const addStartFunctionIfNeeded = () => ({
 	},
 });
 
-export const requireSilent = (module: string) => {
+export const requireSilent = (moduleId: string) => {
 	try {
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		return require(module);
+		const req = createRequire(import.meta.url);
+		return req(moduleId);
 	} catch {
 		// If we are here we might not have the package installed so we'll just return an empty object.
-		return { browser: {}, peerDependencies: {}, dependencies: {} };
+		return { browser: {}, peerDependencies: {}, dependencies: {} } as any;
 	}
 };
 

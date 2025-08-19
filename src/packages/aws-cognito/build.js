@@ -2,7 +2,7 @@
 	const esbuild = await import('esbuild');
 	await esbuild.build({
 		outdir: 'lib',
-		format: 'cjs',
+		format: 'esm',
 		platform: 'node',
 		sourcemap: 'linked',
 		entryPoints: ['src/index.ts'],

@@ -4,7 +4,7 @@
 	const entryPoints = await glob('./src/**/*.ts', { ignore: '**/*.test.ts' });
 	await esbuild.build({
 		outdir: 'lib',
-		format: 'cjs',
+		format: 'esm',
 		platform: 'node',
 		sourcemap: 'linked',
 		entryPoints,

@@ -1,8 +1,9 @@
 import { logger } from '@exogee/logger';
-import { TypeValue } from './types';
+import type { TypeValue } from './types';
 
-import { Filter, PaginationOptions, TraceOptions } from './types';
-import { EntityMetadata, graphweaverMetadata } from './metadata';
+import type { Filter, PaginationOptions, TraceOptions } from './types';
+import type { EntityMetadata } from './metadata';
+import { graphweaverMetadata } from './metadata';
 import { TraceMethod } from './open-telemetry';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];

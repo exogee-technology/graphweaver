@@ -12,7 +12,14 @@
 		"test": "vitest",
 		"version": "npm version --no-git-tag-version"
 	},
+	"type": "module",
 	"main": "lib/index.js",
+	"exports": {
+		".": {
+			"types": "./lib/index.d.ts",
+			"default": "./lib/index.js"
+		}
+	},
 	"source": "src/index.ts",
 	"directories": {
 		"lib": "lib"

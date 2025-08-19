@@ -1,13 +1,13 @@
 import path from 'node:path';
-import {
+import type {
 	BackendProvider,
 	Filter,
 	PaginationOptions,
-	TraceMethod,
 	TraceOptions,
 	EntityMetadata,
 	BackendProviderConfig,
 } from '@exogee/graphweaver';
+import { TraceMethod } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import got, { Options as GotOptions, Method } from 'got-cjs';
 import { inMemoryFilterFor } from './utils';

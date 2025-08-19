@@ -26,7 +26,7 @@ const validateMikroOrmPeerAndDevVersionsMatch = async () => {
 	const entryPoints = await glob('./src/**/*.ts');
 	await esbuild.build({
 		outdir: 'lib',
-		format: 'cjs',
+		format: 'esm',
 		platform: 'node',
 		sourcemap: 'linked',
 		entryPoints,
