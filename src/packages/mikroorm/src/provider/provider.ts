@@ -1,4 +1,4 @@
-import {
+import type {
 	BackendProvider,
 	PaginationOptions,
 	Sort,
@@ -7,15 +7,12 @@ import {
 	FieldMetadata,
 	AggregationResult,
 	AggregationType,
-	TraceMethod,
 	TraceOptions,
-	traceSync,
-	trace as startTrace,
 	GraphweaverRequestEvent,
 	GraphweaverPluginNextFunction,
 	EntityMetadata,
-	graphweaverMetadata,
 } from '@exogee/graphweaver';
+import { TraceMethod, traceSync, trace as startTrace, graphweaverMetadata } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import {
 	AutoPath,
