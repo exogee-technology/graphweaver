@@ -6,11 +6,10 @@ import type {
 	FieldMetadata,
 	AggregationResult,
 	TraceOptions,
-	GraphweaverRequestEvent,
 	GraphweaverPluginNextFunction,
 	EntityMetadata,
 } from '@exogee/graphweaver';
-import { TraceMethod, traceSync, trace as startTrace, graphweaverMetadata, Sort, AggregationType } from '@exogee/graphweaver';
+import { TraceMethod, traceSync, trace as startTrace, graphweaverMetadata, Sort, AggregationType, GraphweaverRequestEvent } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import {
 	AutoPath,
