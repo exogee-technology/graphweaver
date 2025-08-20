@@ -2,9 +2,7 @@ import { exec } from 'child_process';
 
 const asyncExec = async (command: string) =>
 	new Promise<void>((resolve, reject) => {
-		const execCommand = exec(command, (error) => {
-			if (error) return reject(error);
-		});
+		const execCommand = exec(command);
 
 		// Pipe stdout and stderr to parent process
 		execCommand.stdout?.pipe(process.stdout);
