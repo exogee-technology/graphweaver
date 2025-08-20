@@ -30,7 +30,7 @@
 	"dependencies": {
 		"@apollo/client": "3.13.5",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
-		"@graphiql/toolkit": "0.11.1",
+		"@graphiql/toolkit": "0.11.3",
 		"@tanstack/react-form": "1.19.2",
 		"@tanstack/react-table": "8.21.2",
 		"@tiptap/extension-link": "2.11.5",
@@ -39,7 +39,7 @@
 		"@types/react-dom": "19.0.4",
 		"clsx": "2.1.1",
 		"downshift": "9.0.9",
-		"graphiql": "3.8.3",
+		"graphiql": "4.1.2",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.6.1",
 		"motion": "12.23.6",
