@@ -1,8 +1,8 @@
-import { graphweaverMetadata } from '../metadata';
+import { graphweaverMetadata } from '../metadata.js';
 import { GraphQLResolveInfo, ResolveTree, ResolverOptions } from '../types';
 import { AnyGraphQLType } from './scalars';
-import { getOne } from '../resolvers';
-import { graphQLTypeForEntity } from '../schema-builder';
+import { getOne } from '../resolvers.js';
+import { graphQLTypeForEntity } from '../schema-builder.js';
 import { Source } from 'graphql';
 import { EXCLUDED_FROM_FEDERATION_ENTITY_FILTER } from './utils';
 

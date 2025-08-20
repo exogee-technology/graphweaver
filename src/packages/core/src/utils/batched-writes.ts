@@ -11,11 +11,10 @@ import {
 	isPrimaryKeyOnly,
 	isSerializableGraphQLEntityClass,
 	isTransformableGraphQLEntityClass,
-} from '..';
+} from '../index.js';
 import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '../metadata';
 import { getFieldTypeWithMetadata } from '../schema-builder';
 import { BaseContext, Filter, GraphQLResolveInfo } from '../types';
-
 import { getGraphweaverMutationType } from './resolver.utils';
 
 /**
@@ -102,12 +101,12 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 		(targetNodeId: string, foreignKey: string) =>
 		(value: (G & (object | undefined)) | null) => {
 			const targetNode = nodes.get(targetNodeId);
-			if (!targetNode || !value || !value.hasOwnProperty(primaryKey)) {
+			if (!targetNode || !value || !Object.prototype.hasOwnProperty.call(value, primaryKey)) {
 				throw new Error(`Source node ${targetNodeId} not found`);
 			}
 
-			targetNode[foreignKey as keyof typeof targetNode] = {
-				[primaryKey as keyof typeof value]: value[primaryKey as keyof typeof value] as G[keyof G],
+			(targetNode as any)[foreignKey] = {
+				[primaryKey]: (value as any)[primaryKey],
 			} as G[keyof G];
 			return;
 		};
@@ -128,23 +127,15 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 				throw new Error(`Source node ${sourceNodeId} not found`);
 			}
 			const sourceValue = {
-				[sourceKey]: sourceNode[sourceKey as keyof typeof sourceNode],
+				[sourceKey]: (sourceNode as any)[sourceKey],
 			};
-			targetNode[targetKey as keyof typeof targetNode] = sourceValue as G[keyof G];
+			(targetNode as any)[targetKey] = sourceValue as G[keyof G];
 			nodes.set(targetNodeId, targetNode);
 		};
 
 	/**
 	 * Recursively traverses the input entity and its relationships
 	 * to build the dependency graph and task list
-	 *
-	 * @param input - The entity or entities to process
-	 * @param meta - Metadata for the entity type
-	 * @param info - GraphQL resolve info
-	 * @param context - Base context
-	 * @param operationId - Unique ID for this operation batch
-	 * @param index - Index when processing arrays
-	 * @returns An operation object or null
 	 */
 	async function traverse(
 		input: Partial<G> | Partial<G>[],
@@ -165,18 +156,11 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 				input.map((node, i) => traverse(node, meta, info, context, operationId, i))
 			);
 
-			// Check for any rejected promises and throw the first error
-			const errors = results.filter(
-				(result) => result.status === 'rejected'
-			) as PromiseRejectedResult[];
+			const errors = results.filter((result) => result.status === 'rejected') as PromiseRejectedResult[];
 			if (errors.length > 0) {
 				const reason = errors[0].reason;
-				// Make sure we're throwing an Error object
-				if (reason instanceof Error) {
-					throw reason;
-				} else {
-					throw new Error(String(reason));
-				}
+				if (reason instanceof Error) throw reason;
+				else throw new Error(String(reason));
 			}
 
 			const operations = results
@@ -206,31 +190,26 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			});
 			return null;
 		} else if (isObject(input)) {
-			const node = { ...input };
+			const node = { ...input } as Partial<G>;
 			type = await operationType(node, primaryKeyField, meta, info).catch((e) => {
 				throw e;
 			});
 			const nodeId = `${operationId}:${index}`;
-			// Object containing instructions on what this operation should do once it has finished
 			const operationProcesses: Array<OperationProcess<G>> = [];
 			for (const entry of Object.entries(input)) {
 				const [key, childNode]: [string, Partial<G> | Partial<G>[]] = entry as any;
-				const relationship = meta.fields[key];
+				const relationship = (meta.fields as any)[key];
 				const { fieldType } = getFieldTypeWithMetadata(relationship.getType);
 				const relatedEntityMetadata = graphweaverMetadata.metadataForType(fieldType);
 				if (isEntityMetadata(relatedEntityMetadata)) {
 					if (isSerializableGraphQLEntityClass(fieldType)) {
-						node[key as keyof typeof node] = fieldType.serialize({ value: childNode }) as
-							| G[keyof G]
-							| undefined;
+						(node as any)[key] = fieldType.serialize({ value: childNode }) as G[keyof G] | undefined;
 					} else if (childNode === null) {
-						// Handle a many to one relationship being unlinked. We are clearing the foreign key, so nothing to do here
+						// unlink
 					} else if (isLinking(relatedEntityMetadata, childNode)) {
-						// If it's a linking entity or an array of linking entities, nothing to do here
+						// linking entity reference only
 					} else if (Array.isArray(childNode)) {
-						// If we have an array, we may need to create the parent first as children need reference to the parent
-						// As we are updating the parent from the child, we can remove this key
-						delete node[key as keyof Partial<G>];
+						delete (node as any)[key];
 
 						const newOperationId = crypto.randomUUID();
 						if (relationship.relationshipInfo?.relatedField) {
@@ -245,24 +224,24 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 							});
 						}
 
-						await traverse(childNode, relatedEntityMetadata, info, context, newOperationId, index);
+						await traverse(childNode, relatedEntityMetadata as any, info, context, newOperationId, index);
 					} else if (Object.keys(childNode).length > 0) {
 						const newOperationId = crypto.randomUUID();
 						if (relationship.relationshipInfo?.id) {
-							delete node[key as keyof Partial<G>];
+							delete (node as any)[key];
 							deps.push([operationId, newOperationId]);
 							operationProcesses.push({
 								fetch: fetchDependency(
 									`${newOperationId}:${index}`,
 									`${operationId}:${index}`,
-									String(relatedEntityMetadata.primaryKeyField).toString(),
+									String((relatedEntityMetadata as any).primaryKeyField).toString(),
 									key
 								),
 								type: 'pre' as const,
 							});
 							await traverse(
 								childNode,
-								relatedEntityMetadata,
+								relatedEntityMetadata as any,
 								info,
 								context,
 								newOperationId,
@@ -270,7 +249,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 							).then((res) => {
 								if (res) {
 									tasks.set(newOperationId, {
-										meta: relatedEntityMetadata,
+										meta: relatedEntityMetadata as any,
 										operations: [res],
 									});
 								}
@@ -287,7 +266,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 
 							await traverse(
 								childNode,
-								relatedEntityMetadata,
+								relatedEntityMetadata as any,
 								info,
 								context,
 								newOperationId,
@@ -295,7 +274,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 							).then((res) => {
 								if (res) {
 									tasks.set(newOperationId, {
-										meta: relatedEntityMetadata,
+										meta: relatedEntityMetadata as any,
 										operations: [res],
 									});
 								}
@@ -318,11 +297,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 	}
 
 	if (Array.isArray(rootInput)) {
-		await traverse(rootInput, rootMeta, rootInfo, rootContext, crypto.randomUUID(), 0).catch(
-			(e) => {
-				throw e;
-			}
-		);
+		await traverse(rootInput, rootMeta, rootInfo, rootContext, crypto.randomUUID(), 0);
 	} else {
 		throw new Error(`Unexpected Error: trying to create entity ${rootMeta.name}`);
 	}
@@ -338,15 +313,6 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 	};
 };
 
-/**
- * Executes the batched write operations in the correct order
- *
- * @param batches - The batches to execute in order
- * @param tasks - Map of tasks to execute
- * @param nodes - Map of nodes to operate on
- * @param returnOrder - The order to return results
- * @returns The result of the operations
- */
 export const runBatchedWrites = async <G = unknown, D = unknown>(
 	batches: Array<string[]>,
 	tasks: Map<
@@ -383,9 +349,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 			if (creates.length === 1) {
 				promises.push(
 					createOne(meta, nodes.get(creates[0].nodeId)!).then((result) => {
-						for (const process of creates[0].processing.filter(
-							(process) => process.type === 'post'
-						)) {
+						for (const process of creates[0].processing.filter((process) => process.type === 'post')) {
 							const { inject } = process;
 							inject(result);
 						}
@@ -409,9 +373,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 					).then((res) => {
 						for (let i = 0; i < res.length; i++) {
 							const result = res[i];
-							for (const process of creates[i].processing.filter(
-								(process) => process.type === 'post'
-							)) {
+							for (const process of creates[i].processing.filter((process) => process.type === 'post')) {
 								const { inject } = process;
 								inject(result);
 							}
@@ -435,9 +397,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 			if (updates.length === 1) {
 				promises.push(
 					updateOne(meta, nodes.get(updates[0].nodeId)!).then((result) => {
-						for (const process of updates[0].processing.filter(
-							(process) => process.type === 'post'
-						)) {
+						for (const process of updates[0].processing.filter((process) => process.type === 'post')) {
 							const { inject } = process;
 							inject(result);
 						}
@@ -456,9 +416,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 					).then((res) => {
 						for (let i = 0; i < res.length; i++) {
 							const result = res[i] as (G & (object | undefined)) | null;
-							for (const process of updates[i].processing.filter(
-								(process) => process.type === 'post'
-							)) {
+							for (const process of updates[i].processing.filter((process) => process.type === 'post')) {
 								const { inject } = process;
 								inject(result);
 							}
@@ -481,13 +439,6 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 	return rootNode ? [rootNode] : [];
 };
 
-/**
- * Creates a single entity
- *
- * @param meta - Entity metadata
- * @param node - Entity data to create
- * @returns The created entity
- */
 const createOne = async <G = unknown, D = unknown>(
 	meta: EntityMetadata<G, D>,
 	node: Partial<G>
@@ -511,13 +462,6 @@ const createOne = async <G = unknown, D = unknown>(
 	return fromBackendEntity(meta, createdEntity);
 };
 
-/**
- * Creates multiple entities
- *
- * @param meta - Entity metadata
- * @param nodes - Array of entity data to create
- * @returns Array of created entities
- */
 const createMany = async <G = unknown, D = unknown>(
 	meta: EntityMetadata<G, D>,
 	nodes: Partial<G>[]
@@ -545,13 +489,6 @@ const createMany = async <G = unknown, D = unknown>(
 	return createdEntities.map((entity) => fromBackendEntity(meta, entity));
 };
 
-/**
- * Updates a single entity
- *
- * @param meta - Entity metadata
- * @param node - Entity data to update
- * @returns The updated entity
- */
 const updateOne = async <G = unknown, D = unknown>(
 	meta: EntityMetadata<G, D>,
 	node: Partial<G>
@@ -571,13 +508,6 @@ const updateOne = async <G = unknown, D = unknown>(
 	return fromBackendEntity(meta, result);
 };
 
-/**
- * Updates multiple entities
- *
- * @param meta - Entity metadata
- * @param nodes - Array of entity data to update
- * @returns Array of updated entities
- */
 const updateMany = async <G = unknown, D = unknown>(
 	meta: EntityMetadata<G, D>,
 	nodes: Partial<G>[]
@@ -604,15 +534,6 @@ const updateMany = async <G = unknown, D = unknown>(
 	return createdEntities.map((entity) => fromBackendEntity(meta, entity));
 };
 
-/**
- * Determines the operation type (create or update) for an entity
- *
- * @param node - The entity data
- * @param primaryKeyField - Name of the primary key field
- * @param meta - Entity metadata
- * @param info - GraphQL resolve info
- * @returns The operation type ('create' or 'update')
- */
 const operationType = async <G = unknown, D = unknown>(
 	node: Partial<G>,
 	primaryKeyField: keyof G,
@@ -621,15 +542,11 @@ const operationType = async <G = unknown, D = unknown>(
 ) => {
 	let operation: 'create' | 'update' = 'create';
 
-	/**
-	 * If there's an ID, we can't be certain whether it's an update, or a create with a client-side key.
-	 *
-	 */
-
+	// If there's an ID, we can't be certain whether it's an update, or a create with a client-side key.
 	const isConfiguredForClientSideKeys = !!meta.apiOptions?.clientGeneratedPrimaryKeys;
 
-	if (primaryKeyField in node && node[primaryKeyField] && meta.provider) {
-		const primaryKey = node[primaryKeyField];
+	if (primaryKeyField in node && (node as any)[primaryKeyField] && meta.provider) {
+		const primaryKey = (node as any)[primaryKeyField];
 		if (!primaryKey)
 			throw new Error(
 				'Cannot call create or update on a client generated primary key entity without specifying a primary key.'
@@ -651,7 +568,7 @@ const operationType = async <G = unknown, D = unknown>(
 			operation = 'create';
 		} else {
 			throw new Error(
-				`Cannot create entity with ID '${node[primaryKeyField]}' because clientGeneratedPrimaryKeys is not enabled.`
+				`Cannot create entity with ID '${(node as any)[primaryKeyField]}' because clientGeneratedPrimaryKeys is not enabled.`
 			);
 		}
 	}
@@ -659,24 +576,8 @@ const operationType = async <G = unknown, D = unknown>(
 	return operation;
 };
 
-/**
- * Type definition for edges in the dependency graph
- */
 type Edge<T> = [T, T];
 
-/**
- * Performs a layered topological sort on a graph
- *
- * Layered topological sort returns an array of batches,
- * where each batch can be run in parallel. This ensures that
- * dependencies between entities are properly maintained during
- * the write operations.
- *
- * @param nodes - Array of nodes in the graph
- * @param edges - Array of directed edges between nodes
- * @returns Array of node batches in execution order (reversed)
- * @throws Error if a cyclic dependency is detected
- */
 const layeredToposort = <T>(nodes: T[], edges: Edge<T>[]): T[][] => {
 	// 1) Build adjacency list and in-degree map
 	const adj = new Map<T, T[]>();

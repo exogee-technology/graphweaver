@@ -46,7 +46,7 @@ import {
 	UnionMetadata,
 } from './metadata';
 import { trace } from './open-telemetry';
-import * as resolvers from './resolvers';
+import * as resolvers from './resolvers.js';
 import {
 	allOperations,
 	arrayOperations,

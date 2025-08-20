@@ -1,1 +1,1 @@
-export * from './external-id-field';
+export * from './external-id-field.js';

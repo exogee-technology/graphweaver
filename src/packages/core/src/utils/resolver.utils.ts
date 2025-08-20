@@ -1,14 +1,14 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { GraphweaverSchemaInfoExtensionWithSourceEntity } from '../schema-builder';
+import { GraphweaverSchemaInfoExtensionWithSourceEntity } from '../schema-builder.js';
 import { BaseContext } from '@apollo/server';
-import { dataEntityForGraphQLEntity } from '../default-from-backend-entity';
+import { dataEntityForGraphQLEntity } from '../default-from-backend-entity.js';
 import { Filter, ReadHookParams, ResolverOptions } from '../types';
-import { EntityMetadata } from '../metadata';
+import { EntityMetadata } from '../metadata.js';
 import { isScalarType } from 'graphql';
-import { getFieldType } from '../schema-builder';
+import { getFieldType } from '../schema-builder.js';
 import { logger } from '@exogee/logger';
-import { BaseLoaders } from '../base-loader';
-import { isDefined } from '../utils';
+import { BaseLoaders } from '../base-loader.js';
+import { isDefined } from '../utils/index.js';
 
 export const getGraphweaverMutationType = (
 	info: GraphQLResolveInfo

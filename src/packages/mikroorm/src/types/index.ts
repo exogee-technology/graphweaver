@@ -1,2 +1,2 @@
-export * from './date-type';
-export * from './time-type';
+export * from './date-type.js';
+export * from './time-type.js';

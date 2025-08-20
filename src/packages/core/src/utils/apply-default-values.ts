@@ -1,4 +1,4 @@
-import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '../metadata';
+import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '../metadata.js';
 
 export const applyDefaultValues = <G = unknown, D = unknown>(
 	data: Partial<G> | Partial<G>[],

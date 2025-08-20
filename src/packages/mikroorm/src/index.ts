@@ -5,14 +5,14 @@ dotenv.config({
 	path: `.env.${(process.env.NODE_ENV || 'development').toLowerCase()}`,
 }); // TODO: The path to .env file in pnpm workspaces seems to use the workspace package.json path. Need to ensure it uses the local version (if required)
 
-export * from './provider';
-export * from './entities';
-export * from './decorators';
-export * from './database';
-export * from './types';
-export * from './utils/authentication-context';
-export * from './plugins';
-export * from './introspection';
+export * from './provider/index.js';
+export * from './entities/index.js';
+export * from './decorators/index.js';
+export * from './database.js';
+export * from './types/index.js';
+export * from './utils/authentication-context.js';
+export * from './plugins/index.js';
+export * from './introspection/index.js';
 
 // Re-export from Mikro so things that depend on database entities can access helpers such as
 // Reference.isReference().

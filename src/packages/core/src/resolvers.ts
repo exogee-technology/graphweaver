@@ -24,7 +24,7 @@ import {
 	isEntityMetadata,
 	isSerializableGraphQLEntityClass,
 	isTransformableGraphQLEntityClass,
-} from '.';
+} from './index.js';
 import { traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, cleanFilter, hasId, isDefined, withTransaction } from './utils';
@@ -647,7 +647,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 
 	logger.trace('Loading from BaseLoaders');
 
-	const loaderFilter = getLoaderFilter(hookParams, relationshipFilterChunk);
+	const loaderFilter = getLoaderFilter(hookParams, relationshipFilterChunk!);
 
 	const dataEntities = await getDataEntities<G, D, R>({
 		source,

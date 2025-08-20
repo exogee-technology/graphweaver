@@ -1,6 +1,6 @@
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { DetailPanelInputComponentOption, Entity, Field } from '../decorators';
-import { graphweaverMetadata } from '../metadata';
+import { graphweaverMetadata } from '../metadata.js';
 import { AdminUiFieldAttributeMetadata } from './field-attribute';
 import { AdminUiFieldExtensionsMetadata } from './field-extensions';
 import { AdminUiFieldFormatMetadata } from './field-format';

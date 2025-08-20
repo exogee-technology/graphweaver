@@ -1,18 +1,20 @@
-export * from './base-data-provider';
-export * from './base-entities';
-export * from './base-loader';
-export * from './decorators';
-export * from './default-from-backend-entity';
-export * from './federation';
-export * from './field-resolver';
-export * from './hook-manager';
-export * from './metadata';
-export * from './metadata-service';
-export * from './open-telemetry';
-export * from './schema-builder';
-export * from './types';
-export * from './utils/create-or-update-entities';
-export * from './utils/plural';
+export * from './base-data-provider.js';
+export * from './base-entities.js';
+export * from './base-loader.js';
+export * from './decorators/index.js';
+export * from './default-from-backend-entity.js';
+export * from './federation/index.js';
+export * from './field-resolver.js';
+export * from './hook-manager.js';
+export * from './metadata.js';
+export { graphweaverMetadata } from './metadata.js';
+export type { MetadataType } from './metadata.js';
+export * from './metadata-service/index.js';
+export * from './open-telemetry/index.js';
+export * from './schema-builder.js';
+export * from './types.js';
+export * from './utils/create-or-update-entities.js';
+export * from './utils/plural.js';
 
 // Make it easier for everyone to work with our version of GraphQL JS for their own purposes.
 export * from 'graphql/type';

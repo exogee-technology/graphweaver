@@ -3,7 +3,7 @@ import { GraphQLResolveInfo } from 'graphql';
 import { HookRegister, hookManagerMap } from '../hook-manager';
 import { EntityMetadata, graphweaverMetadata } from '../metadata';
 import { BaseContext, CreateOrUpdateHookParams } from '../types';
-import { generateOperationBatches, runBatchedWrites } from './batched-writes';
+import { generateOperationBatches, runBatchedWrites } from './batched-writes.js';
 
 export const isCreateOrUpdate = async () => {};
 

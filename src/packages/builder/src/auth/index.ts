@@ -1,9 +1,9 @@
 import { writeFile } from 'fs/promises';
 
-import { generateConfig } from './config';
-import { generateAuthEnv } from './env';
-import { generateAdminPassword } from './password';
-import { generateApiKey } from './api-key';
+import { generateConfig } from './config.js';
+import { generateAuthEnv } from './env.js';
+import { generateAdminPassword } from './password.js';
+import { generateApiKey } from './api-key.js';
 
 export type Source = 'mysql' | 'postgresql' | 'sqlite' | 'mssql';
 

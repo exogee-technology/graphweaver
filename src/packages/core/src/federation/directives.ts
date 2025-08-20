@@ -1,6 +1,6 @@
 import { DirectiveLocation } from 'graphql';
 
-import { graphweaverMetadata } from '../metadata';
+import { graphweaverMetadata } from '../metadata.js';
 import { LinkPurpose } from './enums';
 import { FieldSetGraphQLType, LinkImportGraphQLType } from './scalars';
 import { EXCLUDED_FROM_FEDERATION_ENTITY_FILTER } from './utils';

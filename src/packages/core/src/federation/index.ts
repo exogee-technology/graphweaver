@@ -1,4 +1,4 @@
-import { graphweaverMetadata } from '..';
+import { graphweaverMetadata } from '../index.js';
 import { addDirectives } from './directives';
 import { addEntitiesQuery } from './entities';
 import { addEnums } from './enums';

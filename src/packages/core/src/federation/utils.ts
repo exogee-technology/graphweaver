@@ -1,4 +1,4 @@
-import { EntityMetadata, SchemaBuilder } from '..';
+import { EntityMetadata, SchemaBuilder } from '../index.js';
 
 export const buildFederationSchema = ({
 	schemaDirectives,

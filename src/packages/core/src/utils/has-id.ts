@@ -1,4 +1,4 @@
-import { EntityMetadata, graphweaverMetadata } from '../metadata';
+import { EntityMetadata, graphweaverMetadata } from '../metadata.js';
 
 export const hasId = <G = unknown, D = unknown>(
 	entityMetdata: EntityMetadata<G, D>,

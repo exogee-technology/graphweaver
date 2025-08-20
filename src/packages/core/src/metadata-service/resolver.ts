@@ -1,6 +1,6 @@
 import { hookManagerMap, HookRegister } from '../hook-manager';
-import { graphweaverMetadata } from '../metadata';
-import { getFieldTypeWithMetadata } from '../schema-builder';
+import { graphweaverMetadata } from '../metadata.js';
+import { getFieldTypeWithMetadata } from '../schema-builder.js';
 import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';

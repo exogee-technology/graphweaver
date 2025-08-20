@@ -1,6 +1,6 @@
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { Entity, Field } from '../decorators';
-import { graphweaverMetadata } from '../metadata';
+import { graphweaverMetadata } from '../metadata.js';
 import { AdminUIFilterType } from '../types';
 
 graphweaverMetadata.collectEnumInformation({

@@ -9,12 +9,12 @@ import {
 	isEntityMetadata,
 	isGraphQLScalarForTypeScriptType,
 	isTransformableGraphQLEntityClass,
-} from '.';
-import { RequestContext } from './request-context';
-import { GraphweaverRequestEvent } from './types';
+} from './index.js';
+import { RequestContext } from './request-context.js';
+import { GraphweaverRequestEvent } from './types.js';
 
-import type { GraphweaverPlugin, GraphweaverPluginNextFunction } from './types';
-import { cleanFilter } from './utils';
+import type { GraphweaverPlugin, GraphweaverPluginNextFunction } from './types.js';
+import { cleanFilter } from './utils/index.js';
 
 type LoaderMap = { [key: string]: DataLoader<string, unknown> };
 

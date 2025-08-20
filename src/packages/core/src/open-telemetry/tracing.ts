@@ -11,7 +11,7 @@ import type { Instrumentation } from '@opentelemetry/instrumentation';
 
 import { JsonSpanProcessor } from './exporter';
 import { BackendProvider, TraceOptions } from '../types';
-import { graphweaverMetadata } from '../metadata';
+import { graphweaverMetadata } from '../metadata.js';
 import { Trace, addTraceEntityToSchema } from './entity';
 
 export interface TraceData {

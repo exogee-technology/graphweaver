@@ -1,3 +1,3 @@
-export * from './tracing';
-export * from './exporter';
-export * from './entity';
+export * from './tracing.js';
+export * from './exporter.js';
+export * from './entity.js';

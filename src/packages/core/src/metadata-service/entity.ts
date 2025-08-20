@@ -5,7 +5,7 @@ import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { Entity, Field } from '../decorators';
 import { AggregationType } from '../types';
 import type { Filter, Sort } from '../types';
-import { graphweaverMetadata } from '../metadata';
+import { graphweaverMetadata } from '../metadata.js';
 
 graphweaverMetadata.collectEnumInformation({
 	target: AggregationType,

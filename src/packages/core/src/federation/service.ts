@@ -1,4 +1,4 @@
-import { graphweaverMetadata } from '../metadata';
+import { graphweaverMetadata } from '../metadata.js';
 import { Entity, Field } from '../decorators';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 import { EXCLUDED_FROM_FEDERATION_ENTITY_FILTER, buildFederationSchema } from './utils';

@@ -1,2 +1,2 @@
-export * from './audit-change';
-export * from './audit-related-entity-change';
+export * from './audit-change.js';
+export * from './audit-related-entity-change.js';

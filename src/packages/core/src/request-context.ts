@@ -2,7 +2,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { logger } from '@exogee/logger';
 import { Mutex } from 'async-mutex';
 
-import { BaseLoader } from './base-loader';
+import { BaseLoader } from './base-loader.js';
 
 type Context = {
 	BaseLoaders: BaseLoader;

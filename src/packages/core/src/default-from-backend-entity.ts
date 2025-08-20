@@ -3,7 +3,7 @@ import {
 	graphweaverMetadata,
 	isEntityMetadata,
 	isTransformableGraphQLEntityClass,
-} from '.';
+} from './index.js';
 
 const dataEntityPropertyKey = Symbol('dataEntity');
 
