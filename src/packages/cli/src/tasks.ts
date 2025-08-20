@@ -3,12 +3,17 @@ import { exec } from 'child_process';
 const asyncExec = async (command: string) =>
 	new Promise<void>((resolve, reject) => {
 		const execCommand = exec(command, (error) => {
-			if (error) {
-				return reject(error);
-			}
-			resolve();
+			if (error) return reject(error);
 		});
+
+		// Pipe stdout and stderr to parent process
 		execCommand.stdout?.pipe(process.stdout);
+		execCommand.stderr?.pipe(process.stderr);
+
+		execCommand.on('close', (code) => {
+			if (code === 0) return resolve();
+			else return reject(`Process exited with code ${code}`);
+		});
 	});
 
 export const generateTypes = async () => {
