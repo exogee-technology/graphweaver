@@ -23,7 +23,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "22.13.14",
-		"graphweaver": "2.16.1",
+		"graphweaver": "workspace:*",
 		"typescript": "5.8.3"
 	}
 }
