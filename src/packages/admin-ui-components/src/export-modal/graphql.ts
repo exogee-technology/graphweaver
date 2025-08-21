@@ -1,4 +1,5 @@
 import { DocumentNode, gql, QueryOptions } from '@apollo/client';
+import { isDocumentNode } from '@apollo/client/utilities';
 import {
 	AggregationType,
 	Entity,
@@ -7,7 +8,6 @@ import {
 	getOrderByQuery,
 	SortEntity,
 } from '../utils';
-import { isDocumentNode } from '@apollo/client/utilities';
 
 export const listEntityForExport = (
 	entity: Entity,
@@ -20,7 +20,7 @@ export const listEntityForExport = (
 	return gql`
 		query entityCSVExport($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
 			result: ${queryName}(filter: $filter, pagination: $pagination) {
-				${generateGqlSelectForEntityFields(entity, entityByType)}
+				${generateGqlSelectForEntityFields(entity.fields.filter((field) => !field.hideInTable), entityByType)}
 			}
 			${entityCanCount ? `aggregate: ${queryName}_aggregate(filter: $filter) { count }` : ''}
 		}
