@@ -1296,11 +1296,11 @@ importers:
         specifier: 22.13.14
         version: 22.13.14
       aws-cdk:
-        specifier: 2.1024.0
-        version: 2.1024.0
+        specifier: 2.1025.0
+        version: 2.1025.0
       aws-cdk-lib:
-        specifier: 2.210.0
-        version: 2.210.0(constructs@10.4.2)
+        specifier: 2.212.0
+        version: 2.212.0(constructs@10.4.2)
       constructs:
         specifier: 10.4.2
         version: 10.4.2
@@ -2161,8 +2161,8 @@ packages:
   '@aws-cdk/asset-node-proxy-agent-v6@2.1.0':
     resolution: {integrity: sha512-7bY3J8GCVxLupn/kNmpPc5VJz8grx+4RKfnnJiO1LG+uxkZfANZG3RMHhE+qQxxwkyQ9/MfPtTpf748UhR425A==}
 
-  '@aws-cdk/cloud-assembly-schema@48.3.0':
-    resolution: {integrity: sha512-6R7aMNXeVnXGMOXgspwMmpVi1rmgRReGKYt7yl22ZKNZN/whJqdnV2C6O2CI2lnj5Th/SlgQWsuEQOMM3TI5RQ==}
+  '@aws-cdk/cloud-assembly-schema@48.4.0':
+    resolution: {integrity: sha512-pWk5oucfA4Ywt0g5sjr8uABzTBNBrMfxVkHqc7b9jUYlMoY9CzCiOAcCdVLaqrtFp63a+z0M4s1sf6gaIkbeaA==}
     engines: {node: '>= 18.0.0'}
     bundledDependencies:
       - jsonschema
@@ -7125,8 +7125,8 @@ packages:
     resolution: {integrity: sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g==}
     engines: {node: '>=6.0.0'}
 
-  aws-cdk-lib@2.210.0:
-    resolution: {integrity: sha512-TSXaZLHKak1bk144PblhqBHZwyh9lvlN2yM4g52aR/HCuxlw2nkn+eupjuOtiNe0JJFwSudvO/qke65dN2WlEg==}
+  aws-cdk-lib@2.212.0:
+    resolution: {integrity: sha512-7vy3/fSwmkJe6hmPpX2DXeDIr/VhMjhOPRH4Y0IUjC0c+W6S4XwQU2urRq3DFJRKRWXDwKidqMZlF1m0ZY1wMw==}
     engines: {node: '>= 18.0.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -7143,8 +7143,8 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.1024.0:
-    resolution: {integrity: sha512-hY0iVT2gPX/QOQXL7RSP2sqIRI/4BYU27vSmbhZxLEj//c3pkMkd9QpIHj7gOhyWC2gf6n5JuYPw27Dgw8FEdA==}
+  aws-cdk@2.1025.0:
+    resolution: {integrity: sha512-qKYM+RG5+U/UbGpjTt8ZaxBEfKJMPdOmtPtFNidsIGlrdIWSIFdNcFYi13zo33FkMk6ZFA6yBnjfDry3fNR+hQ==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
 
@@ -11764,7 +11764,7 @@ packages:
   superagent@8.1.2:
     resolution: {integrity: sha512-6WTxW1EB6yCxV5VFOIPQruWGHqc3yI7hEmZK6h+pyk69Lk/Ut7rLUY6W/ONF2MjBuGjvmMiIpsrVJ2vjrHlslA==}
     engines: {node: '>=6.4.0 <13 || >=14'}
-    deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
+    deprecated: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
 
   supertest-graphql@1.1.4:
     resolution: {integrity: sha512-01No6WtLVu1sOxFgInAP/mG2Qn9eWwGIbM42Gih329ff1XtfMoCpbSNUmBq6SS116BEXuj17VJmaCIxC8DMQIA==}
@@ -13003,7 +13003,7 @@ snapshots:
 
   '@aws-cdk/asset-node-proxy-agent-v6@2.1.0': {}
 
-  '@aws-cdk/cloud-assembly-schema@48.3.0': {}
+  '@aws-cdk/cloud-assembly-schema@48.4.0': {}
 
   '@aws-crypto/crc32@5.2.0':
     dependencies:
@@ -21253,14 +21253,14 @@ snapshots:
 
   await-to-js@3.0.0: {}
 
-  aws-cdk-lib@2.210.0(constructs@10.4.2):
+  aws-cdk-lib@2.212.0(constructs@10.4.2):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.242
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
-      '@aws-cdk/cloud-assembly-schema': 48.3.0
+      '@aws-cdk/cloud-assembly-schema': 48.4.0
       constructs: 10.4.2
 
-  aws-cdk@2.1024.0:
+  aws-cdk@2.1025.0:
     optionalDependencies:
       fsevents: 2.3.2
 
