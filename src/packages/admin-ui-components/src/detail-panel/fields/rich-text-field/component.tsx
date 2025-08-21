@@ -1,4 +1,5 @@
 import { EditorProvider } from '@tiptap/react';
+import type { MarkdownStorage } from 'tiptap-markdown';
 import { useField } from 'formik';
 import { EntityField } from '../../../utils';
 import { MenuBar } from './menu-bar';
@@ -26,7 +27,11 @@ export const RichTextField = (props: Props) => {
 				slotBefore={isReadOnly ? undefined : <MenuBar options={options} />}
 				onUpdate={(props) => {
 					setValue(
-						asMarkdown ? props.editor.storage.markdown.getMarkdown() : props.editor.getHTML()
+						asMarkdown
+							? (
+									props.editor.storage as unknown as { markdown: MarkdownStorage }
+								).markdown.getMarkdown()
+							: props.editor.getHTML()
 					);
 				}}
 				editable={!isReadOnly}
