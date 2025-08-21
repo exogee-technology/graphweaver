@@ -40,7 +40,7 @@
 		"@types/react-dom": "19.0.4",
 		"clsx": "2.1.1",
 		"downshift": "9.0.9",
-		"graphiql": "4.1.2",
+		"graphiql": "5.2.0",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.6.1",
 		"motion": "12.23.6",
