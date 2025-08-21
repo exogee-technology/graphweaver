@@ -1368,8 +1368,8 @@ importers:
         specifier: 5.4.2
         version: 5.4.2
       semver:
-        specifier: 7.7.1
-        version: 7.7.1
+        specifier: 7.7.2
+        version: 7.7.2
       validate-npm-package-name:
         specifier: 6.0.0
         version: 6.0.0
@@ -18621,7 +18621,7 @@ snapshots:
   '@npmcli/fs@1.1.1':
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.7.1
+      semver: 7.7.2
     optional: true
 
   '@npmcli/move-file@1.1.2':
@@ -18777,7 +18777,7 @@ snapshots:
       '@types/shimmer': 1.2.0
       import-in-the-middle: 1.13.0
       require-in-the-middle: 7.5.1
-      semver: 7.7.1
+      semver: 7.7.2
       shimmer: 1.2.1
     transitivePeerDependencies:
       - supports-color
@@ -18877,7 +18877,7 @@ snapshots:
       '@opentelemetry/propagator-b3': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/propagator-jaeger': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 1.30.1(@opentelemetry/api@1.9.0)
-      semver: 7.7.1
+      semver: 7.7.2
 
   '@opentelemetry/semantic-conventions@1.28.0': {}
 
@@ -20165,7 +20165,7 @@ snapshots:
       jsdoc-type-pratt-parser: 4.1.0
       process: 0.11.10
       recast: 0.23.11
-      semver: 7.7.1
+      semver: 7.7.2
       util: 0.12.5
       ws: 8.18.2
     optionalDependencies:
@@ -21125,7 +21125,7 @@ snapshots:
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.1
+      semver: 7.7.2
       ts-api-utils: 2.1.0(typescript@5.8.3)
       typescript: 5.8.3
     transitivePeerDependencies:
@@ -23187,7 +23187,7 @@ snapshots:
       proxy-addr: 2.0.7
       rfdc: 1.4.1
       secure-json-parse: 2.7.0
-      semver: 7.7.1
+      semver: 7.7.2
       toad-cache: 3.7.0
 
   fastify@5.5.0:
@@ -23205,7 +23205,7 @@ snapshots:
       process-warning: 5.0.0
       rfdc: 1.4.1
       secure-json-parse: 4.0.0
-      semver: 7.7.1
+      semver: 7.7.2
       toad-cache: 3.7.0
 
   fastq@1.19.1:
@@ -24330,7 +24330,7 @@ snapshots:
       '@babel/parser': 7.28.0
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
-      semver: 7.7.1
+      semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
 
@@ -25513,7 +25513,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.1
+      semver: 7.7.2
 
   make-error@1.3.6: {}
 
@@ -25834,7 +25834,7 @@ snapshots:
 
   node-abi@3.75.0:
     dependencies:
-      semver: 7.7.1
+      semver: 7.7.2
 
   node-abort-controller@3.1.1: {}
 
@@ -25871,7 +25871,7 @@ snapshots:
       nopt: 5.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
-      semver: 7.7.1
+      semver: 7.7.2
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -27436,7 +27436,7 @@ snapshots:
       methods: 1.1.2
       mime: 2.6.0
       qs: 6.14.0
-      semver: 7.7.1
+      semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
 
