@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useCombobox } from 'downshift';
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { ChevronDownIcon } from '../assets';
 import { useAutoFocus } from '../hooks';
@@ -92,7 +92,7 @@ export const ComboBox = ({
 	});
 
 	// Clear typed text on blur if no item was selected
-	const handleBlur = () => {
+	const handleBlur = useCallback(() => {
 		if (allowFreeTyping && inputValue) {
 			// Check if the input matches any option
 			const matchingOption = options.find(
@@ -104,7 +104,7 @@ export const ComboBox = ({
 				setInputValue('');
 			}
 		}
-	};
+	}, [allowFreeTyping, inputValue, options, setInputValue]);
 
 	useEffect(() => {
 		if (isOpen) onOpen?.();

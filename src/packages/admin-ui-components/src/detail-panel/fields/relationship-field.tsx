@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ComboBox, SelectMode, SelectOption } from '../../combo-box';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
@@ -71,10 +71,20 @@ export const RelationshipField = ({
 
 	const [inputValue, onInputChange] = useState('');
 
-	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
-		const label = relatedEntity.summaryField || relatedEntity.primaryKeyField;
-		return { label: item[label], value: item[relatedEntity.primaryKeyField] };
-	}).filter(item => inputValue?.toLowerCase().length > 0 ? item.label?.toLowerCase().includes(inputValue.toLowerCase()) : true);
+	const options = useMemo(
+		() =>
+			(data?.result ?? [])
+				.map<SelectOption>((item): SelectOption => {
+					const label = relatedEntity.summaryField || relatedEntity.primaryKeyField;
+					return { label: item[label], value: item[relatedEntity.primaryKeyField] };
+				})
+				.filter((item) =>
+					inputValue?.toLowerCase().length > 0
+						? item.label?.toLowerCase().includes(inputValue.toLowerCase())
+						: true
+				),
+		[data?.result, inputValue, relatedEntity.primaryKeyField, relatedEntity.summaryField]
+	);
 
 	const onChange = (value: SelectOption | SelectOption[]) => {
 		let result: SelectOption | SelectOption[] | null = value;
