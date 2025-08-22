@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // Need to mock dependencies since DefaultLayout relies on SideBar and other components
 // In a real storybook implementation, you'd properly set up these components
