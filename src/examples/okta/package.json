@@ -27,7 +27,7 @@
 		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
 		"mikro-orm-sqlite-wasm": "workspace:*",
-		"react": "19.1.0"
+		"react": "19.1.1"
 	},
 	"devDependencies": {
 		"@types/node": "22.13.14",
