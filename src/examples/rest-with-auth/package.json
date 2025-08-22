@@ -34,7 +34,7 @@
 		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
 		"mysql2": "3.14.0",
-		"react": "19.1.0",
+		"react": "19.1.1",
 		"wouter": "3.6.0"
 	},
 	"devDependencies": {
