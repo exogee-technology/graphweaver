@@ -7,7 +7,7 @@ import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/g
 import { AuthorizationContext, AuthenticationType } from '../../types';
 import { UserProfile } from '../../user-profile';
 import { requireEnvironmentVariable } from '../../helper-functions';
-import { AuthenticationBaseEntity, CredentialStorage } from '../entities';
+import { AuthenticationBaseEntity, Credential, CredentialStorage } from '../entities';
 import {
 	defaultPasswordStrength,
 	handleLogOnDidResolveOperation,
