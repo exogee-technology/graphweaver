@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect } from 'react';
 import { toast as hotToast } from 'react-hot-toast';
 import { DismissibleToast, toast } from './component';

@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 
 /**
  * This file doesn't contain actual stories but serves as documentation for hooks.

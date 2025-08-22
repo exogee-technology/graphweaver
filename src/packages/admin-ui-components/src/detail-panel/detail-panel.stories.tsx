@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import { Form, Formik } from 'formik';
 import { AdminUIFilterType, DetailPanelInputComponentOption, Entity, EntityField } from '../utils';
 import { DetailPanel } from './component';
