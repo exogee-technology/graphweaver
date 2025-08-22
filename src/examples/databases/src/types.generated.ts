@@ -67,12 +67,21 @@ export type AdminUiEnumValueMetadata = {
 export type AdminUiFieldAttributeMetadata = {
   __typename?: 'AdminUiFieldAttributeMetadata';
   isReadOnly: Scalars['Boolean']['output'];
-  isRequired: Scalars['Boolean']['output'];
+  isRequiredForCreate: Scalars['Boolean']['output'];
+  isRequiredForUpdate: Scalars['Boolean']['output'];
 };
 
 export type AdminUiFieldExtensionsMetadata = {
   __typename?: 'AdminUiFieldExtensionsMetadata';
   key?: Maybe<Scalars['String']['output']>;
+};
+
+export type AdminUiFieldFormatMetadata = {
+  __typename?: 'AdminUiFieldFormatMetadata';
+  format?: Maybe<Scalars['String']['output']>;
+  timezone?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+  variant?: Maybe<Scalars['String']['output']>;
 };
 
 export type AdminUiFieldMetadata = {
@@ -81,6 +90,7 @@ export type AdminUiFieldMetadata = {
   detailPanelInputComponent?: Maybe<DetailPanelInputComponent>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  format?: Maybe<AdminUiFieldFormatMetadata>;
   hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
   hideInFilterBar?: Maybe<Scalars['Boolean']['output']>;
   hideInTable?: Maybe<Scalars['Boolean']['output']>;

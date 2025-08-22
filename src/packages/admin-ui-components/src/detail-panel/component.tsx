@@ -55,38 +55,43 @@ const isFieldReadonly = (
 	entity: Entity,
 	field: EntityField | CustomField<unknown>
 ) => {
-	// Regardless of if we're creating or editing, IDs should always be read only
-	// unless the entity has client generated primary keys.
-	if (
-		(field.type === 'ID' || field.type === 'ID!') &&
-		!entity.attributes.clientGeneratedPrimaryKeys
-	) {
-		return true;
+	// Primary key fields are treated differently than other fields.
+	if (field.name === entity.primaryKeyField) {
+		if (panelMode === PanelMode.CREATE) {
+			return !entity.attributes.clientGeneratedPrimaryKeys;
+		} else if (panelMode === PanelMode.EDIT) {
+			return field.attributes?.isReadOnly ?? false;
+		}
 	}
 
 	// If the entity as a whole is read only, then all fields should be read only.
 	if (entity.attributes.isReadOnly) return true;
 
-	// If we're editing and a field is read only, it should be shown as read only.
-	// However if we're creating, we may need to write the value for the initial creation.
-	if (panelMode !== PanelMode.CREATE && field.attributes?.isReadOnly) return true;
-
-	return false;
+	// Otherwise we can just return if the field itself is pure-play read only.
+	return field.attributes?.isReadOnly ?? false;
 };
 
 /**
  * Filter out fields before submission. Don't include read only fields. Include fields that are required, or have been modified.
- * 
+ *
  * @param initialValues - The initial values of the form.
  * @param values - The current values of the form.
  * @param entity - The entity of the current form
  */
-const filterFieldsForSubmission = (initialValues: Record<string, any>, values: Record<string, any>, entity: Entity, panelMode: PanelMode) => {
+const filterFieldsForSubmission = (
+	initialValues: Record<string, any>,
+	values: Record<string, any>,
+	entity: Entity,
+	panelMode: PanelMode
+) => {
 	const result: Record<string, any> = {};
 
 	for (const [key, value] of Object.entries(values)) {
 		const field = entity.fields.find((f) => f.name === key);
-		const isRequired = panelMode === PanelMode.CREATE ? field?.attributes?.isRequiredForCreate : field?.attributes?.isRequiredForUpdate;
+		const isRequired =
+			panelMode === PanelMode.CREATE
+				? field?.attributes?.isRequiredForCreate
+				: field?.attributes?.isRequiredForUpdate;
 
 		if (!isEqual(initialValues[key], value) || isRequired) {
 			result[key] = value;
@@ -194,7 +199,10 @@ const DetailField = ({
 	autoFocus: boolean;
 	panelMode: PanelMode;
 }) => {
-	const isRequired = panelMode === PanelMode.CREATE ? field.attributes?.isRequiredForCreate : field.attributes?.isRequiredForUpdate;
+	const isRequired =
+		panelMode === PanelMode.CREATE
+			? field.attributes?.isRequiredForCreate
+			: field.attributes?.isRequiredForUpdate;
 	return (
 		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
@@ -217,13 +225,13 @@ const CustomFieldComponent = ({
 	const formik = {
 		meta,
 		helpers,
-	}
+	};
 
 	return (
 		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
-			{field.component({ entity, context: 'detail-form', panelMode, formik, })}
+			{field.component({ entity, context: 'detail-form', panelMode, formik })}
 		</div>
-	)
+	);
 };
 
 const PersistForm = ({ name }: { name: string }) => {
@@ -267,7 +275,10 @@ const DetailForm = ({
 		(values: any) => {
 			const errors: Record<string, string> = {};
 			for (const field of detailFields) {
-				const isRequired = panelMode === PanelMode.CREATE ? field.attributes?.isRequiredForCreate : field.attributes?.isRequiredForUpdate;
+				const isRequired =
+					panelMode === PanelMode.CREATE
+						? field.attributes?.isRequiredForCreate
+						: field.attributes?.isRequiredForUpdate;
 				if (
 					isRequired &&
 					field.type !== 'ID' &&
@@ -312,7 +323,12 @@ const DetailForm = ({
 	const submit = useCallback(
 		async (values: any, actions: FormikHelpers<any>) => {
 			try {
-				const transformedValues = filterFieldsForSubmission(initialValues, values, entity, panelMode);
+				const transformedValues = filterFieldsForSubmission(
+					initialValues,
+					values,
+					entity,
+					panelMode
+				);
 
 				for (const transform of Object.values(dataTransforms)) {
 					transformedValues[transform.field.name] = await transform.transform(
@@ -342,45 +358,50 @@ const DetailForm = ({
 			onSubmit={submit}
 			onReset={onCancel}
 		>
-			{({ isSubmitting }) => { 
+			{({ isSubmitting }) => {
 				return (
-				<Form className={styles.detailFormContainer}>
-					<div className={styles.detailFieldList}>
-						{detailFields.map((field) => {
-							if (field.hideInDetailForm) return null;
-							else if (field.type === 'custom') {
-								return (
-									<CustomFieldComponent
-										key={field.name}
-										field={field as CustomField}
-										entity={initialValues}
-										panelMode={panelMode}
-									/>
-								);
-							} else {
-								return (
-									<DetailField
-										key={field.name}
-										entity={entity}
-										field={field}
-										autoFocus={field === firstEditableField}
-										panelMode={panelMode}
-									/>
-								);
-							}
-						})}
-						<div className={styles.detailButtonContainer}>
-							<Button type="reset" disabled={isSubmitting}>
-								Cancel
-							</Button>
-							<Button type="submit" disabled={isSubmitting || !!isReadOnly} loading={isSubmitting}>
-								Save
-							</Button>
+					<Form className={styles.detailFormContainer}>
+						<div className={styles.detailFieldList}>
+							{detailFields.map((field) => {
+								if (field.hideInDetailForm) return null;
+								else if (field.type === 'custom') {
+									return (
+										<CustomFieldComponent
+											key={field.name}
+											field={field as CustomField}
+											entity={initialValues}
+											panelMode={panelMode}
+										/>
+									);
+								} else {
+									return (
+										<DetailField
+											key={field.name}
+											entity={entity}
+											field={field}
+											autoFocus={field === firstEditableField}
+											panelMode={panelMode}
+										/>
+									);
+								}
+							})}
+							<div className={styles.detailButtonContainer}>
+								<Button type="reset" disabled={isSubmitting}>
+									Cancel
+								</Button>
+								<Button
+									type="submit"
+									disabled={isSubmitting || !!isReadOnly}
+									loading={isSubmitting}
+								>
+									Save
+								</Button>
+							</div>
 						</div>
-					</div>
-					<PersistForm name={persistName} />
-				</Form>
-			)}}
+						<PersistForm name={persistName} />
+					</Form>
+				);
+			}}
 		</Formik>
 	);
 };
