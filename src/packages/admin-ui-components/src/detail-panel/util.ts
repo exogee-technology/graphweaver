@@ -49,3 +49,5 @@ export const transformValueForForm = (field: EntityField, value: unknown, entity
 	}
 	return value;
 };
+
+export const getFieldId = (fieldName: string) => `detail-panel-field-${fieldName}`

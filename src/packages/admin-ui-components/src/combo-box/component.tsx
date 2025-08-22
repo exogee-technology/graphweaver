@@ -30,6 +30,7 @@ interface SelectProps {
 	allowFreeTyping?: boolean;
 	onInputChange?: (inputValue: string) => void;
 	['data-testid']?: string;
+	fieldId?: string;
 }
 
 function arrayify<T>(value: T) {
@@ -51,6 +52,7 @@ export const ComboBox = ({
 	allowFreeTyping = false,
 	onInputChange,
 	['data-testid']: testId,
+	fieldId,
 }: SelectProps) => {
 	const valueArray = arrayify(value);
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
@@ -67,6 +69,7 @@ export const ComboBox = ({
 		toggleMenu,
 	} = useCombobox({
 		items: options,
+		id: fieldId,
 		itemToString: (item) => item?.label ?? '',
 		isItemDisabled: () => disabled,
 		onInputValueChange: ({ inputValue }) => {

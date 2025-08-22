@@ -6,6 +6,7 @@ import { ComboBox, SelectMode, SelectOption } from '../../combo-box';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 import { useDataTransform } from '../use-data-transform';
+import { getFieldId } from '../util';
 
 const mode = (field: EntityField) => {
 	if (field.relationshipType === 'ONE_TO_MANY' || field.relationshipType === 'MANY_TO_MANY') {
@@ -27,6 +28,7 @@ export const RelationshipField = ({
 	const [{ value }, _, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const relatedEntity = entityByType(field.type);
+	const fieldId = getFieldId(name);
 
 	// The form data works with select options for ease of management / display,
 	// but when we go to the server, we need to convert these to the correct format
@@ -111,6 +113,7 @@ export const RelationshipField = ({
 				autoFocus={autoFocus}
 				allowFreeTyping
 				onInputChange={onInputChange}
+				fieldId={fieldId}
 			/>
 		);
 	}
