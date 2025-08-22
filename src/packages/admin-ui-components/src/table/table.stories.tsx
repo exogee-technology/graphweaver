@@ -121,9 +121,9 @@ const columnsWithSelection = [
 	...defaultColumns,
 ];
 
-const meta = {
+const meta: Meta<typeof Table<Person>> = {
 	title: 'Display/Table',
-	component: Table,
+	component: Table<Person>,
 	parameters: {
 		layout: 'padded',
 	},
@@ -131,7 +131,7 @@ const meta = {
 		loading: { control: 'boolean' },
 	},
 	decorators: [(Story) => <div style={{ height: '400px' }}>{Story()}</div>],
-} as Meta<typeof Table>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
