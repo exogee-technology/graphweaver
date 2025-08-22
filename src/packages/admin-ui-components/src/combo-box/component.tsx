@@ -112,13 +112,57 @@ export const ComboBox = ({
 
 	// Position dropdown when opened
 	useEffect(() => {
-		if (isOpen && selectBoxRef.current && dropdownRef.current) {
-			const selectRect = selectBoxRef.current.getBoundingClientRect();
-			const dropdown = dropdownRef.current;
+		const positionDropdown = () => {
+			if (isOpen && selectBoxRef.current && dropdownRef.current) {
+				const selectRect = selectBoxRef.current.getBoundingClientRect();
+				const dropdown = dropdownRef.current;
 
-			dropdown.style.top = `${selectRect.bottom + window.scrollY + 2}px`;
-			dropdown.style.left = `${selectRect.left + window.scrollX}px`;
-			dropdown.style.width = `${Math.max(selectRect.width, 150)}px`;
+				// Use the absolute viewport position - getBoundingClientRect() already accounts for all scroll positions
+				dropdown.style.top = `${selectRect.bottom + 2}px`;
+				dropdown.style.left = `${selectRect.left}px`;
+				dropdown.style.width = `${Math.max(selectRect.width, 150)}px`;
+			}
+		};
+
+		const addScrollListeners = () => {
+			// Add scroll event listeners to all scrollable parent containers and window
+			const scrollListeners: Array<{ element: Element | Window; listener: EventListener }> = [];
+
+			// Listen to window scroll
+			const windowListener = positionDropdown;
+			window.addEventListener('scroll', windowListener);
+			scrollListeners.push({ element: window, listener: windowListener });
+
+			// Listen to parent container scrolls
+			let element = selectBoxRef.current?.parentElement;
+			while (element && element !== document.body) {
+				const computedStyle = window.getComputedStyle(element);
+				if (
+					computedStyle.overflowX === 'auto' ||
+					computedStyle.overflowX === 'scroll' ||
+					computedStyle.overflowY === 'auto' ||
+					computedStyle.overflowY === 'scroll'
+				) {
+					const listener = positionDropdown;
+					element.addEventListener('scroll', listener);
+					scrollListeners.push({ element, listener });
+				}
+				element = element.parentElement;
+			}
+
+			return scrollListeners;
+		};
+
+		if (isOpen) {
+			positionDropdown();
+			const scrollListeners = addScrollListeners();
+
+			// Cleanup function to remove scroll listeners
+			return () => {
+				scrollListeners.forEach(({ element, listener }) => {
+					element.removeEventListener('scroll', listener);
+				});
+			};
 		}
 	}, [isOpen]);
 
