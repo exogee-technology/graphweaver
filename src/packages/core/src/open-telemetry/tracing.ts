@@ -4,7 +4,7 @@ import { Span, SpanOptions, SpanStatusCode, trace as traceApi, context } from '@
 import * as opentelemetry from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { isTracingSuppressed, suppressTracing, unsuppressTracing } from '@opentelemetry/core';
-import { Resource } from '@opentelemetry/resources';
+import { resourceFromAttributes } from '@opentelemetry/resources';
 import { logger } from '@exogee/logger';
 
 import type { Instrumentation } from '@opentelemetry/instrumentation';
@@ -167,7 +167,7 @@ export const startTracing = ({
 			spanProcessors: traceProvider ? [JsonSpanProcessor(traceProvider)] : [],
 			traceExporter,
 			instrumentations,
-			resource: new Resource({
+			resource: resourceFromAttributes({
 				['service.name']: process.env.SERVICE_NAME ?? 'Graphweaver',
 			}),
 		});
