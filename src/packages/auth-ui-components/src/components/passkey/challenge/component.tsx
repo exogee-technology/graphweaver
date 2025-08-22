@@ -59,7 +59,9 @@ const RegisterButton = ({
 		try {
 			const { data } = await generateRegistrationOptions();
 			if (!data) throw new Error('Could not generate registration options.');
-			const registrationResponse = await startRegistration(data.passkeyGenerateRegistrationOptions);
+			const registrationResponse = await startRegistration({
+				optionsJSON: data.passkeyGenerateRegistrationOptions,
+			});
 			const { data: verifyData } = await verifyRegistrationResponse({
 				variables: {
 					registrationResponse,
@@ -122,9 +124,9 @@ const AuthenticateButton = ({
 			setLoading(true);
 			const { data } = await generateAuthenticationOptions();
 			if (!data) throw new Error('Could not generate registration options.');
-			const authenticationResponse = await startAuthentication(
-				data.passkeyGenerateAuthenticationOptions
-			);
+			const authenticationResponse = await startAuthentication({
+				optionsJSON: data.passkeyGenerateAuthenticationOptions,
+			});
 			const { data: verifyData } = await verifyAuthenticationResponse({
 				variables: {
 					authenticationResponse,

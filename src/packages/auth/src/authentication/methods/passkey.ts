@@ -8,12 +8,15 @@ import { isoBase64URL } from '@simplewebauthn/server/helpers';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import type {
+	AuthenticationExtensionsClientOutputs,
 	AuthenticationResponseJSON,
 	AuthenticatorAssertionResponseJSON,
+	AuthenticatorAttachment,
 	AuthenticatorAttestationResponseJSON,
 	CredentialDeviceType,
 	PublicKeyCredentialCreationOptionsJSON,
 	PublicKeyCredentialRequestOptionsJSON,
+	PublicKeyCredentialType,
 	RegistrationResponseJSON,
 } from '@simplewebauthn/types';
 import { logger } from '@exogee/logger';
@@ -298,15 +301,15 @@ export class Passkey extends BaseAuthMethod {
 			const { verified, registrationInfo } = verification;
 
 			if (verified) {
-				if (!registrationInfo?.credentialPublicKey)
+				if (!registrationInfo?.credential.publicKey)
 					throw new AuthenticationError('Authentication failed: No Public Key Found');
 
 				const newPasskey: PasskeyAuthenticatorDeviceJSON = {
-					id: registrationInfo.credentialID,
+					id: registrationInfo.credential.id,
 					// Created by `generateRegistrationOptions()`
 					webAuthnUserID: currentOptions.data.user.id,
-					publicKey: isoBase64URL.fromBuffer(registrationInfo.credentialPublicKey),
-					counter: registrationInfo.counter ?? 0,
+					publicKey: isoBase64URL.fromBuffer(registrationInfo.credential.publicKey),
+					counter: registrationInfo.credential.counter ?? 0,
 					deviceType: registrationInfo.credentialDeviceType,
 					// Whether the passkey has been backed up in some way
 					backedUp: registrationInfo.credentialBackedUp,
@@ -393,9 +396,9 @@ export class Passkey extends BaseAuthMethod {
 				expectedChallenge: currentOptions.data.challenge,
 				expectedOrigin: config.origin,
 				expectedRPID: config.rp.id,
-				authenticator: {
-					credentialID: passkey.id,
-					credentialPublicKey: isoBase64URL.toBuffer(passkey.publicKey),
+				credential: {
+					id: passkey.id,
+					publicKey: isoBase64URL.toBuffer(passkey.publicKey),
 					counter: passkey.counter,
 				},
 			});
