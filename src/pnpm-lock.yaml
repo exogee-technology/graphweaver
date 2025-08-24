@@ -1353,8 +1353,8 @@ importers:
         specifier: 7.7.2
         version: 7.7.2
       validate-npm-package-name:
-        specifier: 6.0.0
-        version: 6.0.0
+        specifier: 6.0.2
+        version: 6.0.2
       yargs:
         specifier: 17.7.2
         version: 17.7.2
@@ -12026,6 +12026,10 @@ packages:
 
   validate-npm-package-name@6.0.0:
     resolution: {integrity: sha512-d7KLgL1LD3U3fgnvWEY1cQXoO/q6EQ1BSz48Sa149V/5zVTAbgmZIpyI8TRi6U9/JNyeYLlTKsEMPtLC27RFUg==}
+    engines: {node: ^18.17.0 || >=20.5.0}
+
+  validate-npm-package-name@6.0.2:
+    resolution: {integrity: sha512-IUoow1YUtvoBBC06dXs8bR8B9vuA3aJfmQNKMoaPG/OFsPmoQvw8xh+6Ye25Gx9DQhoEom3Pcu9MKHerm/NpUQ==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
   validator@13.12.0:
@@ -27676,6 +27680,8 @@ snapshots:
       convert-source-map: 2.0.0
 
   validate-npm-package-name@6.0.0: {}
+
+  validate-npm-package-name@6.0.2: {}
 
   validator@13.12.0: {}
 
