@@ -95,6 +95,10 @@
 	margin-left: 8px;
 	pointer-events: all;
 	background-color: transparent;
+	border: none;
+	padding: 0;
+	outline: none;
+	font-family: inherit;
 }
 
 .selection {
