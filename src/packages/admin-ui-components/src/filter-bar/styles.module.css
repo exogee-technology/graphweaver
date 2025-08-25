@@ -24,9 +24,9 @@
 	display: flex;
 	gap: 16px;
 	overflow-x: auto;
-	height: 476px;
+	height: fit-content;
 	overflow-y: visible;
-	z-index: 99999;
+	z-index: 1000;
 	flex: 1;
 	min-width: 0;
 	padding-bottom: 12px;
