@@ -80,6 +80,7 @@
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	padding: 8px 16px 16px;
 	overflow: hidden;
+	width: fit-content;
 }
 
 .filterButtons {

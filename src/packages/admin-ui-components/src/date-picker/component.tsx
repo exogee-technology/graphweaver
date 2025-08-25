@@ -202,7 +202,7 @@ export const DatePicker = ({
 					className={styles.popup}
 					ref={datePickerRef}
 					style={{
-						position: 'fixed',
+						position: 'sticky',
 						top: `${popupPosition.top}px`,
 						left: `${popupPosition.left}px`,
 						zIndex: 9999,
