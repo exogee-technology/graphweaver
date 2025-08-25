@@ -66,6 +66,8 @@ export const ComboBox = ({
 		getItemProps,
 		inputValue,
 		setInputValue,
+		openMenu,
+		closeMenu,
 		toggleMenu,
 	} = useCombobox({
 		items: options,
@@ -170,7 +172,10 @@ export const ComboBox = ({
 	}, [isOpen]);
 
 	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-		if (e.key === 'Backspace' || e.key === 'Delete') onChange([]);
+		if (e.key === 'Backspace' || e.key === 'Delete') {
+			onChange([]);
+			closeMenu();
+		}
 	};
 
 	// Store the selected ids in an array for easy lookup
@@ -195,7 +200,13 @@ export const ComboBox = ({
 											options.find((option) => option.value === valueArray[0])?.label ??
 											'1 Selected')}
 								</span>
-								<span className={styles.deleteOption} onClick={() => onChange([])}>
+								<span
+									className={styles.deleteOption}
+									onClick={() => {
+										onChange([]);
+										closeMenu();
+									}}
+								>
 									&times;
 								</span>
 							</div>
@@ -211,7 +222,7 @@ export const ComboBox = ({
 								{...getInputProps({
 									ref: inputRef,
 									onBlur: handleBlur,
-									onFocus: toggleMenu,
+									onFocus: openMenu,
 									placeholder: valueArray.length === 0 ? placeholder : undefined,
 								})}
 							/>
@@ -219,7 +230,7 @@ export const ComboBox = ({
 					)}
 				</div>
 
-				<span className={styles.arrow}>
+				<span className={clsx(styles.arrow, isOpen && styles.arrowOpen)}>
 					<ChevronDownIcon />
 				</span>
 			</div>

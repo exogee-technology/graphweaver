@@ -97,14 +97,14 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	// This function updates the filter in state based on the filter keys updated and the newFilter value
 	const onFilter = (fieldName: string, newFilter: Filter) => {
-		// Remove any filters from the currentFilter that start with the same fieldName
+		const filteredTemporaryFilters = { ...temporaryFilters };
 		for (const key of Object.keys(temporaryFilters)) {
-			if (key.startsWith(fieldName)) delete temporaryFilters[key];
+			if (key.startsWith(fieldName)) delete filteredTemporaryFilters[key];
 		}
 
 		// Combine all filters into one object
 		const combinedNewFilter = {
-			...temporaryFilters,
+			...filteredTemporaryFilters,
 			...newFilter,
 		};
 
@@ -201,7 +201,11 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				{filterComponents
 					.filter((item): item is { component: React.ReactElement; width: string } => item !== null)
 					.map(({ component, width }, index) => (
-						<div key={index} className={styles.filterComponentWrapper} style={{ width }}>
+						<div
+							key={`filter-${index}-${component.key}`}
+							className={styles.filterComponentWrapper}
+							style={{ width }}
+						>
 							{component}
 						</div>
 					))}
