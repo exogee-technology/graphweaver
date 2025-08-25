@@ -26,12 +26,10 @@ test('Export CSV with nested entities', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: 'Album' }).click();
 
-	// Filter for an album
+	// Filter for an artist
 	await page.getByTestId('artist-filter-input').click();
-
 	await page.locator('li').getByText('AC/DC').click({ delay: 1000 });
 	await page.waitForResponse(bodyHasText('Let There Be Rock'));
-
 
 	const exportEvent = page.waitForEvent('download');
 	await page.getByRole('button', { name: 'Export to CSV' }).click();
