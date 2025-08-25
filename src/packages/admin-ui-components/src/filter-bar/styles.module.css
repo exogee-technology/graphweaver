@@ -9,6 +9,9 @@
 .filterBarContent {
 	display: flex;
 	align-items: flex-start;
+	height: 70px;
+	overflow-y: visible;
+	z-index: 99999;
 	gap: 16px;
 	padding: 16px 0;
 }
@@ -21,15 +24,26 @@
 	display: flex;
 	gap: 16px;
 	overflow-x: auto;
+	height: 476px;
 	overflow-y: visible;
+	z-index: 99999;
 	flex: 1;
 	min-width: 0;
 	padding-bottom: 12px;
+	/* Hide scrollbar for IE, Edge and Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, Opera) */
+.filterScrollContainer::-webkit-scrollbar {
+	display: none;
 }
 
 .filterComponentWrapper {
 	flex-shrink: 0;
 	overflow: visible;
+	z-index: 99999;
 }
 
 @media only screen and (max-width: 1200px) {

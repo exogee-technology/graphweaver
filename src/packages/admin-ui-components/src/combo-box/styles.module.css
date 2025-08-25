@@ -112,7 +112,7 @@
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 	max-height: 185px;
 	overflow-y: auto;
-	position: fixed;
+	position: absolute;
 	z-index: 9999;
 	border: 1px solid var(--select-border-color);
 	margin-top: 2px;
