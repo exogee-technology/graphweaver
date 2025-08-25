@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
 import { QueryOptions } from '@apollo/client';
 import { Row } from '@tanstack/react-table';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { csvExportOverrides } from 'virtual:graphweaver-admin-ui-csv-export-overrides';
 
@@ -8,7 +8,7 @@ import { apolloClient } from '../apollo';
 import { Button } from '../button';
 import { Modal } from '../modal';
 import { Spinner } from '../spinner';
-import { exportToCSV, useSelectedEntity, useSchema, Filter, SortEntity } from '../utils';
+import { exportToCSV, Filter, SortEntity, useSchema, useSelectedEntity } from '../utils';
 
 import { defaultQuery } from './graphql';
 import styles from './styles.module.css';
@@ -25,7 +25,7 @@ export const ExportModal = <TData extends object>({
 	filters?: Filter;
 }) => {
 	const { selectedEntity } = useSelectedEntity();
-	const { entityByName } = useSchema();
+	const { entityByName, entityByType } = useSchema();
 	const [displayPageNumber, setDisplayPageNumber] = useState(1);
 	const [displayTotalPages, setDisplayTotalPages] = useState<number | undefined>();
 	const abortRef = useRef(false);
@@ -88,7 +88,7 @@ export const ExportModal = <TData extends object>({
 				allResults = await csvOverrides.mapResults(allResults);
 			}
 
-			exportToCSV(selectedEntity.name, allResults);
+			exportToCSV(selectedEntity, allResults, entityByType);
 		} catch (error) {
 			console.error(error);
 			toast.error(String(error), { duration: 5000 });
