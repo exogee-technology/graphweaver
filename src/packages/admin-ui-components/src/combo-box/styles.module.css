@@ -156,7 +156,7 @@
 	transition: transform 0.2s ease-in-out;
 }
 
-.selectBox.open > .arrow {
+.arrowOpen {
 	transform: translateY(-4px) rotate(180deg);
 }
 
