@@ -7,7 +7,7 @@ export const generateUpdateEntityMutation = (
 ) => gql`
     mutation updateEntity ($input: ${entity.name}UpdateInput!){
       update${entity.name} (input: $input) {
-        ${generateGqlSelectForEntityFields(entity, entityByType)}
+        ${generateGqlSelectForEntityFields(entity.fields.filter((field) => !field.hideInDetailForm), entityByType)}
       }
     }
   `;
@@ -18,7 +18,7 @@ export const generateCreateEntityMutation = (
 ) => gql`
     mutation createEntity ($input: ${entity.name}InsertInput!){
       create${entity.name} (input: $input) {
-        ${generateGqlSelectForEntityFields(entity, entityByType)}
+        ${generateGqlSelectForEntityFields(entity.fields.filter((field) => !field.hideInDetailForm), entityByType)}
       }
     }
   `;
