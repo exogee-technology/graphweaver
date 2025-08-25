@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useCombobox } from 'downshift';
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { ChevronDownIcon } from '../assets';
 import { useAutoFocus } from '../hooks';
@@ -30,6 +30,7 @@ interface SelectProps {
 	allowFreeTyping?: boolean;
 	onInputChange?: (inputValue: string) => void;
 	['data-testid']?: string;
+	fieldId?: string;
 }
 
 function arrayify<T>(value: T) {
@@ -51,6 +52,7 @@ export const ComboBox = ({
 	allowFreeTyping = false,
 	onInputChange,
 	['data-testid']: testId,
+	fieldId,
 }: SelectProps) => {
 	const valueArray = arrayify(value);
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
@@ -67,6 +69,7 @@ export const ComboBox = ({
 		toggleMenu,
 	} = useCombobox({
 		items: options,
+		id: fieldId,
 		itemToString: (item) => item?.label ?? '',
 		isItemDisabled: () => disabled,
 		onInputValueChange: ({ inputValue }) => {
@@ -92,7 +95,7 @@ export const ComboBox = ({
 	});
 
 	// Clear typed text on blur if no item was selected
-	const handleBlur = () => {
+	const handleBlur = useCallback(() => {
 		if (allowFreeTyping && inputValue) {
 			// Check if the input matches any option
 			const matchingOption = options.find(
@@ -104,7 +107,7 @@ export const ComboBox = ({
 				setInputValue('');
 			}
 		}
-	};
+	}, [allowFreeTyping, inputValue, options, setInputValue]);
 
 	useEffect(() => {
 		if (isOpen) onOpen?.();

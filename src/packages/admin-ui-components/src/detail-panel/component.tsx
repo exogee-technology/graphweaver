@@ -19,7 +19,7 @@ import {
 	DetailPanelInputComponentOption,
 	Entity,
 	EntityField,
-	queryForEntity,
+	queryForEntityEdit,
 	routeFor,
 	useSchema,
 	useSelectedEntity,
@@ -403,7 +403,7 @@ export const DetailPanel = () => {
 	const panelMode = id === 'graphweaver-admin-new-entity' ? PanelMode.CREATE : PanelMode.EDIT;
 
 	const { data, loading, error } = useQuery<{ result: ResultBaseType }>(
-		queryForEntity(selectedEntity, entityByName),
+		queryForEntityEdit(selectedEntity, entityByName),
 		{
 			variables: { id },
 			skip: panelMode === PanelMode.CREATE,

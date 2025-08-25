@@ -28,7 +28,7 @@ export const queryForEntityPage = (entityName: string, entityByType: (type: stri
 	return gql`
 		query ${queryName}( ${parameterDeclaration} ) {
 			result: ${entityFieldName}(filter: $detailFilter, pagination: $pagination) {
-				${generateGqlSelectForEntityFields(entity, entityByType)}
+				${generateGqlSelectForEntityFields(entity.fields.filter((field) => !field.hideInTable), entityByType)}
 			}
 			${entityCanCount ? `aggregate: ${entityFieldName}_aggregate(filter: $countFilter) { count }` : ''}
 		}

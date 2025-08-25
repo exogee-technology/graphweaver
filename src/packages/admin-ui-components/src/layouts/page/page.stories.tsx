@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Page } from './component';
 
 // Instead of trying to mock DefaultLayout directly, we'll just wrap the Page component

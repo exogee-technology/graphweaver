@@ -1,3 +1,4 @@
+import { Response } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { config } from './config';
@@ -22,3 +23,7 @@ export const resetDatabase = async () => {
 		return;
 	}
 };
+
+export function bodyHasText(searchText: string | RegExp) {
+	return async (response: Response) => (await response.body()).toString().match(searchText) !== null;
+}

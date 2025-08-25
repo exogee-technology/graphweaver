@@ -49,7 +49,7 @@ export class JsonSpanExporter implements SpanExporter {
 	private exportInfo(span: ReadableSpan) {
 		return {
 			traceId: span.spanContext().traceId,
-			parentId: span.parentSpanId,
+			parentId: span.parentSpanContext?.spanId,
 			name: span.name,
 			spanId: span.spanContext().spanId,
 			timestamp: hrTimeToNanoseconds(span.startTime),

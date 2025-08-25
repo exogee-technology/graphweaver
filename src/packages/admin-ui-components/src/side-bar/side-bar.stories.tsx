@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // Import from Storybook testing library
-import { fn } from '@storybook/test';
+import { fn } from 'storybook/test';
 
 // Create a mock component for the SideBar that doesn't depend on virtual modules
 // This is a simplified version to demonstrate the component in Storybook

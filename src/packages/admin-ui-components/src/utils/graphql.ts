@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Entity } from './use-schema';
+import { Entity, EntityField } from './use-schema';
 
 export const SCHEMA_QUERY = gql`
 	query GraphweaverMetadata {
@@ -71,11 +71,10 @@ const entitySelection = (relatedEntity: Entity) =>
 	[relatedEntity.primaryKeyField].concat(relatedEntity.summaryField ?? []).join('\n');
 
 export const generateGqlSelectForEntityFields = (
-	entity: Entity,
+	fields: EntityField[],
 	entityByType?: (entityType: string) => Entity
 ) =>
-	entity.fields
-		.filter((field) => !field.hideInTable)
+	fields
 		.map((field) => {
 			if (field.type === 'GraphweaverMedia') {
 				return `${field.name} { filename, type, url }`;
