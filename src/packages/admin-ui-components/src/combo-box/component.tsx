@@ -200,15 +200,17 @@ export const ComboBox = ({
 											options.find((option) => option.value === valueArray[0])?.label ??
 											'1 Selected')}
 								</span>
-								<span
+								<button
+									type="button"
 									className={styles.deleteOption}
 									onClick={() => {
 										onChange([]);
 										closeMenu();
 									}}
+									aria-label="Clear selection"
 								>
 									&times;
-								</span>
+								</button>
 							</div>
 						</div>
 					)}
