@@ -1,11 +1,20 @@
 .grid {
 	display: grid;
 	width: 100%;
+	/* Ensure grid items don't expand beyond their allocated space */
+	overflow: hidden;
 }
 
 .col {
 	display: flex;
 	flex-direction: column;
+	/* Critical: Prevent grid items from expanding beyond allocated space */
+	min-width: 0;
+	/* Handle overflow content gracefully */
+	overflow: hidden;
+	/* Ensure proper word wrapping for text content */
+	word-wrap: break-word;
+	word-break: break-word;
 }
 
 .row {
