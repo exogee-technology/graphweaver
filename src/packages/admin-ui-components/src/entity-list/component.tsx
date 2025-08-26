@@ -76,6 +76,7 @@ export const EntityList = <TData extends Record<string, unknown>>({
 		{
 			variables,
 			notifyOnNetworkStatusChange: true,
+			fetchPolicy: 'network-only',
 			...(excludeFromTracing
 				? { context: { headers: { ['x-graphweaver-suppress-tracing']: `true` } } }
 				: {}),
