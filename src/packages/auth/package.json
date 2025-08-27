@@ -46,7 +46,7 @@
 		"@types/ms": "2.1.0",
 		"@types/node": "22.13.14",
 		"@types/otp-generator": "4.0.2",
-		"esbuild": "0.25.1",
+		"esbuild": "0.25.9",
 		"glob": "11.0.3",
 		"prettier": "3.5.3",
 		"typescript": "5.8.3",
