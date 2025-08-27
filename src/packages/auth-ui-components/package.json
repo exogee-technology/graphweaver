@@ -30,7 +30,7 @@
 		"@usedapp/core": "1.2.16",
 		"ethers": "5.8.0",
 		"web3-token": "1.0.6",
-		"wouter": "3.6.0"
+		"wouter": "3.7.1"
 	},
 	"peerDependencies": {
 		"@auth0/auth0-spa-js": "^2.1.3",
