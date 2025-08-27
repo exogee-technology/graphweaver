@@ -20,13 +20,13 @@
 	},
 	"dependencies": {
 		"graphql-scalars": "1.24.2",
-		"luxon": "3.6.1"
+		"luxon": "3.7.1"
 	},
 	"peerDependencies": {
 		"graphql": "16"
 	},
 	"devDependencies": {
-		"@types/luxon": "3.6.2",
+		"@types/luxon": "3.7.1",
 		"decimal.js": "10.6.0",
 		"esbuild": "0.25.9",
 		"glob": "11.0.3",
