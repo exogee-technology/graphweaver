@@ -58,6 +58,11 @@
 	outline: none;
 }
 
+/* Hide caret when input is read-only (allowFreeTyping = false) */
+.selectInput[readonly] {
+	caret-color: transparent;
+}
+
 .select:has(input:focus) .selectInput {
 	color: var(--body-copy-color);
 }
@@ -177,4 +182,28 @@
 .focused {
 	background-color: #ffffff0c;
 	opacity: 0.8;
+}
+
+.loadingMore {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 8px;
+	color: #6c757d;
+	font-size: 14px;
+	cursor: default;
+	justify-content: center;
+}
+
+.loadingMore span {
+	margin-left: 4px;
+}
+
+.endOfList {
+	padding: 8px;
+	color: #6c757d;
+	font-size: 14px;
+	text-align: center;
+	cursor: default;
+	font-style: italic;
 }

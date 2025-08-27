@@ -1,10 +1,10 @@
-import { useFragment, useLazyQuery } from '@apollo/client';
+import { useApolloClient, useFragment } from '@apollo/client';
 
-import { ComboBox, SelectMode, SelectOption } from '../combo-box';
+import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../combo-box';
 import { Filter, useSchema } from '../utils';
 import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from './graphql';
 import { toSelectOption } from './utils';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
 
@@ -28,6 +28,8 @@ export interface RelationshipFilterProps {
 	dropdownItemsFilter?: Filter;
 }
 
+const PAGE_SIZE = 100;
+
 export const RelationshipFilter = ({
 	fieldName,
 	entity,
@@ -38,6 +40,7 @@ export const RelationshipFilter = ({
 	dropdownItemsFilter,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
+	const apolloClient = useApolloClient();
 	const entityType = entityByName(entity);
 	const [inputValue, setInputValue] = useState('');
 	const field = entityType?.fields.find((f) => f.name === fieldName);
@@ -103,35 +106,41 @@ export const RelationshipFilter = ({
 		dropdownFilter = dropdownItemsFilter;
 	}
 
-	const [fetchRelationshipOptionsList, { data, loading, error }] = useLazyQuery<{
-		result: any[];
-	}>(getRelationshipQuery(relatedEntity), {
-		variables: {
-			filter: Object.keys(dropdownFilter).length > 0 ? dropdownFilter : undefined,
+	const dataFetcher = useCallback(
+		async ({ page }: DataFetchOptions) => {
+			const query = getRelationshipQuery(relatedEntity);
 
-			...(relatedEntity.summaryField
-				? {
-						pagination: {
-							orderBy: orderBy ?? { [relatedEntity.summaryField]: 'ASC' },
-						},
-					}
-				: {}),
+			// If there's a user specified orderBy, use that. Otherwise, use the summary field if it exists,
+			// otherwise fall back to the primary key field. We need some kind of sort so that the pagination
+			// is deterministic.
+			const orderByForQuery =
+				orderBy ??
+				(relatedEntity.summaryField
+					? { [relatedEntity.summaryField]: 'ASC' }
+					: { [relatedEntity.primaryKeyField]: 'ASC' });
+
+			const { data } = await apolloClient.query<{ result: any[] }>({
+				query,
+				variables: {
+					filter: Object.keys(dropdownFilter).length > 0 ? dropdownFilter : undefined,
+					pagination: {
+						orderBy: orderByForQuery,
+						limit: PAGE_SIZE,
+						offset: Math.max(0, (page - 1) * PAGE_SIZE),
+					},
+				},
+			});
+
+			return data.result.map((item: any) => {
+				const label = relatedEntity.summaryField ?? relatedEntity.primaryKeyField;
+				return {
+					label: label ? item[label] : 'notfound',
+					value: item[relatedEntity.primaryKeyField],
+				};
+			});
 		},
-	});
-
-	const handleOnOpen = () => {
-		if (!data && !loading && !error) {
-			fetchRelationshipOptionsList();
-		}
-	};
-
-	const relationshipOptions = (data?.result ?? []).map<SelectOption>((item) => {
-		const label = relatedEntity.summaryField ?? relatedEntity.primaryKeyField;
-		return {
-			label: label ? (item as any)[label] : 'notfound',
-			value: item[relatedEntity.primaryKeyField],
-		};
-	});
+		[apolloClient, relatedEntity, dropdownFilter, orderBy]
+	);
 
 	const currentValue =
 		currentFilterValue.length === 1
@@ -146,16 +155,14 @@ export const RelationshipFilter = ({
 	return (
 		<ComboBox
 			key={fieldName}
-			options={relationshipOptions}
 			value={currentValue}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			onInputChange={setInputValue}
 			allowFreeTyping={!!searchableFields?.length}
-			onOpen={handleOnOpen}
-			loading={loading}
 			mode={SelectMode.MULTI}
 			data-testid={`${fieldName}-filter`}
+			dataFetcher={dataFetcher}
 		/>
 	);
 };
