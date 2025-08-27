@@ -38,7 +38,7 @@
 		"pg": "8.13.3",
 		"react": "19.1.1",
 		"react-dom": "19.1.1",
-		"react-syntax-highlighter": "15.6.1"
+		"react-syntax-highlighter": "15.6.5"
 	},
 	"devDependencies": {
 		"@types/node": "22.13.14",

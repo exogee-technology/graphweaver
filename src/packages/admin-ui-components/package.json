@@ -50,7 +50,7 @@
 		"react-fast-compare": "3.2.2",
 		"react-hot-toast": "2.5.2",
 		"react-resizable-panels": "2.1.7",
-		"react-syntax-highlighter": "15.6.1",
+		"react-syntax-highlighter": "15.6.5",
 		"tiptap-markdown": "0.8.10",
 		"wouter": "3.6.0",
 		"zod": "4.0.10"
