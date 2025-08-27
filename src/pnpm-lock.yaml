@@ -744,8 +744,8 @@ importers:
         specifier: 3.6.0
         version: 3.6.0(react@19.1.1)
       xero-node:
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 13.0.0
+        version: 13.0.0
     devDependencies:
       '@types/node':
         specifier: 22.13.14
@@ -1962,8 +1962,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       xero-node:
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 13.0.0
+        version: 13.0.0
     devDependencies:
       '@types/node':
         specifier: 22.13.14
@@ -9566,8 +9566,8 @@ packages:
   oblivious-set@1.1.1:
     resolution: {integrity: sha512-Oh+8fK09mgGmAshFdH6hSVco6KZmd1tTwNFWj35OvzdmJTMZtAkbn05zar2iG3v6sDs1JLEtOiBGNb6BHwkb2w==}
 
-  oidc-token-hash@5.0.3:
-    resolution: {integrity: sha512-IF4PcGgzAr6XXSff26Sk/+P4KZFJVuHAJZj3wgO3vX2bMdNVp/QXTP3P7CEm9V1IdG8lDLY3HhiqpsE/nOwpPw==}
+  oidc-token-hash@5.1.1:
+    resolution: {integrity: sha512-D7EmwxJV6DsEB6vOFLrBM2OzsVgQzgPWyHlV2OOAVj772n+WTXpudC9e9u5BVKQnYwaD30Ivhi9b+4UeBcGu9g==}
     engines: {node: ^10.13.0 || >=12.0.0}
 
   omggif@1.0.10:
@@ -9607,8 +9607,8 @@ packages:
     resolution: {integrity: sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==}
     hasBin: true
 
-  openid-client@5.6.5:
-    resolution: {integrity: sha512-5P4qO9nGJzB5PI0LFlhj4Dzg3m4odt0qsJTfyEtZyOlkgpILwEioOhVVJOrS1iVH494S4Ee5OCjjg6Bf5WOj3w==}
+  openid-client@5.7.1:
+    resolution: {integrity: sha512-jDBPgSVfTnkIh71Hg9pRvtJc6wTwqjRkN88+gCFtYWrlP4Yx2Dsrow8uPi3qLr/aeymPF3o2+dS+wOpglK04ew==}
 
   optimism@0.18.1:
     resolution: {integrity: sha512-mLXNwWPa9dgFyDqkNi54sjDyNJ9/fTI6WGBLgnXku1vdKY/jovHfZT5r+aiVeFFLOz+foPNOm5YJ4mqgld2GBQ==}
@@ -11591,8 +11591,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  xero-node@10.0.0:
-    resolution: {integrity: sha512-ui3efO+tyiTerKXRRMJ7WvFEonfcOFHYEDQZxMdNFGZi6jpW+6Rp6GDZEJ40VYU34JNT1ZZyrXY6+NRu4i/ADQ==}
+  xero-node@13.0.0:
+    resolution: {integrity: sha512-Yoil5b4ljt/+pULn758xdl6oV60csL6yTfAzOmtGpyaw4IV8eZRRfsz1JPf8PsHZOy9/gtNvcSQ/HKe64JxkvA==}
 
   xhr2@0.1.3:
     resolution: {integrity: sha512-6RmGK22QwC7yXB1CRwyLWuS2opPcKOlAu0ViAnyZjDlzrEmCKL4kLHkfvB8oMRWeztMsNoDGAjsMZY15w/4tTw==}
@@ -22220,7 +22220,7 @@ snapshots:
 
   oblivious-set@1.1.1: {}
 
-  oidc-token-hash@5.0.3: {}
+  oidc-token-hash@5.1.1: {}
 
   omggif@1.0.10: {}
 
@@ -22259,12 +22259,12 @@ snapshots:
 
   opener@1.5.2: {}
 
-  openid-client@5.6.5:
+  openid-client@5.7.1:
     dependencies:
       jose: 4.15.9
       lru-cache: 6.0.0
       object-hash: 2.2.0
-      oidc-token-hash: 5.0.3
+      oidc-token-hash: 5.1.1
 
   optimism@0.18.1:
     dependencies:
@@ -24457,10 +24457,10 @@ snapshots:
 
   ws@8.18.3: {}
 
-  xero-node@10.0.0:
+  xero-node@13.0.0:
     dependencies:
       axios: 1.11.0
-      openid-client: 5.6.5
+      openid-client: 5.7.1
     transitivePeerDependencies:
       - debug
 
