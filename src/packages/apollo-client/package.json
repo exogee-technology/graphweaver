@@ -26,7 +26,7 @@
 	},
 	"devDependencies": {
 		"@apollo/client": "3.13.5",
-		"esbuild": "0.25.1",
+		"esbuild": "0.25.9",
 		"typescript": "5.8.3"
 	},
 	"keywords": [
