@@ -23,7 +23,7 @@
 		"lodash": "4.17.21"
 	},
 	"devDependencies": {
-		"@types/lodash": "4.17.16",
+		"@types/lodash": "4.17.20",
 		"@types/node": "22.13.14",
 		"esbuild": "0.25.9",
 		"prettier": "3.5.3",
