@@ -641,8 +641,8 @@ importers:
         specifier: 16.11.0
         version: 16.11.0
       luxon:
-        specifier: 3.6.1
-        version: 3.6.1
+        specifier: 3.7.1
+        version: 3.7.1
       mikro-orm-sqlite-wasm:
         specifier: workspace:*
         version: link:../../packages/mikro-orm-sqlite-wasm
@@ -654,8 +654,8 @@ importers:
         version: 19.1.1(react@19.1.1)
     devDependencies:
       '@types/luxon':
-        specifier: 3.6.2
-        version: 3.6.2
+        specifier: 3.7.1
+        version: 3.7.1
       '@types/node':
         specifier: 22.13.14
         version: 22.13.14
@@ -875,8 +875,8 @@ importers:
         specifier: 2.0.6
         version: 2.0.6
       luxon:
-        specifier: 3.6.1
-        version: 3.6.1
+        specifier: 3.7.1
+        version: 3.7.1
       motion:
         specifier: 12.23.6
         version: 12.23.6(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -924,8 +924,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       '@types/luxon':
-        specifier: 3.6.2
-        version: 3.6.2
+        specifier: 3.7.1
+        version: 3.7.1
       '@types/papaparse':
         specifier: 5.3.15
         version: 5.3.15
@@ -1437,8 +1437,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1(@opentelemetry/api@1.9.0)
       '@types/luxon':
-        specifier: 3.6.2
-        version: 3.6.2
+        specifier: 3.7.1
+        version: 3.7.1
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0
@@ -1783,15 +1783,15 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.6.1
-        version: 3.6.1
+        specifier: 3.7.1
+        version: 3.7.1
     devDependencies:
       '@types/lodash':
         specifier: 4.17.20
         version: 4.17.20
       '@types/luxon':
-        specifier: 3.6.2
-        version: 3.6.2
+        specifier: 3.7.1
+        version: 3.7.1
       '@types/node':
         specifier: 22.13.14
         version: 22.13.14
@@ -1814,12 +1814,12 @@ importers:
         specifier: 1.24.2
         version: 1.24.2(graphql@16.11.0)
       luxon:
-        specifier: 3.6.1
-        version: 3.6.1
+        specifier: 3.7.1
+        version: 3.7.1
     devDependencies:
       '@types/luxon':
-        specifier: 3.6.2
-        version: 3.6.2
+        specifier: 3.7.1
+        version: 3.7.1
       decimal.js:
         specifier: 10.6.0
         version: 10.6.0
@@ -6014,8 +6014,8 @@ packages:
   '@types/long@4.0.2':
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
 
-  '@types/luxon@3.6.2':
-    resolution: {integrity: sha512-R/BdP7OxEMc44l2Ex5lSXHoIXTB2JLNa3y2QISIbr58U/YcsffyQrYW//hZSdrfxrjRZj3GcUoxMPGdO8gSYuw==}
+  '@types/luxon@3.7.1':
+    resolution: {integrity: sha512-H3iskjFIAn5SlJU7OuxUmTEpebK6TKB8rxZShDslBMZJ5u9S//KM1sbdAisiSrqwLQncVjnpi2OK2J51h+4lsg==}
 
   '@types/markdown-it@13.0.9':
     resolution: {integrity: sha512-1XPwR0+MgXLWfTn9gCsZ55AHOKW1WN+P9vr0PaQh5aerR9LLQXUbjfEAFhjmEmyoYFWAyuN2Mqkn40MZ4ukjBw==}
@@ -9318,8 +9318,8 @@ packages:
     resolution: {integrity: sha512-Nv9KddBcQSlQopmBHXSsZVY5xsdlZkdH/Iey0BlcBYggMd4two7cZnKOK9vmy3nY0O5RGH99z1PCeTpPqszUYg==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
-  luxon@3.6.1:
-    resolution: {integrity: sha512-tJLxrKJhO2ukZ5z0gyjY1zPh3Rh88Ej9P7jNrZiHMUXHae1yvI2imgOZtL1TO8TW6biMMKfTtAOoEJANgtWBMQ==}
+  luxon@3.7.1:
+    resolution: {integrity: sha512-RkRWjA926cTvz5rAb1BqyWkKbbjzCGchDUIKMCUvNi17j6f6j8uHGDV82Aqcqtzd+icoYpELmG3ksgGiFNNcNg==}
     engines: {node: '>=12'}
 
   lz-string@1.5.0:
@@ -17937,7 +17937,7 @@ snapshots:
 
   '@types/long@4.0.2': {}
 
-  '@types/luxon@3.6.2': {}
+  '@types/luxon@3.7.1': {}
 
   '@types/markdown-it@13.0.9':
     dependencies:
@@ -19317,7 +19317,7 @@ snapshots:
 
   cron-parser@4.9.0:
     dependencies:
-      luxon: 3.6.1
+      luxon: 3.7.1
 
   cross-fetch@3.2.0(encoding@0.1.13):
     dependencies:
@@ -22156,7 +22156,7 @@ snapshots:
 
   lru.min@1.1.2: {}
 
-  luxon@3.6.1: {}
+  luxon@3.7.1: {}
 
   lz-string@1.5.0: {}
 
@@ -23666,7 +23666,7 @@ snapshots:
       jsonpath-plus: 10.2.0
       jsonschema: 1.4.1
       jszip: 3.10.1
-      luxon: 3.6.1
+      luxon: 3.7.1
       nock: 13.5.6
       node-fetch: 3.3.2
       node-schedule: 2.1.1
