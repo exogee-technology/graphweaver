@@ -29,7 +29,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@fastify/cors": "11.1.0",
-		"class-validator": "0.14.1",
+		"class-validator": "0.14.2",
 		"decimal.js": "10.6.0",
 		"fastify": "5.5.0",
 		"graphql": "16.11.0",

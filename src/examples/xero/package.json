@@ -38,7 +38,7 @@
 		"@nivo/theming": "0.99.0",
 		"@nivo/tooltip": "0.99.0",
 		"async-mutex": "0.5.0",
-		"class-validator": "0.14.1",
+		"class-validator": "0.14.2",
 		"decimal.js": "10.6.0",
 		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
