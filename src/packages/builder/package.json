@@ -24,7 +24,7 @@
 		"@graphql-codegen/near-operation-file-preset": "3.0.0",
 		"@graphql-codegen/typescript": "4.1.6",
 		"@graphql-codegen/typescript-operations": "4.6.1",
-		"@graphql-codegen/typescript-react-apollo": "4.3.2",
+		"@graphql-codegen/typescript-react-apollo": "4.3.3",
 		"@serverless/utils": "6.15.0",
 		"@vitejs/plugin-react": "4.3.4",
 		"class-validator": "0.14.1",
