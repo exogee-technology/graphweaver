@@ -461,8 +461,8 @@ importers:
         specifier: 19.1.1
         version: 19.1.1
       wouter:
-        specifier: 3.6.0
-        version: 3.6.0(react@19.1.1)
+        specifier: 3.7.1
+        version: 3.7.1(react@19.1.1)
     devDependencies:
       '@types/node':
         specifier: 22.13.14
@@ -741,8 +741,8 @@ importers:
         specifier: 19.1.1
         version: 19.1.1(react@19.1.1)
       wouter:
-        specifier: 3.6.0
-        version: 3.6.0(react@19.1.1)
+        specifier: 3.7.1
+        version: 3.7.1(react@19.1.1)
       xero-node:
         specifier: 13.0.0
         version: 13.0.0
@@ -793,8 +793,8 @@ importers:
         specifier: 3.16.3
         version: 3.16.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       wouter:
-        specifier: 3.6.0
-        version: 3.6.0(react@19.1.1)
+        specifier: 3.7.1
+        version: 3.7.1(react@19.1.1)
     devDependencies:
       '@chialab/esbuild-plugin-html':
         specifier: 0.18.2
@@ -905,8 +905,8 @@ importers:
         specifier: 0.8.10
         version: 0.8.10(@tiptap/core@3.3.0(@tiptap/pm@3.3.0))
       wouter:
-        specifier: 3.6.0
-        version: 3.6.0(react@19.1.1)
+        specifier: 3.7.1
+        version: 3.7.1(react@19.1.1)
       zod:
         specifier: 4.0.10
         version: 4.0.10
@@ -1093,8 +1093,8 @@ importers:
         specifier: 1.0.6
         version: 1.0.6(react@19.1.1)
       wouter:
-        specifier: 3.6.0
-        version: 3.6.0(react@19.1.1)
+        specifier: 3.7.1
+        version: 3.7.1(react@19.1.1)
     devDependencies:
       '@auth0/auth0-spa-js':
         specifier: 2.1.3
@@ -11533,8 +11533,8 @@ packages:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
 
-  wouter@3.6.0:
-    resolution: {integrity: sha512-l11eR4urCc+CbY8+pV8HKFHxEqMgffss9aVB1XwiSkLDtH3cI6XpCa50cOzREzL0KwQqrwCVE5dCyeNcCgFpPg==}
+  wouter@3.7.1:
+    resolution: {integrity: sha512-od5LGmndSUzntZkE2R5CHhoiJ7YMuTIbiXsa0Anytc2RATekgv4sfWRAxLEULBrp7ADzinWQw8g470lkT8+fOw==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -24424,7 +24424,7 @@ snapshots:
 
   word-wrap@1.2.5: {}
 
-  wouter@3.6.0(react@19.1.1):
+  wouter@3.7.1(react@19.1.1):
     dependencies:
       mitt: 3.0.1
       react: 19.1.1
