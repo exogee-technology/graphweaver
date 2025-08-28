@@ -27,7 +27,7 @@
 		"@graphql-codegen/typescript-react-apollo": "4.3.3",
 		"@serverless/utils": "6.15.0",
 		"@vitejs/plugin-react": "4.3.4",
-		"class-validator": "0.14.1",
+		"class-validator": "0.14.2",
 		"dotenv": "16.4.7",
 		"esbuild": "0.25.9",
 		"esbuild-css-modules-plugin": "3.1.5",

@@ -30,7 +30,7 @@
 		"@exogee/logger": "workspace:*",
 		"@simplewebauthn/server": "13.1.2",
 		"apollo-server-errors": "3.3.1",
-		"class-validator": "0.14.1",
+		"class-validator": "0.14.2",
 		"dotenv": "16.4.7",
 		"graphql": "16.11.0",
 		"hash-wasm": "4.12.0",
