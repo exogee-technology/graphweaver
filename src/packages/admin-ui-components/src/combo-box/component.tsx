@@ -366,6 +366,13 @@ export const ComboBox = ({
 								</li>
 							))}
 
+							{/* Show a message if there are no options */}
+							{options.length === 0 && (
+								<li className={clsx(styles.option, styles.nonSelectableOption)}>
+									No options found
+								</li>
+							)}
+
 							{/* Show loading indicator for lazy loading */}
 							{dataFetcher && isLoadingMore && (
 								<li className={styles.loadingMore}>
