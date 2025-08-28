@@ -146,7 +146,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					break;
 				case AdminUIFilterType.RELATIONSHIP:
 					component = <RelationshipFilter key={field.name} {...options} />;
-					width = '200px';
+					width = '250px';
 					break;
 				case AdminUIFilterType.ENUM:
 					component = <EnumFilter key={field.name} {...options} />;
