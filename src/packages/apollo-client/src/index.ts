@@ -34,8 +34,6 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 				};
 			} | null
 		) => {
-			console.log('Apollo cache keyArgs called with args:', args);
-
 			// Remove Order Stabilization Keys
 			const filters = (args?.filter ?? {}) as unknown as FilterWithStabilization;
 			if (filters[stabilizationKeys]) {
