@@ -3,7 +3,7 @@ import { useField } from 'formik';
 
 import { useMemo, useCallback } from 'react';
 import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../../combo-box';
-import { EntityField, useSchema } from '../../utils';
+import { EntityField, substringFilterForFields, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 import { useDataTransform } from '../use-data-transform';
 import { getFieldId } from '../util';
@@ -74,9 +74,16 @@ export const RelationshipField = ({
 		[field, helpers]
 	);
 
-	// Determine the correct summary field and its metadata
 	const summaryFieldName = relatedEntity.summaryField || relatedEntity.primaryKeyField;
 	const summaryFieldMetadata = relatedEntity.fields.find((f) => f.name === summaryFieldName);
+
+	// Create searchable fields array for the utility function
+	const searchableFields = useMemo(() => {
+		if (summaryFieldMetadata?.filter?.options?.substringMatch) {
+			return [summaryFieldMetadata];
+		}
+		return [];
+	}, [summaryFieldMetadata]);
 
 	// Data fetcher for pagination, infinite scroll, and search
 	const dataFetcher = useCallback(
@@ -87,19 +94,12 @@ export const RelationshipField = ({
 				? { [relatedEntity.summaryField as string]: 'ASC' }
 				: { [relatedEntity.primaryKeyField]: 'ASC' };
 
-			// Build search filter if searchTerm is provided and the field supports search
-			let searchFilter = {};
-			if (searchTerm && summaryFieldMetadata?.filter?.options?.substringMatch) {
-				const operator = summaryFieldMetadata.filter.options.caseInsensitive ? 'ilike' : 'like';
-				searchFilter = {
-					[`${summaryFieldName}_${operator}`]: `%${searchTerm}%`,
-				};
-			}
+			const generatedFilter = substringFilterForFields(searchableFields, searchTerm ?? '');
 
 			const { data } = await apolloClient.query<{ result: any[] }>({
 				query,
 				variables: {
-					filter: Object.keys(searchFilter).length > 0 ? searchFilter : undefined,
+					filter: generatedFilter,
 					pagination: {
 						orderBy: orderByForQuery,
 						limit: PAGE_SIZE,
@@ -116,7 +116,7 @@ export const RelationshipField = ({
 				};
 			});
 		},
-		[relatedEntity, apolloClient, summaryFieldName, summaryFieldMetadata]
+		[relatedEntity, apolloClient, summaryFieldName, searchableFields]
 	);
 
 	// Normalize the value to ensure it has proper SelectOption structure
@@ -137,9 +137,9 @@ export const RelationshipField = ({
 		});
 	}, [value]);
 
-	// Always render the ComboBox with dataFetcher for dynamic loading and search
 	return (
 		<ComboBox
+			key={name}
 			value={normalizedValue}
 			onChange={onChange}
 			mode={mode(field)}

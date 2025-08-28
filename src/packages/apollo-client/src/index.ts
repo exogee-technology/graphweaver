@@ -34,6 +34,8 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 				};
 			} | null
 		) => {
+			console.log('Apollo cache keyArgs called with args:', args);
+
 			// Remove Order Stabilization Keys
 			const filters = (args?.filter ?? {}) as unknown as FilterWithStabilization;
 			if (filters[stabilizationKeys]) {
@@ -48,9 +50,22 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 
 			// Include the full pagination object (including offset and limit) in the cache key
 			// This ensures queries with different offset values create separate cache entries
-			return btoa(`${filter}:${pagination}`);
+			const cacheKey = btoa(`${filter}:${pagination}`);
+
+			console.log('Apollo cache key generated:', {
+				filter,
+				pagination,
+				cacheKey,
+				originalArgs: args,
+			});
+
+			return cacheKey;
 		},
 		merge(existing = [], incoming: { __ref: string }[]) {
+			console.log('Apollo cache merge called:', {
+				existing: existing.length,
+				incoming: incoming.length,
+			});
 			const mergeMap = new Map<string, { __ref: string }>();
 			for (const entity of [...existing, ...incoming]) {
 				mergeMap.set(entity.__ref, entity);

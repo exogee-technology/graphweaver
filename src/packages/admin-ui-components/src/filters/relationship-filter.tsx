@@ -1,22 +1,12 @@
 import { useApolloClient, useFragment } from '@apollo/client';
 
 import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../combo-box';
-import { EntityField, Filter, useSchema } from '../utils';
+import { Filter, substringFilterForFields, useSchema } from '../utils';
 import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from './graphql';
 import { toSelectOption } from './utils';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
-
-const substringOperatorForField = (fieldMetadata: EntityField) =>
-	fieldMetadata.filter?.options?.caseInsensitive ? 'ilike' : 'like';
-
-const substringFilterForField = (fieldMetadata: EntityField, inputValue: string) => {
-	const operator = substringOperatorForField(fieldMetadata);
-	return {
-		[`${fieldMetadata.name}_${operator}`]: `%${inputValue}%`,
-	};
-};
 
 export interface RelationshipFilterProps {
 	fieldName: string;
@@ -52,7 +42,6 @@ export const RelationshipFilter = ({
 	const { entityByName, entities } = useSchema();
 	const apolloClient = useApolloClient();
 	const entityType = entityByName(entity);
-	const [inputValue, setInputValue] = useState('');
 	const field = entityType?.fields.find((f) => f.name === fieldName);
 	if (!field?.type) return null;
 
@@ -115,29 +104,8 @@ export const RelationshipFilter = ({
 		);
 	};
 
-	let dropdownFilter: Filter = {};
-
-	if (relatedSearchableFields.length && inputValue) {
-		// Let's special case just having one searchable field to be nicer to the server.
-		if (relatedSearchableFields.length === 1) {
-			dropdownFilter = substringFilterForField(relatedSearchableFields[0], inputValue);
-		} else {
-			dropdownFilter = {
-				_or: relatedSearchableFields.map((fieldMetadata) =>
-					substringFilterForField(fieldMetadata, inputValue)
-				),
-			};
-		}
-	}
-
-	if (Object.keys(dropdownFilter).length > 0 && dropdownItemsFilter) {
-		dropdownFilter = { _and: [dropdownFilter, dropdownItemsFilter] };
-	} else if (dropdownItemsFilter) {
-		dropdownFilter = dropdownItemsFilter;
-	}
-
 	const dataFetcher = useCallback(
-		async ({ page }: DataFetchOptions) => {
+		async ({ page, searchTerm }: DataFetchOptions) => {
 			const query = getRelationshipQuery(relatedEntity);
 
 			// If there's a user specified orderBy, use that. Otherwise, use the summary field if it exists,
@@ -152,7 +120,11 @@ export const RelationshipFilter = ({
 			const { data } = await apolloClient.query<{ result: any[] }>({
 				query,
 				variables: {
-					filter: Object.keys(dropdownFilter).length > 0 ? dropdownFilter : undefined,
+					filter: substringFilterForFields(
+						relatedSearchableFields,
+						searchTerm ?? '',
+						dropdownItemsFilter
+					),
 					pagination: {
 						orderBy: orderByForQuery,
 						limit: PAGE_SIZE,
@@ -169,7 +141,7 @@ export const RelationshipFilter = ({
 				};
 			});
 		},
-		[apolloClient, relatedEntity, dropdownFilter, orderBy]
+		[apolloClient, relatedEntity, orderBy, dropdownItemsFilter]
 	);
 
 	const currentValue =
@@ -188,7 +160,6 @@ export const RelationshipFilter = ({
 			value={currentValue}
 			placeholder={fieldName}
 			onChange={handleOnChange}
-			onInputChange={setInputValue}
 			allowFreeTyping={!!relatedSearchableFields?.length}
 			mode={SelectMode.MULTI}
 			data-testid={`${fieldName}-filter`}

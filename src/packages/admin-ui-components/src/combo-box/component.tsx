@@ -80,6 +80,7 @@ export const ComboBox = ({
 	const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [hasReachedEnd, setHasReachedEnd] = useState(false);
+	const lastSearchTermRef = useRef<string | undefined>(undefined);
 
 	// Use ref to track if we're already loading data to prevent duplicate fetches
 	const fetchedPagesRef = useRef(new Set<number>());
@@ -133,7 +134,6 @@ export const ComboBox = ({
 		},
 	});
 
-	// Define fetchData after useCombobox where isOpen is available
 	const fetchData = useCallback(
 		async (page: number, search: string) => {
 			if (!dataFetcher) return;
@@ -148,14 +148,21 @@ export const ComboBox = ({
 			try {
 				const result = await dataFetcher({ page, searchTerm: search });
 
-				if (result && result.length > 0) {
-					setDynamicOptions((prev) => [...prev, ...result]);
+				if (lastSearchTermRef.current === search) {
+					// Search term hasn't changed, merge the options in.
+					if (result && result.length > 0) {
+						setDynamicOptions((prev) => [...prev, ...result]);
+					} else {
+						setHasReachedEnd(true);
+					}
 				} else {
-					setHasReachedEnd(true);
+					// If the search term has changed, we need to reset the options
+					setDynamicOptions(result);
 				}
 			} catch (error) {
 				console.error('ComboBox fetchData error:', error);
 			} finally {
+				lastSearchTermRef.current = search;
 				setIsLoadingMore(false);
 			}
 		},
