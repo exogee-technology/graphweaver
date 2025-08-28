@@ -50,22 +50,9 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 
 			// Include the full pagination object (including offset and limit) in the cache key
 			// This ensures queries with different offset values create separate cache entries
-			const cacheKey = btoa(`${filter}:${pagination}`);
-
-			console.log('Apollo cache key generated:', {
-				filter,
-				pagination,
-				cacheKey,
-				originalArgs: args,
-			});
-
-			return cacheKey;
+			return btoa(`${filter}:${pagination}`);
 		},
 		merge(existing = [], incoming: { __ref: string }[]) {
-			console.log('Apollo cache merge called:', {
-				existing: existing.length,
-				incoming: incoming.length,
-			});
 			const mergeMap = new Map<string, { __ref: string }>();
 			for (const entity of [...existing, ...incoming]) {
 				mergeMap.set(entity.__ref, entity);
