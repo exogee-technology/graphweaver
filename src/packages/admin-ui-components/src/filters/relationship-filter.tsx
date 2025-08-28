@@ -1,12 +1,22 @@
 import { useApolloClient, useFragment } from '@apollo/client';
 
 import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../combo-box';
-import { Filter, useSchema } from '../utils';
+import { EntityField, Filter, useSchema } from '../utils';
 import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from './graphql';
 import { toSelectOption } from './utils';
 import { useCallback, useState } from 'react';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
+
+const substringOperatorForField = (fieldMetadata: EntityField) =>
+	fieldMetadata.filter?.options?.caseInsensitive ? 'ilike' : 'like';
+
+const substringFilterForField = (fieldMetadata: EntityField, inputValue: string) => {
+	const operator = substringOperatorForField(fieldMetadata);
+	return {
+		[`${fieldMetadata.name}_${operator}`]: `%${inputValue}%`,
+	};
+};
 
 export interface RelationshipFilterProps {
 	fieldName: string;
@@ -17,7 +27,7 @@ export interface RelationshipFilterProps {
 
 	// You can use this to enable users to search for related entities with text.
 	// Make sure all fields are indexed to respond quickly to ILIKE queries. You
-	// can do this in Postgres with trigram indexes. The component will or all
+	// can do this in Postgres with trigram indexes. The component will 'or' all
 	// fields you specify, so a match in any of them will be found. This is slow
 	// and you should be very selective about which fields you enable this for.
 	searchableFields?: string[];
@@ -59,6 +69,27 @@ export const RelationshipFilter = ({
 			`${relatedEntity.primaryKeyField}_in`
 		] ?? [];
 
+	// Should we have any searchable fields? we should grab them from the schema as well as
+	// any that were passed in as a prop, deduplicating them.
+	const relatedSearchableFieldsSet = new Set(searchableFields ?? []);
+
+	// If there's a summary field on the entity, and that summary field is marked as searchable, then
+	// it should be added to the searchable fields.
+	if (
+		relatedEntity.summaryField &&
+		relatedEntity.fields.find((f) => f.name === relatedEntity.summaryField)?.filter?.options
+			?.substringMatch
+	) {
+		relatedSearchableFieldsSet.add(relatedEntity.summaryField);
+	}
+
+	const relatedSearchableFields = [...relatedSearchableFieldsSet].map((searchableField) => {
+		const fieldMetadata = relatedEntity.fields.find((f) => f.name === searchableField);
+		if (!fieldMetadata)
+			throw new Error(`Field ${searchableField} not found on entity ${relatedEntity.name}`);
+		return fieldMetadata;
+	});
+
 	// This reads the data for the related entity directly from the Apollo cache without going back to
 	// the server. The reason we always get the first one is we only display the name in the filter if there's
 	// one selected item. It will be in the cache because the grid will have fetched it.
@@ -86,16 +117,15 @@ export const RelationshipFilter = ({
 
 	let dropdownFilter: Filter = {};
 
-	if (searchableFields?.length && inputValue) {
-		if (searchableFields.length === 1) {
-			dropdownFilter = {
-				[`${searchableFields[0]}_ilike`]: `%${inputValue}%`,
-			};
+	if (relatedSearchableFields.length && inputValue) {
+		// Let's special case just having one searchable field to be nicer to the server.
+		if (relatedSearchableFields.length === 1) {
+			dropdownFilter = substringFilterForField(relatedSearchableFields[0], inputValue);
 		} else {
 			dropdownFilter = {
-				_or: searchableFields?.map((field) => ({
-					[`${field}_ilike`]: `%${inputValue}%`,
-				})),
+				_or: relatedSearchableFields.map((fieldMetadata) =>
+					substringFilterForField(fieldMetadata, inputValue)
+				),
 			};
 		}
 	}
@@ -159,7 +189,7 @@ export const RelationshipFilter = ({
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			onInputChange={setInputValue}
-			allowFreeTyping={!!searchableFields?.length}
+			allowFreeTyping={!!relatedSearchableFields?.length}
 			mode={SelectMode.MULTI}
 			data-testid={`${fieldName}-filter`}
 			dataFetcher={dataFetcher}
