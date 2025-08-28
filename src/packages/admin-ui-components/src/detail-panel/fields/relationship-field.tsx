@@ -1,12 +1,14 @@
-import { useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { useField } from 'formik';
 
-import { useMemo, useState } from 'react';
-import { ComboBox, SelectMode, SelectOption } from '../../combo-box';
+import { useMemo, useCallback } from 'react';
+import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../../combo-box';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 import { useDataTransform } from '../use-data-transform';
 import { getFieldId } from '../util';
+
+const PAGE_SIZE = 100;
 
 const mode = (field: EntityField) => {
 	if (field.relationshipType === 'ONE_TO_MANY' || field.relationshipType === 'MANY_TO_MANY') {
@@ -25,6 +27,7 @@ export const RelationshipField = ({
 	field: EntityField;
 	autoFocus: boolean;
 }) => {
+	const apolloClient = useApolloClient();
 	const [{ value }, _, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const relatedEntity = entityByType(field.type);
@@ -49,72 +52,101 @@ export const RelationshipField = ({
 				[relatedEntity.primaryKeyField]: item.value,
 			}));
 
-			if (mode(field) === SelectMode.MULTI) {
-				return mappedResults;
-			}
-			return mappedResults[0];
+			return mode(field) === SelectMode.SINGLE ? mappedResults[0] : mappedResults;
 		},
 	});
 
-	const { data } = useQuery<{ result: Record<string, string>[] }>(
-		getRelationshipQuery(relatedEntity),
-		{
-			variables: {
-				pagination: {
-					orderBy: relatedEntity.summaryField
-						? {
-								[relatedEntity.summaryField as string]: 'ASC',
-							}
-						: { [relatedEntity.primaryKeyField]: 'ASC' },
-				},
-			},
-		}
-	);
+	const onChange = useCallback(
+		(value: SelectOption | SelectOption[]) => {
+			let result: SelectOption | SelectOption[] | null = value;
 
-	const [inputValue, onInputChange] = useState('');
-
-	const options = useMemo(
-		() =>
-			(data?.result ?? [])
-				.map<SelectOption>((item): SelectOption => {
-					const label = relatedEntity.summaryField || relatedEntity.primaryKeyField;
-					return { label: item[label], value: item[relatedEntity.primaryKeyField] };
-				})
-				.filter((item) =>
-					inputValue?.toLowerCase().length > 0
-						? item.label?.toLowerCase().includes(inputValue.toLowerCase())
-						: true
-				),
-		[data?.result, inputValue, relatedEntity.primaryKeyField, relatedEntity.summaryField]
-	);
-
-	const onChange = (value: SelectOption | SelectOption[]) => {
-		let result: SelectOption | SelectOption[] | null = value;
-
-		if (mode(field) === SelectMode.SINGLE) {
-			if (Array.isArray(value)) {
-				if (value.length === 0) {
-					result = null;
-				} else {
-					result = value[0];
+			if (mode(field) === SelectMode.SINGLE) {
+				if (Array.isArray(value)) {
+					if (value.length === 0) {
+						result = null;
+					} else {
+						result = value[0];
+					}
 				}
 			}
-		}
-		helpers.setValue(result);
-	};
+			helpers.setValue(result);
+		},
+		[field, helpers]
+	);
 
-	if (data?.result) {
-		return (
-			<ComboBox
-				options={options}
-				value={value}
-				onChange={onChange}
-				mode={mode(field)}
-				autoFocus={autoFocus}
-				allowFreeTyping
-				onInputChange={onInputChange}
-				fieldId={fieldId}
-			/>
-		);
-	}
+	// Determine the correct summary field and its metadata
+	const summaryFieldName = relatedEntity.summaryField || relatedEntity.primaryKeyField;
+	const summaryFieldMetadata = relatedEntity.fields.find((f) => f.name === summaryFieldName);
+
+	// Data fetcher for pagination, infinite scroll, and search
+	const dataFetcher = useCallback(
+		async ({ page, searchTerm }: DataFetchOptions) => {
+			const query = getRelationshipQuery(relatedEntity);
+
+			const orderByForQuery = relatedEntity.summaryField
+				? { [relatedEntity.summaryField as string]: 'ASC' }
+				: { [relatedEntity.primaryKeyField]: 'ASC' };
+
+			// Build search filter if searchTerm is provided and the field supports search
+			let searchFilter = {};
+			if (searchTerm && summaryFieldMetadata?.filter?.options?.substringMatch) {
+				const operator = summaryFieldMetadata.filter.options.caseInsensitive ? 'ilike' : 'like';
+				searchFilter = {
+					[`${summaryFieldName}_${operator}`]: `%${searchTerm}%`,
+				};
+			}
+
+			const { data } = await apolloClient.query<{ result: any[] }>({
+				query,
+				variables: {
+					filter: Object.keys(searchFilter).length > 0 ? searchFilter : undefined,
+					pagination: {
+						orderBy: orderByForQuery,
+						limit: PAGE_SIZE,
+						offset: Math.max(0, (page - 1) * PAGE_SIZE),
+					},
+				},
+			});
+
+			return data.result.map((item: any) => {
+				const labelField = summaryFieldName;
+				return {
+					label: labelField ? item[labelField] : 'notfound',
+					value: item[relatedEntity.primaryKeyField],
+				};
+			});
+		},
+		[relatedEntity, apolloClient, summaryFieldName, summaryFieldMetadata]
+	);
+
+	// Normalize the value to ensure it has proper SelectOption structure
+	const normalizedValue = useMemo(() => {
+		if (!value) return [];
+
+		const arrayifiedValue = Array.isArray(value) ? value : [value];
+
+		return arrayifiedValue.map((item) => {
+			// If item is already a SelectOption with both value and label, return as is
+			if (item && typeof item === 'object' && 'value' in item && 'label' in item) {
+				return item;
+			}
+
+			// If item is just a value (primary key), we can't find the label without options
+			// So we'll use the value as the label for now
+			return { value: item, label: String(item) };
+		});
+	}, [value]);
+
+	// Always render the ComboBox with dataFetcher for dynamic loading and search
+	return (
+		<ComboBox
+			value={normalizedValue}
+			onChange={onChange}
+			mode={mode(field)}
+			autoFocus={autoFocus}
+			allowFreeTyping={!!summaryFieldMetadata?.filter?.options?.substringMatch}
+			fieldId={fieldId}
+			dataFetcher={dataFetcher}
+		/>
+	);
 };
