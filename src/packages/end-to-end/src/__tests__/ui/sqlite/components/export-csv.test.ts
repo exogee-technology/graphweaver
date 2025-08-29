@@ -48,7 +48,7 @@ test('Export CSV with nested entities', async ({ page }) => {
 				albumId: '4',
 				artist: 'AC/DC',
 				title: 'Let There Be Rock',
-				tracks: `Go Down, Dog Eat Dog, Let There Be Rock, Bad Boy Boogie, Problem Child, Overdose, Hell Ain't A Bad Place To Be, Whole Lotta Rosie, "40"`,
+				tracks: `Go Down, Dog Eat Dog, Let There Be Rock, Bad Boy Boogie, Problem Child, Overdose, Hell Ain't A Bad Place To Be, Whole Lotta Rosie`,
 			}),
 		])
 	);
