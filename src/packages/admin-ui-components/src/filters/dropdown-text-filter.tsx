@@ -52,10 +52,15 @@ export const DropdownTextFilter = ({
 			}
 
 			const query = getFilterOptionsQuery(entityType, fieldName);
-
 			const orderByForQuery = { [fieldName]: 'ASC' };
-
 			const searchFilter = searchTerm ? substringFilterForFields([field], searchTerm) : undefined;
+
+			if (!query) {
+				console.warn(
+					`Query not found for field '${fieldName}' in entity '${entity}', skipping data fetch.`
+				);
+				return [];
+			}
 
 			const { data } = await apolloClient.query<{ result: any[] }>({
 				query,

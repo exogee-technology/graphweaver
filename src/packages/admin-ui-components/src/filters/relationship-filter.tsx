@@ -81,13 +81,20 @@ export const RelationshipFilter = ({
 	const { data: displayData } = useFragment({
 		...fragmentForDisplayValueOfEntity(relatedEntity),
 		from: {
-			__typename: relatedEntity.name,
-			[relatedEntity.primaryKeyField]: currentFilterValue[0],
+			__typename: relatedEntity?.name ?? 'Empty',
+			[relatedEntity?.primaryKeyField]: currentFilterValue[0],
 		},
 	});
 
 	const handleOnChange = useCallback(
 		(options?: SelectOption[]) => {
+			if (!relatedEntity) {
+				console.warn(
+					`Related entity not found for field '${fieldName}' in entity '${entity}', ignoring change.`
+				);
+				return;
+			}
+
 			const hasSelectedOptions = (options ?? [])?.length > 0;
 			onChange?.(
 				fieldName,
@@ -100,12 +107,18 @@ export const RelationshipFilter = ({
 					: {}
 			);
 		},
-		[fieldName, onChange, relatedEntity.primaryKeyField]
+		[fieldName, onChange, relatedEntity?.primaryKeyField]
 	);
 
 	const dataFetcher = useCallback(
 		async ({ page, searchTerm }: DataFetchOptions) => {
 			const query = getRelationshipQuery(relatedEntity);
+			if (!query) {
+				console.warn(
+					`Query not found for field '${fieldName}' in entity '${entity}', skipping data fetch.`
+				);
+				return [];
+			}
 
 			// If there's a user specified orderBy, use that. Otherwise, use the summary field if it exists,
 			// otherwise fall back to the primary key field. We need some kind of sort so that the pagination
@@ -142,6 +155,8 @@ export const RelationshipFilter = ({
 		},
 		[apolloClient, relatedEntity, orderBy, dropdownItemsFilter]
 	);
+
+	if (!relatedEntity) return null;
 
 	const currentValue =
 		currentFilterValue.length === 1

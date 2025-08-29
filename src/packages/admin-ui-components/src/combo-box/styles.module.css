@@ -187,6 +187,9 @@
 	transform-origin: center;
 	border-color: #fff transparent transparent transparent;
 	transition: transform 0.2s ease-in-out;
+	background: none;
+	border: none;
+	padding: 0;
 }
 
 .arrowOpen {
