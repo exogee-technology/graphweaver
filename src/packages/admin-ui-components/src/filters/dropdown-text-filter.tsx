@@ -31,20 +31,26 @@ export const DropdownTextFilter = ({
 	const apolloClient = useApolloClient();
 	const entityType = entityByName(entity);
 	const field = entityType?.fields.find((f) => f.name === fieldName);
-	if (!field) return null;
-
 	const currentFilterValue = (filter?.[`${fieldName}_in`] as string[]) ?? [];
 
-	const handleOnChange = (options?: SelectOption[]) => {
-		const hasSelectedOptions = (options ?? [])?.length > 0;
-		onChange?.(
-			fieldName,
-			hasSelectedOptions ? { [`${fieldName}_in`]: options?.map((option) => option.value) } : {}
-		);
-	};
+	const handleOnChange = useCallback(
+		(options?: SelectOption[]) => {
+			const hasSelectedOptions = (options ?? [])?.length > 0;
+			onChange?.(
+				fieldName,
+				hasSelectedOptions ? { [`${fieldName}_in`]: options?.map((option) => option.value) } : {}
+			);
+		},
+		[fieldName, onChange]
+	);
 
 	const dataFetcher = useCallback(
 		async ({ page, searchTerm }: DataFetchOptions) => {
+			if (!field) {
+				console.warn(`Field '${fieldName}' not found in entity '${entity}', skipping data fetch.`);
+				return [];
+			}
+
 			const query = getFilterOptionsQuery(entityType, fieldName);
 
 			const orderByForQuery = { [fieldName]: 'ASC' };
@@ -70,6 +76,8 @@ export const DropdownTextFilter = ({
 		},
 		[apolloClient, entityType, fieldName, field]
 	);
+
+	if (!field) return null;
 
 	return (
 		<ComboBox
