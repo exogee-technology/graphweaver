@@ -43,15 +43,11 @@ export const RelationshipFilter = ({
 	const apolloClient = useApolloClient();
 	const entityType = entityByName(entity);
 	const field = entityType?.fields.find((f) => f.name === fieldName);
-	if (!field?.type) return null;
-
 	const relationshipEntity =
 		field && field.relationshipType === 'MANY_TO_ONE'
 			? entities.find((e) => e === field.type)
 			: undefined;
-
-	if (!relationshipEntity) return null;
-	const relatedEntity = entityByName(relationshipEntity);
+	const relatedEntity = entityByName(relationshipEntity ?? '');
 
 	const currentFilterValue =
 		(filter?.[fieldName] as Record<string, string[]> | undefined)?.[
@@ -90,19 +86,22 @@ export const RelationshipFilter = ({
 		},
 	});
 
-	const handleOnChange = (options?: SelectOption[]) => {
-		const hasSelectedOptions = (options ?? [])?.length > 0;
-		onChange?.(
-			fieldName,
-			hasSelectedOptions
-				? {
-						[fieldName]: {
-							[`${relatedEntity.primaryKeyField}_in`]: options?.map((option) => option.value),
-						},
-					}
-				: {}
-		);
-	};
+	const handleOnChange = useCallback(
+		(options?: SelectOption[]) => {
+			const hasSelectedOptions = (options ?? [])?.length > 0;
+			onChange?.(
+				fieldName,
+				hasSelectedOptions
+					? {
+							[fieldName]: {
+								[`${relatedEntity.primaryKeyField}_in`]: options?.map((option) => option.value),
+							},
+						}
+					: {}
+			);
+		},
+		[fieldName, onChange, relatedEntity.primaryKeyField]
+	);
 
 	const dataFetcher = useCallback(
 		async ({ page, searchTerm }: DataFetchOptions) => {
