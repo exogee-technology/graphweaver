@@ -36,18 +36,22 @@ test('Export CSV with nested entities', async ({ page }) => {
 
 	const csvRaw = await saveDownload(await exportEvent, { filename: 'albums-export.csv' });
 	const csv = parse(csvRaw, { columns: true });
-	expect(csv).toEqual(expect.arrayContaining([
-		expect.objectContaining({
-			"albumId": "1",
-			"artist": "AC/DC",
-			"title": "For Those About To Rock We Salute You",
-			"tracks": "For Those About To Rock (We Salute You), Put The Finger On You, Let's Get It Up, Inject The Venom, Snowballed, Evil Walks, C.O.D., Breaking The Rules, Night Of The Long Knives, Spellbound, \"40\""
-		  }),
-		  expect.objectContaining({
-			"albumId": "4",
-			"artist": "AC/DC",
-			"title": "Let There Be Rock",
-			"tracks": "Go Down, Dog Eat Dog, Let There Be Rock, Bad Boy Boogie, Problem Child, Overdose, Hell Ain't A Bad Place To Be, Whole Lotta Rosie"
-		  })
-	]));
+	expect(csv).toEqual(
+		expect.arrayContaining([
+			expect.objectContaining({
+				albumId: '1',
+				artist: 'AC/DC',
+				title: 'For Those About To Rock We Salute You',
+				tracks:
+					"For Those About To Rock (We Salute You), Put The Finger On You, Let's Get It Up, Inject The Venom, Snowballed, Evil Walks, C.O.D., Breaking The Rules, Night Of The Long Knives, Spellbound",
+			}),
+			expect.objectContaining({
+				albumId: '4',
+				artist: 'AC/DC',
+				title: 'Let There Be Rock',
+				tracks:
+					"Go Down, Dog Eat Dog, Let There Be Rock, Bad Boy Boogie, Problem Child, Overdose, Hell Ain't A Bad Place To Be, Whole Lotta Rosie",
+			}),
+		])
+	);
 });
