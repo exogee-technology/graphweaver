@@ -345,12 +345,16 @@ export const ComboBox = ({
 					)}
 				</div>
 
-				<span
+				<button
+					type="button"
 					onClick={() => !disabled && toggleMenu()}
 					className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
+					aria-label="Toggle dropdown"
+					aria-expanded={isOpen}
+					disabled={disabled}
 				>
 					<ChevronDownIcon />
-				</span>
+				</button>
 			</div>
 
 			<ul
