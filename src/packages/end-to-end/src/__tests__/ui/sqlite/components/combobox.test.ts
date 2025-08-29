@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 import { config } from '../../../../config';
-import { bodyHasText } from '../../../../utils';
 
 test('Check Select field displays correct number of selected items based on initial values', async ({
 	page,
