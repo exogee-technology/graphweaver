@@ -1,5 +1,4 @@
-import { useApolloClient, useFragment } from '@apollo/client';
-
+import { useApolloClient } from '@apollo/client';
 import {
 	ComboBox,
 	DataFetchOptions,
@@ -8,9 +7,9 @@ import {
 	SelectOption,
 	useSchema,
 	substringFilterForFields,
+	toSelectOption,
 } from '..';
-import { fragmentForDisplayValueOfEntity, getFilterOptionsQuery } from './graphql';
-import { toSelectOption } from './utils';
+import { getFilterOptionsQuery } from './graphql';
 import { useCallback } from 'react';
 
 export interface DropdownTextFilterProps {
@@ -35,16 +34,6 @@ export const DropdownTextFilter = ({
 	if (!field) return null;
 
 	const currentFilterValue = (filter?.[`${fieldName}_in`] as string[]) ?? [];
-
-	// This reads the data for the field directly from the Apollo cache without going back to
-	// the server. We only need the first item for display purposes since we only show one label.
-	const { data: displayData } = useFragment({
-		...fragmentForDisplayValueOfEntity(entityType),
-		from: {
-			__typename: entityType.name,
-			[entityType.primaryKeyField]: currentFilterValue[0],
-		},
-	});
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		const hasSelectedOptions = (options ?? [])?.length > 0;
@@ -76,25 +65,16 @@ export const DropdownTextFilter = ({
 
 			return data.result.map((item: any) => ({
 				label: item[fieldName] || 'notfound',
-				value: item[entityType.primaryKeyField],
+				value: item[fieldName],
 			}));
 		},
 		[apolloClient, entityType, fieldName, field]
 	);
 
-	// Build the current value with proper labels from the cache
-	const currentValue =
-		currentFilterValue.length === 1
-			? {
-					label: displayData?.[fieldName] ?? currentFilterValue[0],
-					value: currentFilterValue[0],
-				}
-			: currentFilterValue.map(toSelectOption);
-
 	return (
 		<ComboBox
 			key={fieldName}
-			value={currentValue}
+			value={currentFilterValue.map(toSelectOption)}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			allowFreeTyping={!!field.filter?.options?.substringMatch}
