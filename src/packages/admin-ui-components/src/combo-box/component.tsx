@@ -152,12 +152,17 @@ export const ComboBox = ({
 					// Search term hasn't changed, merge the options in.
 					if (result && result.length > 0) {
 						setDynamicOptions((prev) => [...prev, ...result]);
+						setCurrentPage(page);
 					} else {
 						setHasReachedEnd(true);
 					}
 				} else {
 					// If the search term has changed, we need to reset the options
 					setDynamicOptions(result);
+					setCurrentPage(1);
+					setHasReachedEnd(false);
+					fetchedPagesRef.current.clear();
+					fetchedPagesRef.current.add(1);
 				}
 			} catch (error) {
 				console.error('ComboBox fetchData error:', error);
@@ -305,7 +310,7 @@ export const ComboBox = ({
 									{valueArray.length > 1
 										? `${valueArray.length} Selected`
 										: (valueArray[0].label ??
-											options.find((option) => option.value === valueArray[0])?.label ??
+											options.find((option) => option.value === valueArray[0].value)?.label ??
 											'1 Selected')}
 								</span>
 								<button
