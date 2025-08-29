@@ -61,7 +61,7 @@ export const RelationshipFilter = ({
 	// If there's a summary field on the entity, and that summary field is marked as searchable, then
 	// it should be added to the searchable fields.
 	if (
-		relatedEntity.summaryField &&
+		relatedEntity?.summaryField &&
 		relatedEntity.fields.find((f) => f.name === relatedEntity.summaryField)?.filter?.options
 			?.substringMatch
 	) {
