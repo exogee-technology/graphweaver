@@ -84,9 +84,11 @@ export const EntityList = <TData extends Record<string, unknown>>({
 	);
 
 	if (error) {
+		console.error(error);
 		return <ErrorView message={error.message} />;
 	}
 	if (!loading && !data) {
+		console.error('Error! Unable to load entity, both loading and data are falsey.');
 		return <ErrorView message="Error! Unable to load entity." />;
 	}
 

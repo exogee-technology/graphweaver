@@ -1,10 +1,10 @@
-import { useFragment, useLazyQuery } from '@apollo/client';
+import { useApolloClient, useFragment } from '@apollo/client';
 
-import { ComboBox, SelectMode, SelectOption } from '../combo-box';
-import { Filter, useSchema } from '../utils';
+import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../combo-box';
+import { Filter, substringFilterForFields, useSchema } from '../utils';
 import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from './graphql';
 import { toSelectOption } from './utils';
-import { useState } from 'react';
+import { useCallback } from 'react';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
 
@@ -17,7 +17,7 @@ export interface RelationshipFilterProps {
 
 	// You can use this to enable users to search for related entities with text.
 	// Make sure all fields are indexed to respond quickly to ILIKE queries. You
-	// can do this in Postgres with trigram indexes. The component will or all
+	// can do this in Postgres with trigram indexes. The component will 'or' all
 	// fields you specify, so a match in any of them will be found. This is slow
 	// and you should be very selective about which fields you enable this for.
 	searchableFields?: string[];
@@ -27,6 +27,8 @@ export interface RelationshipFilterProps {
 	// expressed relative to the entity displayed as rows in the dropdown.
 	dropdownItemsFilter?: Filter;
 }
+
+const PAGE_SIZE = 100;
 
 export const RelationshipFilter = ({
 	fieldName,
@@ -38,23 +40,40 @@ export const RelationshipFilter = ({
 	dropdownItemsFilter,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
+	const apolloClient = useApolloClient();
 	const entityType = entityByName(entity);
-	const [inputValue, setInputValue] = useState('');
 	const field = entityType?.fields.find((f) => f.name === fieldName);
-	if (!field?.type) return null;
-
 	const relationshipEntity =
 		field && field.relationshipType === 'MANY_TO_ONE'
 			? entities.find((e) => e === field.type)
 			: undefined;
-
-	if (!relationshipEntity) return null;
-	const relatedEntity = entityByName(relationshipEntity);
+	const relatedEntity = entityByName(relationshipEntity ?? '');
 
 	const currentFilterValue =
 		(filter?.[fieldName] as Record<string, string[]> | undefined)?.[
 			`${relatedEntity.primaryKeyField}_in`
 		] ?? [];
+
+	// Should we have any searchable fields? we should grab them from the schema as well as
+	// any that were passed in as a prop, deduplicating them.
+	const relatedSearchableFieldsSet = new Set(searchableFields ?? []);
+
+	// If there's a summary field on the entity, and that summary field is marked as searchable, then
+	// it should be added to the searchable fields.
+	if (
+		relatedEntity?.summaryField &&
+		relatedEntity.fields.find((f) => f.name === relatedEntity.summaryField)?.filter?.options
+			?.substringMatch
+	) {
+		relatedSearchableFieldsSet.add(relatedEntity.summaryField);
+	}
+
+	const relatedSearchableFields = [...relatedSearchableFieldsSet].map((searchableField) => {
+		const fieldMetadata = relatedEntity.fields.find((f) => f.name === searchableField);
+		if (!fieldMetadata)
+			throw new Error(`Field ${searchableField} not found on entity ${relatedEntity.name}`);
+		return fieldMetadata;
+	});
 
 	// This reads the data for the related entity directly from the Apollo cache without going back to
 	// the server. The reason we always get the first one is we only display the name in the filter if there's
@@ -62,76 +81,82 @@ export const RelationshipFilter = ({
 	const { data: displayData } = useFragment({
 		...fragmentForDisplayValueOfEntity(relatedEntity),
 		from: {
-			__typename: relatedEntity.name,
-			[relatedEntity.primaryKeyField]: currentFilterValue[0],
+			__typename: relatedEntity?.name ?? 'Empty',
+			[relatedEntity?.primaryKeyField]: currentFilterValue[0],
 		},
 	});
 
-	const handleOnChange = (options?: SelectOption[]) => {
-		const hasSelectedOptions = (options ?? [])?.length > 0;
-		onChange?.(
-			fieldName,
-			hasSelectedOptions
-				? {
-						[fieldName]: {
-							[`${relatedEntity.primaryKeyField}_in`]: options?.map((option) => option.value),
-						},
-					}
-				: {}
-		);
-	};
+	const handleOnChange = useCallback(
+		(options?: SelectOption[]) => {
+			if (!relatedEntity) {
+				console.warn(
+					`Related entity not found for field '${fieldName}' in entity '${entity}', ignoring change.`
+				);
+				return;
+			}
 
-	let dropdownFilter: Filter = {};
-
-	if (searchableFields?.length && inputValue) {
-		if (searchableFields.length === 1) {
-			dropdownFilter = {
-				[`${searchableFields[0]}_ilike`]: `%${inputValue}%`,
-			};
-		} else {
-			dropdownFilter = {
-				_or: searchableFields?.map((field) => ({
-					[`${field}_ilike`]: `%${inputValue}%`,
-				})),
-			};
-		}
-	}
-
-	if (Object.keys(dropdownFilter).length > 0 && dropdownItemsFilter) {
-		dropdownFilter = { _and: [dropdownFilter, dropdownItemsFilter] };
-	} else if (dropdownItemsFilter) {
-		dropdownFilter = dropdownItemsFilter;
-	}
-
-	const [fetchRelationshipOptionsList, { data, loading, error }] = useLazyQuery<{
-		result: any[];
-	}>(getRelationshipQuery(relatedEntity), {
-		variables: {
-			filter: Object.keys(dropdownFilter).length > 0 ? dropdownFilter : undefined,
-
-			...(relatedEntity.summaryField
-				? {
-						pagination: {
-							orderBy: orderBy ?? { [relatedEntity.summaryField]: 'ASC' },
-						},
-					}
-				: {}),
+			const hasSelectedOptions = (options ?? [])?.length > 0;
+			onChange?.(
+				fieldName,
+				hasSelectedOptions
+					? {
+							[fieldName]: {
+								[`${relatedEntity.primaryKeyField}_in`]: options?.map((option) => option.value),
+							},
+						}
+					: {}
+			);
 		},
-	});
+		[fieldName, onChange, relatedEntity?.primaryKeyField]
+	);
 
-	const handleOnOpen = () => {
-		if (!data && !loading && !error) {
-			fetchRelationshipOptionsList();
-		}
-	};
+	const dataFetcher = useCallback(
+		async ({ page, searchTerm }: DataFetchOptions) => {
+			const query = getRelationshipQuery(relatedEntity);
+			if (!query) {
+				console.warn(
+					`Query not found for field '${fieldName}' in entity '${entity}', skipping data fetch.`
+				);
+				return [];
+			}
 
-	const relationshipOptions = (data?.result ?? []).map<SelectOption>((item) => {
-		const label = relatedEntity.summaryField ?? relatedEntity.primaryKeyField;
-		return {
-			label: label ? (item as any)[label] : 'notfound',
-			value: item[relatedEntity.primaryKeyField],
-		};
-	});
+			// If there's a user specified orderBy, use that. Otherwise, use the summary field if it exists,
+			// otherwise fall back to the primary key field. We need some kind of sort so that the pagination
+			// is deterministic.
+			const orderByForQuery =
+				orderBy ??
+				(relatedEntity.summaryField
+					? { [relatedEntity.summaryField]: 'ASC' }
+					: { [relatedEntity.primaryKeyField]: 'ASC' });
+
+			const { data } = await apolloClient.query<{ result: any[] }>({
+				query,
+				variables: {
+					filter: substringFilterForFields(
+						relatedSearchableFields,
+						searchTerm ?? '',
+						dropdownItemsFilter
+					),
+					pagination: {
+						orderBy: orderByForQuery,
+						limit: PAGE_SIZE,
+						offset: Math.max(0, (page - 1) * PAGE_SIZE),
+					},
+				},
+			});
+
+			return data.result.map((item: any) => {
+				const label = relatedEntity.summaryField ?? relatedEntity.primaryKeyField;
+				return {
+					label: label ? item[label] : 'notfound',
+					value: item[relatedEntity.primaryKeyField],
+				};
+			});
+		},
+		[apolloClient, relatedEntity, orderBy, dropdownItemsFilter]
+	);
+
+	if (!relatedEntity) return null;
 
 	const currentValue =
 		currentFilterValue.length === 1
@@ -146,16 +171,13 @@ export const RelationshipFilter = ({
 	return (
 		<ComboBox
 			key={fieldName}
-			options={relationshipOptions}
 			value={currentValue}
 			placeholder={fieldName}
 			onChange={handleOnChange}
-			onInputChange={setInputValue}
-			allowFreeTyping={!!searchableFields?.length}
-			onOpen={handleOnOpen}
-			loading={loading}
+			allowFreeTyping={!!relatedSearchableFields?.length}
 			mode={SelectMode.MULTI}
 			data-testid={`${fieldName}-filter`}
+			dataFetcher={dataFetcher}
 		/>
 	);
 };

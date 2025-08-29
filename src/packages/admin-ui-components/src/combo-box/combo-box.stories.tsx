@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ComboBox, SelectMode, SelectOption } from './component';
+import { ComboBox, SelectMode, SelectOption, DataFetcher } from './component';
 
 // Sample options for the stories
 const fruitOptions: SelectOption[] = [
@@ -22,16 +22,36 @@ const colorOptions: SelectOption[] = [
 	{ value: 'purple', label: 'Purple' },
 ];
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
+// Mock data fetcher for lazy loading demo
+const mockDataFetcher: DataFetcher = async ({ page, searchTerm }) => {
+	// Simulate API delay
+	await new Promise((resolve) => setTimeout(resolve, 500));
+
+	// Generate mock data
+	const allItems: SelectOption[] = Array.from({ length: 1000 }, (_, i) => ({
+		value: `item-${i}`,
+		label: `Item ${i + 1}${searchTerm ? ` (${searchTerm})` : ''}`,
+	}));
+
+	// Filter by search term if provided
+	const filteredItems = searchTerm
+		? allItems.filter((item) => item.label?.toLowerCase().includes(searchTerm.toLowerCase()))
+		: allItems;
+
+	const pageSize = 20;
+	const startIndex = (page - 1) * pageSize;
+	const endIndex = startIndex + pageSize;
+	const data = filteredItems.slice(startIndex, endIndex);
+
+	// Return just the data array - component will automatically fetch more if data.length > 0
+	return data;
+};
+
 const meta = {
 	title: 'Inputs/ComboBox',
 	component: ComboBox,
-	parameters: {
-		// Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
-		layout: 'centered',
-	},
-	// This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
-	// More on argTypes: https://storybook.js.org/docs/api/argtypes
+	parameters: { layout: 'centered' },
+
 	argTypes: {
 		options: {
 			description: 'The list of options available in the dropdown',
@@ -192,4 +212,22 @@ export const InForm: Story = {
 			</form>
 		),
 	],
+};
+
+export const LazyLoadingWithInfiniteScroll: Story = {
+	args: {
+		mode: SelectMode.SINGLE,
+		placeholder: 'Type to search and scroll to load more...',
+		allowFreeTyping: true,
+		dataFetcher: mockDataFetcher,
+		searchDebounceMs: 300,
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'This ComboBox demonstrates lazy loading with infinite scroll. It fetches data in pages as you scroll, and supports search with debouncing. The data fetcher simulates an API call with a 500ms delay.',
+			},
+		},
+	},
 };
