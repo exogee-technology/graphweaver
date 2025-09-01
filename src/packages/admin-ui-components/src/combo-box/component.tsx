@@ -80,6 +80,8 @@ export const ComboBox = ({
 	const [currentPage, setCurrentPage] = useState(1);
 	const [hasReachedEnd, setHasReachedEnd] = useState(false);
 	const lastSearchTermRef = useRef<string | undefined>(undefined);
+	// We need this to scroll the menu to the top when the dropdown is opened.
+	const dropdownRef = useRef<HTMLUListElement>(null);
 
 	// Use ref to track if we're already loading data to prevent duplicate fetches
 	const fetchedPagesRef = useRef(new Set<number>());
@@ -175,6 +177,13 @@ export const ComboBox = ({
 		},
 		[dataFetcher, isOpen]
 	);
+
+	// Scroll the menu to the top when it's opened.
+	useEffect(() => {
+		if (isOpen && dropdownRef.current) {
+			dropdownRef.current.scrollTop = 0;
+		}
+	}, [isOpen]);
 
 	// Handle search with debouncing - moved here after useCombobox where isOpen is available
 	useEffect(() => {
@@ -310,7 +319,11 @@ export const ComboBox = ({
 				</button>
 			</div>
 
-			<ul className={styles.optionsDropdown} {...getMenuProps()} onScroll={handleScroll}>
+			<ul
+				className={styles.optionsDropdown}
+				{...getMenuProps({ ref: dropdownRef })}
+				onScroll={handleScroll}
+			>
 				{isOpen &&
 					(loading ? (
 						<Spinner />
