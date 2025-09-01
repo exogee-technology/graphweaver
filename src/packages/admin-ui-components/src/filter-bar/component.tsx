@@ -207,7 +207,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 						<div
 							key={`filter-${index}-${component.key}`}
 							className={styles.filterComponentWrapper}
-							style={{ width: `${width}px` }}
+							style={{ width }}
 						>
 							{component}
 						</div>
