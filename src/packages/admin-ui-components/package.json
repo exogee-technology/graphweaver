@@ -49,7 +49,7 @@
 		"react-error-boundary": "6.0.0",
 		"react-fast-compare": "3.2.2",
 		"react-hot-toast": "2.5.2",
-		"react-resizable-panels": "2.1.7",
+		"react-resizable-panels": "3.0.5",
 		"react-syntax-highlighter": "15.6.6",
 		"tiptap-markdown": "0.8.10",
 		"wouter": "3.7.1",
