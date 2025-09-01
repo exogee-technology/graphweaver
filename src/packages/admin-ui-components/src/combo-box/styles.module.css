@@ -22,7 +22,6 @@
 	border-width: 1px;
 	border-radius: 6px;
 	cursor: pointer;
-	max-height: 35px;
 	min-height: 35px;
 	width: 100%;
 }
@@ -152,6 +151,13 @@
 	display: none;
 	min-width: 250px;
 	width: 250px;
+	list-style: none;
+	padding: 0;
+}
+
+.optionsDropdown li {
+	list-style: none;
+	margin: 0;
 }
 
 .optionsDropdown .selectedOptions {
@@ -165,14 +171,10 @@
 
 .option {
 	cursor: pointer;
-	padding: 8px;
+	padding: 8px 12px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-.selected {
-	background-color: #0000003a;
 }
 
 .highlighted {
@@ -226,10 +228,51 @@
 }
 
 .nonSelectableOption {
-	padding: 8px;
 	color: #6c757d;
 	font-size: 14px;
 	text-align: center;
 	cursor: default;
 	font-style: italic;
+}
+
+.selectedOption {
+	background-color: var(--primary-color);
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1px;
+	padding-right: 8px;
+	white-space: nowrap;
+	overflow: hidden;
+	transition: background-color 0.2s ease;
+}
+
+.selectedOption:hover {
+	background-color: var(--color-red);
+}
+
+.removeSelectedItem {
+	color: #fff;
+	cursor: pointer;
+	font-size: 16px;
+	margin-left: 8px;
+	pointer-events: all;
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	outline: none;
+	font-family: inherit;
+	transition: opacity 0.2s ease;
+}
+
+.removeSelectedItem:hover {
+	opacity: 0.8;
+}
+
+.separator {
+	height: 1px;
+	background-color: var(--select-border-color);
+	margin: 8px 0;
+	cursor: default;
 }
