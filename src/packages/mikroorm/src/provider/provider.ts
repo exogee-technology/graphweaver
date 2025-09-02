@@ -40,7 +40,7 @@ import {
 	DatabaseType,
 } from '..';
 
-import { OptimisticLockError } from '../utils/errors';
+import { OptimisticLockError, sanitiseFilterForLogging } from '../utils';
 import { assign } from './assign';
 
 type PostgresError = {
@@ -375,7 +375,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		// If we have a span, update the name
 		trace?.span.updateName(`Mikro-Orm - Find ${this.entityType.name}`);
 
-		logger.trace({ filter, entity: this.entityType.name }, 'Running find with filter');
+		logger.trace(
+			{ filter: sanitiseFilterForLogging(filter), entity: this.entityType.name },
+			'Running find with filter'
+		);
 
 		// Strip custom types out of the equation.
 		// This query only works if we JSON.parse(JSON.stringify(filter)):
@@ -449,7 +452,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		trace?: TraceOptions
 	): Promise<D | null> {
 		trace?.span.updateName(`Mikro-Orm - FindOne ${this.entityType.name}`);
-		logger.trace(`Running findOne ${this.entityType.name} with filter ${filter}`);
+		logger.trace(
+			{ entity: this.entityType.name, filter: sanitiseFilterForLogging(filter) },
+			'Running findOne with filter'
+		);
 
 		const metadata = this.em.getMetadata().get(this.entityType.name);
 		let primaryKeyField = metadata.primaryKeys[0];
@@ -487,6 +493,15 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - findByRelatedId ${this.entityType.name}`);
+		logger.trace(
+			{
+				entity: this.entityType.name,
+				relatedField,
+				relatedFieldIds,
+				filter: sanitiseFilterForLogging(filter),
+			},
+			'Running findByRelatedId'
+		);
 
 		// Any is the actual type from MikroORM, sorry folks.
 		let queryFilter: any = { [relatedField]: { $in: relatedFieldIds } };
@@ -527,7 +542,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		logger.trace(
 			{
 				id,
-				updateArgs: JSON.stringify(updateArgs),
+				updateArgs: sanitiseFilterForLogging(updateArgs),
 				entity: this.entityType.name,
 			},
 			'Running update with args'
@@ -576,7 +591,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - updateMany ${this.entityType.name}`);
-		logger.trace({ updateItems, entity: this.entityType.name }, 'Running update many with args');
+		logger.trace(
+			{ updateItems: sanitiseFilterForLogging(updateItems), entity: this.entityType.name },
+			'Running update many with args'
+		);
 
 		const meta = this.database.em.getMetadata().get(this.entityType.name);
 
@@ -614,7 +632,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public async createOrUpdateMany(items: Partial<D>[], trace?: TraceOptions): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - createOrUpdateMany ${this.entityType.name}`);
 		logger.trace(
-			{ items, entity: this.entityType.name },
+			{ items: sanitiseFilterForLogging(items), entity: this.entityType.name },
 			'Running create or update many with args'
 		);
 
@@ -650,7 +668,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	@TraceMethod()
 	public async createOne(createArgs: Partial<D>, trace?: TraceOptions): Promise<D> {
 		trace?.span.updateName(`Mikro-Orm - createOne ${this.entityType.name}`);
-		logger.trace({ createArgs, entity: this.entityType.name }, 'Running create with args');
+		logger.trace(
+			{ createArgs: sanitiseFilterForLogging(createArgs), entity: this.entityType.name },
+			'Running create with args'
+		);
 
 		const entity = new this.entityType();
 		await this.mapAndAssignKeys(entity, this.entityType, createArgs);
@@ -672,7 +693,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	private async _createMany(createItems: Partial<D>[]) {
-		logger.trace({ createItems, entity: this.entityType.name }, 'Running create with args');
+		logger.trace(
+			{ createItems: sanitiseFilterForLogging(createItems), entity: this.entityType.name },
+			'Running create with args'
+		);
 
 		const entities = await this.database.transactional<D[]>(async () => {
 			return Promise.all<D>(
@@ -693,7 +717,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	@TraceMethod()
 	public async deleteOne(filter: Filter<D>, trace?: TraceOptions): Promise<boolean> {
 		trace?.span.updateName(`Mikro-Orm - deleteOne ${this.entityType.name}`);
-		logger.trace({ filter, entity: this.entityType.name }, 'Running delete with filter.');
+		logger.trace(
+			{ filter: sanitiseFilterForLogging(filter), entity: this.entityType.name },
+			'Running delete with filter.'
+		);
 		const where = filter
 			? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType())
 			: undefined;
@@ -717,7 +744,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	@TraceMethod()
 	public async deleteMany(filter: Filter<D>, trace?: TraceOptions): Promise<boolean> {
 		trace?.span.updateName(`Mikro-Orm - deleteMany ${this.entityType.name}`);
-		logger.trace(`Running delete ${this.entityType.name}`);
+		logger.trace(
+			{ filter: sanitiseFilterForLogging(filter), entity: this.entityType.name },
+			'Running delete'
+		);
 
 		const deletedRows = await this.database.transactional<number>(async () => {
 			const where = filter
@@ -780,7 +810,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		trace?: TraceOptions
 	): Promise<AggregationResult> {
 		trace?.span.updateName(`Mikro-Orm - aggregate ${this.entityType.name}`);
-		logger.trace({ filter, entity: this.entityType.name }, 'Running aggregate with filter');
+		logger.trace(
+			{ filter: sanitiseFilterForLogging(filter), entity: this.entityType.name },
+			'Running aggregate with filter'
+		);
 
 		// Strip custom types out of the equation.
 		// This query only works if we JSON.parse(JSON.stringify(filter)):
