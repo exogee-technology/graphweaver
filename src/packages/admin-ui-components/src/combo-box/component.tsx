@@ -330,20 +330,19 @@ export const ComboBox = ({
 					) : (
 						<>
 							{/* Show selected items at the top */}
-							{valueArray.map((selectedItem, index) => (
-								<li
+							{valueArray.map((selectedItem) => (
+								<div
 									key={selectedItem.value}
 									className={clsx(styles.option, styles.selectedOption)}
 									onClick={() => handleItemDeselect(selectedItem)}
 									data-testid={`selected-option-${selectedItem.label}`}
-									aria-label={selectedItem.label}
-									{...getItemProps({ item: selectedItem, index })}
+									aria-label={`Remove ${selectedItem.label ?? 'Unknown'}`}
 								>
 									<span>{selectedItem.label ?? 'Unknown'}</span>
 									<span>
 										&times;
 									</span>
-								</li>
+								</div>
 							))}
 
 							{/* Show separator if there are selected items and regular options */}
@@ -360,7 +359,7 @@ export const ComboBox = ({
 											[styles.highlighted]: highlightedIndex === index,
 										})}
 										key={String(item.value)}
-										{...getItemProps({ item, index: index + valueArray.length })}
+										{...getItemProps({ item, index })}
 										data-testid={`combo-option-${item.label}`}
 									>
 										<span>{item.label}</span>
