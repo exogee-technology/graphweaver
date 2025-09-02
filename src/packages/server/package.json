@@ -3,6 +3,7 @@
 	"version": "2.19.7",
 	"description": "Server support for @exogee/graphweaver",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",

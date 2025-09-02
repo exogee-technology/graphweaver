@@ -5,6 +5,7 @@
 	"license": "Apache-2.0",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
+	"sideEffects": false,
 	"directories": {
 		"lib": "lib"
 	},

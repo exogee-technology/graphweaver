@@ -4,6 +4,7 @@
 	"description": "Components from Graphweaver's Auth UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
 	"type": "module",
+	"sideEffects": false,
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
