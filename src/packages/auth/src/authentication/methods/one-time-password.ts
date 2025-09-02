@@ -224,7 +224,7 @@ export class OneTimePassword extends BaseAuthMethod {
 			if (e instanceof ChallengeError) throw e;
 			if (e instanceof ForbiddenError) throw e;
 
-			logger.error('Authentication failed with error', e);
+			logger.error(e, 'Authentication failed with error');
 			throw new AuthenticationError('OTP authentication failed.');
 		}
 	}
