@@ -268,12 +268,7 @@ export const ComboBox = ({
 				<div className={styles.inputContainer}>
 					{valueArray.length > 0 && (
 						<div className={styles.selectedOptions}>
-							<div 
-								className={styles.optionPill} 
-								tabIndex={0} 
-								onKeyDown={handleOnPillKeyDown}
-								
-							>
+							<div className={styles.optionPill} tabIndex={0} onKeyDown={handleOnPillKeyDown}>
 								<span className={styles.optionPillLabel}>
 									{valueArray.length > 1
 										? `${valueArray.length} Selected`
@@ -316,9 +311,9 @@ export const ComboBox = ({
 					type="button"
 					onClick={() => !disabled && toggleMenu()}
 					onKeyDown={(e) => {
-						if (e.key === 'ArrowDown' && !isOpen) {
-							e.preventDefault()
-							!disabled && toggleMenu()
+						if (e.key === 'ArrowDown' && !isOpen && !disabled) {
+							e.preventDefault();
+							toggleMenu();
 						}
 					}}
 					className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
