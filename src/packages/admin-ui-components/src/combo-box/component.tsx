@@ -360,7 +360,7 @@ export const ComboBox = ({
 											[styles.highlighted]: highlightedIndex === index,
 										})}
 										key={String(item.value)}
-										{...getItemProps({ item, index })}
+										{...getItemProps({ item, index: index + valueArray.length })}
 										data-testid={`combo-option-${item.label}`}
 									>
 										<span>{item.label}</span>
