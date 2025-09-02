@@ -330,14 +330,14 @@ export const ComboBox = ({
 					) : (
 						<>
 							{/* Show selected items at the top */}
-							{valueArray.map((selectedItem) => (
+							{valueArray.map((selectedItem, index) => (
 								<li
 									key={selectedItem.value}
 									className={clsx(styles.option, styles.selectedOption)}
 									onClick={() => handleItemDeselect(selectedItem)}
 									data-testid={`selected-option-${selectedItem.label}`}
-									aria-label={`Remove ${selectedItem.label || 'selected item'}`}
-									aria-selected={true}
+									aria-label={selectedItem.label}
+									{...getItemProps({ item: selectedItem as SelectOption, index })}
 								>
 									<span>{selectedItem.label ?? 'Unknown'}</span>
 									<span>
@@ -362,7 +362,6 @@ export const ComboBox = ({
 										key={String(item.value)}
 										{...getItemProps({ item, index })}
 										data-testid={`combo-option-${item.label}`}
-										aria-selected={false}
 									>
 										<span>{item.label}</span>
 									</li>
