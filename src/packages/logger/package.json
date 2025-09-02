@@ -3,6 +3,7 @@
 	"version": "2.19.7",
 	"description": "Common logging output for Exogee projects",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"directories": {
 		"lib": "lib"
 	},
