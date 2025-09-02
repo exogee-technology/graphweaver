@@ -660,7 +660,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			);
 		});
 
-		logger.trace({ entity: this.entityType.name, entities }, 'created or updated items');
+		logger.trace(
+			{ entity: this.entityType.name, entities: sanitiseFilterForLogging(entities) },
+			'created or updated items'
+		);
 
 		return entities;
 	}
