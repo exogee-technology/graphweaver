@@ -337,7 +337,7 @@ export const ComboBox = ({
 									onClick={() => handleItemDeselect(selectedItem)}
 									data-testid={`selected-option-${selectedItem.label}`}
 									aria-label={selectedItem.label}
-									{...getItemProps({ item: selectedItem as SelectOption, index })}
+									{...getItemProps({ item: selectedItem, index })}
 								>
 									<span>{selectedItem.label ?? 'Unknown'}</span>
 									<span>
