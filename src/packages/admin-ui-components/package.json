@@ -3,6 +3,7 @@
 	"version": "2.19.7",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"type": "module",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
