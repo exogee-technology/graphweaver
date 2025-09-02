@@ -147,7 +147,10 @@ const assertUserCanPerformRequest = async <G, TContext extends AuthorizationCont
 			try {
 				await assertUserCanPerformRequestedAction(acl, accessType);
 			} catch (e) {
-				logger.error(`User does not have permission to ${accessType} the ${entityName} entity`, e);
+				logger.error(
+					{ error: e, accessType, entityName },
+					`User does not have permission to ${accessType} the ${entityName} entity`
+				);
 				throw e;
 			}
 		} else if (type === RequirePermissionType.FIELD && field) {
@@ -260,7 +263,7 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 					`Could not determine field metadata for filter key: '${filterKey}' on ${entityMetadata.name} entity`
 				);
 			}
-			
+
 			const fieldType = fieldMetadata.getType();
 			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 			if (isEntityMetadata(fieldTypeMetadata)) {
