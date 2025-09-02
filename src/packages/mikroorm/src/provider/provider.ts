@@ -680,7 +680,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		await this.mapAndAssignKeys(entity, this.entityType, createArgs);
 		await this.database.em.persistAndFlush(entity as Partial<D>);
 
-		logger.trace({ entity: this.entityType.name, result: entity }, 'create result');
+		logger.trace(
+			{ entity: this.entityType.name, result: sanitiseFilterForLogging(entity) },
+			'create result'
+		);
 
 		return entity;
 	}
