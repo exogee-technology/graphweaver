@@ -21,7 +21,7 @@ export const EnumField = ({
 		if (multiple) {
 			helpers.setValue(selected.map(({ value }) => value));
 		} else {
-			helpers.setValue(selected?.[0].value);
+			helpers.setValue(selected[0]?.value);
 		}
 	};
 
