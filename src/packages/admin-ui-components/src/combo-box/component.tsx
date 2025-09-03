@@ -311,9 +311,9 @@ export const ComboBox = ({
 					type="button"
 					onClick={() => !disabled && toggleMenu()}
 					onKeyDown={(e) => {
-						if (e.key === 'ArrowDown' && !isOpen && !disabled) {
+						if ((e.key === 'ArrowDown' || e.key === 'Space') && !disabled) {
 							e.preventDefault();
-							toggleMenu();
+							openMenu();
 						}
 					}}
 					className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
