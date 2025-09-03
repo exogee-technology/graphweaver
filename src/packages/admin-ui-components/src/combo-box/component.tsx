@@ -94,7 +94,7 @@ export const ComboBox = ({
 	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
 
-	const { getSelectedItemProps, removeSelectedItem } =
+	const { getSelectedItemProps, removeSelectedItem, activeIndex } =
       useMultipleSelection({
 		initialSelectedItems: valueArray
 	  });
@@ -107,10 +107,10 @@ export const ComboBox = ({
 		getItemProps,
 		inputValue,
 		setInputValue,
+		getToggleButtonProps,
 		openMenu,
 		toggleMenu,
 		closeMenu,
-		setHighlightedIndex,
 	} = useCombobox({
 		items: options,
 		id: fieldId,
@@ -142,8 +142,8 @@ export const ComboBox = ({
 				onChange(change.selectedItem ? [change.selectedItem] : []);
 			}
 		},
-		stateReducer: (state, actionAndChanges) => {
-			const {changes, type} = actionAndChanges
+		stateReducer: (_state, actionAndChanges) => {
+			const { changes, type } = actionAndChanges;
 			switch (type) {
 			case useCombobox.stateChangeTypes.InputKeyDownEnter:
 			case useCombobox.stateChangeTypes.ItemClick:
@@ -283,7 +283,16 @@ export const ComboBox = ({
 			<div
 				ref={selectBoxRef}
 				className={clsx(styles.selectBox, isOpen && styles.open)}
-				onClick={() => !disabled && toggleMenu()}
+				onClick={(e) => {
+					if (!disabled) {
+						toggleMenu();
+						// TODO: FIgure out how to stop the double click WITHOUT disabling pointer events on the button
+					}
+				}}
+				// TODO: Work out if these are moot now that the input renders always regardless
+				// onFocus={() => !disabled && openMenu()}
+				// onBlur={() => !disabled && closeMenu()}
+				
 				data-testid={testId ? `${testId}-box` : undefined}
 			>
 				<div className={styles.inputContainer}>
@@ -310,8 +319,8 @@ export const ComboBox = ({
 							</div>
 						</div>
 					)}
-
-					{(allowFreeTyping || valueArray.length === 0) && (
+					{/* TODO: The presence of the pill (valueArray.length > 0) breaks the keydown handlers for arrow keys. */}
+					{/* {(allowFreeTyping || valueArray.length === 0) && ( */}
 						<div className={styles.inputWrapper}>
 							<input
 								readOnly={!allowFreeTyping}
@@ -325,25 +334,28 @@ export const ComboBox = ({
 								})}
 							/>
 						</div>
-					)}
+					{/* )} */}
+					<button
+						type="button"
+						{...getToggleButtonProps({
+							onClick: () => !disabled && toggleMenu(),
+							onKeyDown: (e) => {
+								if (disabled) return;
+								if (e.key === 'Space') toggleMenu();
+								if (e.key === 'ArrowDown') openMenu();
+								if (e.key === 'ArrowUp') closeMenu();
+							}
+						})}
+						className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
+						aria-label="Toggle dropdown"
+						aria-expanded={isOpen}
+						disabled={disabled}
+					>
+						<ChevronDownIcon />
+					</button>
 				</div>
 
-				<button
-					type="button"
-					onClick={() => !disabled && toggleMenu()}
-					onKeyDown={(e) => {
-						if (disabled) return;
-						if (e.key === 'Space') toggleMenu();
-						if (e.key === 'ArrowDown') openMenu();
-						if (e.key === 'ArrowUp') closeMenu();
-					}}
-					className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
-					aria-label="Toggle dropdown"
-					aria-expanded={isOpen}
-					disabled={disabled}
-				>
-					<ChevronDownIcon />
-				</button>
+				
 			</div>
 
 			<ul
@@ -357,13 +369,16 @@ export const ComboBox = ({
 					) : (
 						<>
 							{/* Show selected items at the top */}
-							{valueArray.map((selectedItem) => (
+							{valueArray.map((selectedItem, index) => (
 								<li
 									key={selectedItem.value}
-									className={clsx(styles.option, styles.selectedOption)}
+									className={clsx(
+										styles.option, 
+										styles.selectedOption
+									)}
 									data-testid={`selected-option-${selectedItem.label}`}
 									aria-label={`Remove ${selectedItem.label ?? 'Unknown'}`}
-									{...getSelectedItemProps({ selectedItem })}
+									{...getSelectedItemProps({ selectedItem, index })}
 									onClick={() => handleItemDeselect(selectedItem)}
 									role='option'
 									aria-selected={true}

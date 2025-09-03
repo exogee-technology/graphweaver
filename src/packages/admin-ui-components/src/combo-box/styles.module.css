@@ -181,11 +181,10 @@
 	background-color: #ffffff1d;
 }
 
-.selectBox > .arrow {
+.inputContainer > .arrow {
 	position: absolute;
 	top: 7px;
 	right: 10px;
-	pointer-events: none;
 	transform-origin: center;
 	border-color: #fff transparent transparent transparent;
 	transition: transform 0.2s ease-in-out;
