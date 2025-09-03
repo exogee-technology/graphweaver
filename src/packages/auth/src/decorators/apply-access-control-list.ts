@@ -33,8 +33,6 @@ export const registerAccessControlListHook = <G, TContext extends AuthorizationC
 		async requestDidStart() {
 			if (!hasCheckedForAuthMethods) {
 				hasCheckedForAuthMethods = true;
-				console.log('[...pluginManager.getPlugins()]', [...pluginManager.getPlugins()]);
-
 				if (![...pluginManager.getPlugins()].find((p) => p.name === 'AuthRequestContextPlugin')) {
 					throw new Error(
 						'No auth methods have been registered, but an ACL has been applied to an entity. Please ensure that an auth method is ' +
