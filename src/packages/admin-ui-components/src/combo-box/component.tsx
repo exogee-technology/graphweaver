@@ -71,7 +71,6 @@ export const ComboBox = ({
 	const valueArray = arrayify(value);
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
-	const dropdownRef = useRef<HTMLUListElement>(null);
 
 	// Lazy loading state
 	const [dynamicOptions, setDynamicOptions] = useState<SelectOption[]>([]);
@@ -81,12 +80,19 @@ export const ComboBox = ({
 	const [currentPage, setCurrentPage] = useState(1);
 	const [hasReachedEnd, setHasReachedEnd] = useState(false);
 	const lastSearchTermRef = useRef<string | undefined>(undefined);
+	// We need this to scroll the menu to the top when the dropdown is opened.
+	const dropdownRef = useRef<HTMLUListElement>(null);
 
 	// Use ref to track if we're already loading data to prevent duplicate fetches
 	const fetchedPagesRef = useRef(new Set<number>());
 
-	// Use dynamic options if dataFetcher is provided, otherwise use static options
-	const options = dataFetcher ? dynamicOptions : staticOptions || [];
+	// Calculate items once - use dynamic options if dataFetcher is provided, otherwise use static options
+	const options = useMemo(() => {
+		return dataFetcher ? dynamicOptions : staticOptions || [];
+	}, [dataFetcher, dynamicOptions, staticOptions]);
+
+	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
+	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
 
 	const {
 		isOpen,
@@ -97,18 +103,16 @@ export const ComboBox = ({
 		inputValue,
 		setInputValue,
 		openMenu,
-		closeMenu,
 		toggleMenu,
+		closeMenu,
 	} = useCombobox({
 		items: options,
 		id: fieldId,
 		itemToString: (item) => item?.label ?? '',
 		isItemDisabled: () => disabled,
 		onInputValueChange: ({ inputValue }) => {
-			if (allowFreeTyping && onInputChange && inputValue !== undefined) {
-				onInputChange(inputValue);
-			}
-			// Update search term for lazy loading
+			onInputChange?.(inputValue);
+
 			if (dataFetcher && inputValue !== undefined) {
 				fetchedPagesRef.current.clear();
 				setDynamicOptions([]);
@@ -174,6 +178,13 @@ export const ComboBox = ({
 		[dataFetcher, isOpen]
 	);
 
+	// Scroll the menu to the top when it's opened.
+	useEffect(() => {
+		if (isOpen && dropdownRef.current) {
+			dropdownRef.current.scrollTop = 0;
+		}
+	}, [isOpen]);
+
 	// Handle search with debouncing - moved here after useCombobox where isOpen is available
 	useEffect(() => {
 		// Only trigger search if dropdown is open AND we have a dataFetcher
@@ -228,71 +239,23 @@ export const ComboBox = ({
 		if (isOpen) onOpen?.();
 	}, [isOpen]);
 
-	// Position dropdown when opened
-	useEffect(() => {
-		const positionDropdown = () => {
-			if (isOpen && selectBoxRef.current && dropdownRef.current) {
-				const selectRect = selectBoxRef.current.getBoundingClientRect();
-				const dropdown = dropdownRef.current;
+	// Handle individual item deselection
+	const handleItemDeselect = useCallback(
+		(itemToRemove: SelectOption) => {
+			onChange(valueArray.filter((item) => item.value !== itemToRemove.value));
+		},
+		[onChange, valueArray]
+	);
 
-				// Use the absolute viewport position - getBoundingClientRect() already accounts for all scroll positions
-				dropdown.style.top = `${selectRect.bottom + 2}px`;
-				dropdown.style.left = `${selectRect.left}px`;
-				dropdown.style.width = `${Math.max(selectRect.width, 150)}px`;
+	const handleOnPillKeyDown = useCallback(
+		(e: React.KeyboardEvent<HTMLDivElement>) => {
+			if (e.key === 'Backspace' || e.key === 'Delete') {
+				onChange([]);
+				if (isOpen) closeMenu();
 			}
-		};
-
-		const addScrollListeners = () => {
-			// Add scroll event listeners to all scrollable parent containers and window
-			const scrollListeners: Array<{ element: Element | Window; listener: EventListener }> = [];
-
-			// Listen to window scroll
-			const windowListener = positionDropdown;
-			window.addEventListener('scroll', windowListener);
-			scrollListeners.push({ element: window, listener: windowListener });
-
-			// Listen to parent container scrolls
-			let element = selectBoxRef.current?.parentElement;
-			while (element && element !== document.body) {
-				const computedStyle = window.getComputedStyle(element);
-				if (
-					computedStyle.overflowX === 'auto' ||
-					computedStyle.overflowX === 'scroll' ||
-					computedStyle.overflowY === 'auto' ||
-					computedStyle.overflowY === 'scroll'
-				) {
-					const listener = positionDropdown;
-					element.addEventListener('scroll', listener);
-					scrollListeners.push({ element, listener });
-				}
-				element = element.parentElement;
-			}
-
-			return scrollListeners;
-		};
-
-		if (isOpen) {
-			positionDropdown();
-			const scrollListeners = addScrollListeners();
-
-			// Cleanup function to remove scroll listeners
-			return () => {
-				scrollListeners.forEach(({ element, listener }) => {
-					element.removeEventListener('scroll', listener);
-				});
-			};
-		}
-	}, [isOpen]);
-
-	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-		if (e.key === 'Backspace' || e.key === 'Delete') {
-			onChange([]);
-			closeMenu();
-		}
-	};
-
-	// Store the selected ids in an array for easy lookup
-	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [value]);
+		},
+		[onChange, isOpen, closeMenu]
+	);
 
 	return (
 		<div className={styles.select} data-testid={testId}>
@@ -318,7 +281,6 @@ export const ComboBox = ({
 									className={styles.deleteOption}
 									onClick={() => {
 										onChange([]);
-										closeMenu();
 									}}
 									aria-label="Clear selection"
 								>
@@ -348,6 +310,12 @@ export const ComboBox = ({
 				<button
 					type="button"
 					onClick={() => !disabled && toggleMenu()}
+					onKeyDown={(e) => {
+						if ((e.key === 'ArrowDown' || e.key === 'Space') && !disabled) {
+							e.preventDefault();
+							openMenu();
+						}
+					}}
 					className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
 					aria-label="Toggle dropdown"
 					aria-expanded={isOpen}
@@ -358,9 +326,8 @@ export const ComboBox = ({
 			</div>
 
 			<ul
-				ref={dropdownRef}
 				className={styles.optionsDropdown}
-				{...getMenuProps()}
+				{...getMenuProps({ ref: dropdownRef })}
 				onScroll={handleScroll}
 			>
 				{isOpen &&
@@ -368,19 +335,45 @@ export const ComboBox = ({
 						<Spinner />
 					) : (
 						<>
-							{options.map((item, index) => (
-								<li
-									className={clsx(styles.option, {
-										[styles.highlighted]: highlightedIndex === index,
-										[styles.selected]: selectedIds.has(item.value),
-									})}
-									key={item.value as any}
-									{...getItemProps({ item, index })}
-									data-testid={`combo-option-${item.label}`}
+							{/* Show selected items at the top */}
+							{valueArray.map((selectedItem) => (
+								<div
+									key={selectedItem.value}
+									role="option"
+									className={clsx(styles.option, styles.selectedOption)}
+									onClick={() => handleItemDeselect(selectedItem)}
+									data-testid={`selected-option-${selectedItem.label}`}
+									aria-label={`Remove ${selectedItem.label ?? 'Unknown'}`}
+									aria-selected={true}
 								>
-									<span>{item.label}</span>
-								</li>
+									<span>{selectedItem.label ?? 'Unknown'}</span>
+									<span>
+										&times;
+									</span>
+								</div>
 							))}
+
+							{/* Show separator if there are selected items and regular options */}
+							{valueArray.length > 0 && options.length > 0 && <li className={styles.separator} />}
+
+							{/* Show non-selected options */}
+							{options.map((item, index) => {
+								// Skip selected items
+								if (selectedIds.has(item.value)) return null;
+
+								return (
+									<li
+										className={clsx(styles.option, {
+											[styles.highlighted]: highlightedIndex === index,
+										})}
+										key={String(item.value)}
+										{...getItemProps({ item, index })}
+										data-testid={`combo-option-${item.label}`}
+									>
+										<span>{item.label}</span>
+									</li>
+								);
+							})}
 
 							{/* Show a message if there are no options */}
 							{options.length === 0 && (

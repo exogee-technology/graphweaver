@@ -135,6 +135,31 @@ export const WithMultipleSelectedValues: Story = {
 		value: [fruitOptions[0], fruitOptions[3]], // Apple and Durian
 		placeholder: 'Select fruits',
 	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"This ComboBox shows multiple selected items. When you open the dropdown, you'll see the selected items at the top with purple lozenges that can be clicked to deselect individual items.",
+			},
+		},
+	},
+};
+
+export const SelectedItemsInDropdown: Story = {
+	args: {
+		options: fruitOptions,
+		mode: SelectMode.MULTI,
+		value: [fruitOptions[0], fruitOptions[2], fruitOptions[4]], // Apple, Cherry, Elderberry
+		placeholder: 'Select fruits',
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'This ComboBox demonstrates the selected items feature. Selected items appear at the top of the dropdown as purple lozenges. Click on any lozenge to deselect that item, and it will return to the main options list in its original order.',
+			},
+		},
+	},
 };
 
 export const Loading: Story = {

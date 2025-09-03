@@ -1,10 +1,9 @@
-import { useApolloClient, useFragment } from '@apollo/client';
-
+import { useApolloClient } from '@apollo/client';
 import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../combo-box';
 import { Filter, substringFilterForFields, useSchema } from '../utils';
 import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from './graphql';
-import { toSelectOption } from './utils';
 import { useCallback } from 'react';
+import { toSelectOption } from './utils';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
 
@@ -73,17 +72,6 @@ export const RelationshipFilter = ({
 		if (!fieldMetadata)
 			throw new Error(`Field ${searchableField} not found on entity ${relatedEntity.name}`);
 		return fieldMetadata;
-	});
-
-	// This reads the data for the related entity directly from the Apollo cache without going back to
-	// the server. The reason we always get the first one is we only display the name in the filter if there's
-	// one selected item. It will be in the cache because the grid will have fetched it.
-	const { data: displayData } = useFragment({
-		...fragmentForDisplayValueOfEntity(relatedEntity),
-		from: {
-			__typename: relatedEntity?.name ?? 'Empty',
-			[relatedEntity?.primaryKeyField]: currentFilterValue[0],
-		},
 	});
 
 	const handleOnChange = useCallback(
@@ -158,15 +146,26 @@ export const RelationshipFilter = ({
 
 	if (!relatedEntity) return null;
 
-	const currentValue =
-		currentFilterValue.length === 1
-			? {
-					label:
-						displayData?.[relatedEntity.summaryField ?? relatedEntity.primaryKeyField] ??
-						currentFilterValue[0],
-					value: currentFilterValue[0],
-				}
-			: currentFilterValue.map(toSelectOption);
+	const currentValue = currentFilterValue.map((value) => {
+		// Read the labels for these entities from the Apollo cache.
+		const displayValue = apolloClient.readFragment({
+			...fragmentForDisplayValueOfEntity(relatedEntity),
+			id: apolloClient.cache.identify({
+				__typename: relatedEntity?.name,
+				[relatedEntity?.primaryKeyField ?? 'id']: value,
+			}),
+		});
+
+		if (displayValue) {
+			return {
+				label: displayValue[relatedEntity.summaryField ?? relatedEntity.primaryKeyField] ?? value,
+				value,
+			};
+		}
+
+		// And if they're not found, just return the value as the label.
+		return toSelectOption(value);
+	});
 
 	return (
 		<ComboBox
