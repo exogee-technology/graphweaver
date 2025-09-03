@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useCombobox } from 'downshift';
+import { useCombobox, useMultipleSelection } from 'downshift';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ChevronDownIcon } from '../assets';
@@ -94,6 +94,11 @@ export const ComboBox = ({
 	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
 
+	const { getSelectedItemProps, removeSelectedItem } =
+      useMultipleSelection({
+		initialSelectedItems: valueArray
+	  });
+
 	const {
 		isOpen,
 		getMenuProps,
@@ -105,6 +110,7 @@ export const ComboBox = ({
 		openMenu,
 		toggleMenu,
 		closeMenu,
+		setHighlightedIndex,
 	} = useCombobox({
 		items: options,
 		id: fieldId,
@@ -136,7 +142,21 @@ export const ComboBox = ({
 				onChange(change.selectedItem ? [change.selectedItem] : []);
 			}
 		},
+		stateReducer: (state, actionAndChanges) => {
+			const {changes, type} = actionAndChanges
+			switch (type) {
+			case useCombobox.stateChangeTypes.InputKeyDownEnter:
+			case useCombobox.stateChangeTypes.ItemClick:
+				return {
+				...changes,
+				isOpen: mode === SelectMode.MULTI, // keep the menu open after selection, if it's a multi-select
+				}
+			}
+			return changes
+		},
 	});
+
+	
 
 	const fetchData = useCallback(
 		async (page: number, search: string) => {
@@ -242,6 +262,7 @@ export const ComboBox = ({
 	// Handle individual item deselection
 	const handleItemDeselect = useCallback(
 		(itemToRemove: SelectOption) => {
+			removeSelectedItem(itemToRemove)
 			onChange(valueArray.filter((item) => item.value !== itemToRemove.value));
 		},
 		[onChange, valueArray]
@@ -311,10 +332,10 @@ export const ComboBox = ({
 					type="button"
 					onClick={() => !disabled && toggleMenu()}
 					onKeyDown={(e) => {
-						if ((e.key === 'ArrowDown' || e.key === 'Space') && !disabled) {
-							e.preventDefault();
-							openMenu();
-						}
+						if (disabled) return;
+						if (e.key === 'Space') toggleMenu();
+						if (e.key === 'ArrowDown') openMenu();
+						if (e.key === 'ArrowUp') closeMenu();
 					}}
 					className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
 					aria-label="Toggle dropdown"
@@ -337,20 +358,21 @@ export const ComboBox = ({
 						<>
 							{/* Show selected items at the top */}
 							{valueArray.map((selectedItem) => (
-								<div
+								<li
 									key={selectedItem.value}
-									role="option"
 									className={clsx(styles.option, styles.selectedOption)}
-									onClick={() => handleItemDeselect(selectedItem)}
 									data-testid={`selected-option-${selectedItem.label}`}
 									aria-label={`Remove ${selectedItem.label ?? 'Unknown'}`}
+									{...getSelectedItemProps({ selectedItem })}
+									onClick={() => handleItemDeselect(selectedItem)}
+									role='option'
 									aria-selected={true}
 								>
 									<span>{selectedItem.label ?? 'Unknown'}</span>
 									<span>
 										&times;
 									</span>
-								</div>
+								</li>
 							))}
 
 							{/* Show separator if there are selected items and regular options */}
