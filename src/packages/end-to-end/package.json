@@ -60,7 +60,7 @@
 		"@types/jest": "30.0.0",
 		"@types/node": "22.13.10",
 		"csv-parse": "6.1.0",
-		"dotenv": "16.4.7",
+		"dotenv": "17.2.1",
 		"graphql-tag": "2.12.6",
 		"http-server": "14.1.1",
 		"jest": "30.0.4",

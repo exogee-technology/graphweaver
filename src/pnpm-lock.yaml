@@ -131,8 +131,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
       graphql:
         specifier: 16.11.0
         version: 16.11.0
@@ -241,8 +241,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
     devDependencies:
       '@types/node':
         specifier: 22.13.14
@@ -394,8 +394,8 @@ importers:
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
       got-cjs:
         specifier: 12.5.4
         version: 12.5.4
@@ -443,8 +443,8 @@ importers:
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
       got-cjs:
         specifier: 12.5.4
         version: 12.5.4
@@ -1014,8 +1014,8 @@ importers:
         specifier: 0.14.2
         version: 0.14.2
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
       graphql:
         specifier: 16.11.0
         version: 16.11.0
@@ -1206,8 +1206,8 @@ importers:
         specifier: 0.14.2
         version: 0.14.2
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
       esbuild:
         specifier: 0.25.9
         version: 0.25.9
@@ -1550,8 +1550,8 @@ importers:
         specifier: 6.1.0
         version: 6.1.0
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.11.0)
@@ -1667,8 +1667,8 @@ importers:
         specifier: 10.6.0
         version: 10.6.0
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
       pluralize:
         specifier: 8.0.0
         version: 8.0.0
@@ -1774,8 +1774,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.1
+        version: 17.2.1
       graphql:
         specifier: 16.11.0
         version: 16.11.0
@@ -2792,8 +2792,8 @@ packages:
   '@codemirror/state@6.5.2':
     resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
 
-  '@codemirror/view@6.38.1':
-    resolution: {integrity: sha512-RmTOkE7hRU3OVREqFVITWHz6ocgBjv08GoePscAakgVQfciA3SGCEk7mb9IzwW61cKKmlTpHXG6DUE5Ubx+MGQ==}
+  '@codemirror/view@6.38.2':
+    resolution: {integrity: sha512-bTWAJxL6EOFLPzTx+O5P5xAO3gTqpatQ2b/ARQ8itfU/v2LlpS3pH2fkL0A3E/Fx8Y2St2KES7ZEV0sHTsSW/A==}
 
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
@@ -7515,12 +7515,12 @@ packages:
     resolution: {integrity: sha512-zIHwmZPRshsCdpMDyVsqGmgyP0yT8GAgXUnkdAoJisxvf33k7yO6OuoKmcTGuXPWSsm8Oh88nZicRLA9Y0rUeA==}
     engines: {node: '>=12'}
 
-  dotenv@16.4.7:
-    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
-    engines: {node: '>=12'}
-
   dotenv@16.5.0:
     resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
+    engines: {node: '>=12'}
+
+  dotenv@16.6.1:
+    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
     engines: {node: '>=12'}
 
   dotenv@17.2.1:
@@ -13305,7 +13305,7 @@ snapshots:
   '@codemirror/language@6.0.0':
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.1
+      '@codemirror/view': 6.38.2
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
@@ -13315,7 +13315,7 @@ snapshots:
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.38.1':
+  '@codemirror/view@6.38.2':
     dependencies:
       '@codemirror/state': 6.5.2
       crelt: 1.0.6
@@ -14449,7 +14449,7 @@ snapshots:
       '@whatwg-node/fetch': 0.10.8
       chalk: 4.1.2
       debug: 4.4.1
-      dotenv: 16.4.7
+      dotenv: 16.6.1
       graphql: 16.11.0
       graphql-request: 6.1.0(encoding@0.1.13)(graphql@16.11.0)
       http-proxy-agent: 7.0.2
@@ -19531,11 +19531,11 @@ snapshots:
 
   dotenv-expand@11.0.7:
     dependencies:
-      dotenv: 16.4.7
-
-  dotenv@16.4.7: {}
+      dotenv: 16.6.1
 
   dotenv@16.5.0: {}
+
+  dotenv@16.6.1: {}
 
   dotenv@17.2.1: {}
 
