@@ -1,5 +1,5 @@
-import { BigIntType, Entity, Ref, Index, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-
+import { BigIntType, Entity, Index, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import type { Ref } from '@mikro-orm/core';
 import { AuditChange } from './audit-change';
 @Entity()
 @Index({ properties: ['relatedEntityType', 'relatedEntityId'] })

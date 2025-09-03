@@ -1,4 +1,4 @@
-import { HookParams, TraceOptions } from './types';
+import type { HookParams, TraceOptions } from './types';
 import { TraceMethod } from './open-telemetry';
 
 export enum HookRegister {

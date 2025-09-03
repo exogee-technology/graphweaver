@@ -21,10 +21,12 @@ import { StartServerOptions, startStandaloneServer, startServerless } from './in
 import { GraphweaverConfig, mergeConfig } from './config';
 import { enableTracing } from './trace';
 import { pluginManager } from './plugin-manager';
-import {
-	ExecuteOperationOptions,
-	GraphQLResponse,
-} from '@apollo/server/dist/esm/externalTypes/graphql';
+import { GraphQLResponse } from '@apollo/server';
+
+// Define ExecuteOperationOptions type since it's not exported from the main Apollo Server package
+interface ExecuteOperationOptions<TContext extends BaseContext> {
+	contextValue?: TContext;
+}
 import { onRequestWrapper } from './integrations/utils';
 import { apolloPluginManager } from './apollo-plugins/apollo-plugin-manager';
 

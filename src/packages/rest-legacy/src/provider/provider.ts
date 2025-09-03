@@ -1,9 +1,8 @@
-import {
-	BackendProvider as Provider,
+import { BackendProvider as Provider, TraceMethod } from '@exogee/graphweaver';
+import type {
 	Filter,
 	PaginationOptions,
 	BackendProviderConfig,
-	TraceMethod,
 	TraceOptions,
 	EntityMetadata,
 } from '@exogee/graphweaver';
