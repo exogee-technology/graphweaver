@@ -41,7 +41,7 @@ describe('Nested entities in custom operations', () => {
 		}
 		await fetch(uploadUrl, {
 			method: 'PUT',
-			body: file,
+			body: new Uint8Array(file),
 		});
 
 		const newSubmission = await request<{ createSubmission: Submission }>(config.baseUrl)
