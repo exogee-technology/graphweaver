@@ -27,7 +27,7 @@
 		"dotenv": "17.2.1"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.14",
+		"@types/node": "24.3.0",
 		"graphweaver": "workspace:*",
 		"tsx": "4.19.3",
 		"typescript": "5.9.2"
