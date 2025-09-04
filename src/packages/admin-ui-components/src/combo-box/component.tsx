@@ -94,7 +94,7 @@ export const ComboBox = ({
 	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
 
-	const { getSelectedItemProps, removeSelectedItem, activeIndex } =
+	const { getSelectedItemProps, removeSelectedItem } =
       useMultipleSelection({
 		initialSelectedItems: valueArray
 	  });
