@@ -44,6 +44,12 @@ ComboBoxes can have pre-selected values for both single and multi-select modes.
 
 <Canvas of={ComboBoxStories.WithMultipleSelectedValues} />
 
+#### Selected Items in Dropdown
+
+When using multi-select mode, selected items appear at the top of the dropdown as purple lozenges. Users can click on individual lozenges to deselect them, and the items will return to the main options list in their original order.
+
+<Canvas of={ComboBoxStories.SelectedItemsInDropdown} />
+
 ### States and Variations
 
 #### Loading State
@@ -64,6 +70,39 @@ Allow users to type to filter options.
 
 <Canvas of={ComboBoxStories.WithFreeTyping} />
 
+### Lazy Loading with Infinite Scroll
+
+For large datasets, the ComboBox supports lazy loading with infinite scroll. This allows you to fetch data in pages as the user scrolls, improving performance and user experience.
+
+<Canvas of={ComboBoxStories.LazyLoadingWithInfiniteScroll} />
+
+#### Key Features:
+
+- **Data Fetching**: Provide a `dataFetcher` function that returns paginated data
+- **Infinite Scroll**: Automatically load more data when the user scrolls near the bottom
+- **Search Integration**: Search terms are automatically passed to the data fetcher
+- **Debounced Search**: Configurable debounce delay to prevent excessive API calls
+- **Loading States**: Visual indicators for when more data is being fetched
+
+#### Implementation:
+
+```tsx
+const dataFetcher: DataFetcher = async ({ page, searchTerm }) => {
+	const response = await fetch(`/api/items?page=${page}&pageSize=25&search=${searchTerm}`);
+	const result = await response.json();
+
+	return result.items || [];
+};
+
+<ComboBox
+	dataFetcher={dataFetcher}
+	searchDebounceMs={300}
+	allowFreeTyping={true}
+	mode={SelectMode.SINGLE}
+	placeholder="Search and scroll to load more..."
+/>;
+```
+
 ### In Form Context
 
 ComboBoxes are typically used within forms to collect user input.
@@ -74,6 +113,15 @@ ComboBoxes are typically used within forms to collect user input.
 
 <Controls of={ComboBoxStories.SingleSelect} />
 
+### Lazy Loading Props
+
+When using the lazy loading feature, you can configure these additional properties:
+
+| Prop               | Type          | Default     | Description                                    |
+| ------------------ | ------------- | ----------- | ---------------------------------------------- |
+| `dataFetcher`      | `DataFetcher` | `undefined` | Function to fetch paginated data               |
+| `searchDebounceMs` | `number`      | `300`       | Debounce delay for search input (milliseconds) |
+
 ## Usage Guidelines
 
 - Use single select when only one option should be selected at a time
@@ -83,6 +131,12 @@ ComboBoxes are typically used within forms to collect user input.
 - Use placeholder text to give users a hint about what to select
 - Include a loading state for asynchronously loaded options
 - For very short lists (2-5 items), consider using radio buttons or checkboxes instead
+- **Multi-select UX**: In multi-select mode, selected items appear at the top of the dropdown for easy access and deselection
+- **Individual Deselection**: Users can click on individual selected item lozenges to remove them without affecting other selections
+- **Order Preservation**: When items are deselected, they return to their original position in the options list
+- **Lazy Loading**: Use lazy loading with infinite scroll for datasets with more than 100 items to improve performance
+- **Search Integration**: When implementing lazy loading, ensure your data fetcher properly handles search terms for optimal user experience
+- **Page Size**: Choose an appropriate page size (typically 20-50 items) in your data fetcher based on your data structure and API capabilities
 
 ## Accessibility
 

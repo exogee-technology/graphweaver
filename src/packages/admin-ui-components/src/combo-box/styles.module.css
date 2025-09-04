@@ -22,17 +22,37 @@
 	border-width: 1px;
 	border-radius: 6px;
 	cursor: pointer;
-	max-height: 35px;
 	min-height: 35px;
 	width: 100%;
 }
 
 .inputContainer {
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	align-items: center;
 	width: calc(100% - 30px);
 	min-height: 28px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.inputContainer::-webkit-scrollbar {
+	height: 4px;
+}
+
+.inputContainer::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.inputContainer::-webkit-scrollbar-thumb {
+	background-color: rgba(255, 255, 255, 0.3);
+	border-radius: 2px;
+}
+
+.inputContainer::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(255, 255, 255, 0.5);
 }
 
 .selectedOptions {
@@ -40,11 +60,13 @@
 	flex-wrap: nowrap;
 	padding: 0 4px;
 	z-index: 2;
+	flex-shrink: 0;
 }
 
 .inputWrapper {
 	flex: 1;
 	min-width: 50px;
+	flex-shrink: 0;
 }
 
 .selectInput {
@@ -56,6 +78,11 @@
 	padding: 4px 8px;
 	color: inherit;
 	outline: none;
+}
+
+/* Hide caret when input is read-only (allowFreeTyping = false) */
+.selectInput[readonly] {
+	caret-color: transparent;
 }
 
 .select:has(input:focus) .selectInput {
@@ -124,6 +151,13 @@
 	display: none;
 	min-width: 250px;
 	width: 250px;
+	list-style: none;
+	padding: 0;
+}
+
+.optionsDropdown li {
+	list-style: none;
+	margin: 0;
 }
 
 .optionsDropdown .selectedOptions {
@@ -137,14 +171,10 @@
 
 .option {
 	cursor: pointer;
-	padding: 8px;
+	padding: 8px 12px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-.selected {
-	background-color: #0000003a;
 }
 
 .highlighted {
@@ -159,6 +189,9 @@
 	transform-origin: center;
 	border-color: #fff transparent transparent transparent;
 	transition: transform 0.2s ease-in-out;
+	background: none;
+	border: none;
+	padding: 0;
 }
 
 .arrowOpen {
@@ -177,4 +210,69 @@
 .focused {
 	background-color: #ffffff0c;
 	opacity: 0.8;
+}
+
+.loadingMore {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 8px;
+	color: #6c757d;
+	font-size: 14px;
+	cursor: default;
+	justify-content: center;
+}
+
+.loadingMore span {
+	margin-left: 4px;
+}
+
+.nonSelectableOption {
+	color: #6c757d;
+	font-size: 14px;
+	text-align: center;
+	cursor: default;
+	font-style: italic;
+}
+
+.selectedOption {
+	background-color: var(--primary-color);
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1px;
+	padding-right: 8px;
+	white-space: nowrap;
+	overflow: hidden;
+	transition: background-color 0.2s ease;
+}
+
+.selectedOption:hover {
+	background-color: var(--color-red);
+}
+
+.removeSelectedItem {
+	color: #fff;
+	cursor: pointer;
+	font-size: 16px;
+	margin-left: 8px;
+	pointer-events: all;
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	outline: none;
+	font-family: inherit;
+	transition: opacity 0.2s ease;
+}
+
+.removeSelectedItem:hover {
+	opacity: 0.8;
+}
+
+.separator {
+	height: 1px;
+	background-color: var(--select-border-color);
+	margin: 8px 0;
+	cursor: default;
 }

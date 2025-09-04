@@ -1,10 +1,11 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "2.19.6",
+	"version": "2.19.7",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"directories": {
 		"dist": "dist"
 	},
@@ -45,7 +46,7 @@
 		"esbuild-plugin-copy": "2.1.1",
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
-		"typescript": "5.8.3",
+		"typescript": "5.9.2",
 		"vite": "6.3.5"
 	},
 	"keywords": [

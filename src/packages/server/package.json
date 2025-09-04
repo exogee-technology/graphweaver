@@ -1,8 +1,9 @@
 {
 	"name": "@exogee/graphweaver-server",
-	"version": "2.19.6",
+	"version": "2.19.7",
 	"description": "Server support for @exogee/graphweaver",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
@@ -41,7 +42,7 @@
 		"esbuild": "0.25.9",
 		"glob": "11.0.3",
 		"vitest": "3.2.4",
-		"typescript": "5.8.3"
+		"typescript": "5.9.2"
 	},
 	"keywords": [
 		"graphql",

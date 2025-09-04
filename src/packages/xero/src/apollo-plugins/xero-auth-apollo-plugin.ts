@@ -57,7 +57,7 @@ export const XeroAuthApolloPlugin: ApolloServerPlugin<XeroTokenContext> = {
 			}
 		}
 
-		logger.trace('validURL: ', validURL);
+		logger.trace({ validURL }, 'XeroAuthApolloPlugin has validated the url');
 
 		// Case 1: No header, no code, initial request.
 		if (!authHeader) {
@@ -70,7 +70,7 @@ export const XeroAuthApolloPlugin: ApolloServerPlugin<XeroTokenContext> = {
 			try {
 				token = await xero.apiCallback(authHeader);
 			} catch (error) {
-				logger.error('Error while exchanging code for a token', error);
+				logger.error(error, 'Error while exchanging code for a token');
 
 				// At this point we know we have a code but it's expired or it's been exchanged already.
 				// The only way for the user to recover is to go through the auth flow again, so we'll

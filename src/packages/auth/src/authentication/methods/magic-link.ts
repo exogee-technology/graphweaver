@@ -196,7 +196,7 @@ export class MagicLink extends BaseAuthMethod {
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
 
-			logger.error('Authentication failed with error', e);
+			logger.error(e, 'Authentication failed with error');
 			throw new AuthenticationError('Magic Link authentication failed.');
 		}
 	}

@@ -132,9 +132,9 @@ class QueryManagerImplementation {
 		filter?: Filter<D>;
 	}) {
 		logger.trace('Handling cross-datasource queries');
-		logger.trace('Original filter: ', filter);
+		logger.trace({ filter }, 'Original filter');
 		const result = await visit(entityMetadata, filter);
-		logger.trace('Filter after ID flattening: ', filter);
+		logger.trace({ filter }, 'Filter after ID flattening: ');
 
 		return result.filter;
 	}

@@ -66,7 +66,7 @@ graphweaverMetadata.addMutation({
 		// upload the image to s3
 		await fetch(upload.url, {
 			method: 'PUT',
-			body: resizedImage,
+			body: new Uint8Array(resizedImage),
 		});
 
 		// create the new submission in the database

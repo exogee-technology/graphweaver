@@ -129,36 +129,36 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			};
 
 			let component = null;
-			let width = '150px'; // default width
+			let width = 0;
 
 			switch (field.filter.type) {
 				case AdminUIFilterType.TEXT:
 					component = <TextFilter key={field.name} {...options} />;
-					width = '200px';
+					width = 200;
 					break;
 				case AdminUIFilterType.DROP_DOWN_TEXT:
 					component = <DropdownTextFilter key={field.name} {...options} />;
-					width = '250px';
+					width = 250;
 					break;
 				case AdminUIFilterType.BOOLEAN:
 					component = <BooleanFilter key={field.name} {...options} />;
-					width = '150px';
+					width = 150;
 					break;
 				case AdminUIFilterType.RELATIONSHIP:
 					component = <RelationshipFilter key={field.name} {...options} />;
-					width = '200px';
+					width = 250;
 					break;
 				case AdminUIFilterType.ENUM:
 					component = <EnumFilter key={field.name} {...options} />;
-					width = '200px';
+					width = 200;
 					break;
 				case AdminUIFilterType.NUMERIC:
 					component = <NumericFilter key={field.name} {...options} />;
-					width = '200px';
+					width = 200;
 					break;
 				case AdminUIFilterType.NUMERIC_RANGE:
 					component = <NumericRangeFilter key={field.name} {...options} />;
-					width = '200px';
+					width = 200;
 					break;
 				case AdminUIFilterType.DATE_RANGE:
 					component = (
@@ -169,7 +169,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 							fieldType={field.type}
 						/>
 					);
-					width = '220px';
+					width = 220;
 					break;
 				case AdminUIFilterType.DATE_TIME_RANGE:
 					component = (
@@ -180,7 +180,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 							fieldType={field.type}
 						/>
 					);
-					width = '250px';
+					width = 250;
 					break;
 			}
 
@@ -199,7 +199,10 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			{/* Middle: Scrollable filter components */}
 			<div className={styles.filterScrollContainer}>
 				{filterComponents
-					.filter((item): item is { component: React.ReactElement; width: string } => item !== null)
+					.filter(
+						(item): item is { component: React.ReactElement; width: number } =>
+							!!item?.component && !!item?.width
+					)
 					.map(({ component, width }, index) => (
 						<div
 							key={`filter-${index}-${component.key}`}

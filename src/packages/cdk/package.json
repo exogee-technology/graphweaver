@@ -1,8 +1,9 @@
 {
 	"name": "@exogee/graphweaver-cdk",
-	"version": "2.19.6",
+	"version": "2.19.7",
 	"description": "Deploy Graphweaver to AWS",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"directories": {
 		"lib": "lib"
 	},
@@ -30,14 +31,14 @@
 	"devDependencies": {
 		"@digitak/esrun": "3.2.26",
 		"dotenv-cli": "10.0.0",
-		"aws-cdk": "2.1026.0",
-		"aws-cdk-lib": "2.212.0",
+		"aws-cdk": "2.1027.0",
+		"aws-cdk-lib": "2.213.0",
 		"constructs": "10.4.2",
 		"@exogee/graphweaver": "workspace:*",
-		"@types/node": "22.13.14",
+		"@types/node": "24.3.0",
 		"esbuild": "0.25.9",
 		"glob": "11.0.3",
-		"typescript": "5.8.3",
+		"typescript": "5.9.2",
 		"vitest": "3.2.4"
 	},
 	"keywords": [

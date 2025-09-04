@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 import { config } from '../../../../config';
-import { bodyHasText } from '../../../../utils';
 
 test('Check Select field displays correct number of selected items based on initial values', async ({
 	page,
@@ -19,8 +18,10 @@ test('Check Select field shows correct number of selected items after adding add
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('cell', { name: '3', exact: true }).click();
-	await page.waitForResponse(bodyHasText('Eine Kleine Nachtmusik'));
-	await page.locator('input#detail-panel-field-tracks-input').click({ delay: 1000 });
+	await page
+		.locator('div')
+		.filter({ hasText: /^tracks3 Selected×$/ })
+		.click({ delay: 1000 });
 	await page.getByRole('listbox').getByText('"40"').click();
 	await expect(page.locator('form')).toContainText('4 Selected');
 });
@@ -31,9 +32,11 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('cell', { name: 'For Those About To Rock We' }).click();
-	await page.waitForResponse(bodyHasText('Eine Kleine Nachtmusik'));
-	await page.locator('input#detail-panel-field-tracks-input').click({ delay: 1000 });
-	await page.locator('li').getByText('"40"').click();
+	await page
+		.locator('div')
+		.filter({ hasText: /^tracks10 Selected×$/ })
+		.click({ delay: 1000 });
+	await page.getByText('"40"').click();
 	await expect(page.locator('form')).toContainText('11 Selected');
 	await page.getByRole('button', { name: 'Save' }).click();
 	await expect(

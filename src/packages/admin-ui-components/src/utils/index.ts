@@ -1,6 +1,7 @@
 export * from './data-loading';
 export * from './graphql';
 export * from './route-for';
+export * from './search-filter';
 export * from './timestamp';
 export * from './trace-to-tree';
 export * from './use-schema';

@@ -1,8 +1,9 @@
 {
 	"name": "@exogee/graphweaver-config",
-	"version": "2.19.6",
+	"version": "2.19.7",
 	"description": "Retrieve and parse Graphweaver configurations",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
@@ -24,9 +25,9 @@
 	},
 	"devDependencies": {
 		"@types/lodash": "4.17.20",
-		"@types/node": "22.13.14",
+		"@types/node": "24.3.0",
 		"esbuild": "0.25.9",
-		"prettier": "3.5.3",
+		"prettier": "3.6.2",
 		"vite": "6.3.5"
 	},
 	"keywords": [

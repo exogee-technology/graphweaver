@@ -27,7 +27,11 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 		keyArgs: (
 			args: {
 				filter?: Record<string, unknown>;
-				pagination?: { orderBy: Record<string, unknown> };
+				pagination?: {
+					orderBy: Record<string, unknown>;
+					offset?: number;
+					limit?: number;
+				};
 			} | null
 		) => {
 			// Remove Order Stabilization Keys
@@ -40,10 +44,11 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 			}
 
 			const filter = JSON.stringify(filters);
-			const orderBy = args?.pagination?.orderBy ? JSON.stringify(args.pagination.orderBy) : '';
+			const pagination = args?.pagination ? JSON.stringify(args.pagination) : '';
 
-			// https://www.apollographql.com/docs/react/pagination/key-args/#keyargs-function-advanced
-			return btoa(`${filter}:${orderBy}`);
+			// Include the full pagination object (including offset and limit) in the cache key
+			// This ensures queries with different offset values create separate cache entries
+			return btoa(`${filter}:${pagination}`);
 		},
 		merge(existing = [], incoming: { __ref: string }[]) {
 			const mergeMap = new Map<string, { __ref: string }>();

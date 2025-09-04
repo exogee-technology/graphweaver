@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "2.19.6",
+	"version": "2.19.7",
 	"description": "Graphweaver Test Suite",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -58,18 +58,18 @@
 		"@playwright/test": "1.49.1",
 		"@simplewebauthn/types": "12.0.0",
 		"@types/jest": "30.0.0",
-		"@types/node": "22.13.10",
+		"@types/node": "24.3.0",
 		"csv-parse": "6.1.0",
-		"dotenv": "16.4.7",
+		"dotenv": "17.2.1",
 		"graphql-tag": "2.12.6",
 		"http-server": "14.1.1",
-		"jest": "30.0.4",
+		"jest": "30.1.2",
 		"mockdate": "3.0.5",
 		"pg": "8.13.3",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.4.1",
 		"tsx": "4.19.3",
-		"typescript": "5.8.3"
+		"typescript": "5.9.2"
 	},
 	"keywords": [
 		"graphql",

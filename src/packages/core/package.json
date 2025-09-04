@@ -1,8 +1,9 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "2.19.6",
+	"version": "2.19.7",
 	"description": "Graphweaver Core Package",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
@@ -45,7 +46,7 @@
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.25.9",
 		"glob": "11.0.3",
-		"typescript": "5.8.3",
+		"typescript": "5.9.2",
 		"vitest": "3.2.4"
 	},
 	"keywords": [

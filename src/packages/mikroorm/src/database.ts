@@ -107,7 +107,7 @@ class DatabaseImplementation {
 				try {
 					result = await callback();
 				} catch (error) {
-					logger.error('Error in transaction', error);
+					logger.error(error, 'Error in transaction');
 					throw error;
 				} finally {
 					delete this.transactionalEm;
@@ -276,7 +276,7 @@ class DatabaseImplementation {
 			...params,
 		});
 
-		logger.trace('Creating connection to %s on %s', params.dbName, params.host);
+		logger.trace({ dbName: params.dbName, host: params.host }, 'Creating database connection');
 		await orm.connect();
 
 		logger.trace('Caching connection');

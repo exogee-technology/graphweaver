@@ -247,7 +247,7 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 		Array.isArray(consolidatedAccessControlValue) &&
 		consolidatedAccessControlValue.length > 0
 	) {
-		logger.trace(`Got permission filters: `, consolidatedAccessControlValue);
+		logger.trace({ consolidateAccessControlValue }, `Got permission filters`);
 
 		const authContext = getAuthorizationContext();
 
