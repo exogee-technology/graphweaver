@@ -253,7 +253,6 @@
 	transition: background-color 0.2s ease;
 }
 
-/*TODO*/
 .selectedOption:hover {
 	background-color: var(--color-red);
 }
