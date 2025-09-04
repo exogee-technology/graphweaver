@@ -19,7 +19,6 @@ export class Album {
 		adminUIOptions: {
 			summaryField: true,
 			filterType: AdminUIFilterType.DROP_DOWN_TEXT,
-			filterOptions: { substringMatch: true, caseInsensitive: true },
 		},
 	})
 	title!: string;
