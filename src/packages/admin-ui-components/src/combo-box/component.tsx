@@ -149,7 +149,12 @@ export const ComboBox = ({
 			case useCombobox.stateChangeTypes.ItemClick:
 				return {
 				...changes,
-				isOpen: mode === SelectMode.MULTI, // keep the menu open after selection, if it's a multi-select
+				// Keep the menu open after selection, if it's a multi-select
+				/* TODO: It would be much nicer UX if the menu didn't collapse every time you made a selection, 
+				 * if you're trying to select multiple options. There's a bug in the fetching logic at the moment,
+				 * something to do with the 'search' value being changed to the selected option when you click.
+				 */ 
+				// isOpen: mode === SelectMode.MULTI, 
 				}
 			}
 			return changes
@@ -283,15 +288,11 @@ export const ComboBox = ({
 			<div
 				ref={selectBoxRef}
 				className={clsx(styles.selectBox, isOpen && styles.open)}
-				onClick={(e) => {
+				onClick={() => {
 					if (!disabled) {
 						toggleMenu();
-						// TODO: FIgure out how to stop the double click WITHOUT disabling pointer events on the button
 					}
 				}}
-				// TODO: Work out if these are moot now that the input renders always regardless
-				// onFocus={() => !disabled && openMenu()}
-				// onBlur={() => !disabled && closeMenu()}
 				
 				data-testid={testId ? `${testId}-box` : undefined}
 			>
@@ -319,9 +320,8 @@ export const ComboBox = ({
 							</div>
 						</div>
 					)}
-					{/* TODO: The presence of the pill (valueArray.length > 0) breaks the keydown handlers for arrow keys. */}
-					{/* {(allowFreeTyping || valueArray.length === 0) && ( */}
 						<div className={styles.inputWrapper}>
+							{/* This input needs to render always. This lets the browser handle some default behaviour around key presses. */}
 							<input
 								readOnly={!allowFreeTyping}
 								className={styles.selectInput}
@@ -334,17 +334,11 @@ export const ComboBox = ({
 								})}
 							/>
 						</div>
-					{/* )} */}
 					<button
 						type="button"
 						{...getToggleButtonProps({
 							onClick: () => !disabled && toggleMenu(),
-							onKeyDown: (e) => {
-								if (disabled) return;
-								if (e.key === 'Space') toggleMenu();
-								if (e.key === 'ArrowDown') openMenu();
-								if (e.key === 'ArrowUp') closeMenu();
-							}
+							onKeyDown: () => !disabled && toggleMenu()
 						})}
 						className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
 						aria-label="Toggle dropdown"

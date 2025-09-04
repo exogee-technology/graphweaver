@@ -128,6 +128,12 @@
 	font-family: inherit;
 }
 
+.deleteOption:focus {
+	color: var(--color-red);
+	text-shadow: 0 0 4px var(--detail-bg-color);
+	font-weight: 2;
+}
+
 .selection {
 	padding: 8px;
 }
@@ -247,6 +253,7 @@
 	transition: background-color 0.2s ease;
 }
 
+/*TODO*/
 .selectedOption:hover {
 	background-color: var(--color-red);
 }
