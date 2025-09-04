@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { config } from '../../../../config';
 
-test.only('Ensure filtering by multiple items works', async ({ page }) => {
+test('Ensure filtering by multiple items works', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: 'Album' }).click();
 

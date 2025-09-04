@@ -32,7 +32,7 @@ test('Ensure vehicles can be listed and that they have pilots', async ({ page })
 test('Ensure people can be filtered', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByTestId('Person-entity-link').click();
-	await page.getByTestId('url-filter').click();
+	await page.getByTestId('url-filter').getByLabel('Toggle').click();
 	await page.getByTestId('combo-option-4').click();
 	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCJdfQ%3D%3D'));
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
