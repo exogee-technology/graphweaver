@@ -32,7 +32,7 @@
 		"@exogee/logger": "workspace:*",
 		"dataloader": "2.2.3",
 		"decimal.js": "10.6.0",
-		"dotenv": "17.2.1",
+		"dotenv": "17.2.2",
 		"pluralize": "8.0.0",
 		"reflect-metadata": "0.2.2"
 	},
@@ -69,12 +69,12 @@
 		"@mikro-orm/mysql": "6.4.16",
 		"@mikro-orm/postgresql": "6.4.16",
 		"@mikro-orm/sqlite": "6.4.16",
-		"@types/node": "22.13.14",
+		"@types/node": "24.3.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.25.9",
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
-		"tsx": "4.19.3",
+		"tsx": "4.20.5",
 		"typescript": "5.9.2",
 		"vitest": "3.2.4"
 	},

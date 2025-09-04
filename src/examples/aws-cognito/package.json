@@ -25,12 +25,12 @@
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-aws": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"dotenv": "17.2.1",
+		"dotenv": "17.2.2",
 		"graphql": "16.11.0",
 		"react": "19.1.1"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.14",
+		"@types/node": "24.3.0",
 		"graphweaver": "workspace:*",
 		"typescript": "5.9.2"
 	},

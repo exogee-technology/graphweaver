@@ -27,10 +27,10 @@
 		"node-sqlite3-wasm": "0.8.47"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.14",
+		"@types/node": "24.3.0",
 		"esbuild": "0.25.9",
 		"glob": "11.0.3",
-		"tsx": "4.19.3",
+		"tsx": "4.20.5",
 		"typescript": "5.9.2"
 	},
 	"keywords": [
