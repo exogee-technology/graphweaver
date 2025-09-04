@@ -131,8 +131,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       graphql:
         specifier: 16.11.0
         version: 16.11.0
@@ -241,8 +241,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
     devDependencies:
       '@types/node':
         specifier: 24.3.0
@@ -394,8 +394,8 @@ importers:
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       got-cjs:
         specifier: 12.5.4
         version: 12.5.4
@@ -443,8 +443,8 @@ importers:
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       got-cjs:
         specifier: 12.5.4
         version: 12.5.4
@@ -1014,8 +1014,8 @@ importers:
         specifier: 0.14.2
         version: 0.14.2
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       graphql:
         specifier: 16.11.0
         version: 16.11.0
@@ -1206,8 +1206,8 @@ importers:
         specifier: 0.14.2
         version: 0.14.2
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       esbuild:
         specifier: 0.25.9
         version: 0.25.9
@@ -1550,8 +1550,8 @@ importers:
         specifier: 6.1.0
         version: 6.1.0
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.11.0)
@@ -1667,8 +1667,8 @@ importers:
         specifier: 10.6.0
         version: 10.6.0
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       pluralize:
         specifier: 8.0.0
         version: 8.0.0
@@ -1774,8 +1774,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       graphql:
         specifier: 16.11.0
         version: 16.11.0
@@ -7529,8 +7529,8 @@ packages:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
     engines: {node: '>=12'}
 
-  dotenv@17.2.1:
-    resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
+  dotenv@17.2.2:
+    resolution: {integrity: sha512-Sf2LSQP+bOlhKWWyhFsn0UsfdK/kCWRv1iuA2gXAwt3dyNabr6QSj00I2V10pidqz69soatm9ZwZvpQMTIOd5Q==}
     engines: {node: '>=12'}
 
   downshift@9.0.10:
@@ -19557,7 +19557,7 @@ snapshots:
   dotenv-cli@10.0.0:
     dependencies:
       cross-spawn: 7.0.6
-      dotenv: 17.2.1
+      dotenv: 17.2.2
       dotenv-expand: 11.0.7
       minimist: 1.2.8
 
@@ -19569,7 +19569,7 @@ snapshots:
 
   dotenv@16.6.1: {}
 
-  dotenv@17.2.1: {}
+  dotenv@17.2.2: {}
 
   downshift@9.0.10(react@19.1.1):
     dependencies:
