@@ -32,7 +32,7 @@
 		"@exogee/logger": "workspace:*",
 		"dataloader": "2.2.3",
 		"decimal.js": "10.6.0",
-		"dotenv": "16.4.7",
+		"dotenv": "17.2.1",
 		"pluralize": "8.0.0",
 		"reflect-metadata": "0.2.2"
 	},
@@ -75,7 +75,7 @@
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
 		"tsx": "4.19.3",
-		"typescript": "5.8.3",
+		"typescript": "5.9.2",
 		"vitest": "3.2.4"
 	},
 	"keywords": [

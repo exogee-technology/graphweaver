@@ -29,7 +29,7 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"@mikro-orm/core": "6.4.16",
 		"@mikro-orm/mysql": "6.4.16",
-		"dotenv": "16.4.7",
+		"dotenv": "17.2.1",
 		"got-cjs": "12.5.4",
 		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
@@ -40,7 +40,7 @@
 	"devDependencies": {
 		"@types/node": "22.13.14",
 		"dotenv-cli": "10.0.0",
-		"typescript": "5.8.3",
+		"typescript": "5.9.2",
 		"vite": "6.3.5"
 	},
 	"keywords": [
