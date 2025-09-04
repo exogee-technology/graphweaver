@@ -128,6 +128,12 @@
 	font-family: inherit;
 }
 
+.deleteOption:focus {
+	color: var(--color-red);
+	text-shadow: 0 0 4px var(--detail-bg-color);
+	font-weight: 2;
+}
+
 .selection {
 	padding: 8px;
 }
@@ -181,11 +187,10 @@
 	background-color: #ffffff1d;
 }
 
-.selectBox > .arrow {
+.inputContainer > .arrow {
 	position: absolute;
 	top: 7px;
 	right: 10px;
-	pointer-events: none;
 	transform-origin: center;
 	border-color: #fff transparent transparent transparent;
 	transition: transform 0.2s ease-in-out;
