@@ -42,10 +42,7 @@ export const RelationshipFilter = ({
 	const apolloClient = useApolloClient();
 	const entityType = entityByName(entity);
 	const field = entityType?.fields.find((f) => f.name === fieldName);
-	const relationshipEntity =
-		field && field.relationshipType === 'MANY_TO_ONE'
-			? entities.find((e) => e === field.type)
-			: undefined;
+	const relationshipEntity = field ? entities.find((e) => e === field.type) : undefined;
 	const relatedEntity = entityByName(relationshipEntity ?? '');
 
 	const currentFilterValue =
