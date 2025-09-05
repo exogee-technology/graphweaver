@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargs from 'yargs/yargs';
 import chokidar from 'chokidar';
 import semver from 'semver';
 import {
