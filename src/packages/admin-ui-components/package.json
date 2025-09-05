@@ -38,7 +38,7 @@
 		"@tiptap/extension-link": "3.4.0",
 		"@tiptap/react": "3.4.0",
 		"@tiptap/starter-kit": "3.4.0",
-		"@types/react-dom": "19.1.7",
+		"@types/react-dom": "19.1.9",
 		"clsx": "2.1.1",
 		"downshift": "9.0.10",
 		"graphiql": "4.1.2",
