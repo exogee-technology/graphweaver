@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargs from 'yargs/yargs';
 import chokidar from 'chokidar';
 import semver from 'semver';
 import {
@@ -20,7 +20,7 @@ import { config } from '@exogee/graphweaver-config';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 
-yargs
+yargs()
 	.scriptName('graphweaver')
 	.env('GRAPHWEAVER')
 	.check(() => {
@@ -407,7 +407,7 @@ yargs
 	.command({
 		command: '*',
 		handler() {
-			yargs.showHelp();
+			yargs().showHelp();
 		},
 	})
 	.parse();
