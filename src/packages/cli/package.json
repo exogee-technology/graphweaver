@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "2.19.7",
+	"version": "2.19.10",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -44,7 +44,7 @@
 	"devDependencies": {
 		"@types/inquirer": "9.0.7",
 		"@types/node": "24.3.0",
-		"@types/semver": "7.7.0",
+		"@types/semver": "7.7.1",
 		"@types/validate-npm-package-name": "4.0.2",
 		"@types/yargs": "17.0.33",
 		"prettier": "3.6.2",

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useCombobox } from 'downshift';
+import { useCombobox, useMultipleSelection } from 'downshift';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ChevronDownIcon } from '../assets';
@@ -94,6 +94,11 @@ export const ComboBox = ({
 	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
 
+	const { getSelectedItemProps, removeSelectedItem } =
+      useMultipleSelection({
+		initialSelectedItems: valueArray
+	  });
+
 	const {
 		isOpen,
 		getMenuProps,
@@ -102,6 +107,7 @@ export const ComboBox = ({
 		getItemProps,
 		inputValue,
 		setInputValue,
+		getToggleButtonProps,
 		openMenu,
 		toggleMenu,
 		closeMenu,
@@ -136,7 +142,26 @@ export const ComboBox = ({
 				onChange(change.selectedItem ? [change.selectedItem] : []);
 			}
 		},
+		stateReducer: (_state, actionAndChanges) => {
+			const { changes, type } = actionAndChanges;
+			switch (type) {
+			case useCombobox.stateChangeTypes.InputKeyDownEnter:
+			case useCombobox.stateChangeTypes.ItemClick:
+				return {
+				...changes,
+				// Keep the menu open after selection, if it's a multi-select
+				/* TODO: It would be much nicer UX if the menu didn't collapse every time you made a selection, 
+				 * if you're trying to select multiple options. There's a bug in the fetching logic at the moment,
+				 * something to do with the 'search' value being changed to the selected option when you click.
+				 */ 
+				// isOpen: mode === SelectMode.MULTI, 
+				}
+			}
+			return changes
+		},
 	});
+
+	
 
 	const fetchData = useCallback(
 		async (page: number, search: string) => {
@@ -242,6 +267,7 @@ export const ComboBox = ({
 	// Handle individual item deselection
 	const handleItemDeselect = useCallback(
 		(itemToRemove: SelectOption) => {
+			removeSelectedItem(itemToRemove)
 			onChange(valueArray.filter((item) => item.value !== itemToRemove.value));
 		},
 		[onChange, valueArray]
@@ -262,7 +288,12 @@ export const ComboBox = ({
 			<div
 				ref={selectBoxRef}
 				className={clsx(styles.selectBox, isOpen && styles.open)}
-				onClick={() => !disabled && toggleMenu()}
+				onClick={() => {
+					if (!disabled) {
+						toggleMenu();
+					}
+				}}
+				
 				data-testid={testId ? `${testId}-box` : undefined}
 			>
 				<div className={styles.inputContainer}>
@@ -289,9 +320,8 @@ export const ComboBox = ({
 							</div>
 						</div>
 					)}
-
-					{(allowFreeTyping || valueArray.length === 0) && (
 						<div className={styles.inputWrapper}>
+							{/* This input needs to render always. This lets the browser handle some default behaviour around key presses. */}
 							<input
 								readOnly={!allowFreeTyping}
 								className={styles.selectInput}
@@ -304,25 +334,22 @@ export const ComboBox = ({
 								})}
 							/>
 						</div>
-					)}
+					<button
+						type="button"
+						{...getToggleButtonProps({
+							onClick: () => !disabled && toggleMenu(),
+							onKeyDown: () => !disabled && toggleMenu()
+						})}
+						className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
+						aria-label="Toggle dropdown"
+						aria-expanded={isOpen}
+						disabled={disabled}
+					>
+						<ChevronDownIcon />
+					</button>
 				</div>
 
-				<button
-					type="button"
-					onClick={() => !disabled && toggleMenu()}
-					onKeyDown={(e) => {
-						if ((e.key === 'ArrowDown' || e.key === 'Space') && !disabled) {
-							e.preventDefault();
-							openMenu();
-						}
-					}}
-					className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
-					aria-label="Toggle dropdown"
-					aria-expanded={isOpen}
-					disabled={disabled}
-				>
-					<ChevronDownIcon />
-				</button>
+				
 			</div>
 
 			<ul
@@ -336,21 +363,25 @@ export const ComboBox = ({
 					) : (
 						<>
 							{/* Show selected items at the top */}
-							{valueArray.map((selectedItem) => (
-								<div
+							{valueArray.map((selectedItem, index) => (
+								<li
 									key={selectedItem.value}
-									role="option"
-									className={clsx(styles.option, styles.selectedOption)}
-									onClick={() => handleItemDeselect(selectedItem)}
+									className={clsx(
+										styles.option, 
+										styles.selectedOption
+									)}
 									data-testid={`selected-option-${selectedItem.label}`}
 									aria-label={`Remove ${selectedItem.label ?? 'Unknown'}`}
+									{...getSelectedItemProps({ selectedItem, index })}
+									onClick={() => handleItemDeselect(selectedItem)}
+									role='option'
 									aria-selected={true}
 								>
 									<span>{selectedItem.label ?? 'Unknown'}</span>
 									<span>
 										&times;
 									</span>
-								</div>
+								</li>
 							))}
 
 							{/* Show separator if there are selected items and regular options */}
