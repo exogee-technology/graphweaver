@@ -1,8 +1,9 @@
 {
 	"name": "@exogee/graphweaver-server",
-	"version": "2.17.4",
+	"version": "2.19.10",
 	"description": "Server support for @exogee/graphweaver",
 	"license": "Apache-2.0",
+	"sideEffects": false,
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
@@ -22,26 +23,26 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.11.3",
+		"@apollo/server": "4.12.2",
 		"@as-integrations/aws-lambda": "3.1.0",
-		"@as-integrations/fastify": "2.1.1",
-		"@escape.tech/graphql-armor": "3.1.2",
+		"@as-integrations/fastify": "3.0.0",
+		"@escape.tech/graphql-armor": "3.1.7",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@fastify/cors": "9.0.1",
-		"class-validator": "0.14.1",
-		"decimal.js": "10.5.0",
-		"fastify": "4.28.1",
-		"graphql": "16.10.0",
+		"@fastify/cors": "11.1.0",
+		"class-validator": "0.14.2",
+		"decimal.js": "10.6.0",
+		"fastify": "5.5.0",
+		"graphql": "16.11.0",
 		"graphql-deduplicator": "2.0.6"
 	},
 	"devDependencies": {
 		"@escape.tech/graphql-armor-types": "0.7.0",
 		"@types/graphql-deduplicator": "2.0.2",
-		"esbuild": "0.25.1",
-		"glob": "11.0.1",
-		"vitest": "3.0.9",
-		"typescript": "5.8.3"
+		"esbuild": "0.25.9",
+		"glob": "11.0.3",
+		"vitest": "3.2.4",
+		"typescript": "5.9.2"
 	},
 	"keywords": [
 		"graphql",

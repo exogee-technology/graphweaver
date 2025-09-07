@@ -1,12 +1,12 @@
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
+import { generateJSON, generateText } from '@tiptap/react';
+import { DateTime } from 'luxon';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
-import { generateText, generateJSON } from '@tiptap/react';
 import { Link } from 'wouter';
-import { DetailPanelInputComponentOption, Entity, EntityField, routeFor } from '../utils';
-import { cells } from '../table/cells';
 import { Checkbox } from '../checkbox';
 import { getExtensions } from '../detail-panel/fields/rich-text-field/utils';
-import { DateTime } from 'luxon';
+import { cells } from '../table/cells';
+import { DetailPanelInputComponentOption, Entity, EntityField, routeFor } from '../utils';
 
 const richTextExtensions = getExtensions({});
 
@@ -65,18 +65,22 @@ const cellForType = (
 	if (field.relationshipType) {
 		const relatedEntity = entityByType(field.type);
 
-		const linkForValue = (item: any) =>
-			relatedEntity ? (
-				<Link
-					key={item.value}
-					to={routeFor({ type: field.type, id: item.value })}
-					onClick={(e) => e.stopPropagation()}
-				>
-					{item.label}
-				</Link>
-			) : (
-				item.label
-			);
+		const linkForValue = (item: any) => {
+			if (relatedEntity) {
+				const key = relatedEntity.primaryKeyField;
+				const label = relatedEntity.summaryField ?? key;
+				return (
+					<Link
+						key={item[key]}
+						to={routeFor({ type: field.type, id: item[key] })}
+						onClick={(e) => e.stopPropagation()}
+					>
+						{item[label]}
+					</Link>
+				);
+			}
+			return item.label;
+		};
 
 		if (!value) return null;
 

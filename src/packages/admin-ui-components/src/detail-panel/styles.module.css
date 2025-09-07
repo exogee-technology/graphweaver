@@ -24,6 +24,8 @@
 	padding: 30px;
 	overflow-y: auto;
 	overflow-x: hidden;
+	position: fixed;
+	z-index: 9999;
 }
 
 .detailContainer.slideIn {

@@ -150,7 +150,7 @@ export class Web3 extends BaseAuthMethod {
 			if (e instanceof ChallengeError) throw e;
 			if (e instanceof ForbiddenError) throw e;
 
-			logger.error('Authentication failed with error', e);
+			logger.error(e, 'Authentication failed with error');
 			throw new AuthenticationError('Web3 authentication failed.');
 		}
 	}
@@ -176,7 +176,7 @@ export class Web3 extends BaseAuthMethod {
 			if (e instanceof ChallengeError) throw e;
 			if (e instanceof ForbiddenError) throw e;
 
-			logger.error('Authentication failed with error', e);
+			logger.error(e, 'Authentication failed with error');
 			throw new AuthenticationError('Web3 authentication failed.');
 		}
 	}
@@ -212,7 +212,7 @@ export class Web3 extends BaseAuthMethod {
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
 
-			logger.error('Authentication failed with error', e);
+			logger.error(e, 'Authentication failed with error');
 			throw new AuthenticationError('Web3 authentication failed.');
 		}
 	}

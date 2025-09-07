@@ -12,7 +12,7 @@ jobs:
         working-directory: src
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
@@ -34,7 +34,7 @@ jobs:
           version: 9.15.3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"

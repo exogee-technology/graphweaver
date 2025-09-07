@@ -1,7 +1,7 @@
 import { Field, FieldProps } from 'formik';
-import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
+import { useDataTransform } from '..';
+import { ComboBox, SelectMode, SelectOption } from '../../combo-box';
 import { EntityField } from '../../utils';
-import { useDataTransform } from '../use-data-transform';
 
 export const BooleanField = ({
 	field,
@@ -12,7 +12,6 @@ export const BooleanField = ({
 	autoFocus: boolean;
 	disabled?: boolean;
 }) => {
-	// Before we go up to the server we need to change over to a boolean from an array of options
 	useDataTransform({
 		field,
 		transform: async (value: unknown) => {
@@ -21,7 +20,7 @@ export const BooleanField = ({
 			return value[0]?.value;
 		},
 	});
-
+	
 	return (
 		<Field name={field.name}>
 			{({ field, form }: FieldProps) => (

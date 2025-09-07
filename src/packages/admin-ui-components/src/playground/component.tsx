@@ -1,7 +1,7 @@
-import GraphiQL from 'graphiql';
+import { GraphiQL } from 'graphiql';
 import { createGraphiQLFetcher } from '@graphiql/toolkit';
 
-import 'graphiql/graphiql.min.css';
+import 'graphiql/style.css';
 
 import { uri, localStorageAuthKey } from '../config';
 

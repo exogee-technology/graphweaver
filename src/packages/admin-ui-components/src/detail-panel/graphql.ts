@@ -7,7 +7,10 @@ export const generateUpdateEntityMutation = (
 ) => gql`
     mutation updateEntity ($input: ${entity.name}UpdateInput!){
       update${entity.name} (input: $input) {
-        ${generateGqlSelectForEntityFields(entity, entityByType)}
+        ${generateGqlSelectForEntityFields(
+					entity.fields.filter((field) => !field.hideInDetailForm),
+					entityByType
+				)}
       }
     }
   `;
@@ -18,7 +21,10 @@ export const generateCreateEntityMutation = (
 ) => gql`
     mutation createEntity ($input: ${entity.name}InsertInput!){
       create${entity.name} (input: $input) {
-        ${generateGqlSelectForEntityFields(entity, entityByType)}
+        ${generateGqlSelectForEntityFields(
+					entity.fields.filter((field) => !field.hideInDetailForm),
+					entityByType
+				)}
       }
     }
   `;
@@ -40,8 +46,8 @@ export const getRelationshipQuery = (entity: Entity) => {
 	const queryName = plural[0].toLowerCase() + plural.slice(1);
 
 	return gql`
-    query getRelationship ($pagination: ${plural}PaginationInput) {
-      result: ${queryName} (pagination: $pagination) {
+    query getRelationship ($filter: ${plural}ListFilter, $pagination: ${plural}PaginationInput) {
+      result: ${queryName} (filter: $filter, pagination: $pagination) {
         ${primaryKeyField}
         ${summaryField ? summaryField : ''}
       }

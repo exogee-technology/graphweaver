@@ -1,19 +1,17 @@
 import {
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
+	EntityMetadata,
+	Filter,
 	GraphQLArgs,
 	ReadHookParams,
-	graphweaverMetadata,
-	EntityMetadata,
-	isEntityMetadata,
 	ResolveTree,
-	Filter,
+	graphweaverMetadata,
+	isEntityMetadata,
 	isTopLevelFilterProperty,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
-import { AccessType, AuthorizationContext } from '../../types';
-import { andFilters } from '../../helper-functions';
 import {
 	FieldDetails,
 	GENERIC_AUTH_ERROR_MESSAGE,
@@ -25,6 +23,8 @@ import {
 	isPopulatedFilter,
 } from '../../auth-utils';
 import { FieldLocation } from '../../errors';
+import { andFilters } from '../../helper-functions';
+import { AccessType, AuthorizationContext } from '../../types';
 
 const aggregatePattern = /_aggregate$/;
 
@@ -147,7 +147,10 @@ const assertUserCanPerformRequest = async <G, TContext extends AuthorizationCont
 			try {
 				await assertUserCanPerformRequestedAction(acl, accessType);
 			} catch (e) {
-				logger.error(`User does not have permission to ${accessType} the ${entityName} entity`, e);
+				logger.error(
+					{ error: e, accessType, entityName },
+					`User does not have permission to ${accessType} the ${entityName} entity`
+				);
 				throw e;
 			}
 		} else if (type === RequirePermissionType.FIELD && field) {
@@ -260,7 +263,7 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 					`Could not determine field metadata for filter key: '${filterKey}' on ${entityMetadata.name} entity`
 				);
 			}
-			
+
 			const fieldType = fieldMetadata.getType();
 			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 			if (isEntityMetadata(fieldTypeMetadata)) {
@@ -398,6 +401,11 @@ const generatePermissionListFromArgs = <G>() => {
 
 					// We need to loop through the relationship nodes and check the access type as it could be a mixture of read, create, update
 					for (const relationshipNode of relationshipNodes) {
+						// If the subject of the relationship is null, we can bail out from ACL checks
+						if (relationshipNode === null) {
+							continue;
+						}
+
 						// Check the access type of the relationship
 						const relationshipAccessType = filter
 							? accessType

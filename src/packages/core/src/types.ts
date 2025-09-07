@@ -3,12 +3,12 @@ import { Span, Tracer } from '@opentelemetry/api';
 import { GraphQLID, GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
 import { ResolveTree } from 'graphql-parse-resolve-info';
 import { ComplexityEstimator } from 'graphql-query-complexity';
-import { EntityMetadata } from './metadata';
 import {
 	CellFormatOptions,
 	DetailPanelInputComponent,
 	DetailPanelInputComponentOption,
 } from './decorators';
+import { EntityMetadata } from './metadata';
 
 export type { Instrumentation } from '@opentelemetry/instrumentation';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -262,6 +262,8 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		format?: CellFormatOptions;
 	};
 	apiOptions?: {
+		requiredForCreate?: boolean;
+		requiredForUpdate?: boolean;
 		excludeFromBuiltInWriteOperations?: boolean;
 	};
 	target: { new (...args: any[]): G };

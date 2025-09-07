@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-okta",
-	"version": "2.17.4",
+	"version": "2.19.10",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting a SQLite database with Okta.",
@@ -23,14 +23,14 @@
 		"@mikro-orm/core": "6.4.16",
 		"@mikro-orm/knex": "6.4.16",
 		"@mikro-orm/sqlite": "6.4.16",
-		"@okta/okta-auth-js": "7.11.1",
-		"graphql": "16.10.0",
+		"@okta/okta-auth-js": "7.14.0",
+		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
 		"mikro-orm-sqlite-wasm": "workspace:*",
-		"react": "19.1.0"
+		"react": "19.1.1"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.14",
-		"typescript": "5.8.3"
+		"@types/node": "24.3.0",
+		"typescript": "5.9.2"
 	}
 }

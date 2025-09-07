@@ -5,7 +5,7 @@ import { getDidResolveOperationItemsToLog, extractInitialQuerySegment } from './
 // This plugin logs on each request.
 export const LogRequests: ApolloServerPlugin = {
 	async requestDidStart({ request: { variables, query } }) {
-		logger.info(extractInitialQuerySegment(query), 'Query Received');
+		logger.info({ query: extractInitialQuerySegment(query) }, 'Query Received');
 
 		let requestOperationName: string | null;
 		return {

@@ -116,7 +116,7 @@ const obfuscateSensitiveValues = (
 
 		return obfuscateObject(variables);
 	} catch (e) {
-		logger.error('obfuscateSensitiveValues - error', e);
+		logger.error(e, 'obfuscateSensitiveValues - error');
 		return undefined;
 	}
 };

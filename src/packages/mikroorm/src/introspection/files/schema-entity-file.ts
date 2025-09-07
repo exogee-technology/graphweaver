@@ -295,7 +295,6 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.primary) {
-			console.log('prop is primary: ', prop);
 			options.primaryKeyField = true;
 		}
 

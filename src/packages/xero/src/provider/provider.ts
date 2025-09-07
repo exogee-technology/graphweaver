@@ -185,10 +185,14 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 	public async updateOne(id: string, updateArgs: Partial<D & { version?: number }>): Promise<D> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running update one ${this.entityTypeName} with args`, {
-			id,
-			updateArgs,
-		});
+		logger.trace(
+			{
+				id,
+				updateArgs,
+				entity: this.entityTypeName,
+			},
+			`Running update one with args`
+		);
 
 		throw new Error('Not implemented');
 	}
@@ -196,9 +200,13 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 	public async updateMany(updateItems: (Partial<D> & { id: string })[]): Promise<D[]> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running update many ${this.entityTypeName} with args`, {
-			updateItems: updateItems,
-		});
+		logger.trace(
+			{
+				updateItems,
+				entity: this.entityTypeName,
+			},
+			`Running update many with args`
+		);
 
 		throw new Error('Not implemented');
 	}
@@ -213,9 +221,13 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 	}
 
 	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
-		logger.trace(`Running create ${this.entityTypeName} with args`, {
-			createItems,
-		});
+		logger.trace(
+			{
+				createItems,
+				entity: this.entityTypeName,
+			},
+			`Requested to create many with args, but not implemented.`
+		);
 
 		throw new Error('Not implemented');
 	}

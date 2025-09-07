@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest-with-auth",
-	"version": "2.17.4",
+	"version": "2.19.10",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting a Rest API with a MySQL database and complex auth.",
@@ -29,19 +29,19 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"@mikro-orm/core": "6.4.16",
 		"@mikro-orm/mysql": "6.4.16",
-		"dotenv": "16.4.7",
+		"dotenv": "17.2.2",
 		"got-cjs": "12.5.4",
-		"graphql": "16.10.0",
+		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
-		"mysql2": "3.14.0",
-		"react": "19.1.0",
-		"wouter": "3.6.0"
+		"mysql2": "3.14.4",
+		"react": "19.1.1",
+		"wouter": "3.7.1"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.14",
-		"dotenv-cli": "8.0.0",
-		"typescript": "5.8.3",
-		"vite": "6.3.5"
+		"@types/node": "24.3.0",
+		"dotenv-cli": "10.0.0",
+		"typescript": "5.9.2",
+		"vite": "7.1.4"
 	},
 	"keywords": [
 		"graphql",

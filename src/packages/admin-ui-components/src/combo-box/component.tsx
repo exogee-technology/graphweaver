@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
-import { useCombobox } from 'downshift';
+import { useCombobox, useMultipleSelection } from 'downshift';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ChevronDownIcon } from '../assets';
-import { Spinner } from '../spinner';
 import { useAutoFocus } from '../hooks';
+import { Spinner, SpinnerSize } from '../spinner';
 import styles from './styles.module.css';
 
 export enum SelectMode {
@@ -17,8 +17,15 @@ export interface SelectOption {
 	label?: string;
 }
 
+export interface DataFetchOptions {
+	page: number;
+	searchTerm?: string;
+}
+
+export type DataFetcher = (options: DataFetchOptions) => Promise<SelectOption[]>;
+
 interface SelectProps {
-	options: SelectOption[];
+	options?: SelectOption[];
 	onChange: (selected: SelectOption[]) => void;
 	mode: SelectMode;
 	onOpen?: () => void;
@@ -30,6 +37,11 @@ interface SelectProps {
 	allowFreeTyping?: boolean;
 	onInputChange?: (inputValue: string) => void;
 	['data-testid']?: string;
+	fieldId?: string;
+	// Lazy loading props
+	dataFetcher?: DataFetcher;
+	pageSize?: number;
+	searchDebounceMs?: number;
 }
 
 function arrayify<T>(value: T) {
@@ -39,7 +51,7 @@ function arrayify<T>(value: T) {
 }
 
 export const ComboBox = ({
-	options,
+	options: staticOptions,
 	onChange,
 	onOpen,
 	mode,
@@ -51,11 +63,42 @@ export const ComboBox = ({
 	allowFreeTyping = false,
 	onInputChange,
 	['data-testid']: testId,
+	fieldId,
+	// Lazy loading props
+	dataFetcher,
+	searchDebounceMs = 300,
 }: SelectProps) => {
 	const valueArray = arrayify(value);
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
+
+	// Lazy loading state
+	const [dynamicOptions, setDynamicOptions] = useState<SelectOption[]>([]);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
+	const [searchTerm, setSearchTerm] = useState('');
+	const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [hasReachedEnd, setHasReachedEnd] = useState(false);
+	const lastSearchTermRef = useRef<string | undefined>(undefined);
+	// We need this to scroll the menu to the top when the dropdown is opened.
 	const dropdownRef = useRef<HTMLUListElement>(null);
+
+	// Use ref to track if we're already loading data to prevent duplicate fetches
+	const fetchedPagesRef = useRef(new Set<number>());
+
+	// Calculate items once - use dynamic options if dataFetcher is provided, otherwise use static options
+	const options = useMemo(() => {
+		return dataFetcher ? dynamicOptions : staticOptions || [];
+	}, [dataFetcher, dynamicOptions, staticOptions]);
+
+	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
+	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
+
+	const { getSelectedItemProps, removeSelectedItem } =
+      useMultipleSelection({
+		initialSelectedItems: valueArray
+	  });
+
 	const {
 		isOpen,
 		getMenuProps,
@@ -64,31 +107,148 @@ export const ComboBox = ({
 		getItemProps,
 		inputValue,
 		setInputValue,
+		getToggleButtonProps,
+		openMenu,
 		toggleMenu,
+		closeMenu,
 	} = useCombobox({
 		items: options,
+		id: fieldId,
 		itemToString: (item) => item?.label ?? '',
 		isItemDisabled: () => disabled,
 		onInputValueChange: ({ inputValue }) => {
-			if (allowFreeTyping && onInputChange && inputValue !== undefined) {
-				onInputChange(inputValue);
+			onInputChange?.(inputValue);
+
+			if (dataFetcher && inputValue !== undefined) {
+				fetchedPagesRef.current.clear();
+				setDynamicOptions([]);
+				setCurrentPage(1);
+				setHasReachedEnd(false);
+				setSearchTerm(inputValue);
 			}
 		},
 		onSelectedItemChange: (change) => {
 			setInputValue('');
 
 			if (mode === SelectMode.MULTI) {
-				if (change.selectedItem && !selectedIds.has(change.selectedItem.value)) {
-					onChange([...valueArray, change.selectedItem]);
+				if (change.selectedItem) {
+					if (selectedIds.has(change.selectedItem.value)) {
+						onChange(valueArray.filter((item) => item.value !== change.selectedItem?.value));
+					} else {
+						onChange([...valueArray, change.selectedItem]);
+					}
 				}
 			} else {
 				onChange(change.selectedItem ? [change.selectedItem] : []);
 			}
 		},
+		stateReducer: (_state, actionAndChanges) => {
+			const { changes, type } = actionAndChanges;
+			switch (type) {
+			case useCombobox.stateChangeTypes.InputKeyDownEnter:
+			case useCombobox.stateChangeTypes.ItemClick:
+				return {
+				...changes,
+				// Keep the menu open after selection, if it's a multi-select
+				/* TODO: It would be much nicer UX if the menu didn't collapse every time you made a selection, 
+				 * if you're trying to select multiple options. There's a bug in the fetching logic at the moment,
+				 * something to do with the 'search' value being changed to the selected option when you click.
+				 */ 
+				// isOpen: mode === SelectMode.MULTI, 
+				}
+			}
+			return changes
+		},
 	});
 
+	
+
+	const fetchData = useCallback(
+		async (page: number, search: string) => {
+			if (!dataFetcher) return;
+
+			// Check if we've already loaded this page.
+			if (fetchedPagesRef.current.has(page)) return;
+
+			// Mark this fetch as in progress
+			fetchedPagesRef.current.add(page);
+			setIsLoadingMore(true);
+
+			try {
+				const result = await dataFetcher({ page, searchTerm: search });
+
+				if (lastSearchTermRef.current === search) {
+					// Search term hasn't changed, merge the options in.
+					if (result && result.length > 0) {
+						setDynamicOptions((prev) => [...prev, ...result]);
+						setCurrentPage(page);
+					} else {
+						setHasReachedEnd(true);
+					}
+				} else {
+					// If the search term has changed, we need to reset the options
+					setDynamicOptions(result);
+					setCurrentPage(1);
+					setHasReachedEnd(false);
+					fetchedPagesRef.current.clear();
+					fetchedPagesRef.current.add(1);
+				}
+			} catch (error) {
+				console.error('ComboBox fetchData error:', error);
+			} finally {
+				lastSearchTermRef.current = search;
+				setIsLoadingMore(false);
+			}
+		},
+		[dataFetcher, isOpen]
+	);
+
+	// Scroll the menu to the top when it's opened.
+	useEffect(() => {
+		if (isOpen && dropdownRef.current) {
+			dropdownRef.current.scrollTop = 0;
+		}
+	}, [isOpen]);
+
+	// Handle search with debouncing - moved here after useCombobox where isOpen is available
+	useEffect(() => {
+		// Only trigger search if dropdown is open AND we have a dataFetcher
+		if (dataFetcher && searchTerm !== undefined && isOpen) {
+			const timeout = setTimeout(() => {
+				fetchData(1, searchTerm);
+			}, searchDebounceMs);
+
+			setSearchTimeout(timeout);
+		}
+
+		return () => {
+			if (searchTimeout) clearTimeout(searchTimeout);
+		};
+	}, [searchTerm, dataFetcher, searchDebounceMs, isOpen]);
+
+	// Infinite scroll handler - fetches more data when user scrolls to bottom
+	const handleScroll = useCallback(
+		(event: React.UIEvent<HTMLUListElement>) => {
+			if (!dataFetcher || isLoadingMore || hasReachedEnd) return;
+
+			const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+			const threshold = 50; // pixels from bottom
+
+			if (scrollHeight - scrollTop - clientHeight < threshold) {
+				fetchData(currentPage + 1, searchTerm);
+			}
+		},
+		[dataFetcher, isLoadingMore, hasReachedEnd, currentPage, searchTerm]
+	);
+
+	useEffect(() => {
+		// Load initial data when dropdown is first opened.
+		// If the fetch has already happened this request is ignored.
+		if (dataFetcher && isOpen) fetchData(1, searchTerm);
+	}, [dataFetcher, isOpen, searchTerm]);
+
 	// Clear typed text on blur if no item was selected
-	const handleBlur = () => {
+	const handleBlur = useCallback(() => {
 		if (allowFreeTyping && inputValue) {
 			// Check if the input matches any option
 			const matchingOption = options.find(
@@ -96,41 +256,44 @@ export const ComboBox = ({
 			);
 
 			// Clear input if no match found
-			if (!matchingOption) {
-				setInputValue('');
-			}
+			if (!matchingOption) setInputValue('');
 		}
-	};
+	}, [allowFreeTyping, inputValue, options, setInputValue]);
 
 	useEffect(() => {
 		if (isOpen) onOpen?.();
 	}, [isOpen]);
 
-	// Position dropdown when opened
-	useEffect(() => {
-		if (isOpen && selectBoxRef.current && dropdownRef.current) {
-			const selectRect = selectBoxRef.current.getBoundingClientRect();
-			const dropdown = dropdownRef.current;
+	// Handle individual item deselection
+	const handleItemDeselect = useCallback(
+		(itemToRemove: SelectOption) => {
+			removeSelectedItem(itemToRemove)
+			onChange(valueArray.filter((item) => item.value !== itemToRemove.value));
+		},
+		[onChange, valueArray]
+	);
 
-			dropdown.style.top = `${selectRect.bottom + window.scrollY + 2}px`;
-			dropdown.style.left = `${selectRect.left + window.scrollX}px`;
-			dropdown.style.width = `${Math.max(selectRect.width, 150)}px`;
-		}
-	}, [isOpen]);
-
-	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-		if (e.key === 'Backspace' || e.key === 'Delete') onChange([]);
-	};
-
-	// Store the selected ids in an array for easy lookup
-	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [value]);
+	const handleOnPillKeyDown = useCallback(
+		(e: React.KeyboardEvent<HTMLDivElement>) => {
+			if (e.key === 'Backspace' || e.key === 'Delete') {
+				onChange([]);
+				if (isOpen) closeMenu();
+			}
+		},
+		[onChange, isOpen, closeMenu]
+	);
 
 	return (
 		<div className={styles.select} data-testid={testId}>
 			<div
 				ref={selectBoxRef}
 				className={clsx(styles.selectBox, isOpen && styles.open)}
-				onClick={() => !disabled && toggleMenu()}
+				onClick={() => {
+					if (!disabled) {
+						toggleMenu();
+					}
+				}}
+				
 				data-testid={testId ? `${testId}-box` : undefined}
 			>
 				<div className={styles.inputContainer}>
@@ -138,19 +301,27 @@ export const ComboBox = ({
 						<div className={styles.selectedOptions}>
 							<div className={styles.optionPill} tabIndex={0} onKeyDown={handleOnPillKeyDown}>
 								<span className={styles.optionPillLabel}>
-									{valueArray.length > 1 || !valueArray[0].label
+									{valueArray.length > 1
 										? `${valueArray.length} Selected`
-										: valueArray[0].label}
+										: (valueArray[0].label ??
+											options.find((option) => option.value === valueArray[0].value)?.label ??
+											'1 Selected')}
 								</span>
-								<span className={styles.deleteOption} onClick={() => onChange([])}>
+								<button
+									type="button"
+									className={styles.deleteOption}
+									onClick={() => {
+										onChange([]);
+									}}
+									aria-label="Clear selection"
+								>
 									&times;
-								</span>
+								</button>
 							</div>
 						</div>
 					)}
-
-					{(allowFreeTyping || valueArray.length === 0) && (
 						<div className={styles.inputWrapper}>
+							{/* This input needs to render always. This lets the browser handle some default behaviour around key presses. */}
 							<input
 								readOnly={!allowFreeTyping}
 								className={styles.selectInput}
@@ -158,37 +329,97 @@ export const ComboBox = ({
 								{...getInputProps({
 									ref: inputRef,
 									onBlur: handleBlur,
-									onFocus: toggleMenu,
+									onFocus: openMenu,
 									placeholder: valueArray.length === 0 ? placeholder : undefined,
 								})}
 							/>
 						</div>
-					)}
+					<button
+						type="button"
+						{...getToggleButtonProps({
+							onClick: () => !disabled && toggleMenu(),
+							onKeyDown: () => !disabled && toggleMenu()
+						})}
+						className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
+						aria-label="Toggle dropdown"
+						aria-expanded={isOpen}
+						disabled={disabled}
+					>
+						<ChevronDownIcon />
+					</button>
 				</div>
 
-				<span className={styles.arrow}>
-					<ChevronDownIcon />
-				</span>
+				
 			</div>
 
-			<ul ref={dropdownRef} className={styles.optionsDropdown} {...getMenuProps()}>
+			<ul
+				className={styles.optionsDropdown}
+				{...getMenuProps({ ref: dropdownRef })}
+				onScroll={handleScroll}
+			>
 				{isOpen &&
 					(loading ? (
 						<Spinner />
 					) : (
-						options.map((item, index) => (
-							<li
-								className={clsx(styles.option, {
-									[styles.highlighted]: highlightedIndex === index,
-									[styles.selected]: selectedIds.has(item.value),
-								})}
-								key={item.value as any}
-								{...getItemProps({ item, index })}
-								data-testid={`combo-option-${item.label}`}
-							>
-								<span>{item.label}</span>
-							</li>
-						))
+						<>
+							{/* Show selected items at the top */}
+							{valueArray.map((selectedItem, index) => (
+								<li
+									key={selectedItem.value}
+									className={clsx(
+										styles.option, 
+										styles.selectedOption
+									)}
+									data-testid={`selected-option-${selectedItem.label}`}
+									aria-label={`Remove ${selectedItem.label ?? 'Unknown'}`}
+									{...getSelectedItemProps({ selectedItem, index })}
+									onClick={() => handleItemDeselect(selectedItem)}
+									role='option'
+									aria-selected={true}
+								>
+									<span>{selectedItem.label ?? 'Unknown'}</span>
+									<span>
+										&times;
+									</span>
+								</li>
+							))}
+
+							{/* Show separator if there are selected items and regular options */}
+							{valueArray.length > 0 && options.length > 0 && <li className={styles.separator} />}
+
+							{/* Show non-selected options */}
+							{options.map((item, index) => {
+								// Skip selected items
+								if (selectedIds.has(item.value)) return null;
+
+								return (
+									<li
+										className={clsx(styles.option, {
+											[styles.highlighted]: highlightedIndex === index,
+										})}
+										key={String(item.value)}
+										{...getItemProps({ item, index })}
+										data-testid={`combo-option-${item.label}`}
+									>
+										<span>{item.label}</span>
+									</li>
+								);
+							})}
+
+							{/* Show a message if there are no options */}
+							{options.length === 0 && (
+								<li className={clsx(styles.option, styles.nonSelectableOption)}>
+									No options found
+								</li>
+							)}
+
+							{/* Show loading indicator for lazy loading */}
+							{dataFetcher && isLoadingMore && (
+								<li className={styles.loadingMore}>
+									<Spinner size={SpinnerSize.SMALL} />
+								</li>
+							)}
+						</>
 					))}
 			</ul>
 		</div>

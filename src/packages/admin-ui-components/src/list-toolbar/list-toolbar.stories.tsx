@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 import { ListToolBar } from './component';
 
 // Note: Since this component depends on routing context and schema context,

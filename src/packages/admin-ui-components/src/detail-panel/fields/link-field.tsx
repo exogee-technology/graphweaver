@@ -24,6 +24,9 @@ export const LinkField = ({ name, field }: { name: string; field: EntityField })
 		}
 	};
 
+	// For when there is no entity on the other side of the relationship
+	if (!formEntity) return <span>—</span>;
+
 	return (
 		<>
 			{field.relationshipType === 'ONE_TO_ONE' || field.relationshipType === 'MANY_TO_ONE' ? (

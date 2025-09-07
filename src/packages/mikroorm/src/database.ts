@@ -10,7 +10,6 @@ import {
 	ReflectMetadataProvider,
 } from '@mikro-orm/core';
 import { logger } from '@exogee/logger';
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 
 import type { EntityManager as PgEntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import type { EntityManager as MyEntityManager, MySqlDriver } from '@mikro-orm/mysql';
@@ -108,7 +107,7 @@ class DatabaseImplementation {
 				try {
 					result = await callback();
 				} catch (error) {
-					logger.error('Error in transaction', error);
+					logger.error(error, 'Error in transaction');
 					throw error;
 				} finally {
 					delete this.transactionalEm;
@@ -144,6 +143,16 @@ class DatabaseImplementation {
 		logger.trace('Database::getEnvironmentOverrides() - Enter');
 		const secret = secretArn ?? process.env.DATABASE_SECRET_ARN;
 		if (secret) {
+			const { SecretsManagerClient, GetSecretValueCommand } = await import(
+				'@aws-sdk/client-secrets-manager'
+			);
+
+			if (!SecretsManagerClient || !GetSecretValueCommand) {
+				throw new Error(
+					'SecretsManagerClient or GetSecretValueCommand not found but a secret ARN was provided. Is @aws-sdk/client-secrets-manager available?'
+				);
+			}
+
 			const client = new SecretsManagerClient({
 				region: process.env.AWS_REGION,
 			});
@@ -267,7 +276,7 @@ class DatabaseImplementation {
 			...params,
 		});
 
-		logger.trace('Creating connection to %s on %s', params.dbName, params.host);
+		logger.trace({ dbName: params.dbName, host: params.host }, 'Creating database connection');
 		await orm.connect();
 
 		logger.trace('Caching connection');

@@ -10,12 +10,15 @@ interface Props {
 
 export const BarChart = (props: Props) => {
 	const { data, controls, employeeIds } = props;
+
+	// Apply reverse if needed
+	const chartData = controls.reverse ? [...data].reverse() : data;
+
 	return (
 		<div style={{ height: '40vh' }}>
 			<ResponsiveBar
-				data={data}
+				data={chartData}
 				keys={employeeIds}
-				reverse={controls.reverse}
 				colors={{ scheme: controls.colorScheme }}
 				enableLabel={controls.enableLabel}
 				enableTotals={controls.enableTotals}

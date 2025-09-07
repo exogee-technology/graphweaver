@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DateTime } from 'luxon';
 import clsx from 'clsx';
 import { DayPicker } from 'react-day-picker';
@@ -39,16 +39,19 @@ export const DatePicker = ({
 
 	const [isOpen, setIsOpen] = useState(false);
 
-	const inputDisplayText = (start?: DateTime, end?: DateTime) => {
-		if (start) {
-			const selectedDatesText = isDateLocalFormat
-				? [start.toLocaleString(), end?.toLocaleString()]
-				: [start.toISODate(), end?.toISODate()];
-			return isRangePicker ? `${selectedDatesText.join(' to ')}` : start.toLocaleString();
-		} else {
-			return '';
-		}
-	};
+	const inputDisplayText = useCallback(
+		(start?: DateTime, end?: DateTime) => {
+			if (start) {
+				const selectedDatesText = isDateLocalFormat
+					? [start.toLocaleString(), end?.toLocaleString()]
+					: [start.toISODate(), end?.toISODate()];
+				return isRangePicker ? `${selectedDatesText.join(' to ')}` : start.toLocaleString();
+			} else {
+				return '';
+			}
+		},
+		[isDateLocalFormat, isRangePicker]
+	);
 
 	const [dateInputValue, setDateInputValue] = useState(
 		inputDisplayText(luxonStartDate, luxonEndDate)
@@ -56,6 +59,12 @@ export const DatePicker = ({
 	const datePickerRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+
+	// Clear the text input value if both start date and end date are undefined.
+	// This frequently happens by the user clicking the clear all filters button.
+	useEffect(() => {
+		if (!startDate && !endDate) setDateInputValue('');
+	}, [startDate, endDate]);
 
 	const handleDateRangeSelect = (start?: DateTime, end?: DateTime) => {
 		const shouldHandleTimeBehindTheScenes =
@@ -173,12 +182,17 @@ export const DatePicker = ({
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.inputSelector}>
+			<div
+				className={clsx(
+					styles.inputSelector,
+					(startDate || dateInputValue.length) && styles.inputSelectorActive
+				)}
+			>
 				<input
 					ref={inputRef}
 					className={clsx(
-						(startDate || dateInputValue.length) && styles.inputFieldActive,
-						styles.inputField
+						styles.inputField,
+						(startDate || dateInputValue.length) && styles.inputFieldActive
 					)}
 					onClick={handleInputClick}
 					placeholder={placeholder}
@@ -202,7 +216,7 @@ export const DatePicker = ({
 					className={styles.popup}
 					ref={datePickerRef}
 					style={{
-						position: 'fixed',
+						position: 'sticky',
 						top: `${popupPosition.top}px`,
 						left: `${popupPosition.left}px`,
 						zIndex: 9999,

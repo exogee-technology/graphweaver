@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "2.17.4",
+	"version": "2.19.10",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -23,25 +23,32 @@
 		"bin"
 	],
 	"dependencies": {
+		"@graphql-tools/utils": "10.9.1",
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
+		"@mikro-orm/core": "6",
+		"@mikro-orm/knex": "6",
+		"@mikro-orm/mssql": "6",
+		"@mikro-orm/mysql": "6",
+		"@mikro-orm/postgresql": "6",
+		"@mikro-orm/sqlite": "6",
 		"chokidar": "4.0.3",
-		"esbuild": "0.25.1",
+		"esbuild": "0.25.9",
 		"inquirer": "11.1.0",
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
-		"semver": "7.7.1",
-		"validate-npm-package-name": "6.0.0",
+		"semver": "7.7.2",
+		"validate-npm-package-name": "6.0.2",
 		"yargs": "17.7.2"
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.7",
-		"@types/node": "22.13.14",
-		"@types/semver": "7.7.0",
+		"@types/node": "24.3.0",
+		"@types/semver": "7.7.1",
 		"@types/validate-npm-package-name": "4.0.2",
 		"@types/yargs": "17.0.33",
-		"prettier": "3.5.3",
-		"typescript": "5.8.3"
+		"prettier": "3.6.2",
+		"typescript": "5.9.2"
 	},
 	"keywords": [
 		"graphql",

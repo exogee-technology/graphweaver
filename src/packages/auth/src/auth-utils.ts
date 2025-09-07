@@ -1,7 +1,15 @@
+import { Filter, graphweaverMetadata, isEntityMetadata } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
-import { Filter, graphweaverMetadata, isEntityMetadata } from '@exogee/graphweaver';
 
+import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
+import { FieldLocation, RestrictedFieldError } from './errors';
+import {
+	AclMap,
+	buildAccessControlEntryForUser,
+	buildFieldAccessControlEntryForUser,
+	evaluateAccessControlValue,
+} from './helper-functions';
 import {
 	AccessControlList,
 	AccessType,
@@ -10,14 +18,6 @@ import {
 	ConsolidatedAccessControlEntry,
 	ConsolidatedAccessControlValue,
 } from './types';
-import {
-	AclMap,
-	buildAccessControlEntryForUser,
-	buildFieldAccessControlEntryForUser,
-	evaluateAccessControlValue,
-} from './helper-functions';
-import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
-import { RestrictedFieldError, FieldLocation } from './errors';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
@@ -155,7 +155,7 @@ const assertAccessControlValueNotEmpty = async <G, TContext extends Authorizatio
 				(filter): filter is { status: 'rejected'; reason: string } => filter.status === 'rejected'
 			)
 			.forEach((filter) =>
-				logger.error('Error while evaluating permissions filter: ', filter.reason)
+				logger.error({ reason: filter.reason }, 'Error while evaluating permissions filter')
 			);
 
 		// If any of the filters returned false or undefined, we should reject the request
@@ -251,7 +251,7 @@ export async function checkEntityPermission<G = unknown, D = unknown>(
 			throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 		}
 	} catch (error) {
-		logger.error('Error while checking entity permissions', error);
+		logger.error(error, 'Error while checking entity permissions');
 		if ((error as any).message === GENERIC_AUTH_ERROR_MESSAGE) {
 			throw error;
 		}
@@ -301,6 +301,12 @@ export async function checkAuthorization<G = unknown>(
 
 		if (isEntityMetadata(relatedEntityMetadata)) {
 			// Now we have a related entity, let's check and make sure we have permission
+
+			// If a to-many relationship is being reset to an empty array, we don't need to check permissions
+			if (Array.isArray(value) && value.length === 0) {
+				continue;
+			}
+
 			const accessType = requiredPermissionsForAction(value);
 			const values = Array.isArray(value) ? value : [value];
 			for (const item of values) {
@@ -327,7 +333,7 @@ export async function checkAuthorization<G = unknown>(
 	try {
 		await Promise.all(relatedEntityAuthChecks);
 	} catch (e) {
-		logger.info(`Permission check failed:`, e);
+		logger.info(e, 'Permission check failed');
 		permissionsErrorHandler(e);
 	}
 

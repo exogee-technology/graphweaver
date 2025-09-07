@@ -8,3 +8,5 @@ node_modules
 /playwright/.cache/
 
 local_modules
+
+.downloads

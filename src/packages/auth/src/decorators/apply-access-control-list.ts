@@ -9,6 +9,7 @@ import {
 import { AccessType, AccessControlList, AuthorizationContext } from '../types';
 import { AclMap } from '../helper-functions';
 import { afterCreateOrUpdate, beforeDelete, beforeRead, beforeCreateOrUpdate } from './hooks/acl';
+import { apolloPluginManager, pluginManager } from '@exogee/graphweaver-server';
 
 interface AclRegistrationOptions {
 	/**
@@ -17,11 +18,32 @@ interface AclRegistrationOptions {
 	overrideIfExists?: boolean;
 }
 
+// We should only do this check once for performance reasons.
+let hasCheckedForAuthMethods = false;
+
 export const registerAccessControlListHook = <G, TContext extends AuthorizationContext>(
 	entityName: string,
 	acl: Partial<AccessControlList<G, TContext>>,
 	options: AclRegistrationOptions = {}
 ) => {
+	// It's possible to accidentally misconfigure the system so there's an ACL applied to an entity but not
+	// have the auth method brought in at all. If you do this, then the system works in a weirdly default
+	// accessible way. We should catch this situation and throw an error.
+	apolloPluginManager.addPlugin('CheckForAuthMethodOnServerStart', {
+		async requestDidStart() {
+			if (!hasCheckedForAuthMethods) {
+				hasCheckedForAuthMethods = true;
+				if (![...pluginManager.getPlugins()].find((p) => p.name === 'AuthRequestContextPlugin')) {
+					throw new Error(
+						'No auth methods have been registered, but an ACL has been applied to an entity. Please ensure that an auth method is ' +
+							'registered in the server configuration. The usual way to accidentally do this is to not ' +
+							'import the file you have defined the auth method in.'
+					);
+				}
+			}
+		},
+	});
+
 	if (!options.overrideIfExists && AclMap.get(entityName)) {
 		throw new Error(`An ACL already exists for ${entityName}`);
 	}

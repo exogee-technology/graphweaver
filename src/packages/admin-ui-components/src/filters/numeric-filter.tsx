@@ -19,6 +19,7 @@ export const NumericFilter = ({ fieldName, onChange, filter }: NumericFilterProp
 			inputMode="numeric"
 			fieldName={fieldName}
 			value={String(filter?.[fieldName] ?? '')}
+			placeholder={fieldName}
 			onChange={handleOnChange}
 			data-testid={`${fieldName}-filter`}
 		/>

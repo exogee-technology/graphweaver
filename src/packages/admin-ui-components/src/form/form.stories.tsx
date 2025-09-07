@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import { useCreateForm } from './component';
 import { z } from 'zod';
 import { SelectMode } from '../select';

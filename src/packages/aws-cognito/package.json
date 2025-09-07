@@ -1,11 +1,12 @@
 {
 	"name": "@exogee/graphweaver-aws",
-	"version": "2.17.4",
+	"version": "2.19.10",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
 		"lib": "lib"
 	},
+	"sideEffects": false,
 	"files": [
 		"lib"
 	],
@@ -21,10 +22,10 @@
 	"license": "Apache-2.0",
 	"devDependencies": {
 		"@exogee/graphweaver": "workspace:*",
-		"esbuild": "0.25.1",
+		"esbuild": "0.25.9",
 		"graphql-type-json": "0.3.2",
-		"prettier": "3.5.3",
-		"typescript": "5.8.3"
+		"prettier": "3.6.2",
+		"typescript": "5.9.2"
 	},
 	"peerDependencies": {
 		"@exogee/graphweaver": "workspace:*",
@@ -32,9 +33,9 @@
 		"graphql-type-json": "^0.3.2"
 	},
 	"dependencies": {
-		"@aws-sdk/client-cognito-identity-provider": "3.782.0",
-		"@aws-sdk/client-lambda": "3.782.0",
+		"@aws-sdk/client-cognito-identity-provider": "3.883.0",
+		"@aws-sdk/client-lambda": "3.883.0",
 		"@exogee/graphweaver-rest-legacy": "workspace:*",
-		"graphql": "16.10.0"
+		"graphql": "16.11.0"
 	}
 }

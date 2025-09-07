@@ -1,6 +1,6 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { ComboBox, SelectMode, SelectOption } from './component';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ComboBox, SelectMode, SelectOption, DataFetcher } from './component';
 
 // Sample options for the stories
 const fruitOptions: SelectOption[] = [
@@ -22,16 +22,36 @@ const colorOptions: SelectOption[] = [
 	{ value: 'purple', label: 'Purple' },
 ];
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
+// Mock data fetcher for lazy loading demo
+const mockDataFetcher: DataFetcher = async ({ page, searchTerm }) => {
+	// Simulate API delay
+	await new Promise((resolve) => setTimeout(resolve, 500));
+
+	// Generate mock data
+	const allItems: SelectOption[] = Array.from({ length: 1000 }, (_, i) => ({
+		value: `item-${i}`,
+		label: `Item ${i + 1}${searchTerm ? ` (${searchTerm})` : ''}`,
+	}));
+
+	// Filter by search term if provided
+	const filteredItems = searchTerm
+		? allItems.filter((item) => item.label?.toLowerCase().includes(searchTerm.toLowerCase()))
+		: allItems;
+
+	const pageSize = 20;
+	const startIndex = (page - 1) * pageSize;
+	const endIndex = startIndex + pageSize;
+	const data = filteredItems.slice(startIndex, endIndex);
+
+	// Return just the data array - component will automatically fetch more if data.length > 0
+	return data;
+};
+
 const meta = {
 	title: 'Inputs/ComboBox',
 	component: ComboBox,
-	parameters: {
-		// Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
-		layout: 'centered',
-	},
-	// This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
-	// More on argTypes: https://storybook.js.org/docs/api/argtypes
+	parameters: { layout: 'centered' },
+
 	argTypes: {
 		options: {
 			description: 'The list of options available in the dropdown',
@@ -115,6 +135,31 @@ export const WithMultipleSelectedValues: Story = {
 		value: [fruitOptions[0], fruitOptions[3]], // Apple and Durian
 		placeholder: 'Select fruits',
 	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"This ComboBox shows multiple selected items. When you open the dropdown, you'll see the selected items at the top with purple lozenges that can be clicked to deselect individual items.",
+			},
+		},
+	},
+};
+
+export const SelectedItemsInDropdown: Story = {
+	args: {
+		options: fruitOptions,
+		mode: SelectMode.MULTI,
+		value: [fruitOptions[0], fruitOptions[2], fruitOptions[4]], // Apple, Cherry, Elderberry
+		placeholder: 'Select fruits',
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'This ComboBox demonstrates the selected items feature. Selected items appear at the top of the dropdown as purple lozenges. Click on any lozenge to deselect that item, and it will return to the main options list in its original order.',
+			},
+		},
+	},
 };
 
 export const Loading: Story = {
@@ -192,4 +237,22 @@ export const InForm: Story = {
 			</form>
 		),
 	],
+};
+
+export const LazyLoadingWithInfiniteScroll: Story = {
+	args: {
+		mode: SelectMode.SINGLE,
+		placeholder: 'Type to search and scroll to load more...',
+		allowFreeTyping: true,
+		dataFetcher: mockDataFetcher,
+		searchDebounceMs: 300,
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'This ComboBox demonstrates lazy loading with infinite scroll. It fetches data in pages as you scroll, and supports search with debouncing. The data fetcher simulates an API call with a 500ms delay.',
+			},
+		},
+	},
 };
