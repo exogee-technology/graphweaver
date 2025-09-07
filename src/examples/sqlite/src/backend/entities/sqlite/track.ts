@@ -14,7 +14,7 @@ import { InvoiceLine } from './invoice-line';
 import { MediaType } from './media-type';
 import { Playlist } from './playlist';
 
-@Entity({ tableName: 'Track' })
+@Entity({ tableName: 'Track', forceConstructor: true })
 export class Track {
 	@PrimaryKey({ fieldName: 'TrackId', type: 'number' })
 	trackId!: number;
@@ -62,8 +62,8 @@ export class Track {
 	unitPrice!: string;
 
 	@OneToMany({ entity: () => InvoiceLine, mappedBy: 'track' })
-	invoiceLines = new Collection<InvoiceLine>(this);
+	invoiceLines!: Collection<InvoiceLine>;
 
 	@ManyToMany({ entity: () => Playlist, mappedBy: 'tracks' })
-	playlists = new Collection<Playlist>(this);
+	playlists!: Collection<Playlist>;
 }

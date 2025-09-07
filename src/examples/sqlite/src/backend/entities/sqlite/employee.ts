@@ -9,7 +9,7 @@ import {
 } from '@mikro-orm/core';
 import { Customer } from './customer';
 
-@Entity({ tableName: 'Employee' })
+@Entity({ tableName: 'Employee', forceConstructor: true })
 export class Employee {
 	@PrimaryKey({ fieldName: 'EmployeeId', type: 'number' })
 	employeeId!: number;

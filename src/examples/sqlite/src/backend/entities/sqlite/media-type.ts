@@ -1,7 +1,7 @@
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { Track } from './track';
 
-@Entity({ tableName: 'MediaType' })
+@Entity({ tableName: 'MediaType', forceConstructor: true })
 export class MediaType {
 	@PrimaryKey({ fieldName: 'MediaTypeId', type: 'number' })
 	mediaTypeId!: number;

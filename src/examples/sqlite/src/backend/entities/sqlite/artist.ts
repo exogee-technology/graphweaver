@@ -1,7 +1,7 @@
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { Album } from './album';
 
-@Entity({ tableName: 'Artist' })
+@Entity({ tableName: 'Artist', forceConstructor: true })
 export class Artist {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
 	artistId!: number;
