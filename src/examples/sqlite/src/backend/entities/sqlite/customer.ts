@@ -10,7 +10,7 @@ import {
 import { Employee } from './employee';
 import { Invoice } from './invoice';
 
-@Entity({ tableName: 'Customer', forceConstructor: true })
+@Entity({ tableName: 'Customer' })
 export class Customer {
 	@PrimaryKey({ fieldName: 'CustomerId', type: 'number' })
 	customerId!: number;

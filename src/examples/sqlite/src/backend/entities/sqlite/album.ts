@@ -10,7 +10,7 @@ import {
 import { Artist } from './artist';
 import { Track } from './track';
 
-@Entity({ tableName: 'Album', forceConstructor: true })
+@Entity({ tableName: 'Album' })
 export class Album {
 	@PrimaryKey({ fieldName: 'AlbumId', type: 'number' })
 	albumId!: number;

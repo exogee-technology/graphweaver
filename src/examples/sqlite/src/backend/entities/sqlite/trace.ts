@@ -1,7 +1,7 @@
 import { Entity, PrimaryKey, Property, JsonType, BigIntType } from '@mikro-orm/core';
 import { TraceData } from '@exogee/graphweaver';
 
-@Entity({ tableName: 'Trace', forceConstructor: true })
+@Entity({ tableName: 'Trace' })
 export class Trace implements TraceData {
 	@PrimaryKey({ fieldName: 'Id', type: new BigIntType('string') })
 	id!: string;
