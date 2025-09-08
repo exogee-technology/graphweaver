@@ -200,9 +200,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 						transactionIsolationLevel: optionsOrIsolationLevel,
 					};
 
-		// Modify the entity to ensure forceConstructor is set to true
-		this.ensureForceConstructor(mikroType);
-
 		this.entityType = mikroType;
 		this.connectionManagerId = connection.connectionManagerId;
 		this._backendId = `mikro-orm-${connection.connectionManagerId || ''}`;
@@ -210,6 +207,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			options.transactionIsolationLevel ?? IsolationLevel.REPEATABLE_READ;
 		this.backendDisplayName = options.backendDisplayName;
 		this.connection = connection;
+
+		// Modify the entity to ensure forceConstructor is set to true
+		// This must be called after this.connection is set
+		this.ensureForceConstructor(mikroType);
+
 		this.addRequestContext();
 		this.connectToDatabase();
 	}
