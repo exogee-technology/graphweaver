@@ -8,12 +8,16 @@ import {
 	graphweaverMetadata,
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
-import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
+import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
 
-import { UserProfile } from '../../user-profile';
+import { AclMap } from '../../helper-functions';
 import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
+import { UserProfile } from '../../user-profile';
+import { hashPassword, verifyPassword } from '../../utils/argon2id';
 import { Credential, CredentialStorage, Token } from '../entities';
+import { AuthTokenProvider } from '../token';
+import { BaseAuthMethod } from './base-auth-method';
 import {
 	PasswordStrengthError,
 	defaultPasswordStrength,
@@ -21,10 +25,6 @@ import {
 	runAfterHooks,
 	updatePasswordCredential,
 } from './utils';
-import { hashPassword, verifyPassword } from '../../utils/argon2id';
-import { AuthTokenProvider } from '../token';
-import { AclMap } from '../../helper-functions';
-import { BaseAuthMethod } from './base-auth-method';
 
 export enum PasswordOperation {
 	LOGIN = 'login',
@@ -138,6 +138,12 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			args: {
 				username: () => String,
 				password: () => String,
+				extendedToken: {
+					type: () => Boolean,
+					defaultValue: false,
+					nullable: true,
+					description: "Should the token have an extended expiration time? (Useful for 'Remember me on this device')",
+				},
 			},
 			getType: () => Token,
 			resolver: this.loginPassword.bind(this),
@@ -353,14 +359,14 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 		args,
 		context,
 	}: ResolverOptions<
-		{ username: string; password: string },
+		{ username: string; password: string; extendedToken?: boolean },
 		AuthorizationContext
 	>): Promise<Token> {
 		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
 		const userProfile = await this.authenticate(args.username, args.password, context);
 		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
-		const authToken = await tokenProvider.generateToken(userProfile);
+		const authToken = await tokenProvider.generateToken(userProfile, args.extendedToken);
 
 		// This allows people with expired tokens to not get redirected to login while trying to log in.
 		// This happens at the end of this function so that we can be sure all the other checks have passed
