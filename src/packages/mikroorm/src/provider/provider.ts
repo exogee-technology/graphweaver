@@ -208,71 +208,8 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		this.backendDisplayName = options.backendDisplayName;
 		this.connection = connection;
 
-		// Modify the entity to ensure forceConstructor is set to true
-		// This must be called after this.connection is set
-		this.ensureForceConstructor(mikroType);
-
 		this.addRequestContext();
 		this.connectToDatabase();
-	}
-
-	/**
-	 * Ensures that the entity has forceConstructor set to true by modifying its decorator metadata
-	 * This addresses MikroORM 6.5 collection initialization issues where merge() and transactions
-	 * can skip constructors, leaving collections uninitialized.
-	 */
-	private ensureForceConstructor(entityClass: new () => D): void {
-		try {
-			// First, let's try the direct approach - modify the connection entities config
-			const mikroOrmConfig = this.connection.mikroOrmConfig as any;
-			if (mikroOrmConfig && Array.isArray(mikroOrmConfig.entities)) {
-				const entityIndex = mikroOrmConfig.entities.findIndex(
-					(entity: any) => entity === entityClass
-				);
-				if (entityIndex !== -1) {
-					// Replace the class reference with an EntitySchema-like object
-					mikroOrmConfig.entities[entityIndex] = {
-						name: entityClass.name,
-						class: entityClass,
-						forceConstructor: true,
-					};
-					logger.trace(
-						`Set forceConstructor: true for entity ${entityClass.name} via config modification`
-					);
-					return;
-				}
-			}
-
-			// Fallback: Try to modify reflect-metadata directly
-			// MikroORM uses various metadata keys, let's try the most common ones
-			const metadataKeys = [
-				'design:entity',
-				'mikroorm:entity-options',
-				Symbol.for('mikroorm:entity'),
-			];
-
-			let found = false;
-			for (const key of metadataKeys) {
-				const existingMetadata = Reflect.getMetadata(key, entityClass);
-				if (existingMetadata) {
-					const updatedMetadata = { ...existingMetadata, forceConstructor: true };
-					Reflect.defineMetadata(key, updatedMetadata, entityClass);
-					logger.trace(
-						`Updated metadata for ${entityClass.name} with forceConstructor: true using key ${String(key)}`
-					);
-					found = true;
-					break;
-				}
-			}
-
-			// If no metadata found, create new metadata
-			if (!found) {
-				Reflect.defineMetadata('design:entity', { forceConstructor: true }, entityClass);
-				logger.trace(`Created new metadata for ${entityClass.name} with forceConstructor: true`);
-			}
-		} catch (error) {
-			logger.warn(`Failed to modify forceConstructor for entity ${entityClass.name}: ${error}`);
-		}
 	}
 
 	private getDbType(): DatabaseType {

@@ -28,7 +28,7 @@
 		"@nivo/pie": "0.99.0",
 		"clsx": "2.1.1",
 		"graphql": "16.11.0",
-		"luxon": "3.7.1",
+		"luxon": "3.7.2",
 		"mikro-orm-sqlite-wasm": "workspace:*",
 		"react": "19.1.1",
 		"react-dom": "19.1.1"
