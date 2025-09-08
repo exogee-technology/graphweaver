@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
 	BackendProvider,
 	PaginationOptions,
@@ -199,6 +200,9 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 						transactionIsolationLevel: optionsOrIsolationLevel,
 					};
 
+		// Modify the entity to ensure forceConstructor is set to true
+		this.ensureForceConstructor(mikroType);
+
 		this.entityType = mikroType;
 		this.connectionManagerId = connection.connectionManagerId;
 		this._backendId = `mikro-orm-${connection.connectionManagerId || ''}`;
@@ -209,6 +213,56 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		this.addRequestContext();
 		this.connectToDatabase();
 	}
+
+	/**
+	 * Ensures that the entity has forceConstructor set to true by modifying the connection config
+	 */
+	private ensureForceConstructor(entityClass: new () => D): void {
+		try {
+			const mikroOrmConfig = this.connection.mikroOrmConfig as any;
+
+			if (mikroOrmConfig && Array.isArray(mikroOrmConfig.entities)) {
+				// Find the entity in the entities array and modify its configuration
+				const entityIndex = mikroOrmConfig.entities.findIndex((entity: any) => {
+					// Handle both class references and entity schema objects
+					if (typeof entity === 'function') {
+						return entity === entityClass;
+					} else if (entity && typeof entity === 'object' && entity.class) {
+						return entity.class === entityClass;
+					}
+					return false;
+				});
+
+				if (entityIndex !== -1) {
+					const entity = mikroOrmConfig.entities[entityIndex];
+
+					if (typeof entity === 'function') {
+						// Replace with entity schema object that includes forceConstructor
+						mikroOrmConfig.entities[entityIndex] = {
+							class: entity,
+							forceConstructor: true,
+						};
+						logger.trace(
+							`Added forceConstructor: true to entity ${entityClass.name} via schema object`
+						);
+					} else if (entity && typeof entity === 'object') {
+						// Modify existing entity schema object
+						entity.forceConstructor = true;
+						logger.trace(
+							`Added forceConstructor: true to existing schema for entity ${entityClass.name}`
+						);
+					}
+				} else {
+					logger.warn(`Could not find entity ${entityClass.name} in mikroOrmConfig.entities array`);
+				}
+			} else {
+				logger.warn(`mikroOrmConfig.entities is not an array or mikroOrmConfig is not available`);
+			}
+		} catch (error) {
+			logger.warn(`Failed to modify forceConstructor for entity ${entityClass.name}: ${error}`);
+		}
+	}
+
 	private getDbType(): DatabaseType {
 		const driver = this.em.getDriver().constructor.name;
 		// This used to import the actual drivers, but since they're optional it makes more sense
