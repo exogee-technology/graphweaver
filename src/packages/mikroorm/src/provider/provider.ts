@@ -210,55 +210,63 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 		// Modify the entity to ensure forceConstructor is set to true
 		// This must be called after this.connection is set
-		this.ensureForceConstructor(mikroType);
+		// TODO: Temporarily disabled while investigating timing issues
+		// this.ensureForceConstructor(mikroType);
 
 		this.addRequestContext();
 		this.connectToDatabase();
 	}
 
 	/**
-	 * Ensures that the entity has forceConstructor set to true by modifying the connection config
+	 * Ensures that the entity has forceConstructor set to true by modifying its decorator metadata
 	 */
 	private ensureForceConstructor(entityClass: new () => D): void {
 		try {
-			const mikroOrmConfig = this.connection.mikroOrmConfig as any;
+			// Try multiple metadata keys that MikroORM might use
+			const possibleKeys = [
+				'mikroorm:entity',
+				'design:mikroorm:entity',
+				Symbol.for('mikroorm:entity'),
+				'entity',
+			];
 
-			if (mikroOrmConfig && Array.isArray(mikroOrmConfig.entities)) {
-				// Find the entity in the entities array and modify its configuration
-				const entityIndex = mikroOrmConfig.entities.findIndex((entity: any) => {
-					// Handle both class references and entity schema objects
-					if (typeof entity === 'function') {
-						return entity === entityClass;
-					} else if (entity && typeof entity === 'object' && entity.class) {
-						return entity.class === entityClass;
-					}
-					return false;
-				});
+			let metadataModified = false;
 
-				if (entityIndex !== -1) {
-					const entity = mikroOrmConfig.entities[entityIndex];
-
-					if (typeof entity === 'function') {
-						// Replace with entity schema object that includes forceConstructor
-						mikroOrmConfig.entities[entityIndex] = {
-							class: entity,
+			for (const metadataKey of possibleKeys) {
+				try {
+					const existingMetadata = Reflect.getMetadata(metadataKey, entityClass);
+					if (existingMetadata) {
+						// Modify existing metadata
+						const updatedMetadata = {
+							...existingMetadata,
 							forceConstructor: true,
 						};
+						Reflect.defineMetadata(metadataKey, updatedMetadata, entityClass);
 						logger.trace(
-							`Added forceConstructor: true to entity ${entityClass.name} via schema object`
+							`Added forceConstructor: true to entity ${entityClass.name} using key ${String(metadataKey)}`
 						);
-					} else if (entity && typeof entity === 'object') {
-						// Modify existing entity schema object
-						entity.forceConstructor = true;
-						logger.trace(
-							`Added forceConstructor: true to existing schema for entity ${entityClass.name}`
-						);
+						metadataModified = true;
+						break;
 					}
-				} else {
-					logger.warn(`Could not find entity ${entityClass.name} in mikroOrmConfig.entities array`);
+				} catch (keyError) {
+					// Continue trying other keys
+					continue;
 				}
-			} else {
-				logger.warn(`mikroOrmConfig.entities is not an array or mikroOrmConfig is not available`);
+			}
+
+			// If no existing metadata was found, try to create new metadata with a common key
+			if (!metadataModified) {
+				try {
+					const newMetadata = { forceConstructor: true };
+					Reflect.defineMetadata('mikroorm:entity', newMetadata, entityClass);
+					logger.trace(
+						`Created new metadata for entity ${entityClass.name} with forceConstructor: true`
+					);
+				} catch (createError) {
+					logger.warn(
+						`Could not create new metadata for entity ${entityClass.name}: ${createError}`
+					);
+				}
 			}
 		} catch (error) {
 			logger.warn(`Failed to modify forceConstructor for entity ${entityClass.name}: ${error}`);
