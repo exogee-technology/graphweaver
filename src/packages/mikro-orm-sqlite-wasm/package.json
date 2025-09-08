@@ -24,7 +24,7 @@
 	"dependencies": {
 		"@mikro-orm/knex": "6.4.16",
 		"@mikro-orm/sqlite": "6.4.16",
-		"node-sqlite3-wasm": "0.8.47"
+		"node-sqlite3-wasm": "0.8.48"
 	},
 	"devDependencies": {
 		"@types/node": "24.3.1",
