@@ -1179,8 +1179,8 @@ importers:
         specifier: workspace:*
         version: link:../mikroorm
       '@graphql-codegen/add':
-        specifier: 5.0.3
-        version: 5.0.3(graphql@16.11.0)
+        specifier: 6.0.0
+        version: 6.0.0(graphql@16.11.0)
       '@graphql-codegen/cli':
         specifier: 5.0.7
         version: 5.0.7(@types/node@24.3.1)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.2)
@@ -3396,6 +3396,12 @@ packages:
 
   '@graphql-codegen/add@5.0.3':
     resolution: {integrity: sha512-SxXPmramkth8XtBlAHu4H4jYcYXM/o3p01+psU+0NADQowA8jtYkK6MW5rV6T+CxkEaNZItfSmZRPgIuypcqnA==}
+    peerDependencies:
+      graphql: 16.11.0
+
+  '@graphql-codegen/add@6.0.0':
+    resolution: {integrity: sha512-biFdaURX0KTwEJPQ1wkT6BRgNasqgQ5KbCI1a3zwtLtO7XTo7/vKITPylmiU27K5DSOWYnY/1jfSqUAEBuhZrQ==}
+    engines: {node: '>=16'}
     peerDependencies:
       graphql: 16.11.0
 
@@ -14205,6 +14211,12 @@ snapshots:
   '@graphql-codegen/add@5.0.3(graphql@16.11.0)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.1.1(graphql@16.11.0)
+      graphql: 16.11.0
+      tslib: 2.6.3
+
+  '@graphql-codegen/add@6.0.0(graphql@16.11.0)':
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 6.0.0(graphql@16.11.0)
       graphql: 16.11.0
       tslib: 2.6.3
 
