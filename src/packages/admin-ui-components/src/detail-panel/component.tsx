@@ -148,7 +148,7 @@ const getField = ({
 	if (field.relationshipType) {
 		// For relationships with 'count' behaviour, always show count field (inherently read-only)
 		if (field.relationshipBehaviour === 'count') {
-			return <RelationshipCountField name={field.name} field={field} />;
+			return <RelationshipCountField name={field.name} field={field} entity={entity} />;
 		}
 
 		// If the field is readonly and a relationship, show a link to the entity/entities

@@ -144,6 +144,7 @@ const renderField = (field: EntityField, autoFocus = false) => {
 	const panelMode = { CREATE: 'CREATE', EDIT: 'EDIT' };
 
 	const getField = ({
+		entity,
 		field,
 		autoFocus,
 	}: {
@@ -189,7 +190,7 @@ const renderField = (field: EntityField, autoFocus = false) => {
 						<ApolloProvider client={apolloClient}>
 							<Router>
 								<MockSchemaProvider>
-									<RelationshipCountField name={field.name} field={field} />
+									<RelationshipCountField name={field.name} field={field} entity={entity} />
 								</MockSchemaProvider>
 							</Router>
 						</ApolloProvider>
