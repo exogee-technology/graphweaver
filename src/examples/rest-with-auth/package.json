@@ -33,7 +33,7 @@
 		"got-cjs": "12.5.4",
 		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
-		"mysql2": "3.14.4",
+		"mysql2": "3.14.5",
 		"react": "19.1.1",
 		"wouter": "3.7.1"
 	},
