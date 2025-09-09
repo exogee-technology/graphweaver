@@ -63,6 +63,23 @@ const cellForType = (
 
 	// If not, is it a relationship?
 	if (field.relationshipType) {
+		// For relationships with 'count' behaviour, show count instead of links
+		if (field.relationshipBehaviour === 'count') {
+			// Debug: log the actual value structure
+			console.log('RelationshipCountField debug:', {
+				fieldName: field.name,
+				fieldType: field.type,
+				value,
+				valueType: typeof value,
+				hasCount: value && typeof value === 'object' && 'count' in value,
+			});
+
+			// When using _aggregate, the value will be an object with a count property
+			if (!value || typeof value !== 'object' || !('count' in value)) return '0';
+			const count = (value as { count: number }).count;
+			return `${count} ${field.type.toLowerCase()}s`;
+		}
+
 		const relatedEntity = entityByType(field.type);
 
 		const linkForValue = (item: any) => {
@@ -179,14 +196,20 @@ export const convertEntityToColumns = <T extends Record<string, unknown>>(
 
 	const entityColumns = entity.fields
 		.filter((field) => !field.hideInTable)
-		.map((field) =>
-			columnHelper.accessor(field.name as any, {
+		.map((field) => {
+			// For relationship fields with count behaviour, the GraphQL field name is different
+			const accessorFieldName =
+				field.relationshipType && field.relationshipBehaviour === 'count'
+					? `${field.name}_aggregate`
+					: field.name;
+
+			return columnHelper.accessor(accessorFieldName as any, {
 				id: field.name,
 				header: () => field.name,
 				cell: (info: CellContext<T, unknown>) => cellForType(field, info.getValue(), entityByType),
 				enableSorting: isFieldSortable(field),
-			})
-		);
+			});
+		});
 
 	// Which custom fields do we need to show here?
 	const customFieldsToShow = (customFields?.get(entity.name) || []).filter(
