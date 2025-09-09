@@ -1,7 +1,10 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { Form, Formik } from 'formik';
+import { ApolloProvider } from '@apollo/client';
+import { Router } from 'wouter';
 import { AdminUIFilterType, DetailPanelInputComponentOption, Entity, EntityField } from '../utils';
 import { DetailPanel } from './component';
+import { apolloClient } from '../apollo';
 
 // Import field components for rendering
 import {
@@ -12,6 +15,7 @@ import {
 	LinkField,
 	MediaField,
 	RelationshipField,
+	RelationshipCountField,
 	RichTextField,
 	TextField,
 } from './fields';
@@ -24,6 +28,22 @@ const mockEnum = {
 		{ name: 'INACTIVE', value: 'INACTIVE' },
 		{ name: 'PENDING', value: 'PENDING' },
 	],
+};
+
+// Mock schema context
+const mockSchema = {
+	entityByType: (entityType: string) => ({
+		name: entityType,
+		plural: `${entityType}s`,
+		primaryKeyField: 'id',
+		summaryField: 'name',
+	}),
+};
+
+// Mock schema provider component
+const MockSchemaProvider = ({ children }: { children: React.ReactNode }) => {
+	// This would normally be provided by a context, but for storybook we'll mock it
+	return <div data-testid="mock-schema-provider">{children}</div>;
 };
 
 // Mock entity for the fields
@@ -120,6 +140,12 @@ const mockFields: EntityField[] = [
 		relationshipType: 'MANY_TO_ONE',
 		attributes: { isReadOnly: true, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
+	{
+		name: 'ordersCount',
+		type: 'Order',
+		relationshipType: 'ONE_TO_MANY',
+		attributes: { isReadOnly: true, isRequiredForCreate: false, isRequiredForUpdate: false },
+	},
 ];
 
 // Mock function to render a field
@@ -166,6 +192,18 @@ const renderField = (field: EntityField, autoFocus = false) => {
 		if (field.relationshipType) {
 			// If the field is readonly and a relationship, show a link to the entity/entities
 			if (isReadonly) {
+				// For ONE_TO_MANY relationships, show count field instead of link
+				if (field.relationshipType === 'ONE_TO_MANY') {
+					return (
+						<ApolloProvider client={apolloClient}>
+							<Router>
+								<MockSchemaProvider>
+									<RelationshipCountField name={field.name} field={field} />
+								</MockSchemaProvider>
+							</Router>
+						</ApolloProvider>
+					);
+				}
 				return <LinkField name={field.name} field={field} />;
 			} else {
 				return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
@@ -453,6 +491,17 @@ export const LinkFieldStory: Story = {
 		docs: {
 			description: {
 				story: 'Link field for read-only relationships',
+			},
+		},
+	},
+};
+
+export const RelationshipCountFieldStory: Story = {
+	render: () => renderField(mockFields.find((f) => f.name === 'ordersCount')!),
+	parameters: {
+		docs: {
+			description: {
+				story: 'Relationship count field for read-only ONE_TO_MANY relationships',
 			},
 		},
 	},
