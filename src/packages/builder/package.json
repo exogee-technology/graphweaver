@@ -20,7 +20,7 @@
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
-		"@graphql-codegen/add": "5.0.3",
+		"@graphql-codegen/add": "6.0.0",
 		"@graphql-codegen/cli": "5.0.7",
 		"@graphql-codegen/near-operation-file-preset": "3.1.0",
 		"@graphql-codegen/typescript": "5.0.0",
