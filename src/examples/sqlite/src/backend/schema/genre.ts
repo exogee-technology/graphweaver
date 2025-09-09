@@ -15,6 +15,9 @@ export class Genre {
 	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
-	@RelationshipField<Track>(() => [Track], { relatedField: 'genre' })
+	@RelationshipField<Track>(() => [Track], {
+		relatedField: 'genre',
+		adminUIOptions: { relationshipBehaviour: 'count' },
+	})
 	tracks!: Track[];
 }

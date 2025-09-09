@@ -1,9 +1,6 @@
-import { useQuery } from '@apollo/client';
 import { useField, useFormikContext } from 'formik';
 
 import { EntityField, routeFor, useSchema } from '../../utils';
-import { getRelationshipCountQuery } from '../graphql';
-import { Spinner } from '../../spinner';
 import { useLocation, useSearchParams } from 'wouter';
 import { useCallback } from 'react';
 
@@ -13,19 +10,16 @@ import { useCallback } from 'react';
 export const RelationshipCountField = ({ name, field }: { name: string; field: EntityField }) => {
 	const { dirty } = useFormikContext();
 	const [, setLocation] = useLocation();
-	const [{ value }] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const relatedEntity = entityByType(field.type);
 	const [_, meta] = useField({ name: name, multiple: false });
-	const [__, setSearchParams] = useSearchParams();
-	const { data, loading, error } = useQuery(getRelationshipCountQuery(relatedEntity), {
-		variables: {
-			filter: {
-				[relatedEntity.primaryKeyField]: value,
-			},
-		},
-	});
 	const { initialValue: formEntity } = meta;
+	const [__, setSearchParams] = useSearchParams();
+
+	// Handle case where relatedEntity is not found
+	if (!relatedEntity) {
+		return <div>Error: Related entity {field.type} not found</div>;
+	}
 
 	const handleLinkClick = useCallback(
 		(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -48,12 +42,9 @@ export const RelationshipCountField = ({ name, field }: { name: string; field: E
 		[dirty, setLocation, setSearchParams, formEntity.value, field.type, location.search]
 	);
 
-	if (loading) return <Spinner />;
-	if (error) return <div>Error: {error.message}</div>;
-
 	return (
 		<a key={formEntity.id} onClick={handleLinkClick}>
-			{data?.result?.count ?? 0} [entity name]s
+			{formEntity?.count ?? 0} {relatedEntity.plural.toLowerCase()}
 		</a>
 	);
 };

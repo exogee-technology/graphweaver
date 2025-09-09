@@ -30,16 +30,6 @@ const mockEnum = {
 	],
 };
 
-// Mock schema context
-const mockSchema = {
-	entityByType: (entityType: string) => ({
-		name: entityType,
-		plural: `${entityType}s`,
-		primaryKeyField: 'id',
-		summaryField: 'name',
-	}),
-};
-
 // Mock schema provider component
 const MockSchemaProvider = ({ children }: { children: React.ReactNode }) => {
 	// This would normally be provided by a context, but for storybook we'll mock it
@@ -144,6 +134,7 @@ const mockFields: EntityField[] = [
 		name: 'ordersCount',
 		type: 'Order',
 		relationshipType: 'ONE_TO_MANY',
+		relationshipBehaviour: 'count',
 		attributes: { isReadOnly: true, isRequiredForCreate: false, isRequiredForUpdate: false },
 	},
 ];
@@ -192,8 +183,8 @@ const renderField = (field: EntityField, autoFocus = false) => {
 		if (field.relationshipType) {
 			// If the field is readonly and a relationship, show a link to the entity/entities
 			if (isReadonly) {
-				// For ONE_TO_MANY relationships, show count field instead of link
-				if (field.relationshipType === 'ONE_TO_MANY') {
+				// For relationships with 'count' behaviour, show count field instead of link
+				if (field.relationshipBehaviour === 'count') {
 					return (
 						<ApolloProvider client={apolloClient}>
 							<Router>

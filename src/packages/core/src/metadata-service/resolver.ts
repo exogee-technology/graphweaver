@@ -104,14 +104,18 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					defaultFieldForDetailPanel = field.name;
 				}
 
-				const isToMany = isList && relatedObject?.type === 'entity'
+				const isToMany = isList && relatedObject?.type === 'entity';
 
-				const canNotBeEmpty = !isToMany && field.nullable !== true
+				const canNotBeEmpty = !isToMany && field.nullable !== true;
 
 				// Define field attributes
 				const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
-				const isRequiredForCreate = field.apiOptions?.requiredForCreate === undefined ? canNotBeEmpty : field.apiOptions?.requiredForCreate;
-				const isRequiredForUpdate = field.name === primaryKeyField || (field.apiOptions?.requiredForUpdate ?? false);
+				const isRequiredForCreate =
+					field.apiOptions?.requiredForCreate === undefined
+						? canNotBeEmpty
+						: field.apiOptions?.requiredForCreate;
+				const isRequiredForUpdate =
+					field.name === primaryKeyField || (field.apiOptions?.requiredForUpdate ?? false);
 
 				const fieldObject: AdminUiFieldMetadata = {
 					name: field.name,
@@ -132,6 +136,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 									name: field.adminUIOptions?.detailPanelInputComponent,
 								}
 							: field.adminUIOptions?.detailPanelInputComponent,
+					relationshipBehaviour: field.adminUIOptions?.relationshipBehaviour,
 				};
 
 				// Check if we have an array of related entities
