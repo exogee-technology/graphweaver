@@ -902,8 +902,8 @@ importers:
         specifier: 15.6.6
         version: 15.6.6(react@19.1.1)
       tiptap-markdown:
-        specifier: 0.8.10
-        version: 0.8.10(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))
+        specifier: 0.9.0
+        version: 0.9.0(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))
       wouter:
         specifier: 3.7.1
         version: 3.7.1(react@19.1.1)
@@ -11265,10 +11265,10 @@ packages:
     resolution: {integrity: sha512-t2T/WLB2WRgZ9EpE4jgPJ9w+i66UZfDc8wHh0xrwiRNN+UwH98GIJkTeZqX9rg0i0ptwzqW+uYeIF0T4F8LR7A==}
     engines: {node: '>=14.0.0'}
 
-  tiptap-markdown@0.8.10:
-    resolution: {integrity: sha512-iDVkR2BjAqkTDtFX0h94yVvE2AihCXlF0Q7RIXSJPRSR5I0PA1TMuAg6FHFpmqTn4tPxJ0by0CK7PUMlnFLGEQ==}
+  tiptap-markdown@0.9.0:
+    resolution: {integrity: sha512-dKLQ9iiuGNgrlGVjrNauF/UBzWu4LYOx5pkD0jNkmQt/GOwfCJsBuzZTsf1jZ204ANHOm572mZ9PYvGh1S7tpQ==}
     peerDependencies:
-      '@tiptap/core': ^2.0.3
+      '@tiptap/core': ^3.0.1
 
   title-case@3.0.3:
     resolution: {integrity: sha512-e1zGYRvbffpcHIrnuqT0Dh+gEJtDaxDSoG4JAIpq4oDFyooziLBIiYQv0GBT4FUAnUop5uZ1hiIAj7oAF6sOCA==}
@@ -24375,7 +24375,7 @@ snapshots:
 
   tinyspy@4.0.3: {}
 
-  tiptap-markdown@0.8.10(@tiptap/core@3.4.1(@tiptap/pm@3.4.1)):
+  tiptap-markdown@0.9.0(@tiptap/core@3.4.1(@tiptap/pm@3.4.1)):
     dependencies:
       '@tiptap/core': 3.4.1(@tiptap/pm@3.4.1)
       '@types/markdown-it': 13.0.9
