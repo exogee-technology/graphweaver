@@ -14,7 +14,7 @@ import { InvoiceLine } from './invoice-line';
 import { MediaType } from './media-type';
 import { Playlist } from './playlist';
 
-@Entity({ tableName: 'Track', forceConstructor: true })
+@Entity({ tableName: 'Track' })
 export class Track {
 	@PrimaryKey({ fieldName: 'TrackId', type: 'number' })
 	trackId!: number;
