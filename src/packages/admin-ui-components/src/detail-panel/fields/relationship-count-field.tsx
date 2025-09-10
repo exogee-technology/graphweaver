@@ -26,15 +26,10 @@ export const RelationshipCountField = ({
 	const { initialValue: formEntity } = meta;
 	const [__, setSearchParams] = useSearchParams();
 
-	// Handle case where relatedEntity is not found
-	if (!relatedEntity) {
-		return <div>Error: Related entity {field.type} not found</div>;
-	}
-
 	const handleLinkClick = useCallback(
-		(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+		(e?: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 			// Handle if the form has changed when clicking a link, if it has pop up a confirmation modal
-			e.preventDefault();
+			e?.preventDefault();
 
 			// Figure out the property that points the other direction, e.g. back at us.
 			// If we're on Genre and we're showing a count of tracks, clicking needs to filter
@@ -62,8 +57,28 @@ export const RelationshipCountField = ({
 		[dirty, setLocation, setSearchParams, formEntity.value, field.type, location.search]
 	);
 
+	const handleKeyDown = useCallback(
+		(e: React.KeyboardEvent<HTMLAnchorElement>) => {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				handleLinkClick();
+			}
+		},
+		[handleLinkClick]
+	);
+
+	// Handle case where relatedEntity is not found
+	if (!relatedEntity) {
+		return <div>Error: Related entity {field.type} not found</div>;
+	}
+
 	return (
-		<a key={formEntity.id} className={styles.relationshipLink} onClick={handleLinkClick}>
+		<a
+			key={formEntity.id}
+			className={styles.relationshipLink}
+			onClick={handleLinkClick}
+			onKeyDown={handleKeyDown}
+		>
 			{formEntity?.count ?? 0} {relatedEntity.plural.toLowerCase()}
 		</a>
 	);
