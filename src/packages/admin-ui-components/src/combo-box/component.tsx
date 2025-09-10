@@ -94,9 +94,15 @@ export const ComboBox = ({
 	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
 
-	const { getSelectedItemProps, removeSelectedItem } =
+	
+	const sortOptionsBySelectedFirst = (opt1: SelectOption, opt2: SelectOption) => {
+		// TODO: Test to see how well this performs
+		return (selectedIds.has(opt2.value) ? 1 : 0) - (selectedIds.has(opt1.value) ? 1 : 0)
+	}
+
+	const { getDropdownProps, removeSelectedItem } =
       useMultipleSelection({
-		initialSelectedItems: valueArray
+		selectedItems: valueArray
 	  });
 
 	const {
@@ -321,7 +327,7 @@ export const ComboBox = ({
 						</div>
 					)}
 						<div className={styles.inputWrapper}>
-							{/* This input needs to render always. This lets the browser handle some default behaviour around key presses. */}
+							{/* This input needs to render always. Keyboard navigation will break without it. */}
 							<input
 								readOnly={!allowFreeTyping}
 								className={styles.selectInput}
@@ -331,6 +337,7 @@ export const ComboBox = ({
 									onBlur: handleBlur,
 									onFocus: openMenu,
 									placeholder: valueArray.length === 0 ? placeholder : undefined,
+									...getDropdownProps(),
 								})}
 							/>
 						</div>
@@ -362,46 +369,33 @@ export const ComboBox = ({
 						<Spinner />
 					) : (
 						<>
-							{/* Show selected items at the top */}
-							{valueArray.map((selectedItem, index) => (
-								<li
-									key={selectedItem.value}
-									className={clsx(
-										styles.option, 
-										styles.selectedOption
-									)}
-									data-testid={`selected-option-${selectedItem.label}`}
-									aria-label={`Remove ${selectedItem.label ?? 'Unknown'}`}
-									{...getSelectedItemProps({ selectedItem, index })}
-									onClick={() => handleItemDeselect(selectedItem)}
-									role='option'
-									aria-selected={true}
-								>
-									<span>{selectedItem.label ?? 'Unknown'}</span>
-									<span>
-										&times;
-									</span>
-								</li>
-							))}
-
-							{/* Show separator if there are selected items and regular options */}
-							{valueArray.length > 0 && options.length > 0 && <li className={styles.separator} />}
-
-							{/* Show non-selected options */}
-							{options.map((item, index) => {
-								// Skip selected items
-								if (selectedIds.has(item.value)) return null;
-
+							{
+								// The sort function bumps any selected options to the top of the list.
+								options.sort(sortOptionsBySelectedFirst).map((item, index) => {
+								const isSelected = selectedIds.has(item.value);
+								const testId = `${isSelected ? 'selected' : 'combo'}-option-${item.label}`
 								return (
 									<li
-										className={clsx(styles.option, {
-											[styles.highlighted]: highlightedIndex === index,
-										})}
+										className={clsx(
+											styles.option,
+											{ 
+												[styles.selectedOption]: isSelected,
+												[styles.highlighted]: highlightedIndex === index,
+												[styles.selectedOptionHighlighted]: isSelected &&  highlightedIndex === index,
+											}
+										)}
 										key={String(item.value)}
+										aria-label={item.label}
 										{...getItemProps({ item, index })}
-										data-testid={`combo-option-${item.label}`}
+										data-testid={testId}
+										
 									>
 										<span>{item.label}</span>
+										{isSelected && (
+											<span>
+												&times;
+											</span>
+										)}
 									</li>
 								);
 							})}
