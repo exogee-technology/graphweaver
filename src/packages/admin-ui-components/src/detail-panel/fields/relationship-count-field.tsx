@@ -26,11 +26,6 @@ export const RelationshipCountField = ({
 	const { initialValue: formEntity } = meta;
 	const [__, setSearchParams] = useSearchParams();
 
-	// Handle case where relatedEntity is not found
-	if (!relatedEntity) {
-		return <div>Error: Related entity {field.type} not found</div>;
-	}
-
 	const handleLinkClick = useCallback(
 		(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 			// Handle if the form has changed when clicking a link, if it has pop up a confirmation modal
@@ -61,6 +56,11 @@ export const RelationshipCountField = ({
 		},
 		[dirty, setLocation, setSearchParams, formEntity.value, field.type, location.search]
 	);
+
+	// Handle case where relatedEntity is not found
+	if (!relatedEntity) {
+		return <div>Error: Related entity {field.type} not found</div>;
+	}
 
 	return (
 		<a key={formEntity.id} className={styles.relationshipLink} onClick={handleLinkClick}>
