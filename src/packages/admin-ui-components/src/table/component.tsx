@@ -49,10 +49,6 @@ export const Table = <T extends object>({
 		desc: direction === Sort.DESC,
 	}));
 
-	const handleRowClick = (row: Row<T>) => {
-		if (onRowClick) onRowClick(row);
-	};
-
 	const handleSortClick = (sortingState: ColumnSort[]) => {
 		// TODO We currently only support single column sorting
 		const [firstSortedColumn] = sortingState ?? [];
@@ -156,7 +152,7 @@ export const Table = <T extends object>({
 										!(e.target as HTMLElement).closest('label') &&
 										!(e.target as HTMLElement).closest('input')
 									) {
-										handleRowClick(row);
+										onRowClick?.(row);
 									}
 								}}
 							>

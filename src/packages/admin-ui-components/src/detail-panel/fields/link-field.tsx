@@ -1,6 +1,7 @@
 import { useField, useFormikContext } from 'formik';
 import { useLocation, useSearchParams } from 'wouter';
 import { EntityField, routeFor } from '../../utils';
+import styles from '../styles.module.css';
 
 export const LinkField = ({ name, field }: { name: string; field: EntityField }) => {
 	const { dirty } = useFormikContext();
@@ -32,6 +33,7 @@ export const LinkField = ({ name, field }: { name: string; field: EntityField })
 			{field.relationshipType === 'ONE_TO_ONE' || field.relationshipType === 'MANY_TO_ONE' ? (
 				<a
 					key={formEntity.id}
+					className={styles.relationshipLink}
 					onClick={(e) =>
 						handleLinkClick(e, routeFor({ type: field.type, id: formEntity.value as string }))
 					}
@@ -44,6 +46,7 @@ export const LinkField = ({ name, field }: { name: string; field: EntityField })
 						return (
 							<a
 								key={value.value}
+								className={styles.relationshipLink}
 								onClick={(e) =>
 									handleLinkClick(e, routeFor({ type: field.type, id: value.value as string }))
 								}

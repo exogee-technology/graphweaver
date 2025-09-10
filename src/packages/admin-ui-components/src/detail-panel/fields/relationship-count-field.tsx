@@ -3,6 +3,7 @@ import { useField, useFormikContext } from 'formik';
 import { Entity, EntityField, routeFor, useSchema } from '../../utils';
 import { useLocation, useSearchParams } from 'wouter';
 import { useCallback } from 'react';
+import styles from '../styles.module.css';
 
 // This field is used when a relationship has too many items to even fetch them all,
 // so we just show a count of the items with a link to the table filtered to those matching
@@ -62,7 +63,7 @@ export const RelationshipCountField = ({
 	);
 
 	return (
-		<a key={formEntity.id} onClick={handleLinkClick}>
+		<a key={formEntity.id} className={styles.relationshipLink} onClick={handleLinkClick}>
 			{formEntity?.count ?? 0} {relatedEntity.plural.toLowerCase()}
 		</a>
 	);
