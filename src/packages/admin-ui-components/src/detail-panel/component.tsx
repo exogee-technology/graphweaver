@@ -32,6 +32,7 @@ import {
 	LinkField,
 	MediaField,
 	RelationshipField,
+	RelationshipCountField,
 	RichTextField,
 	TextField,
 } from './fields';
@@ -76,17 +77,25 @@ const isFieldReadonly = (
 
 /**
  * Filter out fields before submission. Don't include read only fields. Include fields that are required, or have been modified.
- * 
+ *
  * @param initialValues - The initial values of the form.
  * @param values - The current values of the form.
  * @param entity - The entity of the current form
  */
-const filterFieldsForSubmission = (initialValues: Record<string, any>, values: Record<string, any>, entity: Entity, panelMode: PanelMode) => {
+const filterFieldsForSubmission = (
+	initialValues: Record<string, any>,
+	values: Record<string, any>,
+	entity: Entity,
+	panelMode: PanelMode
+) => {
 	const result: Record<string, any> = {};
 
 	for (const [key, value] of Object.entries(values)) {
 		const field = entity.fields.find((f) => f.name === key);
-		const isRequired = panelMode === PanelMode.CREATE ? field?.attributes?.isRequiredForCreate : field?.attributes?.isRequiredForUpdate;
+		const isRequired =
+			panelMode === PanelMode.CREATE
+				? field?.attributes?.isRequiredForCreate
+				: field?.attributes?.isRequiredForUpdate;
 
 		if (!isEqual(initialValues[key], value) || isRequired) {
 			result[key] = value;
@@ -137,6 +146,11 @@ const getField = ({
 	}
 
 	if (field.relationshipType) {
+		// For relationships with 'count' behaviour, always show count field (inherently read-only)
+		if (field.relationshipBehaviour === 'count') {
+			return <RelationshipCountField name={field.name} field={field} entity={entity} />;
+		}
+
 		// If the field is readonly and a relationship, show a link to the entity/entities
 		if (isReadonly) {
 			return <LinkField name={field.name} field={field} />;
@@ -194,7 +208,10 @@ const DetailField = ({
 	autoFocus: boolean;
 	panelMode: PanelMode;
 }) => {
-	const isRequired = panelMode === PanelMode.CREATE ? field.attributes?.isRequiredForCreate : field.attributes?.isRequiredForUpdate;
+	const isRequired =
+		panelMode === PanelMode.CREATE
+			? field.attributes?.isRequiredForCreate
+			: field.attributes?.isRequiredForUpdate;
 	return (
 		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
@@ -217,13 +234,13 @@ const CustomFieldComponent = ({
 	const formik = {
 		meta,
 		helpers,
-	}
+	};
 
 	return (
 		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
-			{field.component({ entity, context: 'detail-form', panelMode, formik, })}
+			{field.component({ entity, context: 'detail-form', panelMode, formik })}
 		</div>
-	)
+	);
 };
 
 const PersistForm = ({ name }: { name: string }) => {
@@ -267,7 +284,10 @@ const DetailForm = ({
 		(values: any) => {
 			const errors: Record<string, string> = {};
 			for (const field of detailFields) {
-				const isRequired = panelMode === PanelMode.CREATE ? field.attributes?.isRequiredForCreate : field.attributes?.isRequiredForUpdate;
+				const isRequired =
+					panelMode === PanelMode.CREATE
+						? field.attributes?.isRequiredForCreate
+						: field.attributes?.isRequiredForUpdate;
 				if (
 					isRequired &&
 					field.type !== 'ID' &&
@@ -312,7 +332,12 @@ const DetailForm = ({
 	const submit = useCallback(
 		async (values: any, actions: FormikHelpers<any>) => {
 			try {
-				const transformedValues = filterFieldsForSubmission(initialValues, values, entity, panelMode);
+				const transformedValues = filterFieldsForSubmission(
+					initialValues,
+					values,
+					entity,
+					panelMode
+				);
 
 				for (const transform of Object.values(dataTransforms)) {
 					transformedValues[transform.field.name] = await transform.transform(
@@ -342,45 +367,50 @@ const DetailForm = ({
 			onSubmit={submit}
 			onReset={onCancel}
 		>
-			{({ isSubmitting }) => { 
+			{({ isSubmitting }) => {
 				return (
-				<Form className={styles.detailFormContainer}>
-					<div className={styles.detailFieldList}>
-						{detailFields.map((field) => {
-							if (field.hideInDetailForm) return null;
-							else if (field.type === 'custom') {
-								return (
-									<CustomFieldComponent
-										key={field.name}
-										field={field as CustomField}
-										entity={initialValues}
-										panelMode={panelMode}
-									/>
-								);
-							} else {
-								return (
-									<DetailField
-										key={field.name}
-										entity={entity}
-										field={field}
-										autoFocus={field === firstEditableField}
-										panelMode={panelMode}
-									/>
-								);
-							}
-						})}
-						<div className={styles.detailButtonContainer}>
-							<Button type="reset" disabled={isSubmitting}>
-								Cancel
-							</Button>
-							<Button type="submit" disabled={isSubmitting || !!isReadOnly} loading={isSubmitting}>
-								Save
-							</Button>
+					<Form className={styles.detailFormContainer}>
+						<div className={styles.detailFieldList}>
+							{detailFields.map((field) => {
+								if (field.hideInDetailForm) return null;
+								else if (field.type === 'custom') {
+									return (
+										<CustomFieldComponent
+											key={field.name}
+											field={field as CustomField}
+											entity={initialValues}
+											panelMode={panelMode}
+										/>
+									);
+								} else {
+									return (
+										<DetailField
+											key={field.name}
+											entity={entity}
+											field={field}
+											autoFocus={field === firstEditableField}
+											panelMode={panelMode}
+										/>
+									);
+								}
+							})}
+							<div className={styles.detailButtonContainer}>
+								<Button type="reset" disabled={isSubmitting}>
+									Cancel
+								</Button>
+								<Button
+									type="submit"
+									disabled={isSubmitting || !!isReadOnly}
+									loading={isSubmitting}
+								>
+									Save
+								</Button>
+							</div>
 						</div>
-					</div>
-					<PersistForm name={persistName} />
-				</Form>
-			)}}
+						<PersistForm name={persistName} />
+					</Form>
+				);
+			}}
 		</Formik>
 	);
 };
@@ -459,9 +489,17 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce(
 		(acc, field) => {
 			const result = savedSessionState ?? data?.result;
-			const value = parseValueForForm(field.type, result?.[field.name as keyof typeof result]);
+
+			// For relationship fields with count behaviour, the GraphQL field name is different
+			const queryFieldName =
+				field.relationshipType && field.relationshipBehaviour === 'count'
+					? `${field.name}_aggregate`
+					: field.name;
+
+			const value = parseValueForForm(field.type, result?.[queryFieldName as keyof typeof result]);
 			const transformedValue = transformValueForForm(field, value, entityByType);
 			acc[field.name] = transformedValue ?? field.initialValue ?? undefined;
+
 			return acc;
 		},
 		{} as Record<string, any>

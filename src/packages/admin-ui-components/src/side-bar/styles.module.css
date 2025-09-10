@@ -91,6 +91,7 @@
 	border-radius: 6px;
 	padding: 0 10px;
 	width: 100%;
+	cursor: pointer;
 }
 
 .subListItemText {

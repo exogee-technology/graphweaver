@@ -145,6 +145,7 @@ export interface EntityField {
 	hideInFilterBar?: boolean;
 	hideInDetailForm?: boolean;
 	detailPanelInputComponent?: DetailPanelInputComponent;
+	relationshipBehaviour?: 'load' | 'count';
 }
 
 export interface EntityFieldAttributes {
