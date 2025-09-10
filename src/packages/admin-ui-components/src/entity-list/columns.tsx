@@ -51,11 +51,19 @@ const formatValue = (field: EntityField, value: unknown): string | number | null
 	return value as string | number | null;
 };
 
-const cellForType = (
-	field: EntityField,
-	value: unknown,
-	entityByType: (type: string) => Entity
-): React.ReactNode => {
+const cellForType = ({
+	field,
+	value,
+	row,
+	entityByType,
+	entity,
+}: {
+	field: EntityField;
+	value: unknown;
+	row: any;
+	entity: Entity;
+	entityByType: (type: string) => Entity;
+}): React.ReactNode => {
 	// Is there a specific definition for the cell type?
 	if (cells[field.type as keyof typeof cells]) {
 		return cells[field.type as keyof typeof cells](value as any);
@@ -65,9 +73,28 @@ const cellForType = (
 	if (field.relationshipType) {
 		// For relationships with 'count' behaviour, show count instead of links
 		if (field.relationshipBehaviour === 'count') {
+			const relatedEntity = entityByType(field.type);
+			if (!relatedEntity) return '0';
 			if (!value || typeof value !== 'object' || !('count' in value)) return '0';
 			const count = (value as { count: number }).count;
-			return `${count} ${field.type.toLowerCase()}s`;
+
+			// Figure out the property that points the other direction, e.g. back at us.
+			// If we're on Genre and we're showing a count of tracks, clicking needs to filter
+			// tracks { genre : { id: 1 } }
+			const inverseRelationship = relatedEntity.fields.find((field) => field.type === entity.name);
+			if (!inverseRelationship) return;
+
+			const route = routeFor({
+				type: field.type,
+				filters: {
+					[inverseRelationship.name]: { [entity.primaryKeyField]: row[entity.primaryKeyField] },
+				},
+			});
+			return (
+				<Link to={route} onClick={(e) => e.stopPropagation()}>
+					{count} {relatedEntity.plural}
+				</Link>
+			);
 		}
 
 		const relatedEntity = entityByType(field.type);
@@ -196,8 +223,16 @@ export const convertEntityToColumns = <T extends Record<string, unknown>>(
 			return columnHelper.accessor(accessorFieldName as any, {
 				id: field.name,
 				header: () => field.name,
-				cell: (info: CellContext<T, unknown>) => cellForType(field, info.getValue(), entityByType),
 				enableSorting: isFieldSortable(field),
+				cell: (info: CellContext<T, unknown>) => {
+					return cellForType({
+						field,
+						value: info.getValue(),
+						entityByType,
+						entity,
+						row: info.row.original,
+					});
+				},
 			});
 		});
 
