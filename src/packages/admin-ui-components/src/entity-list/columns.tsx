@@ -65,16 +65,6 @@ const cellForType = (
 	if (field.relationshipType) {
 		// For relationships with 'count' behaviour, show count instead of links
 		if (field.relationshipBehaviour === 'count') {
-			// Debug: log the actual value structure
-			console.log('RelationshipCountField debug:', {
-				fieldName: field.name,
-				fieldType: field.type,
-				value,
-				valueType: typeof value,
-				hasCount: value && typeof value === 'object' && 'count' in value,
-			});
-
-			// When using _aggregate, the value will be an object with a count property
 			if (!value || typeof value !== 'object' || !('count' in value)) return '0';
 			const count = (value as { count: number }).count;
 			return `${count} ${field.type.toLowerCase()}s`;

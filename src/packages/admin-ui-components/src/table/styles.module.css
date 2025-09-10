@@ -105,3 +105,13 @@
 .table tfoot th {
 	vertical-align: middle;
 }
+
+.table a {
+	cursor: pointer;
+	color: #ede8f2;
+	text-decoration: none;
+}
+
+.table a:hover {
+	text-decoration: underline;
+}
