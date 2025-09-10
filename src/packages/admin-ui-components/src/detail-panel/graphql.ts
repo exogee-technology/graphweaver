@@ -66,3 +66,14 @@ export const getDeleteUrlMutation = gql`
 		getDeleteUrl(key: $key)
 	}
 `;
+
+export const getRelationshipCountQuery = (entity: Entity) => {
+	const { plural } = entity;
+	const queryName = `${plural[0].toLowerCase()}${plural.slice(1)}_aggregate`;
+
+	return gql`
+		query getRelationshipCount ($filter: ${plural}ListFilter) {
+			result: ${queryName} (filter: $filter) { count }
+		}
+	`;
+};

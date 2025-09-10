@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "2.19.10",
+	"version": "2.20.0",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
@@ -47,7 +47,7 @@
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
 		"typescript": "5.9.2",
-		"vite": "7.1.4"
+		"vite": "7.1.5"
 	},
 	"keywords": [
 		"graphql",

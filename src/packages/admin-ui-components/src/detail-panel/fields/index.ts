@@ -4,6 +4,7 @@ export * from './enum-field';
 export * from './json-field';
 export * from './link-field';
 export * from './relationship-field';
+export * from './relationship-count-field';
 export * from './media-field';
 export * from './text-field';
 export * from './rich-text-field/index';

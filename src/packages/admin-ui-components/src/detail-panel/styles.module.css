@@ -113,6 +113,16 @@
 	cursor: pointer;
 }
 
+.relationshipLink {
+	cursor: pointer;
+	color: #ede8f2;
+	text-decoration: none;
+}
+
+.relationshipLink:hover {
+	text-decoration: underline;
+}
+
 /* Unsaved Changes Modal */
 .unsavedChangesModal {
 	width: 371px;

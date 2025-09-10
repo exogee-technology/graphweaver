@@ -51,11 +51,19 @@ const formatValue = (field: EntityField, value: unknown): string | number | null
 	return value as string | number | null;
 };
 
-const cellForType = (
-	field: EntityField,
-	value: unknown,
-	entityByType: (type: string) => Entity
-): React.ReactNode => {
+const cellForType = ({
+	field,
+	value,
+	row,
+	entityByType,
+	entity,
+}: {
+	field: EntityField;
+	value: unknown;
+	row: any;
+	entity: Entity;
+	entityByType: (type: string) => Entity;
+}): React.ReactNode => {
 	// Is there a specific definition for the cell type?
 	if (cells[field.type as keyof typeof cells]) {
 		return cells[field.type as keyof typeof cells](value as any);
@@ -63,32 +71,7 @@ const cellForType = (
 
 	// If not, is it a relationship?
 	if (field.relationshipType) {
-		const relatedEntity = entityByType(field.type);
-
-		const linkForValue = (item: any) => {
-			if (relatedEntity) {
-				const key = relatedEntity.primaryKeyField;
-				const label = relatedEntity.summaryField ?? key;
-				return (
-					<Link
-						key={item[key]}
-						to={routeFor({ type: field.type, id: item[key] })}
-						onClick={(e) => e.stopPropagation()}
-					>
-						{item[label]}
-					</Link>
-				);
-			}
-			return item.label;
-		};
-
-		if (!value) return null;
-
-		if (Array.isArray(value)) {
-			return value.flatMap((item) => [linkForValue(item), ', ']).slice(0, -1);
-		} else {
-			return linkForValue(value);
-		}
+		return renderRelationshipCell({ field, value, row, entityByType, entity });
 	}
 
 	// Is it an array?
@@ -109,6 +92,73 @@ const cellForType = (
 
 	// Ok, all we're left with is a simple value
 	return formatValue(field, value);
+};
+
+const renderRelationshipCell = ({
+	field,
+	value,
+	row,
+	entityByType,
+	entity,
+}: {
+	field: EntityField;
+	value: unknown;
+	row: any;
+	entityByType: (type: string) => Entity;
+	entity: Entity;
+}) => {
+	// For relationships with 'count' behaviour, show count instead of links
+	if (field.relationshipBehaviour === 'count') {
+		const relatedEntity = entityByType(field.type);
+		if (!relatedEntity) return '0';
+		if (!value || typeof value !== 'object' || !('count' in value)) return '0';
+		const count = (value as { count: number }).count;
+
+		// Figure out the property that points the other direction, e.g. back at us.
+		// If we're on Genre and we're showing a count of tracks, clicking needs to filter
+		// tracks { genre : { id: 1 } }
+		const inverseRelationship = relatedEntity.fields.find((field) => field.type === entity.name);
+		if (!inverseRelationship) return;
+
+		const route = routeFor({
+			type: field.type,
+			filters: {
+				[inverseRelationship.name]: { [entity.primaryKeyField]: row[entity.primaryKeyField] },
+			},
+		});
+		return (
+			<Link to={route} onClick={(e) => e.stopPropagation()}>
+				{count} {relatedEntity.plural}
+			</Link>
+		);
+	}
+
+	const relatedEntity = entityByType(field.type);
+
+	const linkForValue = (item: any) => {
+		if (relatedEntity) {
+			const key = relatedEntity.primaryKeyField;
+			const label = relatedEntity.summaryField ?? key;
+			return (
+				<Link
+					key={item[key]}
+					to={routeFor({ type: field.type, id: item[key] })}
+					onClick={(e) => e.stopPropagation()}
+				>
+					{item[label]}
+				</Link>
+			);
+		}
+		return item.label;
+	};
+
+	if (!value) return null;
+
+	if (Array.isArray(value)) {
+		return value.flatMap((item) => [linkForValue(item), ', ']).slice(0, -1);
+	} else {
+		return linkForValue(value);
+	}
 };
 
 const isFieldSortable = (field: EntityField): boolean => {
@@ -179,14 +229,28 @@ export const convertEntityToColumns = <T extends Record<string, unknown>>(
 
 	const entityColumns = entity.fields
 		.filter((field) => !field.hideInTable)
-		.map((field) =>
-			columnHelper.accessor(field.name as any, {
+		.map((field) => {
+			// For relationship fields with count behaviour, the GraphQL field name is different
+			const accessorFieldName =
+				field.relationshipType && field.relationshipBehaviour === 'count'
+					? `${field.name}_aggregate`
+					: field.name;
+
+			return columnHelper.accessor(accessorFieldName as any, {
 				id: field.name,
 				header: () => field.name,
-				cell: (info: CellContext<T, unknown>) => cellForType(field, info.getValue(), entityByType),
 				enableSorting: isFieldSortable(field),
-			})
-		);
+				cell: (info: CellContext<T, unknown>) => {
+					return cellForType({
+						field,
+						value: info.getValue(),
+						entityByType,
+						entity,
+						row: info.row.original,
+					});
+				},
+			});
+		});
 
 	// Which custom fields do we need to show here?
 	const customFieldsToShow = (customFields?.get(entity.name) || []).filter(
