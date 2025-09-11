@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useCombobox, useMultipleSelection } from 'downshift';
+import { useCombobox } from 'downshift';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ChevronDownIcon } from '../assets';
@@ -96,14 +96,16 @@ export const ComboBox = ({
 
 	
 	const sortOptionsBySelectedFirst = (opt1: SelectOption, opt2: SelectOption) => {
-		// TODO: Test to see how well this performs
 		return (selectedIds.has(opt2.value) ? 1 : 0) - (selectedIds.has(opt1.value) ? 1 : 0)
 	}
 
-	const { getDropdownProps, removeSelectedItem } =
-      useMultipleSelection({
-		selectedItems: valueArray
-	  });
+	// Handle individual item deselection
+	const handleItemDeselect = useCallback(
+		(itemToRemove: SelectOption) => {
+			onChange(valueArray.filter((item) => item.value !== itemToRemove.value));
+		},
+		[onChange, valueArray]
+	);
 
 	const {
 		isOpen,
@@ -139,7 +141,7 @@ export const ComboBox = ({
 			if (mode === SelectMode.MULTI) {
 				if (change.selectedItem) {
 					if (selectedIds.has(change.selectedItem.value)) {
-						onChange(valueArray.filter((item) => item.value !== change.selectedItem?.value));
+						handleItemDeselect(change.selectedItem)
 					} else {
 						onChange([...valueArray, change.selectedItem]);
 					}
@@ -270,15 +272,6 @@ export const ComboBox = ({
 		if (isOpen) onOpen?.();
 	}, [isOpen]);
 
-	// Handle individual item deselection
-	const handleItemDeselect = useCallback(
-		(itemToRemove: SelectOption) => {
-			removeSelectedItem(itemToRemove)
-			onChange(valueArray.filter((item) => item.value !== itemToRemove.value));
-		},
-		[onChange, valueArray]
-	);
-
 	const handleOnPillKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLDivElement>) => {
 			if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -336,8 +329,7 @@ export const ComboBox = ({
 									ref: inputRef,
 									onBlur: handleBlur,
 									onFocus: openMenu,
-									placeholder: valueArray.length === 0 ? placeholder : undefined,
-									...getDropdownProps(),
+									placeholder: valueArray.length === 0 ? placeholder : undefined
 								})}
 							/>
 						</div>
