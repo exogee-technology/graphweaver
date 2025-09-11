@@ -1,6 +1,15 @@
 import { gql } from '@apollo/client';
 
 export const csvExportOverrides = {
+	Album: {
+		mapResults: (csvExportRows: any[]) => {
+			// Clean up the __typename field that gets added by GraphQL
+			return csvExportRows.map((row) => {
+				delete row.__typename;
+				return row;
+			});
+		},
+	},
 	Genre: {
 		// When exporting the Genre entity, we also want to include the album on the tracks.
 		query: gql`

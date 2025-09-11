@@ -267,6 +267,7 @@ class DatabaseImplementation {
 				warnWhenNoEntities: false,
 			},
 			allowGlobalContext: true,
+			forceEntityConstructor: true,
 
 			// Ensure we only ever create one connection to the database.
 			pool: {

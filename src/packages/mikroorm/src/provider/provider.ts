@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
 	BackendProvider,
 	PaginationOptions,
@@ -206,9 +207,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			options.transactionIsolationLevel ?? IsolationLevel.REPEATABLE_READ;
 		this.backendDisplayName = options.backendDisplayName;
 		this.connection = connection;
+
 		this.addRequestContext();
 		this.connectToDatabase();
 	}
+
 	private getDbType(): DatabaseType {
 		const driver = this.em.getDriver().constructor.name;
 		// This used to import the actual drivers, but since they're optional it makes more sense
