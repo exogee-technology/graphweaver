@@ -908,8 +908,8 @@ importers:
         specifier: 3.7.1
         version: 3.7.1(react@19.1.1)
       zod:
-        specifier: 4.1.5
-        version: 4.1.5
+        specifier: 4.1.7
+        version: 4.1.7
     devDependencies:
       '@storybook/addon-docs':
         specifier: 9.1.5
@@ -12016,8 +12016,8 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.1.5:
-    resolution: {integrity: sha512-rcUUZqlLJgBC33IT3PNMgsCq6TzLQEG/Ei/KTCU0PedSWRMAXoOUN+4t/0H+Q8bdnLPdqUYnvboJT0bn/229qg==}
+  zod@4.1.7:
+    resolution: {integrity: sha512-6qi6UYyzAl7W9uV29KvcSFXqK4QCYNYUz2YASPNBWpJE1RY6R1nArmmFPgGY/CBYWzpeMw3EOER+DR9a05O4IA==}
 
   zustand@5.0.7:
     resolution: {integrity: sha512-Ot6uqHDW/O2VdYsKLLU8GQu8sCOM1LcoE8RwvLv9uuRT9s6SOHCKs0ZEOhxg+I1Ld+A1Q5lwx+UlKXXUoCZITg==}
@@ -25154,7 +25154,7 @@ snapshots:
 
   zod@3.25.76: {}
 
-  zod@4.1.5: {}
+  zod@4.1.7: {}
 
   zustand@5.0.7(@types/react@19.1.12)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)):
     optionalDependencies:
