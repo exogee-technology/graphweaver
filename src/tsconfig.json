@@ -16,7 +16,7 @@
 		"noImplicitThis": true,
 		"noUnusedLocals": false,
 
-		"moduleResolution": "bundler",
+		"moduleResolution": "node",
 		"baseUrl": ".",
 		"paths": {
 			"*": ["@types/*"]
@@ -30,7 +30,7 @@
 
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"ignoreDeprecations": "5.0",
+		"ignoreDeprecations": "6.0",
 		"sourceMap": true
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"]
