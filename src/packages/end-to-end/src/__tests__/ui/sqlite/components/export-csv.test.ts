@@ -42,7 +42,7 @@ test('Export CSV with nested entities', async ({ page }) => {
 				albumId: '1',
 				artist: 'AC/DC',
 				title: 'For Those About To Rock We Salute You',
-				tracks: `For Those About To Rock (We Salute You), Put The Finger On You, Let's Get It Up, Inject The Venom, Snowballed, Evil Walks, C.O.D., Breaking The Rules, Night Of The Long Knives, Spellbound`,
+				tracks: `For Those About To Rock (We Salute You), Put The Finger On You, Let's Get It Up, Inject The Venom, Snowballed, Evil Walks, C.O.D., Breaking The Rules, Night Of The Long Knives, Spellbound, "40"`,
 			}),
 			expect.objectContaining({
 				albumId: '4',
