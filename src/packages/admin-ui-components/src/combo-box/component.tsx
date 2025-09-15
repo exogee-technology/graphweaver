@@ -68,12 +68,12 @@ export const ComboBox = ({
 	dataFetcher,
 	searchDebounceMs = 300,
 }: SelectProps) => {
-	const valueArray = arrayify(value);
+	const valueArray = arrayify(value) as SelectOption[];
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 
 	// Lazy loading state
-	const [dynamicOptions, setDynamicOptions] = useState<SelectOption[]>([]);
+	const [dynamicOptions, setDynamicOptions] = useState<SelectOption[]>(valueArray);
 	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -86,17 +86,20 @@ export const ComboBox = ({
 	// Use ref to track if we're already loading data to prevent duplicate fetches
 	const fetchedPagesRef = useRef(new Set<number>());
 
+	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
+	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
+
+	const sortOptionsBySelectedFirst = useCallback((opt1: SelectOption, opt2: SelectOption) => {
+		return (selectedIds.has(opt2.value) ? 1 : 0) - (selectedIds.has(opt1.value) ? 1 : 0)
+	}, [selectedIds]);
+
 	// Calculate items once - use dynamic options if dataFetcher is provided, otherwise use static options
 	const options = useMemo(() => {
 		return dataFetcher ? dynamicOptions : staticOptions || [];
 	}, [dataFetcher, dynamicOptions, staticOptions]);
 
-	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
-	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
-
-	const sortOptionsBySelectedFirst = (opt1: SelectOption, opt2: SelectOption) => {
-		return (selectedIds.has(opt2.value) ? 1 : 0) - (selectedIds.has(opt1.value) ? 1 : 0)
-	}
+	// Duplicates can occur for a variety of reasons – e.g., when using this for a string field filter
+	const optionIds = useMemo(() => new Set(options.map((item) => item.value)), [options]);
 
 	// Handle individual item deselection
 	const handleItemDeselect = useCallback(
@@ -121,6 +124,7 @@ export const ComboBox = ({
 	} = useCombobox({
 		items: options,
 		id: fieldId,
+		selectedItem: null,
 		itemToString: (item) => item?.label ?? '',
 		isItemDisabled: () => disabled,
 		onInputValueChange: ({ inputValue }) => {
@@ -128,7 +132,7 @@ export const ComboBox = ({
 
 			if (dataFetcher && inputValue !== undefined) {
 				fetchedPagesRef.current.clear();
-				setDynamicOptions([]);
+				setDynamicOptions(valueArray);
 				setCurrentPage(1);
 				setHasReachedEnd(false);
 				setSearchTerm(inputValue);
@@ -187,14 +191,14 @@ export const ComboBox = ({
 				if (lastSearchTermRef.current === search) {
 					// Search term hasn't changed, merge the options in.
 					if (result && result.length > 0) {
-						setDynamicOptions((prev) => [...prev, ...result]);
+						setDynamicOptions((prev) => [...prev, ...result.filter(o => !optionIds.has(o.value))]);
 						setCurrentPage(page);
 					} else {
 						setHasReachedEnd(true);
 					}
 				} else {
 					// If the search term has changed, we need to reset the options
-					setDynamicOptions(result);
+					setDynamicOptions([...valueArray, ...result.filter(o => !selectedIds.has(o.value))]);
 					setCurrentPage(1);
 					setHasReachedEnd(false);
 					fetchedPagesRef.current.clear();
@@ -207,7 +211,7 @@ export const ComboBox = ({
 				setIsLoadingMore(false);
 			}
 		},
-		[dataFetcher, isOpen]
+		[dataFetcher, isOpen, selectedIds, optionIds]
 	);
 
 	// Scroll the menu to the top when it's opened.
