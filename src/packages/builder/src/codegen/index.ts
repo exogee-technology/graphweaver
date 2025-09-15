@@ -29,7 +29,7 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 					path.join(clientPath, extensions)
 				) || []),
 			],
-			
+
 			generates: {
 				'src/types.generated.ts': {
 					config: {
@@ -69,7 +69,7 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 		const typesOutputPaths = formatListOfTypeOutputPaths(options?.typesOutputPath);
 
 		// Write the files to disk
-		const writeOperations = files.flatMap((file) => [
+		const writeOperations = files.result.flatMap((file) => [
 			fs.promises.writeFile(path.join(file.filename), file.content, 'utf8'),
 			// We save the types to two locations: src and .graphweaver / outdir
 			...(file.filename === 'src/types.generated.ts'
