@@ -68,12 +68,12 @@ export const ComboBox = ({
 	dataFetcher,
 	searchDebounceMs = 300,
 }: SelectProps) => {
-	const valueArray = arrayify(value);
+	const valueArray = arrayify(value) as SelectOption[];
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 
 	// Lazy loading state
-	const [dynamicOptions, setDynamicOptions] = useState<SelectOption[]>([]);
+	const [dynamicOptions, setDynamicOptions] = useState<SelectOption[]>(valueArray);
 	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -97,6 +97,9 @@ export const ComboBox = ({
 	const options = useMemo(() => {
 		return dataFetcher ? dynamicOptions : staticOptions || [];
 	}, [dataFetcher, dynamicOptions, staticOptions]);
+
+	// Duplicates can occur for a variety of reasons.
+	const optionIds = useMemo(() => new Set(options.map((item) => item.value)), [options])
 
 	// Handle individual item deselection
 	const handleItemDeselect = useCallback(
@@ -128,7 +131,7 @@ export const ComboBox = ({
 
 			if (dataFetcher && inputValue !== undefined) {
 				fetchedPagesRef.current.clear();
-				setDynamicOptions([]);
+				setDynamicOptions(valueArray);
 				setCurrentPage(1);
 				setHasReachedEnd(false);
 				setSearchTerm(inputValue);
@@ -187,14 +190,14 @@ export const ComboBox = ({
 				if (lastSearchTermRef.current === search) {
 					// Search term hasn't changed, merge the options in.
 					if (result && result.length > 0) {
-						setDynamicOptions((prev) => [...prev, ...result]);
+						setDynamicOptions((prev) => [...prev, ...result.filter(o => !optionIds.has(o.value))]);
 						setCurrentPage(page);
 					} else {
 						setHasReachedEnd(true);
 					}
 				} else {
 					// If the search term has changed, we need to reset the options
-					setDynamicOptions(result);
+					setDynamicOptions([...valueArray, ...result.filter(o => !selectedIds.has(o.value))]);
 					setCurrentPage(1);
 					setHasReachedEnd(false);
 					fetchedPagesRef.current.clear();
