@@ -1295,19 +1295,19 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/mssql':
         specifier: '6'
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/mysql':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/postgresql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
+        version: 6.4.16(@mikro-orm/core@6.4.16)
       chokidar:
         specifier: 4.0.3
         version: 4.0.3
@@ -1627,6 +1627,9 @@ importers:
       dataloader:
         specifier: 2.2.3
         version: 2.2.3
+      decimal.js:
+        specifier: 10.6.0
+        version: 10.6.0
       dotenv:
         specifier: 17.2.2
         version: 17.2.2
@@ -1642,19 +1645,19 @@ importers:
         version: 6.4.16
       '@mikro-orm/knex':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
       '@mikro-orm/mssql':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
       '@mikro-orm/mysql':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
       '@mikro-orm/postgresql':
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       '@mikro-orm/sqlite':
         specifier: 6.4.16
-        version: 6.4.16(@mikro-orm/core@6.4.16)
+        version: 6.4.16(@mikro-orm/core@6.4.16)(pg@8.16.0)
       '@types/node':
         specifier: 24.3.1
         version: 24.3.1
