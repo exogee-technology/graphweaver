@@ -33,7 +33,7 @@ test('Filter - should be able to interact with and select options using the keyb
 	await page.getByTestId('artist-filter-input').press('ArrowDown');
 	await page.getByTestId('artist-filter-input').press('ArrowDown');
 	await page.getByTestId('artist-filter-input').press('Enter');
-	await expect(page.getByTestId('artist-filter-box')).toHaveText(/^A/);
+	await expect(page.getByTestId('artist-filter-box')).toContainText(/^A/);
 });
 
 test('Filter - should be able to deselect options using the keyboard', async ({ page }) => {

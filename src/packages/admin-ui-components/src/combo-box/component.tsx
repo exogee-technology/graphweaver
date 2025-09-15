@@ -211,7 +211,7 @@ export const ComboBox = ({
 				setIsLoadingMore(false);
 			}
 		},
-		[dataFetcher, isOpen]
+		[dataFetcher, isOpen, selectedIds, optionIds]
 	);
 
 	// Scroll the menu to the top when it's opened.
