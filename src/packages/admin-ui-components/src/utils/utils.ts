@@ -28,3 +28,18 @@ export const getOrderByQuery = ({
 				? { [primaryKeyField]: 'ASC' }
 				: {}),
 });
+
+export const unwrapGraphQLErrors = (error: any) => {
+	const visitedErrors = new Set();
+	let currentError = error;
+	while (currentError.cause && !visitedErrors.has(currentError.cause)) {
+		visitedErrors.add(currentError.cause);
+		currentError = currentError.cause;
+	}
+
+	if (currentError.result?.errors?.length) {
+		return currentError.result.errors.map((error: any) => error.message).join(', ');
+	}
+
+	return currentError.message;
+};
