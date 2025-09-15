@@ -32,7 +32,6 @@
 		"@opentelemetry/resources": "2.1.0",
 		"@opentelemetry/sdk-node": "0.204.0",
 		"@opentelemetry/sdk-trace-base": "2.1.0",
-		"@types/luxon": "3.7.1",
 		"async-mutex": "0.5.0",
 		"class-validator": "0.14.2",
 		"dataloader": "2.2.3",
