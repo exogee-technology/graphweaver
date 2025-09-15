@@ -98,8 +98,8 @@ export const ComboBox = ({
 		return dataFetcher ? dynamicOptions : staticOptions || [];
 	}, [dataFetcher, dynamicOptions, staticOptions]);
 
-	// Duplicates can occur for a variety of reasons.
-	const optionIds = useMemo(() => new Set(options.map((item) => item.value)), [options])
+	// Duplicates can occur for a variety of reasons – e.g., when using this for a string field filter
+	const optionIds = useMemo(() => new Set(options.map((item) => item.value)), [options]);
 
 	// Handle individual item deselection
 	const handleItemDeselect = useCallback(
