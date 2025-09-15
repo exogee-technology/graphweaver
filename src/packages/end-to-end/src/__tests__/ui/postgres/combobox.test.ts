@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { config } from '../../../config';
-import { bodyHasText } from '../../../utils';
 
 test('Detail Panel - should allow deselecting of an entity in a one to many relationship field', async ({
 	page,
