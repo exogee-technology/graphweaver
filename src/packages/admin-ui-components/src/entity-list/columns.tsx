@@ -128,7 +128,7 @@ const renderRelationshipCell = ({
 		});
 		return (
 			<Link to={route} onClick={(e) => e.stopPropagation()}>
-				{count} {relatedEntity.plural}
+				{count} {count === 1 ? relatedEntity.name : relatedEntity.plural}
 			</Link>
 		);
 	}

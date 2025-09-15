@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "2.20.0",
+	"version": "2.20.1",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -35,7 +35,6 @@
 		"chokidar": "4.0.3",
 		"esbuild": "0.25.9",
 		"inquirer": "11.1.0",
-		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.7.2",
 		"validate-npm-package-name": "6.0.2",

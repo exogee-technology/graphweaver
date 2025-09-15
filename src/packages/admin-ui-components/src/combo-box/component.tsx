@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useCombobox, useMultipleSelection } from 'downshift';
+import { useCombobox } from 'downshift';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ChevronDownIcon } from '../assets';
@@ -68,12 +68,12 @@ export const ComboBox = ({
 	dataFetcher,
 	searchDebounceMs = 300,
 }: SelectProps) => {
-	const valueArray = arrayify(value);
+	const valueArray = arrayify(value) as SelectOption[];
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 
 	// Lazy loading state
-	const [dynamicOptions, setDynamicOptions] = useState<SelectOption[]>([]);
+	const [dynamicOptions, setDynamicOptions] = useState<SelectOption[]>(valueArray);
 	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -86,18 +86,28 @@ export const ComboBox = ({
 	// Use ref to track if we're already loading data to prevent duplicate fetches
 	const fetchedPagesRef = useRef(new Set<number>());
 
+	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
+	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
+
+	const sortOptionsBySelectedFirst = useCallback((opt1: SelectOption, opt2: SelectOption) => {
+		return (selectedIds.has(opt2.value) ? 1 : 0) - (selectedIds.has(opt1.value) ? 1 : 0)
+	}, [selectedIds]);
+
 	// Calculate items once - use dynamic options if dataFetcher is provided, otherwise use static options
 	const options = useMemo(() => {
 		return dataFetcher ? dynamicOptions : staticOptions || [];
 	}, [dataFetcher, dynamicOptions, staticOptions]);
 
-	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
-	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
+	// Duplicates can occur for a variety of reasons – e.g., when using this for a string field filter
+	const optionIds = useMemo(() => new Set(options.map((item) => item.value)), [options]);
 
-	const { getSelectedItemProps, removeSelectedItem } =
-      useMultipleSelection({
-		initialSelectedItems: valueArray
-	  });
+	// Handle individual item deselection
+	const handleItemDeselect = useCallback(
+		(itemToRemove: SelectOption) => {
+			onChange(valueArray.filter((item) => item.value !== itemToRemove.value));
+		},
+		[onChange, valueArray]
+	);
 
 	const {
 		isOpen,
@@ -114,6 +124,7 @@ export const ComboBox = ({
 	} = useCombobox({
 		items: options,
 		id: fieldId,
+		selectedItem: null,
 		itemToString: (item) => item?.label ?? '',
 		isItemDisabled: () => disabled,
 		onInputValueChange: ({ inputValue }) => {
@@ -121,7 +132,7 @@ export const ComboBox = ({
 
 			if (dataFetcher && inputValue !== undefined) {
 				fetchedPagesRef.current.clear();
-				setDynamicOptions([]);
+				setDynamicOptions(valueArray);
 				setCurrentPage(1);
 				setHasReachedEnd(false);
 				setSearchTerm(inputValue);
@@ -133,7 +144,7 @@ export const ComboBox = ({
 			if (mode === SelectMode.MULTI) {
 				if (change.selectedItem) {
 					if (selectedIds.has(change.selectedItem.value)) {
-						onChange(valueArray.filter((item) => item.value !== change.selectedItem?.value));
+						handleItemDeselect(change.selectedItem)
 					} else {
 						onChange([...valueArray, change.selectedItem]);
 					}
@@ -180,14 +191,14 @@ export const ComboBox = ({
 				if (lastSearchTermRef.current === search) {
 					// Search term hasn't changed, merge the options in.
 					if (result && result.length > 0) {
-						setDynamicOptions((prev) => [...prev, ...result]);
+						setDynamicOptions((prev) => [...prev, ...result.filter(o => !optionIds.has(o.value))]);
 						setCurrentPage(page);
 					} else {
 						setHasReachedEnd(true);
 					}
 				} else {
 					// If the search term has changed, we need to reset the options
-					setDynamicOptions(result);
+					setDynamicOptions([...valueArray, ...result.filter(o => !selectedIds.has(o.value))]);
 					setCurrentPage(1);
 					setHasReachedEnd(false);
 					fetchedPagesRef.current.clear();
@@ -200,7 +211,7 @@ export const ComboBox = ({
 				setIsLoadingMore(false);
 			}
 		},
-		[dataFetcher, isOpen]
+		[dataFetcher, isOpen, selectedIds, optionIds]
 	);
 
 	// Scroll the menu to the top when it's opened.
@@ -264,15 +275,6 @@ export const ComboBox = ({
 		if (isOpen) onOpen?.();
 	}, [isOpen]);
 
-	// Handle individual item deselection
-	const handleItemDeselect = useCallback(
-		(itemToRemove: SelectOption) => {
-			removeSelectedItem(itemToRemove)
-			onChange(valueArray.filter((item) => item.value !== itemToRemove.value));
-		},
-		[onChange, valueArray]
-	);
-
 	const handleOnPillKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLDivElement>) => {
 			if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -321,7 +323,7 @@ export const ComboBox = ({
 						</div>
 					)}
 						<div className={styles.inputWrapper}>
-							{/* This input needs to render always. This lets the browser handle some default behaviour around key presses. */}
+							{/* This input needs to render always. Keyboard navigation will break without it. */}
 							<input
 								readOnly={!allowFreeTyping}
 								className={styles.selectInput}
@@ -330,7 +332,7 @@ export const ComboBox = ({
 									ref: inputRef,
 									onBlur: handleBlur,
 									onFocus: openMenu,
-									placeholder: valueArray.length === 0 ? placeholder : undefined,
+									placeholder: valueArray.length === 0 ? placeholder : undefined
 								})}
 							/>
 						</div>
@@ -362,46 +364,33 @@ export const ComboBox = ({
 						<Spinner />
 					) : (
 						<>
-							{/* Show selected items at the top */}
-							{valueArray.map((selectedItem, index) => (
-								<li
-									key={selectedItem.value}
-									className={clsx(
-										styles.option, 
-										styles.selectedOption
-									)}
-									data-testid={`selected-option-${selectedItem.label}`}
-									aria-label={`Remove ${selectedItem.label ?? 'Unknown'}`}
-									{...getSelectedItemProps({ selectedItem, index })}
-									onClick={() => handleItemDeselect(selectedItem)}
-									role='option'
-									aria-selected={true}
-								>
-									<span>{selectedItem.label ?? 'Unknown'}</span>
-									<span>
-										&times;
-									</span>
-								</li>
-							))}
-
-							{/* Show separator if there are selected items and regular options */}
-							{valueArray.length > 0 && options.length > 0 && <li className={styles.separator} />}
-
-							{/* Show non-selected options */}
-							{options.map((item, index) => {
-								// Skip selected items
-								if (selectedIds.has(item.value)) return null;
-
+							{
+								// Bump selected options to the top of the list.
+								options.sort(sortOptionsBySelectedFirst).map((item, index) => {
+								const isSelected = selectedIds.has(item.value);
+								const testId = `${isSelected ? 'selected' : 'combo'}-option-${item.label}`
 								return (
 									<li
-										className={clsx(styles.option, {
-											[styles.highlighted]: highlightedIndex === index,
-										})}
+										className={clsx(
+											styles.option,
+											{ 
+												[styles.selectedOption]: isSelected,
+												[styles.highlighted]: highlightedIndex === index,
+												[styles.selectedOptionHighlighted]: isSelected &&  highlightedIndex === index,
+											}
+										)}
 										key={String(item.value)}
+										aria-label={item.label}
 										{...getItemProps({ item, index })}
-										data-testid={`combo-option-${item.label}`}
+										data-testid={testId}
+										
 									>
 										<span>{item.label}</span>
+										{isSelected && (
+											<span>
+												&times;
+											</span>
+										)}
 									</li>
 								);
 							})}

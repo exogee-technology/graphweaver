@@ -79,7 +79,7 @@ export const RelationshipCountField = ({
 			onClick={handleLinkClick}
 			onKeyDown={handleKeyDown}
 		>
-			{formEntity?.count ?? 0} {relatedEntity.plural.toLowerCase()}
+			{formEntity?.count ?? 0} {formEntity?.count === 1 ? relatedEntity.name : relatedEntity.plural}
 		</a>
 	);
 };
