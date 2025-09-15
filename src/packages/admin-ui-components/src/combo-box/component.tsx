@@ -89,16 +89,14 @@ export const ComboBox = ({
 	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
 
-	const sortOptionsBySelectedFirst = (opt1: SelectOption, opt2: SelectOption) => {
+	const sortOptionsBySelectedFirst = useCallback((opt1: SelectOption, opt2: SelectOption) => {
 		return (selectedIds.has(opt2.value) ? 1 : 0) - (selectedIds.has(opt1.value) ? 1 : 0)
-	}
+	}, [selectedIds]);
 
 	// Calculate items once - use dynamic options if dataFetcher is provided, otherwise use static options
 	const options = useMemo(() => {
-		return (dataFetcher ? dynamicOptions : staticOptions || []).sort(sortOptionsBySelectedFirst);
+		return dataFetcher ? dynamicOptions : staticOptions || [];
 	}, [dataFetcher, dynamicOptions, staticOptions]);
-
-	
 
 	// Handle individual item deselection
 	const handleItemDeselect = useCallback(
@@ -364,7 +362,7 @@ export const ComboBox = ({
 						<>
 							{
 								// Bump selected options to the top of the list.
-								options.map((item, index) => {
+								options.sort(sortOptionsBySelectedFirst).map((item, index) => {
 								const isSelected = selectedIds.has(item.value);
 								const testId = `${isSelected ? 'selected' : 'combo'}-option-${item.label}`
 								return (
