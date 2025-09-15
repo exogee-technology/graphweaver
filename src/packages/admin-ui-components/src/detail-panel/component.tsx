@@ -21,6 +21,7 @@ import {
 	EntityField,
 	queryForEntityEdit,
 	routeFor,
+	unwrapGraphQLErrors,
 	useSchema,
 	useSelectedEntity,
 } from '../utils';
@@ -548,7 +549,7 @@ export const DetailPanel = () => {
 					panelMode === PanelMode.EDIT ? await updateEntity(options) : await createEntity(options);
 			} catch (error: any) {
 				console.error(error);
-				return toast.error(`Error from server: ${error.message}`, { duration: 5000 });
+				return toast.error(unwrapGraphQLErrors(error), { duration: 5000 });
 			}
 
 			if (!result?.data) {
