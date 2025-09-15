@@ -124,6 +124,7 @@ export const ComboBox = ({
 	} = useCombobox({
 		items: options,
 		id: fieldId,
+		selectedItem: null,
 		itemToString: (item) => item?.label ?? '',
 		isItemDisabled: () => disabled,
 		onInputValueChange: ({ inputValue }) => {
