@@ -38,8 +38,9 @@ test('Filter - should be able to interact with and select options using the keyb
 });
 
 test('Filter - should be able to deselect options using the keyboard', async ({ page }) => {
+	const waitForDropdownOptions = page.waitForResponse(bodyHasText('Aaron'));
 	// Go to the Album table with AC/DC pre-selected in the artists filter
-	const waitForDropdownOptions = page.waitForResponse(bodyHasText('Let There Be Rock'));
+
 	await page.goto(
 		`${config.adminUiUrl}/Album?filters=eyJhcnRpc3QiOnsiYXJ0aXN0SWRfaW4iOlsiMSJdfX0%3D`
 	);
