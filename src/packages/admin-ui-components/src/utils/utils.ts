@@ -30,8 +30,10 @@ export const getOrderByQuery = ({
 });
 
 export const unwrapGraphQLErrors = (error: any) => {
+	const visitedErrors = new Set();
 	let currentError = error;
-	while (currentError.cause) {
+	while (currentError.cause && !visitedErrors.has(currentError.cause)) {
+		visitedErrors.add(currentError.cause);
 		currentError = currentError.cause;
 	}
 
