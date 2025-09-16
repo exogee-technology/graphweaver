@@ -68,7 +68,7 @@
 		"@types/graphql-deduplicator": "2.0.2",
 		"@types/luxon": "3.7.1",
 		"@types/papaparse": "5.3.16",
-		"@types/react": "19.1.12",
+		"@types/react": "19.1.13",
 		"@types/react-syntax-highlighter": "15.5.13",
 		"esbuild": "0.25.9",
 		"esbuild-plugin-copy": "2.1.1",
