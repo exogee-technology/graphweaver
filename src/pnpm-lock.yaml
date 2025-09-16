@@ -866,8 +866,8 @@ importers:
         specifier: 3.7.2
         version: 3.7.2
       motion:
-        specifier: 12.23.12
-        version: 12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 12.23.13
+        version: 12.23.13(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       papaparse:
         specifier: 5.5.3
         version: 5.5.3
@@ -8374,8 +8374,8 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
 
-  framer-motion@12.23.12:
-    resolution: {integrity: sha512-6e78rdVtnBvlEVgu6eFEAgG9v3wLnYEboM8I5O5EXvfKC8gxGQB8wXJdhkMy10iVcn05jl6CNw7/HTsTCfwcWg==}
+  framer-motion@12.23.13:
+    resolution: {integrity: sha512-OMF57Xh0fuTXfJQPtCieYGeU9Fam4SxqPLVz78YI7ATRFrfz8SARtqr1+qv56cX45kPFcIEfkUorVfxlOsjcUg==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -9889,8 +9889,8 @@ packages:
   motion@10.16.2:
     resolution: {integrity: sha512-p+PurYqfUdcJZvtnmAqu5fJgV2kR0uLFQuBKtLeFVTrYEVllI99tiOTSefVNYuip9ELTEkepIIDftNdze76NAQ==}
 
-  motion@12.23.12:
-    resolution: {integrity: sha512-8jCD8uW5GD1csOoqh1WhH1A6j5APHVE15nuBkFeRiMzYBdRwyAHmSP/oXSuW0WJPZRXTFdBoG4hY9TFWNhhwng==}
+  motion@12.23.13:
+    resolution: {integrity: sha512-kqmtRlqMuSJAMeHmYD+BPJNPGCUBXKqDuYpfuEh+mud9Y2gpSUrIXQRhCNkKzGlwOpbgbJocSJR5aKvhzyqFQg==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -14693,7 +14693,7 @@ snapshots:
       codemirror: 5.65.18
       codemirror-graphql: 2.2.4(@codemirror/language@6.0.0)(codemirror@5.65.18)(graphql@16.11.0)
       copy-to-clipboard: 3.3.3
-      framer-motion: 12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      framer-motion: 12.23.13(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       get-value: 3.0.1
       graphql: 16.11.0
       graphql-language-service: 5.5.0(graphql@16.11.0)
@@ -21254,7 +21254,7 @@ snapshots:
       tiny-warning: 1.0.3
       tslib: 2.8.1
 
-  framer-motion@12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+  framer-motion@12.23.13(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
       motion-dom: 12.23.12
       motion-utils: 12.23.6
@@ -23303,9 +23303,9 @@ snapshots:
       '@motionone/utils': 10.18.0
       '@motionone/vue': 10.16.4
 
-  motion@12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+  motion@12.23.13(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
-      framer-motion: 12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      framer-motion: 12.23.13(@emotion/is-prop-valid@0.8.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       tslib: 2.8.1
     optionalDependencies:
       '@emotion/is-prop-valid': 0.8.8
