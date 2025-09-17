@@ -3,6 +3,7 @@ import {
 	EntityData,
 	EntityManager,
 	EntityProperty,
+	ref,
 	Reference,
 	ReferenceKind,
 	Utils,
@@ -89,10 +90,11 @@ export const assign = async <T extends AnyEntity<T>>(
 						const subvalueKeys = Object.keys(subvalue);
 						if (subvalueKeys.length === 1 && subvalueKeys[0] === relatedPrimaryKeyField) {
 							// It's just the ID.
-							entity = em.getReference(
-								propertyMetadata.type,
-								subvalue[relatedPrimaryKeyField]
-							) as T;
+							if (!relatedEntity?.class) {
+								throw new Error(`Related entity ${relatedEntity?.className} has no class`);
+							}
+
+							entity = ref(relatedEntity?.class, subvalue[relatedPrimaryKeyField]) as unknown as T;
 						} else {
 							logger.warn(
 								`Doing a full database fetch for ${propertyMetadata.type} with id ${subvalue[relatedPrimaryKeyField]}, this should ideally be prefetched into the Unit of Work before calling assign() for performance`
@@ -116,15 +118,22 @@ export const assign = async <T extends AnyEntity<T>>(
 					}
 				}
 
-				const newEntity = await createOrAssignEntity<T>({
-					entity,
-					entityType: propertyMetadata.type,
-					primaryKeyField: relatedPrimaryKeyField,
-					data: subvalue,
-					options,
-					visited,
-					em,
-				});
+				let newEntity: T;
+				if (Reference.isReference(entity)) {
+					// If it's a reference, don't try to assign properties to it
+					// Just add it to visited to prevent recursion and return it
+					newEntity = entity;
+				} else {
+					newEntity = await createOrAssignEntity<T>({
+						entity,
+						entityType: propertyMetadata.type,
+						primaryKeyField: relatedPrimaryKeyField,
+						data: subvalue,
+						options,
+						visited,
+						em,
+					});
+				}
 
 				// Ok, now we've got the created or updated entity, ensure it's in the collection
 				// so its foreign keys are set correctly. If it's already in the collection this is a noop.
