@@ -30,7 +30,7 @@
 		"react": "19.1.1"
 	},
 	"devDependencies": {
-		"@types/node": "24.4.0",
+		"@types/node": "24.5.1",
 		"graphweaver": "workspace:*",
 		"typescript": "5.9.2"
 	},
