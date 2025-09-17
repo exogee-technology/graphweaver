@@ -41,11 +41,11 @@
 		"concurrently": "9.2.1",
 		"eslint": "9.35.0",
 		"eslint-config-prettier": "10.1.8",
-		"globals": "16.3.0",
+		"globals": "16.4.0",
 		"prettier": "3.6.2",
 		"turbo": "2.5.6",
 		"typescript": "5.9.2",
-		"typescript-eslint": "8.43.0"
+		"typescript-eslint": "8.44.0"
 	},
 	"pnpm": {
 		"overrides": {
