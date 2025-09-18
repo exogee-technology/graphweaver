@@ -27,7 +27,7 @@
 		"node-sqlite3-wasm": "0.8.49"
 	},
 	"devDependencies": {
-		"@types/node": "24.5.1",
+		"@types/node": "24.5.2",
 		"esbuild": "0.25.9",
 		"glob": "11.0.3",
 		"tsx": "4.20.5",
