@@ -28,7 +28,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "24.5.2",
-		"esbuild": "0.25.9",
+		"esbuild": "0.25.10",
 		"glob": "11.0.3",
 		"tsx": "4.20.5",
 		"typescript": "5.9.2"
