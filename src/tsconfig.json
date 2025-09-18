@@ -1,7 +1,8 @@
 {
 	"compilerOptions": {
 		"target": "es2021",
-		"module": "commonjs",
+		"module": "es2020",
+		"moduleResolution": "bundler",
 		"lib": ["ES6", "es2021"],
 		"allowJs": true,
 		"jsx": "react",
@@ -16,7 +17,6 @@
 		"noImplicitThis": true,
 		"noUnusedLocals": false,
 
-		"moduleResolution": "node",
 		"baseUrl": ".",
 		"paths": {
 			"*": ["@types/*"]

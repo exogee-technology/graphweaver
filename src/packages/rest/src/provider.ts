@@ -1,9 +1,9 @@
 import path from 'node:path';
-import {
+import { TraceMethod } from '@exogee/graphweaver';
+import type {
 	BackendProvider,
 	Filter,
 	PaginationOptions,
-	TraceMethod,
 	TraceOptions,
 	EntityMetadata,
 	BackendProviderConfig,

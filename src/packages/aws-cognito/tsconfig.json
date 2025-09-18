@@ -6,7 +6,8 @@
 		"noUnusedLocals": false,
 		"experimentalDecorators": true,
 		"target": "es2019",
-		"module": "CommonJS",
+		"module": "es2020",
+		"moduleResolution": "bundler",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 		"jsx": "react-jsx"

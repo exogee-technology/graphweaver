@@ -11,8 +11,11 @@ import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 import { hashPassword } from '../../utils/argon2id';
 import { CredentialUpdateInput, CredentialInsertInput } from './password';
 import { CredentialStorage } from '../entities';
-import { VariableValues } from '@apollo/server/dist/esm/externalTypes/graphql';
 import { Kind, OperationDefinitionNode, print, stripIgnoredCharacters, visit } from 'graphql';
+
+// Define VariableValues type based on Apollo Server's definition since we can't import it from
+// Apollo Server.
+type VariableValues = { [name: string]: any };
 
 export class PasswordStrengthError extends ApolloError {
 	constructor(message: string, extensions?: Record<string, any>) {

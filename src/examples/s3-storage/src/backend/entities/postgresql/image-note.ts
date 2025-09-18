@@ -1,6 +1,6 @@
 import { Entity, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import type { Ref } from '@mikro-orm/core';
 import { Submission } from './submission';
-import { Ref } from '@mikro-orm/core/entity';
 
 @Entity()
 export class ImageNote {

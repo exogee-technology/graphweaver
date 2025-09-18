@@ -1,7 +1,5 @@
 import { logger } from '@exogee/logger';
-import { TypeValue } from './types';
-
-import { Filter, PaginationOptions, TraceOptions } from './types';
+import type { TypeValue, TraceOptions, Filter, PaginationOptions } from './types';
 import { EntityMetadata, graphweaverMetadata } from './metadata';
 import { TraceMethod } from './open-telemetry';
 

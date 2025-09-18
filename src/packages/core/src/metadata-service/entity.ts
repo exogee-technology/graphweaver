@@ -3,7 +3,8 @@ import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { Entity, Field } from '../decorators';
-import { AggregationType, Filter, Sort } from '../types';
+import { AggregationType, Sort } from '../types';
+import type { Filter } from '../types';
 import { graphweaverMetadata } from '../metadata';
 
 graphweaverMetadata.collectEnumInformation({

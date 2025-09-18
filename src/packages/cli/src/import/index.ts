@@ -35,7 +35,7 @@ const checkForMissingDependencies = (source: Source) => {
 	const packageJson = require(path.join(process.cwd(), 'package.json'));
 	const dependencies = Object.keys(packageJson.dependencies ?? {});
 
-	// These dependencies are required to run the
+	// These dependencies are required to run the introspection.
 	const requiredDependencies = [
 		'@exogee/graphweaver-mikroorm',
 		'@mikro-orm/core',

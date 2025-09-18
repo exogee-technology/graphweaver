@@ -1,20 +1,22 @@
 import {
-	BackendProvider,
-	PaginationOptions,
-	Sort,
-	Filter,
-	BackendProviderConfig,
-	FieldMetadata,
-	AggregationResult,
 	AggregationType,
-	TraceMethod,
-	TraceOptions,
-	traceSync,
-	trace as startTrace,
-	GraphweaverRequestEvent,
-	GraphweaverPluginNextFunction,
-	EntityMetadata,
+	BackendProvider,
 	graphweaverMetadata,
+	GraphweaverPluginNextFunction,
+	GraphweaverRequestEvent,
+	Sort,
+	trace as startTrace,
+	TraceMethod,
+	traceSync,
+} from '@exogee/graphweaver';
+import type {
+	AggregationResult,
+	BackendProviderConfig,
+	EntityMetadata,
+	FieldMetadata,
+	Filter,
+	PaginationOptions,
+	TraceOptions,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import {
