@@ -25,7 +25,15 @@ test('should allow a successful api key creation', async ({ page }) => {
 	// fill up the page
 	await page.getByRole('button', { name: 'Generate Secret and API Key' }).click();
 
-	const apiKey = await page.inputValue('input#key');
+	// Wait for the API key to be generated and visible
+	await page.waitForSelector('input#key');
+
+	// Since the input is disabled, we need to get the value attribute instead of using inputValue()
+	const apiKey = await page.getAttribute('input#key', 'value');
+
+	// Verify the API key was captured
+	expect(apiKey).toBeTruthy();
+	if (!apiKey) throw new Error('API key not able to be read from the input.');
 
 	await page.getByTestId('detail-panel-field-roles').getByRole('combobox').click();
 	await page.getByTestId('combo-option-LIGHT_SIDE').click();
@@ -33,5 +41,5 @@ test('should allow a successful api key creation', async ({ page }) => {
 	await page.getByRole('button', { name: 'Save' }).click();
 
 	// post-condition: new record found on the grid page
-	await expect(await page.getByRole('cell', { name: apiKey })).toBeVisible();
+	await expect(await page.getByRole('cell', { name: apiKey, exact: true })).toBeVisible();
 });
