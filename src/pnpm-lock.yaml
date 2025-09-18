@@ -1588,8 +1588,8 @@ importers:
         specifier: 6.4.16
         version: 6.4.16(@mikro-orm/core@6.4.16)
       node-sqlite3-wasm:
-        specifier: 0.8.48
-        version: 0.8.48
+        specifier: 0.8.49
+        version: 0.8.49
     devDependencies:
       '@types/node':
         specifier: 24.5.1
@@ -9978,8 +9978,8 @@ packages:
     resolution: {integrity: sha512-OXdegQq03OmXEjt2hZP33W2YPs/E5BcFQks46+G2gAxs4gHOIVD1u7EqlYLYSKsaIpyKCK9Gbk0ta1/gjRSMRQ==}
     engines: {node: '>=6'}
 
-  node-sqlite3-wasm@0.8.48:
-    resolution: {integrity: sha512-zT7pPsGG4C1qstjrlAXOrrduJkUT3qCwuDuLt5wZMOiPKbEOeI39aK80kIaXaJ0eChizn7oMykcVzKMhe1z6Xw==}
+  node-sqlite3-wasm@0.8.49:
+    resolution: {integrity: sha512-ilyuz5iZb5+XfEcbciQIGSAVuc4P4p1RGDX61HbrB3Ms1bNX3lYAXLfSH5tjGM0/JwK2wdt5Xv2JHzdgGRiDEQ==}
 
   nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
@@ -23315,7 +23315,7 @@ snapshots:
       long-timeout: 0.1.1
       sorted-array-functions: 1.3.0
 
-  node-sqlite3-wasm@0.8.48: {}
+  node-sqlite3-wasm@0.8.49: {}
 
   nopt@5.0.0:
     dependencies:
