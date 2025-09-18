@@ -264,8 +264,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(@apollo/server@5.0.0(graphql@16.11.0))
       '@azure/msal-browser':
-        specifier: 4.22.1
-        version: 4.22.1
+        specifier: 4.23.0
+        version: 4.23.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -1083,8 +1083,8 @@ importers:
         specifier: 2.4.1
         version: 2.4.1
       '@azure/msal-browser':
-        specifier: 4.22.1
-        version: 4.22.1
+        specifier: 4.23.0
+        version: 4.23.0
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -2425,8 +2425,8 @@ packages:
     resolution: {integrity: sha512-0hKEzLhpw+ZTAfNJyRrn6s+V0nDWzXk9OjBr2TiGIu0OfMr5s2V4FpKLTAK3Ca5r5OKLbf4hkOGDPyiRjie/jA==}
     engines: {node: '>=18.0.0'}
 
-  '@azure/msal-browser@4.22.1':
-    resolution: {integrity: sha512-/I76rBJpt5ZVfFXk+GkKxD4w1DZEbVpNn0aQjvRgnDnTYo3L/f8Oeo3R1O9eL/ccg5j1537iRLr7UwVhwnHtyg==}
+  '@azure/msal-browser@4.23.0':
+    resolution: {integrity: sha512-uHnfRwGAEHaYVXzpCtYsruy6PQxL2v76+MJ3+n/c/3PaTiTIa5ch7VofTUNoA39nHyjJbdiqTwFZK40OOTOkjw==}
     engines: {node: '>=0.8.0'}
 
   '@azure/msal-common@15.12.0':
@@ -13373,7 +13373,7 @@ snapshots:
       '@azure/core-tracing': 1.2.0
       '@azure/core-util': 1.12.0
       '@azure/logger': 1.2.0
-      '@azure/msal-browser': 4.22.1
+      '@azure/msal-browser': 4.23.0
       '@azure/msal-node': 3.6.0
       open: 10.1.2
       tslib: 2.8.1
@@ -13417,7 +13417,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@azure/msal-browser@4.22.1':
+  '@azure/msal-browser@4.23.0':
     dependencies:
       '@azure/msal-common': 15.12.0
 
