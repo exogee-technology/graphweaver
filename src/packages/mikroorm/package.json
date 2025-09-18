@@ -71,7 +71,7 @@
 		"@mikro-orm/sqlite": "6.4.16",
 		"@types/node": "24.5.2",
 		"@types/pluralize": "0.0.33",
-		"esbuild": "0.25.9",
+		"esbuild": "0.25.10",
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
 		"tsx": "4.20.5",

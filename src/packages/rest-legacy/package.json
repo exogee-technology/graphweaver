@@ -36,7 +36,7 @@
 		"@types/lodash": "4.17.20",
 		"@types/luxon": "3.7.1",
 		"@types/node": "24.5.2",
-		"esbuild": "0.25.9",
+		"esbuild": "0.25.10",
 		"glob": "11.0.3",
 		"prettier": "3.6.2",
 		"typescript": "5.9.2"
