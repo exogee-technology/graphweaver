@@ -149,6 +149,13 @@ export interface FieldOptions {
 		 * By default, a simple text input is used if the field is of type text.
 		 */
 		detailPanelInputComponent?: DetailPanelInputComponentOption | DetailPanelInputComponent;
+
+		/**
+		 * For relationship fields, specifies how the relationship should be displayed in the Admin UI.
+		 * 'load' is the default - loads and renders related items with a combo box for editing.
+		 * 'count' displays a count value that links to a filtered table view.
+		 */
+		relationshipBehaviour?: 'load' | 'count';
 	};
 	apiOptions?: {
 		// This marks the field as read only in the API.

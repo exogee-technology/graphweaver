@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-server",
-	"version": "2.19.7",
+	"version": "2.20.1",
 	"description": "Server support for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"sideEffects": false,
@@ -23,7 +23,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.12.2",
+		"@apollo/server": "5.0.0",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@as-integrations/fastify": "3.0.0",
 		"@escape.tech/graphql-armor": "3.1.7",
@@ -32,14 +32,14 @@
 		"@fastify/cors": "11.1.0",
 		"class-validator": "0.14.2",
 		"decimal.js": "10.6.0",
-		"fastify": "5.5.0",
+		"fastify": "5.6.0",
 		"graphql": "16.11.0",
 		"graphql-deduplicator": "2.0.6"
 	},
 	"devDependencies": {
 		"@escape.tech/graphql-armor-types": "0.7.0",
 		"@types/graphql-deduplicator": "2.0.2",
-		"esbuild": "0.25.9",
+		"esbuild": "0.25.10",
 		"glob": "11.0.3",
 		"vitest": "3.2.4",
 		"typescript": "5.9.2"

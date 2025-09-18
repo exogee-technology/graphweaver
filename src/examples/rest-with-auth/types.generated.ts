@@ -95,6 +95,7 @@ export type AdminUiFieldMetadata = {
   isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
+  relationshipBehaviour?: Maybe<Scalars['String']['output']>;
   relationshipType?: Maybe<Scalars['String']['output']>;
   type: Scalars['String']['output'];
 };

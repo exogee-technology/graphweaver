@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-xero",
-	"version": "2.19.7",
+	"version": "2.20.1",
 	"description": "Xero backend for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -21,7 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.12.2",
+		"@apollo/server": "5.0.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"class-validator": "0.14.2",
@@ -32,8 +32,8 @@
 		"graphql": "16"
 	},
 	"devDependencies": {
-		"@types/node": "24.3.0",
-		"esbuild": "0.25.9",
+		"@types/node": "24.5.2",
+		"esbuild": "0.25.10",
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
 		"prettier": "3.6.2",

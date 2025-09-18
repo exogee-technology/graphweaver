@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "2.19.7",
+	"version": "2.20.1",
 	"description": "Common logging output for Exogee projects",
 	"license": "Apache-2.0",
 	"sideEffects": false,
@@ -20,11 +20,11 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"pino": "9.9.0"
+		"pino": "9.10.0"
 	},
 	"devDependencies": {
-		"@types/node": "24.3.0",
-		"esbuild": "0.25.9",
+		"@types/node": "24.5.2",
+		"esbuild": "0.25.10",
 		"glob": "11.0.3",
 		"typescript": "5.9.2"
 	},

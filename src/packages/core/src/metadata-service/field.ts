@@ -64,4 +64,7 @@ export class AdminUiFieldMetadata {
 
 	@Field(() => DetailPanelInputComponent, { nullable: true })
 	detailPanelInputComponent?: DetailPanelInputComponent;
+
+	@Field(() => String, { nullable: true })
+	relationshipBehaviour?: string;
 }

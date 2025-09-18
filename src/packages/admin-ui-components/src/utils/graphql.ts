@@ -49,6 +49,7 @@ export const SCHEMA_QUERY = gql`
 						name
 						options
 					}
+					relationshipBehaviour
 				}
 				attributes {
 					isReadOnly
@@ -67,7 +68,7 @@ export const SCHEMA_QUERY = gql`
 	}
 `;
 
-const entitySelection = (relatedEntity: Entity) => 
+const entitySelection = (relatedEntity: Entity) =>
 	[relatedEntity.primaryKeyField].concat(relatedEntity.summaryField ?? []).join('\n');
 
 export const generateGqlSelectForEntityFields = (
@@ -84,6 +85,11 @@ export const generateGqlSelectForEntityFields = (
 				}
 				const relatedEntity = entityByType(field.type);
 				if (!relatedEntity) throw new Error(`Related entity ${field.type} not found`);
+
+				// For relationship fields with count behaviour, use _aggregate instead of fetching items
+				if (field.relationshipBehaviour === 'count') {
+					return `${field.name}_aggregate { count }`;
+				}
 
 				return `${field.name} { 
 					${entitySelection(relatedEntity)}

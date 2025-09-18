@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth-ui-components",
-	"version": "2.19.7",
+	"version": "2.20.1",
 	"description": "Components from Graphweaver's Auth UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
 	"type": "module",
@@ -27,7 +27,7 @@
 	],
 	"dependencies": {
 		"@apollo/client": "3.13.5",
-		"@simplewebauthn/browser": "13.1.2",
+		"@simplewebauthn/browser": "13.2.0",
 		"@usedapp/core": "1.2.16",
 		"ethers": "5.8.0",
 		"web3-token": "1.0.6",
@@ -44,19 +44,19 @@
 		"react-dom": "^18.0.0 || ^19.0.0"
 	},
 	"devDependencies": {
-		"@auth0/auth0-spa-js": "2.3.0",
-		"@azure/msal-browser": "4.21.1",
+		"@auth0/auth0-spa-js": "2.4.1",
+		"@azure/msal-browser": "4.23.0",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@okta/okta-auth-js": "7.14.0",
 		"@simplewebauthn/types": "12.0.0",
-		"@types/react": "19.1.10",
-		"@types/react-dom": "19.1.7",
-		"esbuild": "0.25.9",
+		"@types/react": "19.1.13",
+		"@types/react-dom": "19.1.9",
+		"esbuild": "0.25.10",
 		"glob": "11.0.3",
 		"react": "19.1.1",
 		"react-dom": "19.1.1",
 		"typescript": "5.9.2",
-		"vite": "6.3.5"
+		"vite": "7.1.5"
 	},
 	"keywords": [
 		"graphql",

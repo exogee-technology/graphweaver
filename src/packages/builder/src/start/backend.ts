@@ -38,7 +38,7 @@ const getProjectRoot = () => {
 const builtInBackendFunctions: Record<string, any> = {
 	'graphweaver-backend': {
 		handler: path.join(getProjectRoot(), '.graphweaver', 'backend', 'index.handler'),
-		environment: dotenv.config().parsed,
+		environment: dotenv.config({ quiet: true }).parsed,
 		events: [
 			{
 				http: {
@@ -133,7 +133,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 				handler: `${devOutputPathFor(additionalFunction.handlerPath)}.${
 					additionalFunction.handlerName || 'handler'
 				}`,
-				environment: dotenv.config().parsed,
+				environment: dotenv.config({ quiet: true }).parsed,
 				events: [
 					{
 						http: {

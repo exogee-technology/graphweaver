@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-federation",
 	"private": true,
-	"version": "2.19.7",
+	"version": "2.20.1",
 	"license": "Apache-2.0",
 	"description": "Example app used to test federation compatibility",
 	"main": "lib/index.js",
@@ -20,16 +20,16 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/server": "4.12.2",
+		"@apollo/server": "5.0.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"dotenv": "17.2.1"
+		"dotenv": "17.2.2"
 	},
 	"devDependencies": {
-		"@types/node": "24.3.0",
+		"@types/node": "24.5.2",
 		"graphweaver": "workspace:*",
-		"tsx": "4.19.3",
+		"tsx": "4.20.5",
 		"typescript": "5.9.2"
 	},
 	"keywords": [

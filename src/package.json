@@ -36,26 +36,27 @@
 	},
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.10",
-		"@eslint/js": "9.24.0",
+		"@eslint/js": "9.35.0",
 		"@types/eslint-config-prettier": "6.11.3",
-		"concurrently": "9.1.2",
-		"eslint": "9.34.0",
+		"concurrently": "9.2.1",
+		"eslint": "9.35.0",
 		"eslint-config-prettier": "10.1.8",
-		"globals": "16.0.0",
+		"globals": "16.4.0",
 		"prettier": "3.6.2",
 		"turbo": "2.5.6",
 		"typescript": "5.9.2",
-		"typescript-eslint": "8.41.0"
+		"typescript-eslint": "8.44.0"
 	},
 	"pnpm": {
 		"overrides": {
 			"d3-color": "3.1.0",
 			"@babel/traverse": "7.23.2",
-			"@mikro-orm/core": "6.4.16",
-			"@mikro-orm/knex": "6.4.16",
-			"@mikro-orm/postgresql": "6.4.16",
-			"@mikro-orm/mysql": "6.4.16",
-			"@mikro-orm/sqlite": "6.4.16",
+			"@mikro-orm/core": "6.5.4",
+			"@mikro-orm/knex": "6.5.4",
+			"@mikro-orm/mssql": "6.5.4",
+			"@mikro-orm/postgresql": "6.5.4",
+			"@mikro-orm/mysql": "6.5.4",
+			"@mikro-orm/sqlite": "6.5.4",
 			"graphql": "16.11.0"
 		},
 		"peerDependencyRules": {

@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargsFactory from 'yargs/yargs';
 import chokidar from 'chokidar';
 import semver from 'semver';
 import {
@@ -19,6 +19,8 @@ import * as path from 'path';
 import { config } from '@exogee/graphweaver-config';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
+
+const yargs = yargsFactory(process.argv.slice(2));
 
 yargs
 	.scriptName('graphweaver')

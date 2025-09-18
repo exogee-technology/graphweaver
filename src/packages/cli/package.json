@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "2.19.7",
+	"version": "2.20.1",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -33,18 +33,17 @@
 		"@mikro-orm/postgresql": "6",
 		"@mikro-orm/sqlite": "6",
 		"chokidar": "4.0.3",
-		"esbuild": "0.25.9",
+		"esbuild": "0.25.10",
 		"inquirer": "11.1.0",
-		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.7.2",
 		"validate-npm-package-name": "6.0.2",
-		"yargs": "17.7.2"
+		"yargs": "18.0.0"
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.7",
-		"@types/node": "24.3.0",
-		"@types/semver": "7.7.0",
+		"@types/node": "24.5.2",
+		"@types/semver": "7.7.1",
 		"@types/validate-npm-package-name": "4.0.2",
 		"@types/yargs": "17.0.33",
 		"prettier": "3.6.2",

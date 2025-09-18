@@ -42,16 +42,26 @@ export const RelationshipFilter = ({
 	const apolloClient = useApolloClient();
 	const entityType = entityByName(entity);
 	const field = entityType?.fields.find((f) => f.name === fieldName);
-	const relationshipEntity =
-		field && field.relationshipType === 'MANY_TO_ONE'
-			? entities.find((e) => e === field.type)
-			: undefined;
+	const relationshipEntity = field ? entities.find((e) => e === field.type) : undefined;
 	const relatedEntity = entityByName(relationshipEntity ?? '');
 
-	const currentFilterValue =
-		(filter?.[fieldName] as Record<string, string[]> | undefined)?.[
-			`${relatedEntity.primaryKeyField}_in`
-		] ?? [];
+	// First try with _in
+	let currentFilterValue: string[] | undefined = (
+		filter?.[fieldName] as Record<string, string[]> | undefined
+	)?.[`${relatedEntity.primaryKeyField}_in`];
+
+	// If that didn't do it, then try with just the primary key field.
+	// Arrayify if it exists.
+	if (!currentFilterValue) {
+		const maybePrimaryKey = (filter?.[fieldName] as Record<string, string> | undefined)?.[
+			relatedEntity.primaryKeyField
+		];
+
+		if (maybePrimaryKey) currentFilterValue = [maybePrimaryKey];
+	}
+
+	// Ok, must be no filter.
+	if (!currentFilterValue) currentFilterValue = [];
 
 	// Should we have any searchable fields? we should grab them from the schema as well as
 	// any that were passed in as a prop, deduplicating them.

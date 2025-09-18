@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import * as dotenv from 'dotenv';
 dotenv.config({
 	path: `.env.${(process.env.NODE_ENV || 'development').toLowerCase()}`,
+	quiet: true,
 }); // TODO: The path to .env file in pnpm workspaces seems to use the workspace package.json path. Need to ensure it uses the local version (if required)
 
 export * from './provider';

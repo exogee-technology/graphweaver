@@ -260,6 +260,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		filterOptions?: Record<string, unknown>;
 		detailPanelInputComponent?: DetailPanelInputComponentOption | DetailPanelInputComponent;
 		format?: CellFormatOptions;
+		relationshipBehaviour?: 'load' | 'count';
 	};
 	apiOptions?: {
 		requiredForCreate?: boolean;
