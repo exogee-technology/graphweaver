@@ -24,7 +24,7 @@ test('should allow an admin to delete a tag', async ({ page }) => {
 	const element = await page.getByText('has been successfully created');
 	await expect(element).toHaveCount(1);
 
-	await page.getByRole('row', { name: tag }).getByRole('checkbox').check();
+	await page.getByRole('row', { name: tag }).getByRole('checkbox').click();
 	await page.getByRole('button', { name: 'Actions' }).click();
 	await page.getByText('Delete selected row').click();
 	await page.getByRole('button', { name: 'Delete' }).click();
