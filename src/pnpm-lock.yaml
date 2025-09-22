@@ -1814,7 +1814,7 @@ importers:
         version: 3.1.0(@apollo/server@5.0.0(graphql@16.11.0))
       '@as-integrations/fastify':
         specifier: 3.0.0
-        version: 3.0.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.0)
+        version: 3.0.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.1)
       '@escape.tech/graphql-armor':
         specifier: 3.1.7
         version: 3.1.7(@apollo/server@5.0.0(graphql@16.11.0))(@envelop/core@5.3.1)(@escape.tech/graphql-armor-types@0.7.0)
@@ -1834,8 +1834,8 @@ importers:
         specifier: 10.6.0
         version: 10.6.0
       fastify:
-        specifier: 5.6.0
-        version: 5.6.0
+        specifier: 5.6.1
+        version: 5.6.1
       graphql:
         specifier: 16.11.0
         version: 16.11.0
@@ -8234,8 +8234,8 @@ packages:
   fastify-plugin@5.0.1:
     resolution: {integrity: sha512-HCxs+YnRaWzCl+cWRYFnHmeRFyR5GVnJTAaCJQiYzQSDwK9MgJdyAsuL3nh0EWRCYMgQ5MeziymvmAhUHYHDUQ==}
 
-  fastify@5.6.0:
-    resolution: {integrity: sha512-9j2r9TnwNsfGiCKGYT0Voqy244qwcoYM9qvNi/i+F8sNNWDnqUEVuGYNc9GyjldhXmMlJmVPS6gI1LdvjYGRJw==}
+  fastify@5.6.1:
+    resolution: {integrity: sha512-WjjlOciBF0K8pDUPZoGPhqhKrQJ02I8DKaDIfO51EL0kbSMwQFl85cRwhOvmSDWoukNOdTo27gLN549pLCcH7Q==}
 
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
@@ -12449,10 +12449,10 @@ snapshots:
       '@apollo/server': 5.0.0(graphql@16.11.0)
       '@types/aws-lambda': 8.10.145
 
-  '@as-integrations/fastify@3.0.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.0)':
+  '@as-integrations/fastify@3.0.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.1)':
     dependencies:
       '@apollo/server': 5.0.0(graphql@16.11.0)
-      fastify: 5.6.0
+      fastify: 5.6.1
       fastify-plugin: 5.0.1
 
   '@auth0/auth0-spa-js@2.4.1':
@@ -20951,7 +20951,7 @@ snapshots:
 
   fastify-plugin@5.0.1: {}
 
-  fastify@5.6.0:
+  fastify@5.6.1:
     dependencies:
       '@fastify/ajv-compiler': 4.0.2
       '@fastify/error': 4.2.0
