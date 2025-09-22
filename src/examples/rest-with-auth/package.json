@@ -41,7 +41,7 @@
 		"@types/node": "24.5.2",
 		"dotenv-cli": "10.0.0",
 		"typescript": "5.9.2",
-		"vite": "7.1.6"
+		"vite": "7.1.7"
 	},
 	"keywords": [
 		"graphql",
