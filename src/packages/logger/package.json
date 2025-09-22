@@ -20,7 +20,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"pino": "9.10.0"
+		"pino": "9.11.0"
 	},
 	"devDependencies": {
 		"@types/node": "24.5.2",
