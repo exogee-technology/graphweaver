@@ -32,7 +32,7 @@
 		"@apollo/client": "3.13.5",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.11.3",
-		"@tanstack/react-form": "1.21.1",
+		"@tanstack/react-form": "1.23.0",
 		"@tanstack/react-table": "8.21.3",
 		"@tiptap/extension-link": "3.4.4",
 		"@tiptap/react": "3.4.4",
