@@ -745,8 +745,8 @@ importers:
         specifier: 3.7.1
         version: 3.7.1(react@19.1.1)
       xero-node:
-        specifier: 13.0.0
-        version: 13.0.0
+        specifier: 13.1.0
+        version: 13.1.0
     devDependencies:
       '@types/node':
         specifier: 24.5.2
@@ -1930,8 +1930,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       xero-node:
-        specifier: 13.0.0
-        version: 13.0.0
+        specifier: 13.1.0
+        version: 13.1.0
     devDependencies:
       '@types/node':
         specifier: 24.5.2
@@ -6937,9 +6937,6 @@ packages:
 
   axios-proxy-builder@0.1.2:
     resolution: {integrity: sha512-6uBVsBZzkB3tCC8iyx59mCjQckhB8+GQrI9Cop8eC7ybIsvs/KtnNgEBfRMSEa7GqK2VBGUzgjNYMdPIfotyPA==}
-
-  axios@1.11.0:
-    resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
 
   axios@1.12.2:
     resolution: {integrity: sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==}
@@ -12113,8 +12110,8 @@ packages:
     resolution: {integrity: sha512-h3Fbisa2nKGPxCpm89Hk33lBLsnaGBvctQopaBSOW/uIs6FTe1ATyAnKFJrzVs9vpGdsTe73WF3V4lIsk4Gacw==}
     engines: {node: '>=18'}
 
-  xero-node@13.0.0:
-    resolution: {integrity: sha512-Yoil5b4ljt/+pULn758xdl6oV60csL6yTfAzOmtGpyaw4IV8eZRRfsz1JPf8PsHZOy9/gtNvcSQ/HKe64JxkvA==}
+  xero-node@13.1.0:
+    resolution: {integrity: sha512-Hw6Km3TJ9l8WRfHmiiOEH42cEPGsvEX+9nmNFIMDgZWAJJNGv6O82oZq99gBjU4w8Asen5EYGFUZLUNHdsxZmg==}
 
   xhr2@0.1.3:
     resolution: {integrity: sha512-6RmGK22QwC7yXB1CRwyLWuS2opPcKOlAu0ViAnyZjDlzrEmCKL4kLHkfvB8oMRWeztMsNoDGAjsMZY15w/4tTw==}
@@ -19360,14 +19357,6 @@ snapshots:
     dependencies:
       tunnel: 0.0.6
 
-  axios@1.11.0:
-    dependencies:
-      follow-redirects: 1.15.11
-      form-data: 4.0.4
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-
   axios@1.12.2:
     dependencies:
       follow-redirects: 1.15.11
@@ -25345,9 +25334,9 @@ snapshots:
     dependencies:
       is-wsl: 3.1.0
 
-  xero-node@13.0.0:
+  xero-node@13.1.0:
     dependencies:
-      axios: 1.11.0
+      axios: 1.12.2
       openid-client: 5.7.1
     transitivePeerDependencies:
       - debug
