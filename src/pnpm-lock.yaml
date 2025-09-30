@@ -834,8 +834,8 @@ importers:
         specifier: 0.11.3
         version: 0.11.3(@types/node@24.5.2)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)
       '@tanstack/react-form':
-        specifier: 1.23.2
-        version: 1.23.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 1.23.5
+        version: 1.23.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@tanstack/react-table':
         specifier: 8.21.3
         version: 8.21.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -2882,8 +2882,8 @@ packages:
   '@codemirror/state@6.5.2':
     resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
 
-  '@codemirror/view@6.38.3':
-    resolution: {integrity: sha512-x2t87+oqwB1mduiQZ6huIghjMt4uZKFEdj66IcXw7+a5iBEvv9lh7EWDRHI7crnD4BMGpnyq/RzmCGbiEZLcvQ==}
+  '@codemirror/view@6.38.4':
+    resolution: {integrity: sha512-hduz0suCcUSC/kM8Fq3A9iLwInJDl8fD1xLpTIk+5xkNm8z/FT7UsIa9sOXrkpChh+XXc18RzswE8QqELsVl+g==}
 
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
@@ -5928,15 +5928,15 @@ packages:
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
     engines: {node: '>=10'}
 
-  '@tanstack/devtools-event-client@0.3.1':
-    resolution: {integrity: sha512-djlxAeMCdLZBEHWjCexPmc5xYKtCYJn2p5gvqeFrpBTSwmNlsrW0K14OixO0nTyoVIYUI4dNV9HWChHAx/w+oA==}
+  '@tanstack/devtools-event-client@0.3.2':
+    resolution: {integrity: sha512-gkvph/YMCFUfAca75EsJBJnhbKitDGix7vdEcT/3lAV+eyGSv+uECYG43apVQN4yLJKnV6mzcNvGzOhDhb72gg==}
     engines: {node: '>=18'}
 
-  '@tanstack/form-core@1.23.2':
-    resolution: {integrity: sha512-WluxbS+Nj+Bm/F8+l4zvRluTkEItiU/2j1qOEqtMVo/aZdgCjF37U9fsSEey5QxoUPcg4DzoWqZVw8UDnb+TWQ==}
+  '@tanstack/form-core@1.24.1':
+    resolution: {integrity: sha512-nI9Ad5JFHQjADkUQQtl7ajb7Lsd4sQlR0b5BmKDpJfZSPH/BF7+uUC3m91dM1bucOqIDzTTXr0QROZODnY+www==}
 
-  '@tanstack/react-form@1.23.2':
-    resolution: {integrity: sha512-GuxqMImZS4lXB6+ib7gkZL+REipoIstYpPFSMkl3L5P9mf9CLdw5aPecD072sxvvgTI7pp5KzgZBsY9oH3GcJg==}
+  '@tanstack/react-form@1.23.5':
+    resolution: {integrity: sha512-WygrvTK7Fn3RmSBG5V3FIzH2Z+3FDbau7kaqa/opLiGsX2sx98ZAPvF5umXCe3fmppfJe+nBFYuqY+gaUrSf7w==}
     peerDependencies:
       '@tanstack/react-start': ^1.130.10
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -11843,10 +11843,6 @@ packages:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
     hasBin: true
 
-  uuid@13.0.0:
-    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
-    hasBin: true
-
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
@@ -14017,7 +14013,7 @@ snapshots:
   '@codemirror/language@6.0.0':
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
@@ -14027,7 +14023,7 @@ snapshots:
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.38.3':
+  '@codemirror/view@6.38.4':
     dependencies:
       '@codemirror/state': 6.5.2
       crelt: 1.0.6
@@ -18282,17 +18278,16 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tanstack/devtools-event-client@0.3.1': {}
+  '@tanstack/devtools-event-client@0.3.2': {}
 
-  '@tanstack/form-core@1.23.2':
+  '@tanstack/form-core@1.24.1':
     dependencies:
-      '@tanstack/devtools-event-client': 0.3.1
+      '@tanstack/devtools-event-client': 0.3.2
       '@tanstack/store': 0.7.7
-      uuid: 13.0.0
 
-  '@tanstack/react-form@1.23.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@tanstack/react-form@1.23.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
-      '@tanstack/form-core': 1.23.2
+      '@tanstack/form-core': 1.24.1
       '@tanstack/react-store': 0.7.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       decode-formdata: 0.9.0
       devalue: 5.3.2
@@ -25083,8 +25078,6 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   uuid@11.1.0: {}
-
-  uuid@13.0.0: {}
 
   uuid@8.3.2: {}
 
