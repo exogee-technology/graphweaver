@@ -44,7 +44,7 @@
 		"globals": "16.4.0",
 		"prettier": "3.6.2",
 		"turbo": "2.5.8",
-		"typescript": "5.9.2",
+		"typescript": "5.9.3",
 		"typescript-eslint": "8.46.0"
 	},
 	"pnpm": {
