@@ -36,7 +36,7 @@
 		"esbuild": "0.25.10",
 		"inquirer": "11.1.0",
 		"ora-classic": "5.4.2",
-		"semver": "7.7.2",
+		"semver": "7.7.3",
 		"validate-npm-package-name": "6.0.2",
 		"yargs": "18.0.0"
 	},
