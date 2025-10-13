@@ -1325,8 +1325,8 @@ importers:
         specifier: 5.4.2
         version: 5.4.2
       semver:
-        specifier: 7.7.2
-        version: 7.7.2
+        specifier: 7.7.3
+        version: 7.7.3
       validate-npm-package-name:
         specifier: 6.0.2
         version: 6.0.2
@@ -16822,7 +16822,7 @@ snapshots:
   '@npmcli/fs@1.1.1':
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.7.2
+      semver: 7.7.3
     optional: true
 
   '@npmcli/move-file@1.1.2':
@@ -19047,7 +19047,7 @@ snapshots:
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 2.1.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -19063,7 +19063,7 @@ snapshots:
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 2.1.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -21014,7 +21014,7 @@ snapshots:
       process-warning: 5.0.0
       rfdc: 1.4.1
       secure-json-parse: 4.0.0
-      semver: 7.7.2
+      semver: 7.7.3
       toad-cache: 3.7.0
 
   fastq@1.19.1:
@@ -21942,7 +21942,7 @@ snapshots:
       '@babel/parser': 7.28.4
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
-      semver: 7.7.2
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
 
@@ -22268,7 +22268,7 @@ snapshots:
       jest-message-util: 30.2.0
       jest-util: 30.2.0
       pretty-format: 30.2.0
-      semver: 7.7.2
+      semver: 7.7.3
       synckit: 0.11.11
     transitivePeerDependencies:
       - supports-color
@@ -22940,7 +22940,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   make-error@1.3.6: {}
 
@@ -23243,7 +23243,7 @@ snapshots:
 
   node-abi@3.77.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   node-addon-api@2.0.2: {}
 
@@ -23278,7 +23278,7 @@ snapshots:
       nopt: 5.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
-      semver: 7.7.2
+      semver: 7.7.3
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -24626,7 +24626,7 @@ snapshots:
       esbuild: 0.25.10
       esbuild-register: 3.6.0(esbuild@0.25.10)
       recast: 0.23.11
-      semver: 7.7.2
+      semver: 7.7.3
       ws: 8.18.3
     optionalDependencies:
       prettier: 3.6.2
@@ -24750,7 +24750,7 @@ snapshots:
       methods: 1.1.2
       mime: 2.6.0
       qs: 6.14.0
-      semver: 7.7.2
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
 
