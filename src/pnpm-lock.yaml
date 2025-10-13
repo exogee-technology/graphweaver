@@ -1813,8 +1813,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(@apollo/server@5.0.0(graphql@16.11.0))
       '@as-integrations/fastify':
-        specifier: 3.0.0
-        version: 3.0.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.1)
+        specifier: 3.1.0
+        version: 3.1.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.1)
       '@escape.tech/graphql-armor':
         specifier: 3.1.7
         version: 3.1.7(@apollo/server@5.0.0(graphql@16.11.0))(@envelop/core@5.3.1)(@escape.tech/graphql-armor-types@0.7.0)
@@ -2082,11 +2082,11 @@ packages:
     peerDependencies:
       '@apollo/server': ^4.0.0
 
-  '@as-integrations/fastify@3.0.0':
-    resolution: {integrity: sha512-UXJYMraDQKwCUjk5zKDb4GJnPzqKbn+sPOboNISZCinPAPQsTzuZiw1/VgJNfGRW4l+dI3C0DDM9PysYCG+MWg==}
+  '@as-integrations/fastify@3.1.0':
+    resolution: {integrity: sha512-hfK5adsybNj0qRc+5BiCOy50SqqOhPIctvaaGsjqq7ui8lO/TZkLtz6IvDhWC70vOcMXJuMJCTTEb4hex8RVgw==}
     engines: {node: '>=20'}
     peerDependencies:
-      '@apollo/server': ^4.0.0
+      '@apollo/server': ^4.0.0 || ^5.0.0
       fastify: ^5.3.0
 
   '@auth0/auth0-spa-js@2.4.1':
@@ -2886,8 +2886,8 @@ packages:
   '@codemirror/state@6.5.2':
     resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
 
-  '@codemirror/view@6.38.5':
-    resolution: {integrity: sha512-SFVsNAgsAoou+BjRewMqN+m9jaztB9wCWN9RSRgePqUbq8UVlvJfku5zB2KVhLPgH/h0RLk38tvd4tGeAhygnw==}
+  '@codemirror/view@6.38.6':
+    resolution: {integrity: sha512-qiS0z1bKs5WOvHIAC0Cybmv4AJSkAXgX5aD6Mqd2epSLlVJsQl8NG23jCVouIgkh4All/mrbdsf2UOLFnJw0tw==}
 
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
@@ -8250,6 +8250,9 @@ packages:
   fastify-plugin@5.0.1:
     resolution: {integrity: sha512-HCxs+YnRaWzCl+cWRYFnHmeRFyR5GVnJTAaCJQiYzQSDwK9MgJdyAsuL3nh0EWRCYMgQ5MeziymvmAhUHYHDUQ==}
 
+  fastify-plugin@5.1.0:
+    resolution: {integrity: sha512-FAIDA8eovSt5qcDgcBvDuX/v0Cjz0ohGhENZ/wpc3y+oZCY2afZ9Baqql3g/lC+OHRnciQol4ww7tuthOb9idw==}
+
   fastify@5.6.1:
     resolution: {integrity: sha512-WjjlOciBF0K8pDUPZoGPhqhKrQJ02I8DKaDIfO51EL0kbSMwQFl85cRwhOvmSDWoukNOdTo27gLN549pLCcH7Q==}
 
@@ -12471,11 +12474,11 @@ snapshots:
       '@apollo/server': 5.0.0(graphql@16.11.0)
       '@types/aws-lambda': 8.10.145
 
-  '@as-integrations/fastify@3.0.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.1)':
+  '@as-integrations/fastify@3.1.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.1)':
     dependencies:
       '@apollo/server': 5.0.0(graphql@16.11.0)
       fastify: 5.6.1
-      fastify-plugin: 5.0.1
+      fastify-plugin: 5.1.0
 
   '@auth0/auth0-spa-js@2.4.1':
     dependencies:
@@ -14075,7 +14078,7 @@ snapshots:
   '@codemirror/language@6.0.0':
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.5
+      '@codemirror/view': 6.38.6
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
@@ -14085,7 +14088,7 @@ snapshots:
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.38.5':
+  '@codemirror/view@6.38.6':
     dependencies:
       '@codemirror/state': 6.5.2
       crelt: 1.0.6
@@ -20998,6 +21001,8 @@ snapshots:
       strnum: 2.1.1
 
   fastify-plugin@5.0.1: {}
+
+  fastify-plugin@5.1.0: {}
 
   fastify@5.6.1:
     dependencies:
