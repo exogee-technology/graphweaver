@@ -25,7 +25,7 @@
 	"dependencies": {
 		"@apollo/server": "5.0.0",
 		"@as-integrations/aws-lambda": "3.1.0",
-		"@as-integrations/fastify": "3.0.0",
+		"@as-integrations/fastify": "3.1.0",
 		"@escape.tech/graphql-armor": "3.1.7",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
