@@ -35,7 +35,7 @@
 	},
 	"devDependencies": {
 		"@types/luxon": "3.7.1",
-		"@types/node": "24.7.0",
+		"@types/node": "24.7.2",
 		"@types/react": "19.2.2",
 		"graphweaver": "workspace:*",
 		"typescript": "5.9.3"
