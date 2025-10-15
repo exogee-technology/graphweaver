@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 jobs:
   release:
-    runs-on: depot-ubuntu-24.04-arm
+    runs-on: depot-ubuntu-24.04-arm-4
     permissions:
       contents: write
       deployments: write

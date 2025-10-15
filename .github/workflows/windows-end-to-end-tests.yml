@@ -6,7 +6,7 @@ on:
 
 jobs:
   windows-end-to-end-tests:
-    runs-on: depot-windows-2022
+    runs-on: depot-windows-2022-4
     defaults:
       run:
         working-directory: src

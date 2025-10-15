@@ -6,7 +6,7 @@ on:
 
 jobs:
   unit-tests:
-    runs-on: depot-ubuntu-24.04-arm
+    runs-on: depot-ubuntu-24.04-arm-4
     defaults:
       run:
         working-directory: src
