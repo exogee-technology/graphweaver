@@ -216,6 +216,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.columnTypes?.[0] === 'date') {
+			this.scalarImports.add('DateScalar');
 			return 'DateScalar';
 		}
 
