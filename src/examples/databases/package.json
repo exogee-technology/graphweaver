@@ -32,7 +32,7 @@
 		"@mikro-orm/postgresql": "6.5.8",
 		"class-validator": "0.14.2",
 		"graphql": "16.11.0",
-		"graphql-scalars": "1.24.2",
+		"graphql-scalars": "1.25.0",
 		"graphweaver": "workspace:*",
 		"json-bigint-patch": "0.0.8",
 		"mysql2": "3.15.2",
