@@ -1213,8 +1213,8 @@ importers:
         specifier: 5.0.8
         version: 5.0.8
       rollup-plugin-visualizer:
-        specifier: 6.0.4
-        version: 6.0.4(rollup@4.52.4)
+        specifier: 6.0.5
+        version: 6.0.5(rollup@4.52.4)
       serverless-offline:
         specifier: 14.4.0
         version: 14.4.0(serverless@4.4.3)
@@ -11010,8 +11010,8 @@ packages:
   robust-predicates@3.0.2:
     resolution: {integrity: sha512-IXgzBWvWQwE6PrDI05OvmXUIruQTcoMDzRsOd5CDvHCVLcLHMTSYvOK5Cm46kWqlV3yAbuSpBZdJ5oP5OUoStg==}
 
-  rollup-plugin-visualizer@6.0.4:
-    resolution: {integrity: sha512-q8Q7J/6YofkmaGW1sH/fPRAz37x/+pd7VBuaUU7lwvOS/YikuiiEU9jeb9PH8XHiq50XFrUsBbOxeAMYQ7KZkg==}
+  rollup-plugin-visualizer@6.0.5:
+    resolution: {integrity: sha512-9+HlNgKCVbJDs8tVtjQ43US12eqaiHyyiLMdBwQ7vSZPiHMysGNo2E88TAp1si5wx8NAoYriI2A5kuKfIakmJg==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
@@ -24246,7 +24246,7 @@ snapshots:
 
   robust-predicates@3.0.2: {}
 
-  rollup-plugin-visualizer@6.0.4(rollup@4.52.4):
+  rollup-plugin-visualizer@6.0.5(rollup@4.52.4):
     dependencies:
       open: 8.4.2
       picomatch: 4.0.3
