@@ -292,7 +292,13 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	protected getCommonDecoratorOptions(options: Dictionary, prop: EntityProperty): void {
-		if (prop.nullable && !prop.mappedBy) {
+		// Owning side: use the FK's nullability
+		// Non-owning side of 1:1 is always nullable because we aren't guaranteed to have a row for every single
+		// entity created on the non-owning side of the relationship.
+		if (
+			(prop.nullable && !prop.mappedBy) ||
+			(prop.mappedBy && prop.kind === ReferenceKind.ONE_TO_ONE)
+		) {
 			options.nullable = true;
 		}
 
