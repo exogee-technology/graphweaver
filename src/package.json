@@ -36,7 +36,7 @@
 	},
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.10",
-		"@eslint/js": "9.37.0",
+		"@eslint/js": "9.38.0",
 		"@types/eslint-config-prettier": "6.11.3",
 		"concurrently": "9.2.1",
 		"eslint": "9.37.0",
