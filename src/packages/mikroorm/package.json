@@ -69,7 +69,7 @@
 		"@mikro-orm/mysql": "6.5.8",
 		"@mikro-orm/postgresql": "6.5.8",
 		"@mikro-orm/sqlite": "6.5.8",
-		"@types/node": "24.8.0",
+		"@types/node": "24.8.1",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.25.11",
 		"glob": "11.0.3",
