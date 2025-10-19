@@ -20,7 +20,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@types/node": "24.8.0",
+		"@types/node": "24.8.1",
 		"k6": "0.0.0"
 	},
 	"devDependencies": {
