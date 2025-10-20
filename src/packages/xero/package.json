@@ -32,7 +32,7 @@
 		"graphql": "16"
 	},
 	"devDependencies": {
-		"@types/node": "24.8.1",
+		"@types/node": "24.9.0",
 		"esbuild": "0.25.11",
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
