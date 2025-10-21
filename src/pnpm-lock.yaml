@@ -1162,8 +1162,8 @@ importers:
         specifier: 6.0.0
         version: 6.0.0(graphql@16.11.0)
       '@graphql-codegen/cli':
-        specifier: 6.0.0
-        version: 6.0.0(@types/node@24.8.1)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.3)
+        specifier: 6.0.1
+        version: 6.0.1(@types/node@24.8.1)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.3)
       '@graphql-codegen/near-operation-file-preset':
         specifier: 3.1.0
         version: 3.1.0(encoding@0.1.13)(graphql@16.11.0)
@@ -3347,8 +3347,8 @@ packages:
     peerDependencies:
       graphql: 16.11.0
 
-  '@graphql-codegen/cli@6.0.0':
-    resolution: {integrity: sha512-tvchLVCMtorDE+UwgQbrjyaQK16GCZA+QomTxZazRx64ixtgmbEiQV7GhCBy0y0Bo7/tcTJb6sy9G/TL/BgiOg==}
+  '@graphql-codegen/cli@6.0.1':
+    resolution: {integrity: sha512-6iP91joxb7phdicDrIF8Cv9ah2QpPVXUUu7rbOaQKvqey+QKYmHcxGCi9r5/7p4lUiHZPQvfB7xDHURHQca1SA==}
     engines: {node: '>=16'}
     hasBin: true
     peerDependencies:
@@ -9060,8 +9060,8 @@ packages:
   linkifyjs@4.3.2:
     resolution: {integrity: sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==}
 
-  listr2@9.0.4:
-    resolution: {integrity: sha512-1wd/kpAdKRLwv7/3OKC8zZ5U8e/fajCfWMxacUvB79S5nLrYGPtUI/8chMQhn3LQjsRVErTb9i1ECAwW0ZIHnQ==}
+  listr2@9.0.5:
+    resolution: {integrity: sha512-ME4Fb83LgEgwNw96RKNvKV4VTLuXfoKudAmm2lP8Kk87KaMK0/Xrx/aAkMWmT8mDb+3MlFDspfbCs7adjRxA2g==}
     engines: {node: '>=20.0.0'}
 
   lit-element@3.3.3:
@@ -13941,7 +13941,7 @@ snapshots:
       graphql: 16.11.0
       tslib: 2.6.3
 
-  '@graphql-codegen/cli@6.0.0(@types/node@24.8.1)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.3)':
+  '@graphql-codegen/cli@6.0.1(@types/node@24.8.1)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.3)':
     dependencies:
       '@babel/generator': 7.28.3
       '@babel/template': 7.27.2
@@ -13969,7 +13969,7 @@ snapshots:
       is-glob: 4.0.3
       jiti: 2.6.1
       json-to-pretty-yaml: 1.2.2
-      listr2: 9.0.4
+      listr2: 9.0.5
       log-symbols: 4.1.0
       micromatch: 4.0.8
       shell-quote: 1.8.3
@@ -21485,7 +21485,7 @@ snapshots:
 
   linkifyjs@4.3.2: {}
 
-  listr2@9.0.4:
+  listr2@9.0.5:
     dependencies:
       cli-truncate: 5.1.0
       colorette: 2.0.20
