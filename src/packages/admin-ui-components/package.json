@@ -50,7 +50,7 @@
 		"react-fast-compare": "3.2.2",
 		"react-hot-toast": "2.6.0",
 		"react-resizable-panels": "3.0.6",
-		"react-syntax-highlighter": "15.6.6",
+		"react-syntax-highlighter": "16.0.0",
 		"tiptap-markdown": "0.9.0",
 		"wouter": "3.7.1",
 		"zod": "4.1.12"
@@ -80,7 +80,7 @@
 		"react-dom": "19.2.0",
 		"storybook": "9.1.13",
 		"typescript": "5.9.3",
-		"vite": "7.1.10",
+		"vite": "7.1.11",
 		"vite-plugin-graphweaver": "workspace:*",
 		"vitest": "3.2.4"
 	},
