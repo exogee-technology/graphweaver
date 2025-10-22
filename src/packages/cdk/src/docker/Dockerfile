@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base
-FROM node:22
+FROM node:22.21.0-trixie-slim
 
 # Set the working directory within the container
 WORKDIR /usr/src/app
