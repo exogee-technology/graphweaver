@@ -35,7 +35,7 @@
 		"aws-cdk-lib": "2.220.0",
 		"constructs": "10.4.2",
 		"@exogee/graphweaver": "workspace:*",
-		"@types/node": "24.8.1",
+		"@types/node": "24.9.1",
 		"esbuild": "0.25.11",
 		"glob": "11.0.3",
 		"typescript": "5.9.3",
