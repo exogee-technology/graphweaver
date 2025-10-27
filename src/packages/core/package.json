@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"description": "Graphweaver Core Package",
 	"license": "Apache-2.0",
 	"sideEffects": false,
@@ -27,11 +27,11 @@
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/utils": "10.9.1",
 		"@opentelemetry/api": "1.9.0",
-		"@opentelemetry/core": "2.1.0",
-		"@opentelemetry/exporter-trace-otlp-http": "0.205.0",
-		"@opentelemetry/resources": "2.1.0",
-		"@opentelemetry/sdk-node": "0.205.0",
-		"@opentelemetry/sdk-trace-base": "2.1.0",
+		"@opentelemetry/core": "2.2.0",
+		"@opentelemetry/exporter-trace-otlp-http": "0.207.0",
+		"@opentelemetry/resources": "2.2.0",
+		"@opentelemetry/sdk-node": "0.207.0",
+		"@opentelemetry/sdk-trace-base": "2.2.0",
 		"async-mutex": "0.5.0",
 		"class-validator": "0.14.2",
 		"dataloader": "2.2.3",
@@ -41,12 +41,12 @@
 		"pluralize": "8.0.0"
 	},
 	"devDependencies": {
-		"@opentelemetry/instrumentation": "0.205.0",
+		"@opentelemetry/instrumentation": "0.207.0",
 		"@types/pluralize": "0.0.33",
-		"esbuild": "0.25.10",
+		"esbuild": "0.25.11",
 		"glob": "11.0.3",
-		"typescript": "5.9.2",
-		"vitest": "3.2.4"
+		"typescript": "5.9.3",
+		"vitest": "4.0.3"
 	},
 	"keywords": [
 		"graphql",

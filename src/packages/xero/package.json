@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-xero",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"description": "Xero backend for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -32,14 +32,14 @@
 		"graphql": "16"
 	},
 	"devDependencies": {
-		"@types/node": "24.5.2",
-		"esbuild": "0.25.10",
+		"@types/node": "24.9.1",
+		"esbuild": "0.25.11",
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
 		"prettier": "3.6.2",
 		"react": "19.2.0",
 		"react-dom": "19.2.0",
-		"typescript": "5.9.2"
+		"typescript": "5.9.3"
 	},
 	"keywords": [
 		"graphql",

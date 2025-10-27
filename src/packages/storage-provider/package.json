@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-storage-provider",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"description": "Graphweaver Storage Provider Package",
 	"license": "Apache-2.0",
 	"sideEffects": false,
@@ -21,16 +21,16 @@
 		"lib"
 	],
 	"dependencies": {
-		"@aws-sdk/client-s3": "3.906.0",
-		"@aws-sdk/s3-request-presigner": "3.906.0",
+		"@aws-sdk/client-s3": "3.914.0",
+		"@aws-sdk/s3-request-presigner": "3.914.0",
 		"@exogee/logger": "workspace:*",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*"
 	},
 	"devDependencies": {
-		"esbuild": "0.25.10",
+		"esbuild": "0.25.11",
 		"glob": "11.0.3",
-		"typescript": "5.9.2"
+		"typescript": "5.9.3"
 	},
 	"keywords": [
 		"graphweaver",

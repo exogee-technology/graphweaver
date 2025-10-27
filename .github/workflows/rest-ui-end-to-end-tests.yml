@@ -28,7 +28,7 @@ jobs:
         with:
           version: 9.15.3
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: "pnpm"
@@ -61,7 +61,7 @@ jobs:
           pnpm test-ui-rest &&
           killall node
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: playwright-report

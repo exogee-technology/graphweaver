@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-rest-legacy",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"description": "Legacy RESTful backend adapter for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"sideEffects": false,
@@ -27,7 +27,7 @@
 		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.14.2",
 		"dataloader": "2.2.3",
-		"dotenv": "17.2.2",
+		"dotenv": "17.2.3",
 		"graphql": "16.11.0",
 		"lodash": "4.17.21",
 		"luxon": "3.7.2"
@@ -35,11 +35,11 @@
 	"devDependencies": {
 		"@types/lodash": "4.17.20",
 		"@types/luxon": "3.7.1",
-		"@types/node": "24.5.2",
-		"esbuild": "0.25.10",
+		"@types/node": "24.9.1",
+		"esbuild": "0.25.11",
 		"glob": "11.0.3",
 		"prettier": "3.6.2",
-		"typescript": "5.9.2"
+		"typescript": "5.9.3"
 	},
 	"keywords": [
 		"graphql",

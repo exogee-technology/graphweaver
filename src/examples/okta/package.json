@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-okta",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting a SQLite database with Okta.",
@@ -12,7 +12,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@as-integrations/aws-lambda": "3.1.0",
+		"@as-integrations/aws-lambda": "4.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
@@ -20,9 +20,9 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.5.7",
-		"@mikro-orm/knex": "6.5.7",
-		"@mikro-orm/sqlite": "6.5.7",
+		"@mikro-orm/core": "6.5.8",
+		"@mikro-orm/knex": "6.5.8",
+		"@mikro-orm/sqlite": "6.5.8",
 		"@okta/okta-auth-js": "7.14.0",
 		"graphql": "16.11.0",
 		"graphweaver": "workspace:*",
@@ -30,7 +30,7 @@
 		"react": "19.2.0"
 	},
 	"devDependencies": {
-		"@types/node": "24.5.2",
-		"typescript": "5.9.2"
+		"@types/node": "24.9.1",
+		"typescript": "5.9.3"
 	}
 }

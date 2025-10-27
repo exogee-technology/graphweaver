@@ -6,6 +6,6 @@
 		"test:integration": "node integration-test.js"
 	},
 	"dependencies": {
-		"@apollo/federation-subgraph-compatibility": "2.2.1"
+		"@apollo/federation-subgraph-compatibility": "2.2.2"
 	}
 }

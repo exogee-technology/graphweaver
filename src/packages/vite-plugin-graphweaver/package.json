@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-graphweaver",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"description": "A vite plugin for use with @exogee/graphweaver's admin UI",
 	"license": "Apache-2.0",
 	"main": "lib/index.js",
@@ -20,11 +20,11 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"devDependencies": {
-		"@types/node": "24.5.2",
-		"esbuild": "0.25.10",
+		"@types/node": "24.9.1",
+		"esbuild": "0.25.11",
 		"glob": "11.0.3",
-		"typescript": "5.9.2",
-		"vite": "7.1.7"
+		"typescript": "5.9.3",
+		"vite": "7.1.11"
 	},
 	"peerDependencies": {
 		"vite": "^5.0.0 || ^6.0.0"

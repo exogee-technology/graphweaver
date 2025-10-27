@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-databases",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting a MySQL and PostgreSQL database together.",
@@ -19,31 +19,31 @@
 	},
 	"dependencies": {
 		"@apollo/server": "5.0.0",
-		"@as-integrations/aws-lambda": "3.1.0",
+		"@as-integrations/aws-lambda": "4.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.5.7",
-		"@mikro-orm/knex": "6.5.7",
-		"@mikro-orm/mysql": "6.5.7",
-		"@mikro-orm/postgresql": "6.5.7",
+		"@mikro-orm/core": "6.5.8",
+		"@mikro-orm/knex": "6.5.8",
+		"@mikro-orm/mysql": "6.5.8",
+		"@mikro-orm/postgresql": "6.5.8",
 		"class-validator": "0.14.2",
 		"graphql": "16.11.0",
-		"graphql-scalars": "1.24.2",
+		"graphql-scalars": "1.25.0",
 		"graphweaver": "workspace:*",
 		"json-bigint-patch": "0.0.8",
-		"mysql2": "3.15.0",
+		"mysql2": "3.15.3",
 		"pg": "8.16.3",
 		"react": "19.2.0",
 		"react-dom": "19.2.0",
 		"react-syntax-highlighter": "15.6.6"
 	},
 	"devDependencies": {
-		"@types/node": "24.5.2",
-		"typescript": "5.9.2"
+		"@types/node": "24.9.1",
+		"typescript": "5.9.3"
 	},
 	"keywords": [
 		"graphql",

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
@@ -36,15 +36,15 @@
 	"devDependencies": {
 		"@chialab/esbuild-plugin-html": "0.19.0",
 		"@types/react": "19.2.2",
-		"@types/react-dom": "19.2.1",
+		"@types/react-dom": "19.2.2",
 		"@types/react-modal": "3.16.3",
-		"@vitejs/plugin-react": "5.0.3",
-		"esbuild": "0.25.10",
+		"@vitejs/plugin-react": "5.0.4",
+		"esbuild": "0.25.11",
 		"esbuild-plugin-copy": "2.1.1",
 		"glob": "11.0.3",
 		"graphql": "16.11.0",
-		"typescript": "5.9.2",
-		"vite": "7.1.7"
+		"typescript": "5.9.3",
+		"vite": "7.1.11"
 	},
 	"keywords": [
 		"graphql",

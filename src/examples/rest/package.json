@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest",
-	"version": "2.20.2",
+	"version": "2.20.5",
 	"license": "Apache-2.0",
 	"description": "Simple example of connecting to a Rest API.",
 	"private": true,
@@ -23,16 +23,16 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/knex": "6.5.7",
-		"@mikro-orm/core": "6.5.7",
-		"@mikro-orm/mysql": "6.5.7",
-		"dotenv": "17.2.2",
+		"@mikro-orm/knex": "6.5.8",
+		"@mikro-orm/core": "6.5.8",
+		"@mikro-orm/mysql": "6.5.8",
+		"dotenv": "17.2.3",
 		"got-cjs": "12.5.4",
 		"graphql": "16.11.0"
 	},
 	"devDependencies": {
-		"@types/node": "24.5.2",
+		"@types/node": "24.9.1",
 		"graphweaver": "workspace:*",
-		"typescript": "5.9.2"
+		"typescript": "5.9.3"
 	}
 }
