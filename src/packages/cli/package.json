@@ -34,7 +34,7 @@
 		"@mikro-orm/sqlite": "6",
 		"chokidar": "4.0.3",
 		"esbuild": "0.25.11",
-		"inquirer": "11.1.0",
+		"inquirer": "12.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.7.3",
 		"validate-npm-package-name": "7.0.0",
