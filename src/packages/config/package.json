@@ -28,7 +28,7 @@
 		"@types/node": "24.9.1",
 		"esbuild": "0.25.11",
 		"prettier": "3.6.2",
-		"vite": "7.1.11"
+		"vite": "7.1.12"
 	},
 	"keywords": [
 		"graphql",
