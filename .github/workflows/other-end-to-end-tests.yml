@@ -6,7 +6,7 @@ on:
 
 jobs:
   other-end-to-end-tests:
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-24.04-4
     defaults:
       run:
         working-directory: src
