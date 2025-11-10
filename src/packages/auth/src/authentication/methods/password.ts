@@ -9,7 +9,7 @@ import {
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
 import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 
 import { UserProfile } from '../../user-profile';
 import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
@@ -278,7 +278,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 
 				userProfile = await this.create(hookParams);
 			} catch (err) {
-				logger.error(err);
+				safeErrorLog(logger, err);
 
 				if (err instanceof PasswordStrengthError) throw err;
 				if (err instanceof ValidationError) throw err;
@@ -327,7 +327,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 				);
 				userProfile = await this.update(hookParams);
 			} catch (err) {
-				logger.error(err);
+				safeErrorLog(logger, err);
 				if (err instanceof PasswordStrengthError) throw err;
 				if (err instanceof ValidationError) throw err;
 				if (err instanceof ForbiddenError)

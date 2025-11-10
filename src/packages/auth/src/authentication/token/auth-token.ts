@@ -1,5 +1,5 @@
 import jwt, { Algorithm, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import jwksClient from 'jwks-rsa';
 import ms, { StringValue } from 'ms';
 
@@ -80,7 +80,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 			return token;
 		} catch (err) {
-			logger.error(err);
+			safeErrorLog(logger, err);
 			throw new Error('Could not generate token');
 		}
 	}
@@ -90,7 +90,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 		return new Promise((resolve, reject) => {
 			jwt.verify(token, this.getSigningKey, { algorithms: [algorithm] }, (err, payload) => {
 				if (err) {
-					logger.error(err);
+					safeErrorLog(logger, err);
 					return reject(err);
 				}
 
@@ -131,7 +131,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 			);
 			return new AuthToken(`${TOKEN_PREFIX} ${token}`);
 		} catch (err) {
-			logger.error(err);
+			safeErrorLog(logger, err);
 			throw new Error('Token step-up failed');
 		}
 	}

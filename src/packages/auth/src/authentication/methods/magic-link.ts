@@ -1,6 +1,6 @@
 import ms, { StringValue } from 'ms';
 import { AuthenticationError } from 'apollo-server-errors';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import { randomUUID } from 'node:crypto';
 
 import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../types';
@@ -196,7 +196,7 @@ export class MagicLink extends BaseAuthMethod {
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
 
-			logger.error(e, 'Authentication failed with error');
+			safeErrorLog(logger, e, 'Authentication failed with error');
 			throw new AuthenticationError('Magic Link authentication failed.');
 		}
 	}

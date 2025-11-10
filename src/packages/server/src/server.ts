@@ -12,7 +12,7 @@ import {
 	isTraceable,
 	GraphweaverPlugin,
 } from '@exogee/graphweaver';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import { ApolloServer, BaseContext, GraphQLRequest } from '@apollo/server';
 import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
 
@@ -110,7 +110,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 				this.schema = SchemaBuilder.build({ schemaDirectives: this.config.schemaDirectives });
 			}
 		} catch (error) {
-			logger.error(error, 'Unable to Start Graphweaver: Failed to build schema.');
+			safeErrorLog(logger, error, 'Unable to Start Graphweaver: Failed to build schema.');
 			throw error;
 		}
 

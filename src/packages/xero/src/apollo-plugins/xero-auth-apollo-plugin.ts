@@ -1,5 +1,5 @@
 import { ApolloServerPlugin } from '@apollo/server';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import { TokenSet, XeroClient } from 'xero-node';
 import { GraphQLError } from 'graphql';
 import { XeroBackendProvider } from '../provider';
@@ -70,7 +70,7 @@ export const XeroAuthApolloPlugin: ApolloServerPlugin<XeroTokenContext> = {
 			try {
 				token = await xero.apiCallback(authHeader);
 			} catch (error) {
-				logger.error(error, 'Error while exchanging code for a token');
+				safeErrorLog(logger, error, 'Error while exchanging code for a token');
 
 				// At this point we know we have a code but it's expired or it's been exchanged already.
 				// The only way for the user to recover is to go through the auth flow again, so we'll
@@ -89,7 +89,7 @@ export const XeroAuthApolloPlugin: ApolloServerPlugin<XeroTokenContext> = {
 			try {
 				token = new TokenSet(JSON.parse(authHeader));
 			} catch (error) {
-				logger.error(error);
+				safeErrorLog(logger, error);
 				logger.trace(
 					'Auth Header is either not valid JSON or could not be read by TokenSet, rejecting request.'
 				);
