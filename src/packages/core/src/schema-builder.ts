@@ -27,7 +27,7 @@ import {
 	ThunkObjMap,
 } from 'graphql';
 import { ObjMap } from 'graphql/jsutils/ObjMap';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 
 import { FieldMetadata, GetTypeFunction, ID, TypeValue } from './types';
@@ -363,7 +363,7 @@ const graphQLTypeForInput = (
 
 						fields[field.name] = { type: graphQLType };
 					} catch (e) {
-						logger.error(e);
+						safeErrorLog(logger, e);
 						throw new Error(
 							`Error while generating schema for input type. Field: ${field.name}, Type: ${String(field.getType())}, Input: ${input.name}. Original Error: ${e}`
 						);
@@ -454,7 +454,7 @@ export const graphQLTypeForEntity = (
 							},
 						};
 					} catch (e) {
-						logger.error(e);
+						safeErrorLog(logger, e);
 						throw new Error(
 							`Error while generating schema for entity. Field: ${field.name}, Type: ${String(field.getType())}, Entity: ${entity.name}. Original Error: ${e}`
 						);
@@ -923,7 +923,7 @@ class SchemaBuilderImplementation {
 						: {}),
 				};
 			} catch (e) {
-				logger.error(e);
+				safeErrorLog(logger, e);
 				throw new Error(
 					`Error while generating schema for args. Name: ${name}, Details: ${details}, Args: ${JSON.stringify(args)}. Original Error: ${e}`
 				);
@@ -1044,7 +1044,7 @@ class SchemaBuilderImplementation {
 							};
 						}
 					} catch (e) {
-						logger.error(e);
+						safeErrorLog(logger, e);
 						throw new Error(
 							`Error while generating schema for custom query. Name: ${customQuery.name}, Type: ${String(customQuery.getType())}, Args: ${JSON.stringify(customQuery.args)}. Original Error: ${e}`
 						);

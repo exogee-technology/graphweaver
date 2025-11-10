@@ -18,7 +18,7 @@ import type {
 	PaginationOptions,
 	TraceOptions,
 } from '@exogee/graphweaver';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import {
 	AutoPath,
 	LoadStrategy,
@@ -429,7 +429,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 			return result;
 		} catch (err) {
-			logger.error(`find ${this.entityType.name} error: ${JSON.stringify(err)}`);
+			safeErrorLog(logger, err, `find ${this.entityType.name} error`);
 
 			if ((err as PostgresError)?.routine === 'InitializeSessionUserId') {
 				// Throw if the user credentials are incorrect
@@ -867,7 +867,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 				}
 			}
 		} catch (err) {
-			logger.error(`find ${this.entityType.name} error: ${JSON.stringify(err)}`);
+			safeErrorLog(logger, err, `find ${this.entityType.name} error`);
 
 			if ((err as PostgresError)?.routine === 'InitializeSessionUserId') {
 				// Throw if the user credentials are incorrect

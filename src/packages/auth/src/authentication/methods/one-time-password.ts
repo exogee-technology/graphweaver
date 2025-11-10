@@ -1,7 +1,7 @@
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 import otpGenerator from 'otp-generator';
 import ms, { StringValue } from 'ms';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthenticationType, AuthorizationContext } from '../../types';
@@ -224,7 +224,7 @@ export class OneTimePassword extends BaseAuthMethod {
 			if (e instanceof ChallengeError) throw e;
 			if (e instanceof ForbiddenError) throw e;
 
-			logger.error(e, 'Authentication failed with error');
+			safeErrorLog(logger, e, 'Authentication failed with error');
 			throw new AuthenticationError('OTP authentication failed.');
 		}
 	}

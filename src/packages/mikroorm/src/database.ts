@@ -9,7 +9,7 @@ import {
 	Options,
 	ReflectMetadataProvider,
 } from '@mikro-orm/core';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 
 import type { EntityManager as PgEntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import type { EntityManager as MyEntityManager, MySqlDriver } from '@mikro-orm/mysql';
@@ -107,7 +107,7 @@ class DatabaseImplementation {
 				try {
 					result = await callback();
 				} catch (error) {
-					logger.error(error, 'Error in transaction');
+					safeErrorLog(logger, error, 'Error in transaction');
 					throw error;
 				} finally {
 					delete this.transactionalEm;

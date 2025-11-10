@@ -11,7 +11,7 @@ import {
 	hookManagerMap,
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
 
 import { AccessControlList, AuthorizationContext } from '../../types';
@@ -187,7 +187,7 @@ export class ApiKey<R extends string> extends BaseAuthMethod {
 
 				apiKey = entities[0];
 			} catch (err) {
-				logger.error(err);
+				safeErrorLog(logger, err);
 				if (err instanceof ValidationError) throw err;
 				if (err instanceof ForbiddenError)
 					throw new ForbiddenError(
@@ -243,7 +243,7 @@ export class ApiKey<R extends string> extends BaseAuthMethod {
 
 				apiKey = entity;
 			} catch (err) {
-				logger.error(err);
+				safeErrorLog(logger, err);
 				if (err instanceof ValidationError) throw err;
 				if (err instanceof ForbiddenError)
 					throw new ForbiddenError(
