@@ -5,7 +5,7 @@ import {
 	LogOnDidResolveOperationParams,
 	hookManagerMap,
 } from '@exogee/graphweaver';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
 import { hashPassword } from '../../utils/argon2id';
@@ -119,7 +119,7 @@ const obfuscateSensitiveValues = (
 
 		return obfuscateObject(variables);
 	} catch (e) {
-		logger.error(e, 'obfuscateSensitiveValues - error');
+		safeErrorLog(logger, e, 'obfuscateSensitiveValues - error');
 		return undefined;
 	}
 };

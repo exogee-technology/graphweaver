@@ -5,7 +5,7 @@ import * as opentelemetry from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { isTracingSuppressed, suppressTracing, unsuppressTracing } from '@opentelemetry/core';
 import { resourceFromAttributes } from '@opentelemetry/resources';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 
 import type { Instrumentation } from '@opentelemetry/instrumentation';
 
@@ -89,7 +89,7 @@ export const trace =
 				});
 				return result;
 			} catch (error: any) {
-				logger.error(error);
+				safeErrorLog(logger, error);
 				const errorMessage = String(error);
 				span.setStatus({ code: SpanStatusCode.ERROR, message: errorMessage });
 				span.recordException(error);

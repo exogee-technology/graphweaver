@@ -1,5 +1,5 @@
 import { Filter, graphweaverMetadata, isEntityMetadata } from '@exogee/graphweaver';
-import { logger } from '@exogee/logger';
+import { logger, safeErrorLog } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
 
 import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
@@ -251,7 +251,7 @@ export async function checkEntityPermission<G = unknown, D = unknown>(
 			throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 		}
 	} catch (error) {
-		logger.error(error, 'Error while checking entity permissions');
+		safeErrorLog(logger, error, 'Error while checking entity permissions');
 		if ((error as any).message === GENERIC_AUTH_ERROR_MESSAGE) {
 			throw error;
 		}
