@@ -745,8 +745,8 @@ importers:
         specifier: 3.7.1
         version: 3.7.1(react@19.2.0)
       xero-node:
-        specifier: 13.1.0
-        version: 13.1.0
+        specifier: 13.2.0
+        version: 13.2.0
     devDependencies:
       '@types/node':
         specifier: 24.10.0
@@ -1930,8 +1930,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       xero-node:
-        specifier: 13.1.0
-        version: 13.1.0
+        specifier: 13.2.0
+        version: 13.2.0
     devDependencies:
       '@types/node':
         specifier: 24.10.0
@@ -6796,9 +6796,6 @@ packages:
   axios-proxy-builder@0.1.2:
     resolution: {integrity: sha512-6uBVsBZzkB3tCC8iyx59mCjQckhB8+GQrI9Cop8eC7ybIsvs/KtnNgEBfRMSEa7GqK2VBGUzgjNYMdPIfotyPA==}
 
-  axios@1.12.2:
-    resolution: {integrity: sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==}
-
   axios@1.13.2:
     resolution: {integrity: sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==}
 
@@ -9850,8 +9847,8 @@ packages:
   oblivious-set@1.1.1:
     resolution: {integrity: sha512-Oh+8fK09mgGmAshFdH6hSVco6KZmd1tTwNFWj35OvzdmJTMZtAkbn05zar2iG3v6sDs1JLEtOiBGNb6BHwkb2w==}
 
-  oidc-token-hash@5.1.1:
-    resolution: {integrity: sha512-D7EmwxJV6DsEB6vOFLrBM2OzsVgQzgPWyHlV2OOAVj772n+WTXpudC9e9u5BVKQnYwaD30Ivhi9b+4UeBcGu9g==}
+  oidc-token-hash@5.2.0:
+    resolution: {integrity: sha512-6gj2m8cJZ+iSW8bm0FXdGF0YhIQbKrfP4yWTNzxc31U6MOjfEmB1rHvlYvxI1B7t7BCi1F2vYTT6YhtQRG4hxw==}
     engines: {node: ^10.13.0 || >=12.0.0}
 
   omggif@1.0.10:
@@ -11863,8 +11860,8 @@ packages:
     resolution: {integrity: sha512-h3Fbisa2nKGPxCpm89Hk33lBLsnaGBvctQopaBSOW/uIs6FTe1ATyAnKFJrzVs9vpGdsTe73WF3V4lIsk4Gacw==}
     engines: {node: '>=18'}
 
-  xero-node@13.1.0:
-    resolution: {integrity: sha512-Hw6Km3TJ9l8WRfHmiiOEH42cEPGsvEX+9nmNFIMDgZWAJJNGv6O82oZq99gBjU4w8Asen5EYGFUZLUNHdsxZmg==}
+  xero-node@13.2.0:
+    resolution: {integrity: sha512-lt3H5Jlqy/JjzA/lc5E3xfTc+sx6lcefyb2kpfqidTV/D04L/QbgU643dbAZtEvesUpdVSpaESvSKLZlVE2Mng==}
 
   xhr2@0.1.3:
     resolution: {integrity: sha512-6RmGK22QwC7yXB1CRwyLWuS2opPcKOlAu0ViAnyZjDlzrEmCKL4kLHkfvB8oMRWeztMsNoDGAjsMZY15w/4tTw==}
@@ -18982,14 +18979,6 @@ snapshots:
     dependencies:
       tunnel: 0.0.6
 
-  axios@1.12.2:
-    dependencies:
-      follow-redirects: 1.15.11
-      form-data: 4.0.4
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-
   axios@1.13.2:
     dependencies:
       follow-redirects: 1.15.11
@@ -22729,7 +22718,7 @@ snapshots:
 
   oblivious-set@1.1.1: {}
 
-  oidc-token-hash@5.1.1: {}
+  oidc-token-hash@5.2.0: {}
 
   omggif@1.0.10: {}
 
@@ -22777,7 +22766,7 @@ snapshots:
       jose: 4.15.9
       lru-cache: 6.0.0
       object-hash: 2.2.0
-      oidc-token-hash: 5.1.1
+      oidc-token-hash: 5.2.0
 
   optimism@0.18.1:
     dependencies:
@@ -24849,9 +24838,9 @@ snapshots:
     dependencies:
       is-wsl: 3.1.0
 
-  xero-node@13.1.0:
+  xero-node@13.2.0:
     dependencies:
-      axios: 1.12.2
+      axios: 1.13.2
       openid-client: 5.7.1
     transitivePeerDependencies:
       - debug
