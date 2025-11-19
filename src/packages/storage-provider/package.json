@@ -29,7 +29,7 @@
 	},
 	"devDependencies": {
 		"esbuild": "0.25.12",
-		"glob": "11.0.3",
+		"glob": "11.1.0",
 		"typescript": "5.9.3"
 	},
 	"keywords": [
