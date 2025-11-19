@@ -30,7 +30,7 @@
 		"@types/luxon": "3.7.1",
 		"decimal.js": "10.6.0",
 		"esbuild": "0.25.12",
-		"glob": "11.0.3",
+		"glob": "11.1.0",
 		"graphql": "16.11.0",
 		"typescript": "5.9.3"
 	},

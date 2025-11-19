@@ -72,7 +72,7 @@
 		"@types/node": "24.10.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.25.12",
-		"glob": "11.0.3",
+		"glob": "11.1.0",
 		"graphql": "16.11.0",
 		"tsx": "4.20.6",
 		"typescript": "5.9.3",
