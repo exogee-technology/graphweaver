@@ -57,7 +57,7 @@ importers:
     dependencies:
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@auth0/auth0-spa-js':
         specifier: 2.7.0
         version: 2.7.0
@@ -114,11 +114,11 @@ importers:
   examples/aws-cognito:
     dependencies:
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -154,11 +154,11 @@ importers:
   examples/databases:
     dependencies:
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -230,8 +230,8 @@ importers:
   examples/federation:
     dependencies:
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -262,7 +262,7 @@ importers:
     dependencies:
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@azure/msal-browser':
         specifier: 4.25.1
         version: 4.25.1
@@ -320,7 +320,7 @@ importers:
     dependencies:
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -484,11 +484,11 @@ importers:
         specifier: 3.13.5
         version: 3.13.5(@types/react@19.2.2)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.11.0))
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -552,7 +552,7 @@ importers:
     dependencies:
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -598,7 +598,7 @@ importers:
         version: 3.13.5(@types/react@19.2.2)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.11.0))
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -676,11 +676,11 @@ importers:
         specifier: 3.13.5
         version: 3.13.5(@types/react@19.2.2)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.11.0))
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -979,8 +979,8 @@ importers:
   packages/auth:
     dependencies:
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1381,8 +1381,8 @@ importers:
   packages/core:
     dependencies:
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@exogee/graphweaver-scalars':
         specifier: workspace:*
         version: link:../scalars
@@ -1614,8 +1614,8 @@ importers:
   packages/mikroorm:
     dependencies:
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@aws-sdk/client-secrets-manager':
         specifier: 3.928.0
         version: 3.928.0
@@ -1807,17 +1807,17 @@ importers:
   packages/server:
     dependencies:
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
-        version: 4.0.1(@apollo/server@5.0.0(graphql@16.11.0))
+        version: 4.0.1(@apollo/server@5.1.0(graphql@16.11.0))
       '@as-integrations/fastify':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.1)
+        version: 3.1.0(@apollo/server@5.1.0(graphql@16.11.0))(fastify@5.6.1)
       '@escape.tech/graphql-armor':
         specifier: 3.1.7
-        version: 3.1.7(@apollo/server@5.0.0(graphql@16.11.0))(@envelop/core@5.3.2)(@escape.tech/graphql-armor-types@0.7.0)
+        version: 3.1.7(@apollo/server@5.1.0(graphql@16.11.0))(@envelop/core@5.3.2)(@escape.tech/graphql-armor-types@0.7.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1915,8 +1915,8 @@ importers:
   packages/xero:
     dependencies:
       '@apollo/server':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.11.0)
+        specifier: 5.1.0
+        version: 5.1.0(graphql@16.11.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1995,8 +1995,8 @@ packages:
     peerDependencies:
       graphql: 16.11.0
 
-  '@apollo/server@5.0.0':
-    resolution: {integrity: sha512-PHopOm7pr69k7eDJvCBU4cZy9Z19qyCFKB9/luLnf2YCatu2WOYhoQPNr3dAoe//xv0RZFhxXbRcnK6IXIP7Nw==}
+  '@apollo/server@5.1.0':
+    resolution: {integrity: sha512-azqwwmKp23TMFQkjE66622sdY2Ao9d+LrebW++b3rFCNxU6XAl/vRwInOh9ejNgShDQzVS+bdCIFQnH9+r+N1A==}
     engines: {node: '>=20'}
     peerDependencies:
       graphql: 16.11.0
@@ -3661,6 +3661,12 @@ packages:
     peerDependencies:
       graphql: 16.11.0
 
+  '@graphql-tools/merge@9.1.5':
+    resolution: {integrity: sha512-eVcir6nCcOC/Wzv7ZAng3xec3dj6FehE8+h9TvgvUyrDEKVMdFfrO6etRFZ2hucWVcY8S6drx7zQx04N4lPM8Q==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      graphql: 16.11.0
+
   '@graphql-tools/optimize@1.4.0':
     resolution: {integrity: sha512-dJs/2XvZp+wgHH8T5J2TqptT9/6uVzIYvA6uFACha+ufvdMBedkfR4b4GbT8jAKLRARiqRTxy3dctnwkTM2tdw==}
     peerDependencies:
@@ -3683,8 +3689,8 @@ packages:
     peerDependencies:
       graphql: 16.11.0
 
-  '@graphql-tools/schema@10.0.25':
-    resolution: {integrity: sha512-/PqE8US8kdQ7lB9M5+jlW8AyVjRGCKU7TSktuW3WNKSKmDO0MK1wakvb5gGdyT49MjAIb4a3LWxIpwo5VygZuw==}
+  '@graphql-tools/schema@10.0.29':
+    resolution: {integrity: sha512-+Htiupnq6U/AWOEAJerIOGT1pAf4u43Q3n2JmFpqFfYJchz6sKWZ7L9Lpe/NusaaUQty/IOF+eQlNFypEaWxhg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: 16.11.0
@@ -3697,6 +3703,12 @@ packages:
 
   '@graphql-tools/utils@10.10.1':
     resolution: {integrity: sha512-9iOZ7x6tuIpp/dviNmTCSH1cDDNLIcrj6T3WKH9lU4nRWx5Pr0e7Faj7T/HmP2Njrjik63dJWuDVRxfQSTOc4g==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      graphql: 16.11.0
+
+  '@graphql-tools/utils@10.10.3':
+    resolution: {integrity: sha512-2EdYiefeLLxsoeZTukSNZJ0E/Z5NnWBUGK2VJa0DQj1scDhVd93HeT1eW9TszJOYmIh3eWAKLv58ri/1XUmdsQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: 16.11.0
@@ -5436,6 +5448,7 @@ packages:
   '@smithy/core@3.18.0':
     resolution: {integrity: sha512-vGSDXOJFZgOPTatSI1ly7Gwyy/d/R9zh2TO3y0JZ0uut5qQ88p9IaWaZYIWSSqtdekNM4CGok/JppxbAff4KcQ==}
     engines: {node: '>=18.0.0'}
+    deprecated: Please upgrade your lockfile to use the latest 3.x version of @smithy/core for various fixes, see https://github.com/smithy-lang/smithy-typescript/blob/main/packages/core/CHANGELOG.md
 
   '@smithy/credential-provider-imds@4.2.5':
     resolution: {integrity: sha512-BZwotjoZWn9+36nimwm/OLIcVe+KYRwzMjfhd4QT7QxPm9WY0HiOV8t/Wlh+HVUif0SBVV7ksq8//hPaBC/okQ==}
@@ -12039,7 +12052,7 @@ snapshots:
       '@apollo/utils.logger': 3.0.0
       graphql: 16.11.0
 
-  '@apollo/server@5.0.0(graphql@16.11.0)':
+  '@apollo/server@5.1.0(graphql@16.11.0)':
     dependencies:
       '@apollo/cache-control-types': 1.0.3(graphql@16.11.0)
       '@apollo/server-gateway-interface': 2.0.0(graphql@16.11.0)
@@ -12051,7 +12064,7 @@ snapshots:
       '@apollo/utils.logger': 3.0.0
       '@apollo/utils.usagereporting': 2.1.0(graphql@16.11.0)
       '@apollo/utils.withrequired': 3.0.0
-      '@graphql-tools/schema': 10.0.25(graphql@16.11.0)
+      '@graphql-tools/schema': 10.0.29(graphql@16.11.0)
       async-retry: 1.3.3
       body-parser: 2.2.0
       cors: 2.8.5
@@ -12158,14 +12171,14 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@as-integrations/aws-lambda@4.0.1(@apollo/server@5.0.0(graphql@16.11.0))':
+  '@as-integrations/aws-lambda@4.0.1(@apollo/server@5.1.0(graphql@16.11.0))':
     dependencies:
-      '@apollo/server': 5.0.0(graphql@16.11.0)
+      '@apollo/server': 5.1.0(graphql@16.11.0)
       '@types/aws-lambda': 8.10.156
 
-  '@as-integrations/fastify@3.1.0(@apollo/server@5.0.0(graphql@16.11.0))(fastify@5.6.1)':
+  '@as-integrations/fastify@3.1.0(@apollo/server@5.1.0(graphql@16.11.0))(fastify@5.6.1)':
     dependencies:
-      '@apollo/server': 5.0.0(graphql@16.11.0)
+      '@apollo/server': 5.1.0(graphql@16.11.0)
       fastify: 5.6.1
       fastify-plugin: 5.1.0
 
@@ -13957,7 +13970,7 @@ snapshots:
     dependencies:
       graphql: 16.11.0
 
-  '@escape.tech/graphql-armor@3.1.7(@apollo/server@5.0.0(graphql@16.11.0))(@envelop/core@5.3.2)(@escape.tech/graphql-armor-types@0.7.0)':
+  '@escape.tech/graphql-armor@3.1.7(@apollo/server@5.1.0(graphql@16.11.0))(@envelop/core@5.3.2)(@escape.tech/graphql-armor-types@0.7.0)':
     dependencies:
       '@escape.tech/graphql-armor-block-field-suggestions': 3.0.1
       '@escape.tech/graphql-armor-cost-limit': 2.4.3
@@ -13967,7 +13980,7 @@ snapshots:
       '@escape.tech/graphql-armor-max-tokens': 2.5.1
       graphql: 16.11.0
     optionalDependencies:
-      '@apollo/server': 5.0.0(graphql@16.11.0)
+      '@apollo/server': 5.1.0(graphql@16.11.0)
       '@envelop/core': 5.3.2
       '@escape.tech/graphql-armor-types': 0.7.0
 
@@ -14496,7 +14509,7 @@ snapshots:
   '@graphql-codegen/core@5.0.0(graphql@16.11.0)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 6.0.0(graphql@16.11.0)
-      '@graphql-tools/schema': 10.0.25(graphql@16.11.0)
+      '@graphql-tools/schema': 10.0.29(graphql@16.11.0)
       '@graphql-tools/utils': 10.10.1(graphql@16.11.0)
       graphql: 16.11.0
       tslib: 2.6.3
@@ -14663,7 +14676,7 @@ snapshots:
     dependencies:
       '@graphql-tools/batch-execute': 9.0.19(graphql@16.11.0)
       '@graphql-tools/executor': 1.4.9(graphql@16.11.0)
-      '@graphql-tools/schema': 10.0.25(graphql@16.11.0)
+      '@graphql-tools/schema': 10.0.29(graphql@16.11.0)
       '@graphql-tools/utils': 10.10.1(graphql@16.11.0)
       '@repeaterjs/repeater': 3.0.6
       '@whatwg-node/promise-helpers': 1.3.2
@@ -14814,7 +14827,7 @@ snapshots:
 
   '@graphql-tools/load@8.1.2(graphql@16.11.0)':
     dependencies:
-      '@graphql-tools/schema': 10.0.25(graphql@16.11.0)
+      '@graphql-tools/schema': 10.0.29(graphql@16.11.0)
       '@graphql-tools/utils': 10.10.1(graphql@16.11.0)
       graphql: 16.11.0
       p-limit: 3.1.0
@@ -14823,6 +14836,12 @@ snapshots:
   '@graphql-tools/merge@9.1.1(graphql@16.11.0)':
     dependencies:
       '@graphql-tools/utils': 10.10.1(graphql@16.11.0)
+      graphql: 16.11.0
+      tslib: 2.8.1
+
+  '@graphql-tools/merge@9.1.5(graphql@16.11.0)':
+    dependencies:
+      '@graphql-tools/utils': 10.10.3(graphql@16.11.0)
       graphql: 16.11.0
       tslib: 2.8.1
 
@@ -14855,10 +14874,10 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@graphql-tools/schema@10.0.25(graphql@16.11.0)':
+  '@graphql-tools/schema@10.0.29(graphql@16.11.0)':
     dependencies:
-      '@graphql-tools/merge': 9.1.1(graphql@16.11.0)
-      '@graphql-tools/utils': 10.10.1(graphql@16.11.0)
+      '@graphql-tools/merge': 9.1.5(graphql@16.11.0)
+      '@graphql-tools/utils': 10.10.3(graphql@16.11.0)
       graphql: 16.11.0
       tslib: 2.8.1
 
@@ -14893,6 +14912,14 @@ snapshots:
       graphql: 16.11.0
       tslib: 2.8.1
 
+  '@graphql-tools/utils@10.10.3(graphql@16.11.0)':
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.11.0)
+      '@whatwg-node/promise-helpers': 1.3.2
+      cross-inspect: 1.0.1
+      graphql: 16.11.0
+      tslib: 2.8.1
+
   '@graphql-tools/utils@10.9.1(graphql@16.11.0)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.11.0)
@@ -14911,7 +14938,7 @@ snapshots:
   '@graphql-tools/wrap@10.1.4(graphql@16.11.0)':
     dependencies:
       '@graphql-tools/delegate': 10.2.23(graphql@16.11.0)
-      '@graphql-tools/schema': 10.0.25(graphql@16.11.0)
+      '@graphql-tools/schema': 10.0.29(graphql@16.11.0)
       '@graphql-tools/utils': 10.10.1(graphql@16.11.0)
       '@whatwg-node/promise-helpers': 1.3.2
       graphql: 16.11.0
