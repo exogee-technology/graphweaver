@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@opentelemetry/instrumentation": "0.208.0",
 		"@types/pluralize": "0.0.33",
-		"esbuild": "0.25.12",
+		"esbuild": "0.27.0",
 		"glob": "11.1.0",
 		"typescript": "5.9.3",
 		"vitest": "4.0.3"
