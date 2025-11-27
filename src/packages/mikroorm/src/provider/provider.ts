@@ -214,19 +214,13 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	private getDbType(): DatabaseType {
 		const driver = this.em.getDriver().constructor.name;
 		// This used to import the actual drivers, but since they're optional it makes more sense
-		// to just use the strings.
-		switch (driver) {
-			case 'MsSqlDriver':
-				return 'mssql';
-			case 'MySqlDriver':
-				return 'mysql';
-			case 'PostgreSqlDriver':
-				return 'postgresql';
-			case 'SqliteDriver':
-				return 'sqlite';
-			default:
-				throw new Error(`This driver (${driver}) is not supported!`);
-		}
+		// to just use the strings. Using startsWith to handle ESBuild minification that may rename classes.
+		if (driver.startsWith('MsSqlDriver')) return 'mssql';
+		if (driver.startsWith('MySqlDriver')) return 'mysql';
+		if (driver.startsWith('PostgreSqlDriver')) return 'postgresql';
+		if (driver.startsWith('SqliteDriver')) return 'sqlite';
+
+		throw new Error(`This driver (${driver}) is not supported!`);
 	}
 
 	private connectToDatabase = async () => {
