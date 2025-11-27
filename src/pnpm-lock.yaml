@@ -1263,10 +1263,10 @@ importers:
         version: 2.1033.0
       aws-cdk-lib:
         specifier: 2.226.0
-        version: 2.226.0(constructs@10.4.2)
+        version: 2.226.0(constructs@10.4.3)
       constructs:
-        specifier: 10.4.2
-        version: 10.4.2
+        specifier: 10.4.3
+        version: 10.4.3
       dotenv-cli:
         specifier: 10.0.0
         version: 10.0.0
@@ -7448,8 +7448,8 @@ packages:
   constant-case@3.0.4:
     resolution: {integrity: sha512-I2hSBi7Vvs7BEuJDr5dDHfzb/Ruj3FyvFyh7KLilAjNQw3Be+xgqUBA2W6scVEcL0hL1dwPRtIqEPVUCKkSsyQ==}
 
-  constructs@10.4.2:
-    resolution: {integrity: sha512-wsNxBlAott2qg8Zv87q3eYZYgheb9lchtBfjHzzLHtXbttwSrHPs1NNQbBrmbb1YZvYg2+Vh0Dor76w4mFxJkA==}
+  constructs@10.4.3:
+    resolution: {integrity: sha512-3+ZB67qWGM1vEstNpj6pGaLNN1qz4gxC1CBhEUhZDZk0PqzQWY65IzC1Doq17MGPa9xa2wJ1G/DJ3swU8kWAHQ==}
 
   content-disposition@0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
@@ -19201,12 +19201,12 @@ snapshots:
 
   await-to-js@3.0.0: {}
 
-  aws-cdk-lib@2.226.0(constructs@10.4.2):
+  aws-cdk-lib@2.226.0(constructs@10.4.3):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.242
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
       '@aws-cdk/cloud-assembly-schema': 48.20.0
-      constructs: 10.4.2
+      constructs: 10.4.3
 
   aws-cdk@2.1033.0:
     optionalDependencies:
@@ -19829,7 +19829,7 @@ snapshots:
       tslib: 2.8.1
       upper-case: 2.0.2
 
-  constructs@10.4.2: {}
+  constructs@10.4.3: {}
 
   content-disposition@0.5.4:
     dependencies:
