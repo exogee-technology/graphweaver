@@ -23,7 +23,7 @@
 		"bin"
 	],
 	"dependencies": {
-		"@graphql-tools/utils": "10.10.1",
+		"@graphql-tools/utils": "10.11.0",
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
 		"@mikro-orm/core": "6",
