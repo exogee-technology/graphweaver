@@ -1085,6 +1085,9 @@ importers:
       '@azure/msal-browser':
         specifier: 4.25.1
         version: 4.25.1
+      '@azure/msal-react':
+        specifier: 3.0.22
+        version: 3.0.22(@azure/msal-browser@4.25.1)(react@19.2.0)
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -2439,6 +2442,13 @@ packages:
   '@azure/msal-node@3.8.0':
     resolution: {integrity: sha512-23BXm82Mp5XnRhrcd4mrHa0xuUNRp96ivu3nRatrfdAqjoeWAGyD0eEAafxAOHAEWWmdlyFK4ELFcdziXyw2sA==}
     engines: {node: '>=16'}
+
+  '@azure/msal-react@3.0.22':
+    resolution: {integrity: sha512-ZiNr/uQr0f28UGcrMdlBNRlMzA7Mzp0sW4eOR7/rmVBykv4shT2y6PG5+CDCQlSL+AAdoR8pYbaOkuAtPR+37g==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@azure/msal-browser': ^4.26.2
+      react: ^16.8.0 || ^17 || ^18 || ^19
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -13375,6 +13385,11 @@ snapshots:
       '@azure/msal-common': 15.13.0
       jsonwebtoken: 9.0.2
       uuid: 8.3.2
+
+  '@azure/msal-react@3.0.22(@azure/msal-browser@4.25.1)(react@19.2.0)':
+    dependencies:
+      '@azure/msal-browser': 4.25.1
+      react: 19.2.0
 
   '@babel/code-frame@7.27.1':
     dependencies:
