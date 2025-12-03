@@ -9,7 +9,7 @@ export interface MicrosoftEntraLogoutProps {
 export const MicrosoftEntraLogout = ({ redirectTo }: MicrosoftEntraLogoutProps) => {
 	const handleLogout = useCallback(
 		() => publicClientApplication.logoutRedirect({ postLogoutRedirectUri: redirectTo }),
-		[]
+		[publicClientApplication, redirectTo]
 	);
 
 	return <Logout onLogout={handleLogout} />;
