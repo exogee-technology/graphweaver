@@ -43,6 +43,12 @@ async function main() {
 		await execAsync('pwd');
 		await execAsync('pnpm i --ignore-workspace --no-lockfile');
 
+		// Force the server to start on port 9001 to match the tests.
+		const packageJsonPath = 'package.json';
+		const packageJson = JSON.parse(await fs.promises.readFile(packageJsonPath, 'utf-8'));
+		packageJson.scripts.start = `${packageJson.scripts.start ?? 'graphweaver-server'} --port 9001`;
+		await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+
 		// On Windows, add a small delay to allow filesystem operations to complete
 		// This prevents race conditions with pnpm symlink creation
 		if (process.platform === 'win32') {

@@ -53,35 +53,10 @@ jobs:
         timeout-minutes: 7
         run: |
           pnpm start-server &
-          $maxRetries = 30
-          $retryInterval = 1
-          $url = "http://localhost:9000/graphql"
-
-          for ($i = 0; $i -lt $maxRetries; $i++) {
-            try {
-              $response = Invoke-WebRequest -Uri $url -Method "GET" -UseBasicParsing -ErrorAction Stop
-              if ($response.StatusCode -eq 200) {
-                Write-Host "Server is up and running."
-                break
-              }
-            } catch {
-              Write-Host "Server not ready yet. Retrying in $retryInterval second(s)..."
-              Start-Sleep -Seconds $retryInterval
-            }
-          }
-
-          if ($i -eq $maxRetries) {
-            Write-Host "Server failed to start within the specified time."
-            exit 1
-          }
-          pnpm test-sqlite
-          pnpm test-ui-sqlite
+          sleep 5 &&
+          pnpm test-sqlite &&
+          pnpm test-ui-sqlite &&
+          taskkill /F /IM node.exe /T
 
         env:
           CI: true
-
-      - name: Stop Server
-        if: always()
-        working-directory: src/packages/end-to-end
-        run: |
-          taskkill /F /IM node.exe /T
