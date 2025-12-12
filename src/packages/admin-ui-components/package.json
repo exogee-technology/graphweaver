@@ -39,7 +39,7 @@
 		"@tiptap/starter-kit": "3.13.0",
 		"@types/react-dom": "19.2.3",
 		"clsx": "2.1.1",
-		"downshift": "9.0.12",
+		"downshift": "9.0.13",
 		"graphiql": "4.1.2",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.7.2",
