@@ -98,7 +98,7 @@ export const importDataSource = async (
 			let overwrite = true;
 			if (!overwriteAllFiles && file.needOverwriteWarning && existsSync(fileFullPath)) {
 				const { default: inquirer } = await import('inquirer');
-				const prompt = await inquirer.prompt<any, { overwrite: boolean }>([
+				const prompt = await inquirer.prompt<{ overwrite: boolean }>([
 					{
 						type: 'confirm',
 						name: 'overwrite',

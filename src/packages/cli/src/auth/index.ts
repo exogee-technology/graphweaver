@@ -33,7 +33,7 @@ export const initAuth = async ({
 		});
 
 		const { default: inquirer } = await import('inquirer');
-		const prompt = await inquirer.prompt<any, { tableName: string }>([
+		const prompt = await inquirer.prompt<{ tableName: string }>([
 			{
 				type: 'input',
 				name: 'tableName',
