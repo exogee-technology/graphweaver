@@ -28,7 +28,7 @@
 		"class-validator": "0.14.3",
 		"dataloader": "2.2.3",
 		"dotenv": "17.2.3",
-		"graphql": "16.11.0",
+		"graphql": "16.12.0",
 		"lodash": "4.17.21",
 		"luxon": "3.7.2"
 	},

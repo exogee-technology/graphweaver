@@ -28,7 +28,7 @@
 		"@mikro-orm/mysql": "6.5.8",
 		"dotenv": "17.2.3",
 		"got-cjs": "12.5.4",
-		"graphql": "16.11.0"
+		"graphql": "16.12.0"
 	},
 	"devDependencies": {
 		"@types/node": "24.10.0",

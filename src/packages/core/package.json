@@ -35,7 +35,7 @@
 		"async-mutex": "0.5.0",
 		"class-validator": "0.14.3",
 		"dataloader": "2.2.3",
-		"graphql": "16.11.0",
+		"graphql": "16.12.0",
 		"graphql-parse-resolve-info": "4.14.1",
 		"graphql-query-complexity": "1.1.0",
 		"pluralize": "8.0.0"
