@@ -7,13 +7,13 @@ settings:
 overrides:
   d3-color: 3.1.0
   '@babel/traverse': 7.23.2
-  '@mikro-orm/core': 6.5.8
-  '@mikro-orm/knex': 6.5.8
-  '@mikro-orm/mssql': 6.5.8
-  '@mikro-orm/postgresql': 6.5.8
-  '@mikro-orm/mysql': 6.5.8
-  '@mikro-orm/sqlite': 6.5.8
-  graphql: 16.11.0
+  '@mikro-orm/core': 6.6.2
+  '@mikro-orm/knex': 6.6.2
+  '@mikro-orm/mssql': 6.6.2
+  '@mikro-orm/postgresql': 6.6.2
+  '@mikro-orm/mysql': 6.6.2
+  '@mikro-orm/sqlite': 6.6.2
+  graphql: 16.12.0
 
 importers:
 
@@ -83,16 +83,16 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphweaver:
         specifier: workspace:*
@@ -135,7 +135,7 @@ importers:
         specifier: 17.2.3
         version: 17.2.3
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       react:
         specifier: 19.2.3
@@ -178,22 +178,22 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.3)(pg@8.16.3)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)(mysql2@3.15.3)(pg@8.16.3)
       '@mikro-orm/mysql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)
       '@mikro-orm/postgresql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.3)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)(mysql2@3.15.3)
       class-validator:
         specifier: 0.14.3
         version: 0.14.3
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphql-scalars:
         specifier: 1.25.0
@@ -288,16 +288,16 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphweaver:
         specifier: workspace:*
@@ -343,19 +343,19 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@okta/okta-auth-js':
         specifier: 7.14.0
         version: 7.14.0(encoding@0.1.13)
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphweaver:
         specifier: workspace:*
@@ -386,14 +386,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/mysql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       dotenv:
         specifier: 17.2.3
         version: 17.2.3
@@ -401,7 +401,7 @@ importers:
         specifier: 12.5.4
         version: 12.5.4
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
     devDependencies:
       '@types/node':
@@ -438,11 +438,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/mysql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       dotenv:
         specifier: 17.2.3
         version: 17.2.3
@@ -450,7 +450,7 @@ importers:
         specifier: 12.5.4
         version: 12.5.4
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphweaver:
         specifier: workspace:*
@@ -508,16 +508,16 @@ importers:
         specifier: workspace:*
         version: link:../../packages/storage-provider
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)
       '@mikro-orm/postgresql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphweaver:
         specifier: workspace:*
@@ -566,16 +566,16 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)(tedious@19.1.3)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)(tedious@19.1.3)
       '@mikro-orm/mssql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       tedious:
         specifier: 19.1.3
@@ -615,14 +615,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@nivo/bar':
         specifier: 0.99.0
         version: 0.99.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -639,7 +639,7 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       luxon:
         specifier: 3.7.2
@@ -727,7 +727,7 @@ importers:
         specifier: 10.6.0
         version: 10.6.0
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphweaver:
         specifier: workspace:*
@@ -813,7 +813,7 @@ importers:
         specifier: 11.1.0
         version: 11.1.0
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       typescript:
         specifier: 5.9.3
@@ -940,7 +940,7 @@ importers:
         specifier: 11.1.0
         version: 11.1.0
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       react:
         specifier: 19.2.3
@@ -1000,7 +1000,7 @@ importers:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.12.0)
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       hash-wasm:
         specifier: 4.12.0
@@ -1070,7 +1070,7 @@ importers:
         specifier: ^2.2.9
         version: 2.4.6(@types/react@19.2.7)(react@19.2.3)
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       web3-token:
         specifier: 1.0.6
@@ -1131,7 +1131,7 @@ importers:
         specifier: workspace:*
         version: link:../rest-legacy
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
     devDependencies:
       '@exogee/graphweaver':
@@ -1201,7 +1201,7 @@ importers:
         specifier: 11.1.0
         version: 11.1.0
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       hash-wasm:
         specifier: 4.12.0
@@ -1298,23 +1298,23 @@ importers:
         specifier: 10.11.0
         version: 10.11.0(graphql@16.12.0)
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/mssql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/mysql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/postgresql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       chokidar:
         specifier: 4.0.3
         version: 4.0.3
@@ -1423,7 +1423,7 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphql-parse-resolve-info:
         specifier: 4.14.1
@@ -1475,14 +1475,14 @@ importers:
         specifier: workspace:*
         version: link:../storage-provider
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/postgresql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)
       dotenv-cli:
         specifier: 10.0.0
         version: 10.0.0
@@ -1490,7 +1490,7 @@ importers:
         specifier: 5.8.0
         version: 5.8.0
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphweaver:
         specifier: workspace:*
@@ -1589,11 +1589,11 @@ importers:
   packages/mikro-orm-sqlite-wasm:
     dependencies:
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       node-sqlite3-wasm:
         specifier: 0.8.50
         version: 0.8.50
@@ -1648,23 +1648,23 @@ importers:
         version: 0.2.2
     devDependencies:
       '@mikro-orm/core':
-        specifier: 6.5.8
-        version: 6.5.8
+        specifier: 6.6.2
+        version: 6.6.2
       '@mikro-orm/knex':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/mssql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/mysql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/postgresql':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.5.8
-        version: 6.5.8(@mikro-orm/core@6.5.8)
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
@@ -1678,7 +1678,7 @@ importers:
         specifier: 11.1.0
         version: 11.1.0
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       tsx:
         specifier: 4.20.6
@@ -1748,7 +1748,7 @@ importers:
         specifier: 17.2.3
         version: 17.2.3
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       lodash:
         specifier: 4.17.21
@@ -1801,7 +1801,7 @@ importers:
         specifier: 11.1.0
         version: 11.1.0
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       typescript:
         specifier: 5.9.3
@@ -1840,7 +1840,7 @@ importers:
         specifier: 5.6.2
         version: 5.6.2
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       graphql-deduplicator:
         specifier: 2.0.6
@@ -1946,7 +1946,7 @@ importers:
         specifier: 11.1.0
         version: 11.1.0
       graphql:
-        specifier: 16.11.0
+        specifier: 16.12.0
         version: 16.12.0
       prettier:
         specifier: 3.6.2
@@ -1969,12 +1969,12 @@ packages:
   '@apollo/cache-control-types@1.0.3':
     resolution: {integrity: sha512-F17/vCp7QVwom9eG7ToauIKdAxpSoadsJnqIfyryLFSkLSOEqu+eC5Z3N8OXcUVStuOMcNHlyraRsA6rRICu4g==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/client@3.13.5':
     resolution: {integrity: sha512-ceHa1lApLAiGmUur4V+G/CrjwVwHYujfB7U5HM++poCgHpfGn6eet8YGM93fgeWjYX85SaqwdZbQk18IVwhRHg==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
       graphql-ws: ^5.5.5 || ^6.0.3
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc
@@ -1996,13 +1996,13 @@ packages:
   '@apollo/server-gateway-interface@2.0.0':
     resolution: {integrity: sha512-3HEMD6fSantG2My3jWkb9dvfkF9vJ4BDLRjMgsnD790VINtuPaEp+h3Hg9HOHiWkML6QsOhnaRqZ+gvhp3y8Nw==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/server@5.2.0':
     resolution: {integrity: sha512-OEAl5bwVitkvVkmZlgWksSnQ10FUr6q2qJMdkexs83lsvOGmd/y81X5LoETmKZux8UiQsy/A/xzP00b8hTHH/w==}
     engines: {node: '>=20'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/usage-reporting-protobuf@4.1.1':
     resolution: {integrity: sha512-u40dIUePHaSKVshcedO7Wp+mPiZsaU6xjv9J+VyxpoU/zL6Jle+9zWeG98tr/+SZ0nZ4OXhrbb8SNr0rAPpIDA==}
@@ -2015,7 +2015,7 @@ packages:
     resolution: {integrity: sha512-EsPIBqsSt2BwDsv8Wu76LK5R1KtsVkNoO4b0M5aK0hx+dGg9xJXuqlr7Fo34Dl+y83jmzn+UvEW+t1/GP2melA==}
     engines: {node: '>=14'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/utils.fetcher@3.1.0':
     resolution: {integrity: sha512-Z3QAyrsQkvrdTuHAFwWDNd+0l50guwoQUoaDQssLOjkmnmVuvXlJykqlEJolio+4rFwBnWdoY1ByFdKaQEcm7A==}
@@ -2037,31 +2037,31 @@ packages:
     resolution: {integrity: sha512-9M4LUXV/fQBh8vZWlLvb/HyyhjJ77/I5ZKu+NBWV/BmYGyRmoEP9EVAy7LCVoY3t8BDcyCAGfxJaLFCSuQkPUg==}
     engines: {node: '>=14'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/utils.removealiases@2.0.1':
     resolution: {integrity: sha512-0joRc2HBO4u594Op1nev+mUF6yRnxoUH64xw8x3bX7n8QBDYdeYgY4tF0vJReTy+zdn2xv6fMsquATSgC722FA==}
     engines: {node: '>=14'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/utils.sortast@2.0.1':
     resolution: {integrity: sha512-eciIavsWpJ09za1pn37wpsCGrQNXUhM0TktnZmHwO+Zy9O4fu/WdB4+5BvVhFiZYOXvfjzJUcc+hsIV8RUOtMw==}
     engines: {node: '>=14'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/utils.stripsensitiveliterals@2.0.1':
     resolution: {integrity: sha512-QJs7HtzXS/JIPMKWimFnUMK7VjkGQTzqD9bKD1h3iuPAqLsxd0mUNVbkYOPTsDhUKgcvUOfOqOJWYohAKMvcSA==}
     engines: {node: '>=14'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/utils.usagereporting@2.1.0':
     resolution: {integrity: sha512-LPSlBrn+S17oBy5eWkrRSGb98sWmnEzo3DPTZgp8IQc8sJe0prDgDuppGq4NeQlpoqEHz0hQeYHAOA0Z3aQsxQ==}
     engines: {node: '>=14'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@apollo/utils.withrequired@3.0.0':
     resolution: {integrity: sha512-aaxeavfJ+RHboh7c2ofO5HHtQobGX4AgUujXP4CXpREHp9fQ9jPi6K9T1jrAKe7HIipoP0OJ1gd6JamSkFIpvA==}
@@ -2071,13 +2071,13 @@ packages:
     resolution: {integrity: sha512-9anThAaj1dQr6IGmzBMcfzOQKTa5artjuPmw8NYK/fiGEMjADbSguBY2FMDykt+QhilR3wc9VA/3yVju7JHg7Q==}
     hasBin: true
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@ardatan/relay-compiler@12.0.3':
     resolution: {integrity: sha512-mBDFOGvAoVlWaWqs3hm1AciGHSQE1rqFc/liZTyYz/Oek9yZdT5H26pH2zAFuEiTiBVPPyMuqf5VjOFPI2DGsQ==}
     hasBin: true
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@as-integrations/aws-lambda@4.0.1':
     resolution: {integrity: sha512-1vpz2V6MhuPhO0m5vE8NUVR+4RoM5nDO/iH+IVHovE0aOWUIoDbAqQDKCUXTV8/nJO/GBycQt/z/Mp9MX79Hkg==}
@@ -3585,7 +3585,7 @@ packages:
   '@graphiql/plugin-doc-explorer@0.2.2':
     resolution: {integrity: sha512-0Pj0vsNFfZJZJ3moC7O9xF1Dt2KWyvdxke+cFFZQLN1L2VxdTUa4cfGSg5ujv/ikDUUyyPQNTZuyXzagM4NG5g==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
       react: ^18 || ^19
       react-dom: ^18 || ^19
 
@@ -3598,14 +3598,14 @@ packages:
   '@graphiql/react@0.34.1':
     resolution: {integrity: sha512-Ykqt5uzIRKcbriyVisr/y6BwxK9ZIsilaJFPbajDAcoDiXlGEx/Pl86OcJNjslsqn79M9BkrphWvWa7cBGz3Sw==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
       react: ^18 || ^19
       react-dom: ^18 || ^19
 
   '@graphiql/toolkit@0.11.3':
     resolution: {integrity: sha512-Glf0fK1cdHLNq52UWPzfSrYIJuNxy8h4451Pw1ZVpJ7dtU+tm7GVVC64UjEDQ/v2j3fnG4cX8jvR75IvfL6nzQ==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
       graphql-ws: '>= 4.5.0'
     peerDependenciesMeta:
       graphql-ws:
@@ -3614,13 +3614,13 @@ packages:
   '@graphql-codegen/add@3.2.3':
     resolution: {integrity: sha512-sQOnWpMko4JLeykwyjFTxnhqjd/3NOG2OyMuvK76Wnnwh8DRrNf2VEs2kmSvLl7MndMlOj7Kh5U154dVcvhmKQ==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/add@6.0.0':
     resolution: {integrity: sha512-biFdaURX0KTwEJPQ1wkT6BRgNasqgQ5KbCI1a3zwtLtO7XTo7/vKITPylmiU27K5DSOWYnY/1jfSqUAEBuhZrQ==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/cli@6.0.1':
     resolution: {integrity: sha512-6iP91joxb7phdicDrIF8Cv9ah2QpPVXUUu7rbOaQKvqey+QKYmHcxGCi9r5/7p4lUiHZPQvfB7xDHURHQca1SA==}
@@ -3628,7 +3628,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@parcel/watcher': ^2.1.0
-      graphql: 16.11.0
+      graphql: 16.12.0
     peerDependenciesMeta:
       '@parcel/watcher':
         optional: true
@@ -3637,7 +3637,7 @@ packages:
     resolution: {integrity: sha512-MYMy9dIlAgT3q1U8WUys6Y8yt/T9WLsm1DczRtrCpV5N11v4Rlg3hGWQmEvhJtBbWxgzfYoHZHb0TohtbLkJ+g==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
       graphql-sock: ^1.0.0
     peerDependenciesMeta:
       graphql-sock:
@@ -3647,54 +3647,54 @@ packages:
     resolution: {integrity: sha512-vLTEW0m8LbE4xgRwbFwCdYxVkJ1dBlVJbQyLb9Q7bHnVFgHAP982Xo8Uv7FuPBmON+2IbTjkCqhFLHVZbqpvjQ==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/gql-tag-operations@5.0.2':
     resolution: {integrity: sha512-iK+LFGv4ihHKeerADFPTL7Iq4iNr+J1jm2+GUMtwTSAL4nGk+BdfyruV7eR53R7Des8NFdI+9hBzKbbob7VwGQ==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/near-operation-file-preset@3.1.0':
     resolution: {integrity: sha512-sXIIi0BPP3IcARdzSztpE51oJTcGB67hi7ddBYfLinks/R/5aFG1Ry/J61707Kt+6Q5WhTnf5XAQUAqi6200yA==}
     engines: {node: '>= 16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/plugin-helpers@3.1.2':
     resolution: {integrity: sha512-emOQiHyIliVOIjKVKdsI5MXj312zmRDwmHpyUTZMjfpvxq/UVAHUJIVdVf+lnjjrI+LXBTgMlTWTgHQfmICxjg==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/plugin-helpers@6.0.0':
     resolution: {integrity: sha512-Z7P89vViJvQakRyMbq/JF2iPLruRFOwOB6IXsuSvV/BptuuEd7fsGPuEf8bdjjDxUY0pJZnFN8oC7jIQ8p9GKA==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/plugin-helpers@6.1.0':
     resolution: {integrity: sha512-JJypehWTcty9kxKiqH7TQOetkGdOYjY78RHlI+23qB59cV2wxjFFVf8l7kmuXS4cpGVUNfIjFhVr7A1W7JMtdA==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/schema-ast@5.0.0':
     resolution: {integrity: sha512-jn7Q3PKQc0FxXjbpo9trxzlz/GSFQWxL042l0iC8iSbM/Ar+M7uyBwMtXPsev/3Razk+osQyreghIz0d2+6F7Q==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/typed-document-node@6.0.2':
     resolution: {integrity: sha512-nqcD23F87jLPQ1P2jJaepNAa4SY8Xy2soacPyQMwvxWtbRSXlg/LBUjtbEkCaU2SuLoa4L3w8VPuGoQ3EWUzeg==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/typescript-operations@5.0.6':
     resolution: {integrity: sha512-pkR/82qWO50OHWeV3BiDuVxNFxiJerpmNjFep71VlabADXiU3GIeSaDd6G9a1/SCniVTXZQk2ivCb0ZJiuwo1A==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
       graphql-sock: ^1.0.0
     peerDependenciesMeta:
       graphql-sock:
@@ -3704,36 +3704,36 @@ packages:
     resolution: {integrity: sha512-ecuzzqoZEHCtlxaEXL1LQTrfzVYwNNtbVUBHc/KQDfkJIQZon+dG5ZXOoJ4BpbRA2L99yTx+TZc2VkpOVfSypw==}
     engines: {node: '>= 16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/typescript@5.0.2':
     resolution: {integrity: sha512-OJYXpS9SRf4VFzqu3ZH/RmTftGhAVTCmscH63iPlvTlCT8NBmpSHdZ875AEa38LugdL8XgUcGsI3pprP3e5j/w==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/typescript@5.0.6':
     resolution: {integrity: sha512-rKW3wYInAnmO/DmKjhW3/KLMxUauUCZuMEPQmuoHChnwIuMjn5kVXCdArGyQqv+vVtFj55aS+sJLN4MPNNjSNg==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/visitor-plugin-common@2.13.8':
     resolution: {integrity: sha512-IQWu99YV4wt8hGxIbBQPtqRuaWZhkQRG2IZKbMoSvh0vGeWb3dB0n0hSgKaOOxDY+tljtOf9MTcUYvJslQucMQ==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/visitor-plugin-common@6.1.0':
     resolution: {integrity: sha512-AvGO1pe+b/kAa7+WBDlNDXOruRZWv/NnhLHgTggiW2XWRv33biuzg4cF1UTdpR2jmESZzJU4kXngLLX8RYJWLA==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-codegen/visitor-plugin-common@6.2.1':
     resolution: {integrity: sha512-5QT1hCV3286mrmoIC7vlFXsTlwELMexhuFIkjh+oVGGL1E8hxkIPAU0kfH/lsPbQHKi8zKmic2pl3tAdyYxNyg==}
     engines: {node: '>=16'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-hive/signal@1.0.0':
     resolution: {integrity: sha512-RiwLMc89lTjvyLEivZ/qxAC5nBHoS2CtsWFSOsN35sxG9zoo5Z+JsFHM8MlvmO9yt+MJNIyC5MLE1rsbOphlag==}
@@ -3743,189 +3743,189 @@ packages:
     resolution: {integrity: sha512-ssD2wNxeOTRcUEkuGcp0KfZAGstL9YLTe/y3erTDZtOs2wL1TJESw8NVAp+3oUHPeHKBZQB4Z6RFEbPgMdT2wA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/batch-execute@9.0.19':
     resolution: {integrity: sha512-VGamgY4PLzSx48IHPoblRw0oTaBa7S26RpZXt0Y4NN90ytoE0LutlpB2484RbkfcTjv9wa64QD474+YP1kEgGA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/code-file-loader@8.1.22':
     resolution: {integrity: sha512-FSka29kqFkfFmw36CwoQ+4iyhchxfEzPbXOi37lCEjWLHudGaPkXc3RyB9LdmBxx3g3GHEu43a5n5W8gfcrMdA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/delegate@10.2.23':
     resolution: {integrity: sha512-xrPtl7f1LxS+B6o+W7ueuQh67CwRkfl+UKJncaslnqYdkxKmNBB4wnzVcW8ZsRdwbsla/v43PtwAvSlzxCzq2w==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/documents@1.0.1':
     resolution: {integrity: sha512-aweoMH15wNJ8g7b2r4C4WRuJxZ0ca8HtNO54rkye/3duxTkW4fGBEutCx03jCIr5+a1l+4vFJNP859QnAVBVCA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/executor-common@0.0.4':
     resolution: {integrity: sha512-SEH/OWR+sHbknqZyROCFHcRrbZeUAyjCsgpVWCRjqjqRbiJiXq6TxNIIOmpXgkrXWW/2Ev4Wms6YSGJXjdCs6Q==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/executor-common@0.0.6':
     resolution: {integrity: sha512-JAH/R1zf77CSkpYATIJw+eOJwsbWocdDjY+avY7G+P5HCXxwQjAjWVkJI1QJBQYjPQDVxwf1fmTZlIN3VOadow==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/executor-graphql-ws@2.0.7':
     resolution: {integrity: sha512-J27za7sKF6RjhmvSOwOQFeNhNHyP4f4niqPnerJmq73OtLx9Y2PGOhkXOEB0PjhvPJceuttkD2O1yMgEkTGs3Q==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/executor-http@1.3.3':
     resolution: {integrity: sha512-LIy+l08/Ivl8f8sMiHW2ebyck59JzyzO/yF9SFS4NH6MJZUezA1xThUXCDIKhHiD56h/gPojbkpcFvM2CbNE7A==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/executor-legacy-ws@1.1.19':
     resolution: {integrity: sha512-bEbv/SlEdhWQD0WZLUX1kOenEdVZk1yYtilrAWjRUgfHRZoEkY9s+oiqOxnth3z68wC2MWYx7ykkS5hhDamixg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/executor@1.4.9':
     resolution: {integrity: sha512-SAUlDT70JAvXeqV87gGzvDzUGofn39nvaVcVhNf12Dt+GfWHtNNO/RCn/Ea4VJaSLGzraUd41ObnN3i80EBU7w==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/git-loader@8.0.26':
     resolution: {integrity: sha512-0g+9eng8DaT4ZmZvUmPgjLTgesUa6M8xrDjNBltRldZkB055rOeUgJiKmL6u8PjzI5VxkkVsn0wtAHXhDI2UXQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/github-loader@8.0.22':
     resolution: {integrity: sha512-uQ4JNcNPsyMkTIgzeSbsoT9hogLjYrZooLUYd173l5eUGUi49EAcsGdiBCKaKfEjanv410FE8hjaHr7fjSRkJw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/graphql-file-loader@8.1.2':
     resolution: {integrity: sha512-VB6ttpwkqCu0KsA1/Wmev4qsu05Qfw49kgVSKkPjuyDQfVaqtr9ewEQRkX5CqnqHGEeLl6sOlNGEMM5fCVMWGQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/graphql-tag-pluck@8.3.21':
     resolution: {integrity: sha512-TJhELNvR1tmghXMi6HVKp/Swxbx1rcSp/zdkuJZT0DCM3vOY11FXY6NW3aoxumcuYDNN3jqXcCPKstYGFPi5GQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/import@7.1.2':
     resolution: {integrity: sha512-+tlNQbLEqAA4LdWoLwM1tckx95lo8WIKd8vhj99b9rLwN/KfLwHWzdS3jnUFK7+99vmHmN1oE5v5zmqJz0MTKw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/json-file-loader@8.0.20':
     resolution: {integrity: sha512-5v6W+ZLBBML5SgntuBDLsYoqUvwfNboAwL6BwPHi3z/hH1f8BS9/0+MCW9OGY712g7E4pc3y9KqS67mWF753eA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/load@8.1.2':
     resolution: {integrity: sha512-WhDPv25/jRND+0uripofMX0IEwo6mrv+tJg6HifRmDu8USCD7nZhufT0PP7lIcuutqjIQFyogqT70BQsy6wOgw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/merge@9.1.1':
     resolution: {integrity: sha512-BJ5/7Y7GOhTuvzzO5tSBFL4NGr7PVqTJY3KeIDlVTT8YLcTXtBR+hlrC3uyEym7Ragn+zyWdHeJ9ev+nRX1X2w==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/merge@9.1.6':
     resolution: {integrity: sha512-bTnP+4oom4nDjmkS3Ykbe+ljAp/RIiWP3R35COMmuucS24iQxGLa9Hn8VMkLIoaoPxgz6xk+dbC43jtkNsFoBw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/optimize@1.4.0':
     resolution: {integrity: sha512-dJs/2XvZp+wgHH8T5J2TqptT9/6uVzIYvA6uFACha+ufvdMBedkfR4b4GbT8jAKLRARiqRTxy3dctnwkTM2tdw==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/optimize@2.0.0':
     resolution: {integrity: sha512-nhdT+CRGDZ+bk68ic+Jw1OZ99YCDIKYA5AlVAnBHJvMawSx9YQqQAIj4refNc1/LRieGiuWvhbG3jvPVYho0Dg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/relay-operation-optimizer@6.5.18':
     resolution: {integrity: sha512-mc5VPyTeV+LwiM+DNvoDQfPqwQYhPV/cl5jOBjTgSniyaq8/86aODfMkrE2OduhQ5E00hqrkuL2Fdrgk0w1QJg==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/relay-operation-optimizer@7.0.21':
     resolution: {integrity: sha512-vMdU0+XfeBh9RCwPqRsr3A05hPA3MsahFn/7OAwXzMySA5EVnSH5R4poWNs3h1a0yT0tDPLhxORhK7qJdSWj2A==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/relay-operation-optimizer@7.0.26':
     resolution: {integrity: sha512-cVdS2Hw4hg/WgPVV2wRIzZM975pW5k4vdih3hR4SvEDQVr6MmozmlTQSqzMyi9yg8LKTq540Oz3bYQa286yGmg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/schema@10.0.30':
     resolution: {integrity: sha512-yPXU17uM/LR90t92yYQqn9mAJNOVZJc0nQtYeZyZeQZeQjwIGlTubvvoDL0fFVk+wZzs4YQOgds2NwSA4npodA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/url-loader@8.0.33':
     resolution: {integrity: sha512-Fu626qcNHcqAj8uYd7QRarcJn5XZ863kmxsg1sm0fyjyfBJnsvC7ddFt6Hayz5kxVKfsnjxiDfPMXanvsQVBKw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/utils@10.11.0':
     resolution: {integrity: sha512-iBFR9GXIs0gCD+yc3hoNswViL1O5josI33dUqiNStFI/MHLCEPduasceAcazRH77YONKNiviHBV8f7OgcT4o2Q==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/utils@10.9.1':
     resolution: {integrity: sha512-B1wwkXk9UvU7LCBkPs8513WxOQ2H8Fo5p8HR1+Id9WmYE5+bd51vqN+MbrqvWczHCH2gwkREgHJN88tE0n1FCw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/utils@9.2.1':
     resolution: {integrity: sha512-WUw506Ql6xzmOORlriNrD6Ugx+HjVgYxt9KCXD9mHAak+eaXSwuGGPyE60hy9xaDEoXKBsG7SkG69ybitaVl6A==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-tools/wrap@10.1.4':
     resolution: {integrity: sha512-7pyNKqXProRjlSdqOtrbnFRMQAVamCmEREilOXtZujxY6kYit3tvWWSjUrcIOheltTffoRh7EQSjpy2JDCzasg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@graphql-typed-document-node/core@3.2.0':
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@grpc/grpc-js@1.14.1':
     resolution: {integrity: sha512-sPxgEWtPUR3EnRJCEtbGZG2iX8LQDUls2wUS3o27jg07KqJFMq6YDeWvMo1wfpmy3rqRdS0rivpLwhqQtEyCuQ==}
@@ -4531,15 +4531,15 @@ packages:
     resolution: {integrity: sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==}
     engines: {node: '>=14.0.0'}
 
-  '@mikro-orm/core@6.5.8':
-    resolution: {integrity: sha512-0jym5Pd7AwjpzsgPvs5c1WhrqqsfD2K32UcDmsN0CVU0uXCgKKEfXWnAHsesvUBghg0pKzFhTonI2G6I1GYYUA==}
+  '@mikro-orm/core@6.6.2':
+    resolution: {integrity: sha512-W/UmY8EOlHVBgIlJw6+DxyJX8+KAliLRjp1VpWiStq297eBPFHnKPcu3YEyxwxg4DSHK1SVfEQ/72unrfeAYig==}
     engines: {node: '>= 18.12.0'}
 
-  '@mikro-orm/knex@6.5.8':
-    resolution: {integrity: sha512-/+/jc5zlOgdRlq/SC5RHGdIgrJw7TsGSICumYq6+dauYq2ChMHw3rrN1mW7bKkS/A2oB8eabyNyUj2WKOC3PKA==}
+  '@mikro-orm/knex@6.6.2':
+    resolution: {integrity: sha512-Qs1S5q80thBmrbW9sbexZs7Gxle4ASyqNOtJ9CFwR4q9BLvA846Ig5HjXhv3KIPC8KcmRquSMDYSutgLOzK2nQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
       better-sqlite3: '*'
       libsql: '*'
       mariadb: '*'
@@ -4551,29 +4551,29 @@ packages:
       mariadb:
         optional: true
 
-  '@mikro-orm/mssql@6.5.8':
-    resolution: {integrity: sha512-Karr60xhWov6LnpA3wp7ykeiuk7MbQZfJQJmMo61NglLO7et8ZpQb71Q8kibsJtTE/j5AM2MJcuf6GVxUyFryw==}
+  '@mikro-orm/mssql@6.6.2':
+    resolution: {integrity: sha512-GhgAfkh1S8vETD317TiDoz2SwNJDCcKzK2Oz2UKKsPU0+5R9Jd//Pp6ETIV2sbexPBebQA7sGHjg7m0TyDhv6w==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
 
-  '@mikro-orm/mysql@6.5.8':
-    resolution: {integrity: sha512-4Qr7e1rfPX1aDOd0jK0hF8Lh2Pz2NGCR1HMKmjex4wsr9H+9nPO7+27IF9fpX/W0vnpGWGqF1/i7bPjAAMjHiQ==}
+  '@mikro-orm/mysql@6.6.2':
+    resolution: {integrity: sha512-B03ja2ekmlLXWwMGToh2Td0cdHvpkPwaRHnB41wKlHeVrbcYmx8B8X9+jNF8PFIvRet/q1NM8K+8ecRkKmoYCA==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
 
-  '@mikro-orm/postgresql@6.5.8':
-    resolution: {integrity: sha512-NeQqI8J/QyzqgLPvdOd26TSkefYjLUfFeLUEQ2DeT/yKJd/SF0re1OfYZrqsKve8VIz8MHu6HiVBvz3iZvhfDw==}
+  '@mikro-orm/postgresql@6.6.2':
+    resolution: {integrity: sha512-g72WD8oJ5uihTDECr2nNjBn1fdFS7x/P7OV++DOdFgGC3pQzxFpnxNdwCkY7czsWAaJOs76CIFr+SLytdQ5HZg==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
 
-  '@mikro-orm/sqlite@6.5.8':
-    resolution: {integrity: sha512-9RoOW09YuxmzgrCf7WnfbpTwPJaUJmwBGkdmjS33kPo8DM/8g/Jz93ZibCa+A7ObPrJ3wfy5GKabbAQUoatxMA==}
+  '@mikro-orm/sqlite@6.6.2':
+    resolution: {integrity: sha512-zUf6ysRXo8Hlqx1H8LPELZty9w8qIO/zU6JPd5kpGcECjK6TIGyuATdv24h5eRcRr6BX5gGrtU+LCj2bIww4Tg==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
 
   '@motionone/animation@10.18.0':
     resolution: {integrity: sha512-9z2p5GFGCm0gBsZbi8rVMOAJCtw1WqBTIPw3ozk06gDvZInBPIsQcHgYogEJ4yuHJ+akuW8g1SEIOpTOvYs8hw==}
@@ -6011,7 +6011,7 @@ packages:
     resolution: {integrity: sha512-lwYYKCeHmstOtbMtzxC0BQKWsUPYbEVRVdJ3EqR4jSpcF4gvNf3MOJv6yuvq6QsKqgYZURKRBszmg7VEDoi5Aw==}
     engines: {node: '>=18'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@tiptap/core@3.13.0':
     resolution: {integrity: sha512-iUelgiTMgPVMpY5ZqASUpk8mC8HuR9FWKaDzK27w9oWip9tuB54Z8mePTxNcQaSPb6ErzEaC8x8egrRt7OsdGQ==}
@@ -6857,7 +6857,7 @@ packages:
     engines: {node: '>=12.0'}
     deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now end-of-life (as of October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   aproba@2.1.0:
     resolution: {integrity: sha512-tLIEcj5GuR2RSTnxNKdkK0dJ/GrC7P38sUkiDmDuHfsHmbagTFAxDVIBltoklXEVIQ/f14IL8IMJ5pn9Hez1Ew==}
@@ -7390,7 +7390,7 @@ packages:
     peerDependencies:
       '@codemirror/language': 6.0.0
       codemirror: ^5.65.3
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   codemirror@5.65.20:
     resolution: {integrity: sha512-i5dLDDxwkFCbhjvL2pNjShsojoL3XHyDwsGv1jqETUoW+lzpBKKqNTUWgQwVAOa0tUm4BwekT455ujafi8payA==}
@@ -8567,7 +8567,7 @@ packages:
   graphiql@4.1.2:
     resolution: {integrity: sha512-rNlzQIAzm6i2KBXmVQWBgLvt0TloxFVB2d18bukvdsvjEuFDHsKx5IVOomL1W1o5WW+tE54+ioHb2AEKzO2cUg==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
       react: ^18 || ^19
       react-dom: ^18 || ^19
 
@@ -8576,7 +8576,7 @@ packages:
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       cosmiconfig-toml-loader: ^1.0.0
-      graphql: 16.11.0
+      graphql: 16.12.0
     peerDependenciesMeta:
       cosmiconfig-toml-loader:
         optional: true
@@ -8589,41 +8589,41 @@ packages:
     resolution: {integrity: sha512-9EvWrLLkF6Y5e29/2cmFoAO6hBPPAZlCyjznmpR11iFtRydfkss+9m6x+htA8h7YznGam+TtJwS6JuwoWWgb2Q==}
     hasBin: true
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   graphql-parse-resolve-info@4.14.1:
     resolution: {integrity: sha512-WKHukfEuZamP1ZONR84b8iT+4sJgEhtXMDArm1jpXEsU2vTb5EgkCZ4Obfl+v09oNTKXm0CJjPfBUZ5jcJ2Ykg==}
     engines: {node: '>=8.6'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   graphql-query-complexity@1.1.0:
     resolution: {integrity: sha512-6sfAX+9CgkcPeZ7UiuBwgTGA+M1FYgHrQOXvORhQGd6SiaXbNVkLDcJ9ZSvNgzyChIfH0uPFFOY3Jm4wFZ4qEA==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   graphql-scalars@1.25.0:
     resolution: {integrity: sha512-b0xyXZeRFkne4Eq7NAnL400gStGqG/Sx9VqX0A05nHyEbv57UJnWKsjNnrpVqv5e/8N1MUxkt0wwcRXbiyKcFg==}
     engines: {node: '>=10'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   graphql-tag@2.12.6:
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
     engines: {node: '>=10'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   graphql-type-json@0.3.2:
     resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   graphql-ws@5.16.2:
     resolution: {integrity: sha512-E1uccsZxt/96jH/OwmLPuXMACILs76pKF2i3W861LpKBCYtGIyPQGtWLuBLkND4ox1KHns70e83PS4te50nvPQ==}
     engines: {node: '>=10'}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   graphql-ws@6.0.6:
     resolution: {integrity: sha512-zgfER9s+ftkGKUZgc0xbx8T7/HMO4AV5/YuYiFc+AtgcO5T0v8AxYYNQ+ltzuzDZgNkYJaFspm5MMYLjQzrkmw==}
@@ -8631,7 +8631,7 @@ packages:
     peerDependencies:
       '@fastify/websocket': ^10 || ^11
       crossws: ~0.3
-      graphql: 16.11.0
+      graphql: 16.12.0
       uWebSockets.js: ^20
       ws: ^8
     peerDependenciesMeta:
@@ -8643,10 +8643,6 @@ packages:
         optional: true
       ws:
         optional: true
-
-  graphql@16.11.0:
-    resolution: {integrity: sha512-mS1lbMsxgQj6hge1XZ6p7GPhbrtFwUFYi3wRzXAC/FmYnyXMTvvI3td3rjmQ2u8ewXueaSvRPWaEcgVVOT9Jnw==}
-    engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
   graphql@16.12.0:
     resolution: {integrity: sha512-DKKrynuQRne0PNpEbzuEdHlYOMksHSUI8Zc9Unei5gTsMNA2/vMpoMz/yKba50pejK56qj98qM0SjYxAKi13gQ==}
@@ -8795,6 +8791,10 @@ packages:
     resolution: {integrity: sha512-cf6L2Ds3h57VVmkZe+Pn+5APsT7FpqJtEhhieDCvrE2MK5Qk9MyffgQyuxQTm6BChfeZNtcOLHp9IcWRVcIcBQ==}
     engines: {node: '>=0.10.0'}
 
+  iconv-lite@0.7.1:
+    resolution: {integrity: sha512-2Tth85cXwGFHfvRgZWszZSvdo+0Xsqmw8k8ZwxScfcBneNUraK+dxRxRm24nszx80Y0TVio8kKLt5sLE7ZCLlw==}
+    engines: {node: '>=0.10.0'}
+
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
@@ -8875,8 +8875,8 @@ packages:
   invariant@2.2.4:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
 
-  ip-address@10.0.1:
-    resolution: {integrity: sha512-NWv9YLW4PoW2B7xtzaS3NCot75m6nK7Icdv0o3lfMceJVRfSoQwqD4wEH5rLwoKJwUiZ/rfpiVBhnaF0FK4HoA==}
+  ip-address@10.1.0:
+    resolution: {integrity: sha512-XXADHxXmvT9+CRxhXg56LJovE+bmWnEWB78LB83VZTprKTmaC5QfruXocxzTZ2Kl0DNwKuBdlIhjL8LeY8Sf8Q==}
     engines: {node: '>= 12'}
 
   ipaddr.js@2.2.0:
@@ -9700,8 +9700,8 @@ packages:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
     engines: {node: '>=8.6'}
 
-  mikro-orm@6.5.8:
-    resolution: {integrity: sha512-N3iZIOX/1OHP5c9LSJ6P8MN+Ri+Ab7Clo9U/vKg/7paAdTPgBioMcWzRjimoWMPj8COZYEn9x/xPnlna3FHVEg==}
+  mikro-orm@6.6.2:
+    resolution: {integrity: sha512-fCPwQZVIfOeQZecBYmJy+21zSrWTlt/thUNONjTtcBHzQNu3f+zVGY0kn9gs6x6bvT570cNlPLmzHVd3NCM4Kw==}
     engines: {node: '>= 18.12.0'}
 
   mime-db@1.52.0:
@@ -9872,10 +9872,6 @@ packages:
     resolution: {integrity: sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  mysql2@3.15.2:
-    resolution: {integrity: sha512-kFm5+jbwR5mC+lo+3Cy46eHiykWSpUtTLOH3GE+AR7GeLq8PgfJcvpMiyVWk9/O53DjQsqm6a3VOOfq7gYWFRg==}
-    engines: {node: '>= 8.0'}
-
   mysql2@3.15.3:
     resolution: {integrity: sha512-FBrGau0IXmuqg4haEZRBfHNWB5mUARw6hNwPDXXGg0XzVJ50mr/9hb267lvpVMnhZ1FON3qNd4Xfcez1rbFwSg==}
     engines: {node: '>= 8.0'}
@@ -9932,8 +9928,8 @@ packages:
     resolution: {integrity: sha512-o2zOYiCpzRqSzPj0Zt/dQ/DqZeYoaQ7TUonc/xUPjCGl9WeHpNbxgVvOquXYAaJzI0M9BXV3HTzG0p8IUAbBTQ==}
     engines: {node: '>= 10.13'}
 
-  node-abi@3.78.0:
-    resolution: {integrity: sha512-E2wEyrgX/CqvicaQYU3Ze1PFGjc4QYPGsjUrlYkqAE0WjHEZwgOsGMPMzkMse4LjJbDmaEuDX3CM036j5K2DSQ==}
+  node-abi@3.85.0:
+    resolution: {integrity: sha512-zsFhmbkAzwhTft6nd3VxcG0cvJsT70rL+BIGHWVq5fi6MwGrHwzqKaxXE+Hl2GmnGItnDKPPkO5/LQqjVkIdFg==}
     engines: {node: '>=10'}
 
   node-addon-api@2.0.2:
@@ -11290,7 +11286,7 @@ packages:
     resolution: {integrity: sha512-8D4C6DIH5tGiAIpp5I0wD/xRlNiZAPGHygzCe7VzyzUoxHtawzjNAY9SUTXU05/EY2NMY9/9GF0ycizkXr1CWQ==}
     deprecated: The `subscriptions-transport-ws` package is no longer maintained. We recommend you use `graphql-ws` instead. For help migrating Apollo software to `graphql-ws`, see https://www.apollographql.com/docs/apollo-server/data/subscriptions/#switching-from-subscriptions-transport-ws    For general help using `graphql-ws`, see https://github.com/enisdenjo/graphql-ws/blob/master/README.md
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   superagent@8.1.2:
     resolution: {integrity: sha512-6WTxW1EB6yCxV5VFOIPQruWGHqc3yI7hEmZK6h+pyk69Lk/Ut7rLUY6W/ONF2MjBuGjvmMiIpsrVJ2vjrHlslA==}
@@ -11300,7 +11296,7 @@ packages:
   supertest-graphql@1.1.4:
     resolution: {integrity: sha512-01No6WtLVu1sOxFgInAP/mG2Qn9eWwGIbM42Gih329ff1XtfMoCpbSNUmBq6SS116BEXuj17VJmaCIxC8DMQIA==}
     peerDependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   supertest@6.3.4:
     resolution: {integrity: sha512-erY3HFDG0dPnhw4U+udPfrzXa4xhSG+n4rxfRuZWCUvjFWwKl+OxWf/7zk50s84/fAAs7vf5QAb9uRa0cCykxw==}
@@ -11363,10 +11359,6 @@ packages:
   tarn@3.0.2:
     resolution: {integrity: sha512-51LAVKUSZSVfI05vjPESNc5vwqqZpbXCsU+/+wxlOrUjk2SnFTt97v9ZgQrD4YmxYW1Px6w2KjaDitCfkvgxMQ==}
     engines: {node: '>=8.0.0'}
-
-  tedious@19.0.0:
-    resolution: {integrity: sha512-nmxNBAT72mMVCIYp0Ts0Zzd5+LBQjoXlqigCrIjSo2OERSi04vr3EHq3qJxv/zgrSkg7si03SoIIfekTAadA7w==}
-    engines: {node: '>=18.17'}
 
   tedious@19.1.3:
     resolution: {integrity: sha512-6O6efTeYtcnar3Cqf/ptqJs+U10fYYjp/SHRNm3VGuCTUDys+AUgIbxWbT2kzl4baXAzuy9byV3qCgOimrRfTA==}
@@ -14168,48 +14160,48 @@ snapshots:
 
   '@escape.tech/graphql-armor-block-field-suggestions@3.0.1':
     dependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
     optionalDependencies:
       '@envelop/core': 5.3.2
 
   '@escape.tech/graphql-armor-cost-limit@2.4.3':
     dependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
     optionalDependencies:
       '@envelop/core': 5.3.2
       '@escape.tech/graphql-armor-types': 0.7.0
 
   '@escape.tech/graphql-armor-max-aliases@2.6.2':
     dependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
     optionalDependencies:
       '@envelop/core': 5.3.2
       '@escape.tech/graphql-armor-types': 0.7.0
 
   '@escape.tech/graphql-armor-max-depth@2.4.2':
     dependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
     optionalDependencies:
       '@envelop/core': 5.3.2
       '@escape.tech/graphql-armor-types': 0.7.0
 
   '@escape.tech/graphql-armor-max-directives@2.3.1':
     dependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
     optionalDependencies:
       '@envelop/core': 5.3.2
       '@escape.tech/graphql-armor-types': 0.7.0
 
   '@escape.tech/graphql-armor-max-tokens@2.5.1':
     dependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
     optionalDependencies:
       '@envelop/core': 5.3.2
       '@escape.tech/graphql-armor-types': 0.7.0
 
   '@escape.tech/graphql-armor-types@0.7.0':
     dependencies:
-      graphql: 16.11.0
+      graphql: 16.12.0
 
   '@escape.tech/graphql-armor@3.1.7(@apollo/server@5.2.0(graphql@16.12.0))(@envelop/core@5.3.2)(@escape.tech/graphql-armor-types@0.7.0)':
     dependencies:
@@ -14219,7 +14211,7 @@ snapshots:
       '@escape.tech/graphql-armor-max-depth': 2.4.2
       '@escape.tech/graphql-armor-max-directives': 2.3.1
       '@escape.tech/graphql-armor-max-tokens': 2.5.1
-      graphql: 16.11.0
+      graphql: 16.12.0
     optionalDependencies:
       '@apollo/server': 5.2.0(graphql@16.12.0)
       '@envelop/core': 5.3.2
@@ -15523,7 +15515,7 @@ snapshots:
   '@inquirer/external-editor@1.0.2(@types/node@24.10.0)':
     dependencies:
       chardet: 2.1.0
-      iconv-lite: 0.7.0
+      iconv-lite: 0.7.1
     optionalDependencies:
       '@types/node': 24.10.0
 
@@ -16111,19 +16103,19 @@ snapshots:
 
   '@metamask/detect-provider@2.0.0': {}
 
-  '@mikro-orm/core@6.5.8':
+  '@mikro-orm/core@6.6.2':
     dependencies:
       dataloader: 2.2.3
       dotenv: 17.2.3
       esprima: 4.0.1
       fs-extra: 11.3.2
       globby: 11.1.0
-      mikro-orm: 6.5.8
+      mikro-orm: 6.6.2
       reflect-metadata: 0.2.2
 
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)':
+  '@mikro-orm/knex@6.6.2(@mikro-orm/core@6.6.2)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
       fs-extra: 11.3.2
       knex: 3.1.0
       sqlstring: 2.3.3
@@ -16136,11 +16128,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.2)':
+  '@mikro-orm/knex@6.6.2(@mikro-orm/core@6.6.2)(mysql2@3.15.3)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
       fs-extra: 11.3.2
-      knex: 3.1.0(mysql2@3.15.2)
+      knex: 3.1.0(mysql2@3.15.3)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -16151,24 +16143,9 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.2)(pg@8.16.3)':
+  '@mikro-orm/knex@6.6.2(@mikro-orm/core@6.6.2)(mysql2@3.15.3)(pg@8.16.3)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      fs-extra: 11.3.2
-      knex: 3.1.0(mysql2@3.15.2)(pg@8.16.3)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.3)(pg@8.16.3)':
-    dependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
       fs-extra: 11.3.2
       knex: 3.1.0(mysql2@3.15.3)(pg@8.16.3)
       sqlstring: 2.3.3
@@ -16181,9 +16158,9 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)':
+  '@mikro-orm/knex@6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
       fs-extra: 11.3.2
       knex: 3.1.0(pg@8.16.3)
       sqlstring: 2.3.3
@@ -16196,9 +16173,9 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)(sqlite3@5.1.7)':
+  '@mikro-orm/knex@6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)(sqlite3@5.1.7)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
       fs-extra: 11.3.2
       knex: 3.1.0(pg@8.16.3)(sqlite3@5.1.7)
       sqlstring: 2.3.3
@@ -16211,9 +16188,9 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)(sqlite3@5.1.7)':
+  '@mikro-orm/knex@6.6.2(@mikro-orm/core@6.6.2)(sqlite3@5.1.7)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
       fs-extra: 11.3.2
       knex: 3.1.0(sqlite3@5.1.7)
       sqlstring: 2.3.3
@@ -16226,24 +16203,9 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)(tedious@19.0.0)':
+  '@mikro-orm/knex@6.6.2(@mikro-orm/core@6.6.2)(tedious@19.1.3)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      fs-extra: 11.3.2
-      knex: 3.1.0(tedious@19.0.0)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.5.8(@mikro-orm/core@6.5.8)(tedious@19.1.3)':
-    dependencies:
-      '@mikro-orm/core': 6.5.8
+      '@mikro-orm/core': 6.6.2
       fs-extra: 11.3.2
       knex: 3.1.0(tedious@19.1.3)
       sqlstring: 2.3.3
@@ -16256,11 +16218,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/mssql@6.5.8(@mikro-orm/core@6.5.8)':
+  '@mikro-orm/mssql@6.6.2(@mikro-orm/core@6.6.2)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      '@mikro-orm/knex': 6.5.8(@mikro-orm/core@6.5.8)(tedious@19.0.0)
-      tedious: 19.0.0
+      '@mikro-orm/core': 6.6.2
+      '@mikro-orm/knex': 6.6.2(@mikro-orm/core@6.6.2)(tedious@19.1.3)
+      tedious: 19.1.3
       tsqlstring: 1.0.1
     transitivePeerDependencies:
       - better-sqlite3
@@ -16273,11 +16235,11 @@ snapshots:
       - sqlite3
       - supports-color
 
-  '@mikro-orm/mysql@6.5.8(@mikro-orm/core@6.5.8)':
+  '@mikro-orm/mysql@6.6.2(@mikro-orm/core@6.6.2)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      '@mikro-orm/knex': 6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.2)
-      mysql2: 3.15.2
+      '@mikro-orm/core': 6.6.2
+      '@mikro-orm/knex': 6.6.2(@mikro-orm/core@6.6.2)(mysql2@3.15.3)
+      mysql2: 3.15.3
     transitivePeerDependencies:
       - better-sqlite3
       - libsql
@@ -16289,11 +16251,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/mysql@6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)':
+  '@mikro-orm/mysql@6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      '@mikro-orm/knex': 6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.2)(pg@8.16.3)
-      mysql2: 3.15.2
+      '@mikro-orm/core': 6.6.2
+      '@mikro-orm/knex': 6.6.2(@mikro-orm/core@6.6.2)(mysql2@3.15.3)(pg@8.16.3)
+      mysql2: 3.15.3
     transitivePeerDependencies:
       - better-sqlite3
       - libsql
@@ -16305,10 +16267,10 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/postgresql@6.5.8(@mikro-orm/core@6.5.8)':
+  '@mikro-orm/postgresql@6.6.2(@mikro-orm/core@6.6.2)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      '@mikro-orm/knex': 6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)
+      '@mikro-orm/core': 6.6.2
+      '@mikro-orm/knex': 6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)
       pg: 8.16.3
       postgres-array: 3.0.4
       postgres-date: 2.1.0
@@ -16324,10 +16286,10 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/postgresql@6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.3)':
+  '@mikro-orm/postgresql@6.6.2(@mikro-orm/core@6.6.2)(mysql2@3.15.3)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      '@mikro-orm/knex': 6.5.8(@mikro-orm/core@6.5.8)(mysql2@3.15.3)(pg@8.16.3)
+      '@mikro-orm/core': 6.6.2
+      '@mikro-orm/knex': 6.6.2(@mikro-orm/core@6.6.2)(mysql2@3.15.3)(pg@8.16.3)
       pg: 8.16.3
       postgres-array: 3.0.4
       postgres-date: 2.1.0
@@ -16343,10 +16305,10 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/sqlite@6.5.8(@mikro-orm/core@6.5.8)':
+  '@mikro-orm/sqlite@6.6.2(@mikro-orm/core@6.6.2)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      '@mikro-orm/knex': 6.5.8(@mikro-orm/core@6.5.8)(sqlite3@5.1.7)
+      '@mikro-orm/core': 6.6.2
+      '@mikro-orm/knex': 6.6.2(@mikro-orm/core@6.6.2)(sqlite3@5.1.7)
       fs-extra: 11.3.2
       sqlite3: 5.1.7
       sqlstring-sqlite: 0.1.1
@@ -16362,10 +16324,10 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/sqlite@6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)':
+  '@mikro-orm/sqlite@6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)':
     dependencies:
-      '@mikro-orm/core': 6.5.8
-      '@mikro-orm/knex': 6.5.8(@mikro-orm/core@6.5.8)(pg@8.16.3)(sqlite3@5.1.7)
+      '@mikro-orm/core': 6.6.2
+      '@mikro-orm/knex': 6.6.2(@mikro-orm/core@6.6.2)(pg@8.16.3)(sqlite3@5.1.7)
       fs-extra: 11.3.2
       sqlite3: 5.1.7
       sqlstring-sqlite: 0.1.1
@@ -21295,8 +21257,6 @@ snapshots:
     optionalDependencies:
       ws: 8.18.3
 
-  graphql@16.11.0: {}
-
   graphql@16.12.0: {}
 
   handlebars@4.7.8:
@@ -21485,6 +21445,10 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
+  iconv-lite@0.7.1:
+    dependencies:
+      safer-buffer: 2.1.2
+
   ieee754@1.2.1: {}
 
   ignore@5.3.2: {}
@@ -21575,7 +21539,7 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
 
-  ip-address@10.0.1:
+  ip-address@10.1.0:
     optional: true
 
   ipaddr.js@2.2.0: {}
@@ -22239,7 +22203,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(mysql2@3.15.2):
+  knex@3.1.0(mysql2@3.15.3):
     dependencies:
       colorette: 2.0.19
       commander: 10.0.1
@@ -22256,29 +22220,7 @@ snapshots:
       tarn: 3.0.2
       tildify: 2.0.0
     optionalDependencies:
-      mysql2: 3.15.2
-    transitivePeerDependencies:
-      - supports-color
-
-  knex@3.1.0(mysql2@3.15.2)(pg@8.16.3):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      mysql2: 3.15.2
-      pg: 8.16.3
+      mysql2: 3.15.3
     transitivePeerDependencies:
       - supports-color
 
@@ -22365,27 +22307,6 @@ snapshots:
       tildify: 2.0.0
     optionalDependencies:
       sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
-
-  knex@3.1.0(tedious@19.0.0):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      tedious: 19.0.0
     transitivePeerDependencies:
       - supports-color
 
@@ -22744,7 +22665,7 @@ snapshots:
       braces: 3.0.3
       picomatch: 2.3.1
 
-  mikro-orm@6.5.8: {}
+  mikro-orm@6.6.2: {}
 
   mime-db@1.52.0: {}
 
@@ -22879,18 +22800,6 @@ snapshots:
 
   mute-stream@2.0.0: {}
 
-  mysql2@3.15.2:
-    dependencies:
-      aws-ssl-profiles: 1.1.2
-      denque: 2.1.0
-      generate-function: 2.3.1
-      iconv-lite: 0.7.0
-      long: 5.3.2
-      lru.min: 1.1.2
-      named-placeholders: 1.1.3
-      seq-queue: 0.0.5
-      sqlstring: 2.3.3
-
   mysql2@3.15.3:
     dependencies:
       aws-ssl-profiles: 1.1.2
@@ -22952,7 +22861,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  node-abi@3.78.0:
+  node-abi@3.85.0:
     dependencies:
       semver: 7.7.3
 
@@ -23452,7 +23361,7 @@ snapshots:
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
       napi-build-utils: 2.0.0
-      node-abi: 3.78.0
+      node-abi: 3.85.0
       pump: 3.0.3
       rc: 1.2.8
       simple-get: 4.0.1
@@ -24223,7 +24132,7 @@ snapshots:
 
   socks@2.8.7:
     dependencies:
-      ip-address: 10.0.1
+      ip-address: 10.1.0
       smart-buffer: 4.2.0
     optional: true
 
@@ -24521,21 +24430,6 @@ snapshots:
       yallist: 4.0.0
 
   tarn@3.0.2: {}
-
-  tedious@19.0.0:
-    dependencies:
-      '@azure/core-auth': 1.10.1
-      '@azure/identity': 4.13.0
-      '@azure/keyvault-keys': 4.10.0
-      '@js-joda/core': 5.6.5
-      '@types/node': 24.10.0
-      bl: 6.1.6
-      iconv-lite: 0.6.3
-      js-md4: 0.3.2
-      native-duplexpair: 1.0.0
-      sprintf-js: 1.1.3
-    transitivePeerDependencies:
-      - supports-color
 
   tedious@19.1.3:
     dependencies:
