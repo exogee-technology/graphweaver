@@ -855,8 +855,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       downshift:
-        specifier: 9.0.12
-        version: 9.0.12(react@19.2.3)
+        specifier: 9.0.13
+        version: 9.0.13(react@19.2.3)
       graphiql:
         specifier: 4.1.2
         version: 4.1.2(@codemirror/language@6.0.0)(@types/node@25.0.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
@@ -7859,8 +7859,8 @@ packages:
     resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
     engines: {node: '>=12'}
 
-  downshift@9.0.12:
-    resolution: {integrity: sha512-kFq2pNHm3kmhFfW55RW7+lXliEHg98sKImodICvJfbtvRB6OUiLr138Z8MW5/8t5JaeGZ4Wtomi3Ds72EKVH2Q==}
+  downshift@9.0.13:
+    resolution: {integrity: sha512-fPV+K5jwEzfEAhNhprgCmpWQ23MKwKNzdbtK0QQFiw4hbFcKhMeGB+ccorfWJzmsLR5Dty+CmLDduWlIs74G/w==}
     peerDependencies:
       react: '>=16.12.0'
 
@@ -20241,7 +20241,7 @@ snapshots:
 
   dotenv@17.2.3: {}
 
-  downshift@9.0.12(react@19.2.3):
+  downshift@9.0.13(react@19.2.3):
     dependencies:
       '@babel/runtime': 7.28.4
       compute-scroll-into-view: 3.1.1
