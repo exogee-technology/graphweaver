@@ -41,7 +41,6 @@
 		"yargs": "18.0.0"
 	},
 	"devDependencies": {
-		"@types/inquirer": "9.0.7",
 		"@types/node": "24.10.0",
 		"@types/semver": "7.7.1",
 		"@types/validate-npm-package-name": "4.0.2",

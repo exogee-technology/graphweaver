@@ -27,9 +27,9 @@ export const promptForDatabaseOptions = async ({
 	const { default: inquirer } = await import('inquirer');
 
 	if (!source) {
-		const prompt = await inquirer.prompt<any, { source: Source }>([
+		const prompt = await inquirer.prompt<{ source: Source }>([
 			{
-				type: 'list',
+				type: 'select',
 				name: 'source',
 				message: `What is the data source?`,
 				choices: ['mssql', 'mysql', 'postgresql', 'sqlite'],
