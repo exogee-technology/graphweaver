@@ -37,7 +37,7 @@
 		"inquirer": "13.1.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.7.3",
-		"validate-npm-package-name": "7.0.0",
+		"validate-npm-package-name": "7.0.1",
 		"yargs": "18.0.0"
 	},
 	"devDependencies": {
