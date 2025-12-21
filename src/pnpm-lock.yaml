@@ -1262,11 +1262,11 @@ importers:
         specifier: 24.10.0
         version: 24.10.0
       aws-cdk:
-        specifier: 2.1100.0
-        version: 2.1100.0
+        specifier: 2.1100.1
+        version: 2.1100.1
       aws-cdk-lib:
-        specifier: 2.232.2
-        version: 2.232.2(constructs@10.4.3)
+        specifier: 2.233.0
+        version: 2.233.0(constructs@10.4.3)
       constructs:
         specifier: 10.4.3
         version: 10.4.3
@@ -7018,8 +7018,8 @@ packages:
     resolution: {integrity: sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g==}
     engines: {node: '>=6.0.0'}
 
-  aws-cdk-lib@2.232.2:
-    resolution: {integrity: sha512-jrAxZy5mvSM9YVuF1M++hP8IIGyNmPzW8+C5nnvOnx+eYuySRiCSAzKVKlvB+UNpA0VEVCDNyTxKiu0mFBeg/g==}
+  aws-cdk-lib@2.233.0:
+    resolution: {integrity: sha512-rBOzIA8TGC5eB8TyVIvckAVlX7a0/gVPE634FguhSee9RFaovjgc5+IixGyyLJhu3lLsMSjqDoqTJg2ab+p8ng==}
     engines: {node: '>= 18.0.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -7036,10 +7036,9 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.1100.0:
-    resolution: {integrity: sha512-EadIbrhBodY6Sl+7ujTgZGCyUdcDpbWdDEqq9HsAtYW4CiB/Idu30O7mwITXCqiMAGreko/clMttVh/XfgEbJA==}
+  aws-cdk@2.1100.1:
+    resolution: {integrity: sha512-q2poFrQh90TK6eqeI0zznA8r1JkDI63WVOSqC7gFGo6qjQjAnvFk/utxHoNRgAC0RL0CLd19uCcHh3jfX9NiSg==}
     engines: {node: '>= 18.0.0'}
-    deprecated: This version collects invalid command path
     hasBin: true
 
   aws-ssl-profiles@1.1.2:
@@ -19288,14 +19287,14 @@ snapshots:
 
   await-to-js@3.0.0: {}
 
-  aws-cdk-lib@2.232.2(constructs@10.4.3):
+  aws-cdk-lib@2.233.0(constructs@10.4.3):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.242
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
       '@aws-cdk/cloud-assembly-schema': 48.20.0
       constructs: 10.4.3
 
-  aws-cdk@2.1100.0:
+  aws-cdk@2.1100.1:
     optionalDependencies:
       fsevents: 2.3.2
 

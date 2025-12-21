@@ -31,8 +31,8 @@
 	"devDependencies": {
 		"@digitak/esrun": "3.2.26",
 		"dotenv-cli": "10.0.0",
-		"aws-cdk": "2.1100.0",
-		"aws-cdk-lib": "2.232.2",
+		"aws-cdk": "2.1100.1",
+		"aws-cdk-lib": "2.233.0",
 		"constructs": "10.4.3",
 		"@exogee/graphweaver": "workspace:*",
 		"@types/node": "24.10.0",
