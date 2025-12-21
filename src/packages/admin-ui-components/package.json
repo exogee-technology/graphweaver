@@ -80,7 +80,7 @@
 		"react-dom": "19.2.3",
 		"storybook": "10.1.10",
 		"typescript": "5.9.3",
-		"vite": "7.1.12",
+		"vite": "7.3.0",
 		"vite-plugin-graphweaver": "workspace:*",
 		"vitest": "4.0.3"
 	},
