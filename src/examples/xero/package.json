@@ -46,7 +46,7 @@
 		"react": "19.2.3",
 		"react-dom": "19.2.3",
 		"wouter": "3.7.1",
-		"xero-node": "13.2.0"
+		"xero-node": "13.3.0"
 	},
 	"devDependencies": {
 		"@types/node": "24.10.0",
