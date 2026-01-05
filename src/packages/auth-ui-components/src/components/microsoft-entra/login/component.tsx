@@ -1,5 +1,9 @@
 import { useEffect } from 'react';
-import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import {
+	Button,
+	localStorageAuthKey,
+	localStorageRefreshTokenKey,
+} from '@exogee/graphweaver-admin-ui-components';
 import { useLocation } from 'wouter';
 import { useMsalAuthentication, MsalProvider } from '@azure/msal-react';
 import { InteractionType } from '@azure/msal-browser';
@@ -7,7 +11,7 @@ import { publicClientApplication } from '../client';
 
 const scopes = import.meta.env.VITE_MICROSOFT_ENTRA_SCOPES
 	? import.meta.env.VITE_MICROSOFT_ENTRA_SCOPES.split(' ')
-	: ['openid', 'email'];
+	: ['openid', 'email', 'offline_access'];
 
 const MicrosoftEntraInner = () => {
 	const [, setLocation] = useLocation();
@@ -28,8 +32,25 @@ const MicrosoftEntraInner = () => {
 	useEffect(() => {
 		if (result?.accessToken) {
 			// The user is coming back from a successful authentication redirect.
-			// Save the token
+			// Save the access token
 			localStorage.setItem(localStorageAuthKey, result.accessToken);
+
+			// Extract and save the refresh token from MSAL's cache before clearing it.
+			// MSAL stores refresh tokens in sessionStorage with keys containing 'refreshtoken'.
+			const refreshTokenKey = Object.keys(sessionStorage).find(
+				(k) => k.toLowerCase().includes('refreshtoken') && k.startsWith('msal.')
+			);
+			if (refreshTokenKey) {
+				try {
+					const refreshTokenData = JSON.parse(sessionStorage.getItem(refreshTokenKey) || '{}');
+					if (refreshTokenData.secret) {
+						localStorage.setItem(localStorageRefreshTokenKey, refreshTokenData.secret);
+					}
+				} catch {
+					// If we can't parse the refresh token, continue without it
+					console.warn('Could not extract refresh token from MSAL cache');
+				}
+			}
 
 			// Remove all msal.* values from sessionStorage to make sure we're the
 			// owners of the logged in state. We don't give a rats about your cached

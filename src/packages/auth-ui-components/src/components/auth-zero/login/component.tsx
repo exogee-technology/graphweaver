@@ -38,6 +38,7 @@ export const Auth0 = () => {
 			const options = {
 				authorizationParams: {
 					redirect_uri: window.location.toString(),
+					scope: 'openid profile email offline_access',
 				},
 			};
 			await client.loginWithRedirect(options);

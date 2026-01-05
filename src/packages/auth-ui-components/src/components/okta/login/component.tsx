@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import {
+	Button,
+	localStorageAuthKey,
+	localStorageRefreshTokenKey,
+} from '@exogee/graphweaver-admin-ui-components';
 import { useLocation } from 'wouter';
 import { okta } from '../client';
-import { AccessToken, IDToken } from '@okta/okta-auth-js';
+import { AccessToken, IDToken, RefreshToken } from '@okta/okta-auth-js';
 
-const scopes = ['openid'];
+const scopes = ['openid', 'offline_access'];
 if (import.meta.env.VITE_OKTA_ADDITIONAL_SCOPES) {
 	scopes.push(...import.meta.env.VITE_OKTA_ADDITIONAL_SCOPES.split(','));
 }
@@ -31,10 +35,23 @@ export const Okta = () => {
 
 				okta.tokenManager.setTokens(tokens);
 				localStorage.setItem(localStorageAuthKey, `Bearer ${tokens.accessToken.accessToken}`);
+
+				// Store refresh token for transparent token refresh
+				if (tokens.refreshToken) {
+					localStorage.setItem(localStorageRefreshTokenKey, tokens.refreshToken.refreshToken);
+				}
 			}
 
 			const accessToken = (await okta.tokenManager.get('accessToken')) as AccessToken | undefined;
 			const idToken = (await okta.tokenManager.get('idToken')) as IDToken | undefined;
+			const refreshToken = (await okta.tokenManager.get('refreshToken')) as
+				| RefreshToken
+				| undefined;
+
+			// If we have a refresh token in the token manager, store it for transparent refresh
+			if (refreshToken?.refreshToken) {
+				localStorage.setItem(localStorageRefreshTokenKey, refreshToken.refreshToken);
+			}
 			let userInfo;
 			if (accessToken && idToken) {
 				try {
