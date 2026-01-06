@@ -3,6 +3,10 @@ import { Button } from '@exogee/graphweaver-admin-ui-components';
 import { useLocation, useSearchParams } from 'wouter';
 import { getAuth0Client } from '../client';
 
+// Default scopes for Auth0. Add 'offline_access' to enable token refresh.
+// Configure via VITE_AUTH_ZERO_SCOPES (space-separated)
+const scope = import.meta.env.VITE_AUTH_ZERO_SCOPES || 'openid profile email';
+
 export const Auth0 = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>();
@@ -38,7 +42,7 @@ export const Auth0 = () => {
 			const options = {
 				authorizationParams: {
 					redirect_uri: window.location.toString(),
-					scope: 'openid profile email offline_access',
+					scope,
 				},
 			};
 			await client.loginWithRedirect(options);

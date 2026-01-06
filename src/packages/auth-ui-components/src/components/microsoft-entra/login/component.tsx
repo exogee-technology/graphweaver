@@ -11,7 +11,7 @@ import { publicClientApplication } from '../client';
 
 const scopes = import.meta.env.VITE_MICROSOFT_ENTRA_SCOPES
 	? import.meta.env.VITE_MICROSOFT_ENTRA_SCOPES.split(' ')
-	: ['openid', 'email', 'offline_access'];
+	: ['openid', 'email'];
 
 const MicrosoftEntraInner = () => {
 	const [, setLocation] = useLocation();
@@ -37,6 +37,7 @@ const MicrosoftEntraInner = () => {
 
 			// Extract and save the refresh token from MSAL's cache before clearing it.
 			// MSAL stores refresh tokens in sessionStorage with keys containing 'refreshtoken'.
+			// The token value is stored in the 'secret' property of the cache entry.
 			const refreshTokenKey = Object.keys(sessionStorage).find(
 				(k) => k.toLowerCase().includes('refreshtoken') && k.startsWith('msal.')
 			);
@@ -45,11 +46,21 @@ const MicrosoftEntraInner = () => {
 					const refreshTokenData = JSON.parse(sessionStorage.getItem(refreshTokenKey) || '{}');
 					if (refreshTokenData.secret) {
 						localStorage.setItem(localStorageRefreshTokenKey, refreshTokenData.secret);
+					} else {
+						console.warn(
+							'MSAL refresh token cache entry found but no secret property. Keys:',
+							Object.keys(refreshTokenData)
+						);
 					}
 				} catch {
 					// If we can't parse the refresh token, continue without it
 					console.warn('Could not extract refresh token from MSAL cache');
 				}
+			} else {
+				console.warn(
+					'No MSAL refresh token found in sessionStorage. Available msal keys:',
+					Object.keys(sessionStorage).filter((k) => k.startsWith('msal.'))
+				);
 			}
 
 			// Remove all msal.* values from sessionStorage to make sure we're the

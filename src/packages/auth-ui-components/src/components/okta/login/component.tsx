@@ -8,7 +8,7 @@ import { useLocation } from 'wouter';
 import { okta } from '../client';
 import { AccessToken, IDToken, RefreshToken } from '@okta/okta-auth-js';
 
-const scopes = ['openid', 'offline_access'];
+const scopes = ['openid'];
 if (import.meta.env.VITE_OKTA_ADDITIONAL_SCOPES) {
 	scopes.push(...import.meta.env.VITE_OKTA_ADDITIONAL_SCOPES.split(','));
 }
