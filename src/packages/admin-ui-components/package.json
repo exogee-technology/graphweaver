@@ -72,7 +72,7 @@
 		"@types/react-syntax-highlighter": "15.5.13",
 		"esbuild": "0.27.1",
 		"esbuild-plugin-copy": "2.1.1",
-		"eslint-plugin-storybook": "10.1.7",
+		"eslint-plugin-storybook": "10.1.11",
 		"formik": "2.4.6",
 		"glob": "11.1.0",
 		"graphql": "16.12.0",
