@@ -1,7 +1,10 @@
 import { Auth0Client, createAuth0Client } from '@auth0/auth0-spa-js';
-import { localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import {
+	localStorageAuthKey,
+	localStorageRefreshTokenKey,
+} from '@exogee/graphweaver-admin-ui-components';
 
-// We are using this cache as a hook to save the access token in the local storage
+// We are using this cache as a hook to save the access token and refresh token in local storage
 const cache = {
 	get: () => undefined,
 	remove: () => {},
@@ -9,6 +12,10 @@ const cache = {
 		const accessToken = value?.body?.access_token;
 		if (accessToken) {
 			localStorage.setItem(localStorageAuthKey, `Bearer ${accessToken}`);
+		}
+		const refreshToken = value?.body?.refresh_token;
+		if (refreshToken) {
+			localStorage.setItem(localStorageRefreshTokenKey, refreshToken);
 		}
 	},
 };

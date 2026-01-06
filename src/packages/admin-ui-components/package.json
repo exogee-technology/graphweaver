@@ -30,6 +30,7 @@
 	],
 	"dependencies": {
 		"@apollo/client": "3.13.5",
+		"jwt-decode": "4.0.0",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.11.3",
 		"@tanstack/react-form": "1.23.8",

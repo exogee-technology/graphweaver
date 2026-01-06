@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
 import { inflate } from 'graphql-deduplicator';
 import { localStorageAuthKey, uri } from './config';
+import { tokenRefreshLink } from './token-refresh-link';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
@@ -69,7 +70,8 @@ const authLink = new ApolloLink((operation, forward) => {
 	});
 });
 
+// Token refresh link runs first to ensure fresh tokens before auth link reads them
 export const apolloClient = new ApolloClient({
-	link: authLink.concat(httpLink),
+	link: ApolloLink.from([tokenRefreshLink, authLink, httpLink]),
 	cache: new InMemoryCache(),
 });

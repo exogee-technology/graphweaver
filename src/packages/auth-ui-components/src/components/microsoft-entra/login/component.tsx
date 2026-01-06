@@ -1,5 +1,9 @@
 import { useEffect } from 'react';
-import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import {
+	Button,
+	localStorageAuthKey,
+	localStorageRefreshTokenKey,
+} from '@exogee/graphweaver-admin-ui-components';
 import { useLocation } from 'wouter';
 import { useMsalAuthentication, MsalProvider } from '@azure/msal-react';
 import { InteractionType } from '@azure/msal-browser';
@@ -28,8 +32,36 @@ const MicrosoftEntraInner = () => {
 	useEffect(() => {
 		if (result?.accessToken) {
 			// The user is coming back from a successful authentication redirect.
-			// Save the token
+			// Save the access token
 			localStorage.setItem(localStorageAuthKey, result.accessToken);
+
+			// Extract and save the refresh token from MSAL's cache before clearing it.
+			// MSAL stores refresh tokens in sessionStorage with keys containing 'refreshtoken'.
+			// The token value is stored in the 'secret' property of the cache entry.
+			const refreshTokenKey = Object.keys(sessionStorage).find(
+				(k) => k.toLowerCase().includes('refreshtoken') && k.startsWith('msal.')
+			);
+			if (refreshTokenKey) {
+				try {
+					const refreshTokenData = JSON.parse(sessionStorage.getItem(refreshTokenKey) || '{}');
+					if (refreshTokenData.secret) {
+						localStorage.setItem(localStorageRefreshTokenKey, refreshTokenData.secret);
+					} else {
+						console.warn(
+							'MSAL refresh token cache entry found but no secret property. Keys:',
+							Object.keys(refreshTokenData)
+						);
+					}
+				} catch {
+					// If we can't parse the refresh token, continue without it
+					console.warn('Could not extract refresh token from MSAL cache');
+				}
+			} else {
+				console.warn(
+					'No MSAL refresh token found in sessionStorage. Available msal keys:',
+					Object.keys(sessionStorage).filter((k) => k.startsWith('msal.'))
+				);
+			}
 
 			// Remove all msal.* values from sessionStorage to make sure we're the
 			// owners of the logged in state. We don't give a rats about your cached
