@@ -40,6 +40,8 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
       - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: src/package.json
 
       - uses: actions/setup-node@v6
         with:
