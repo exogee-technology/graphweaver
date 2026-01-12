@@ -2,6 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@exogee/graphweaver-admin-ui-components';
 import { useLocation, useSearchParams } from 'wouter';
 import { getAuth0Client } from '../client';
+import { RedirectLoginOptions } from '@auth0/auth0-spa-js';
+
+// Default scopes for Auth0. Add 'offline_access' to enable token refresh.
+// Configure via VITE_AUTH_ZERO_SCOPES (space-separated)
+const scope = import.meta.env.VITE_AUTH_ZERO_SCOPES || undefined;
 
 export const Auth0 = () => {
 	const [loading, setLoading] = useState(true);
@@ -35,9 +40,10 @@ export const Auth0 = () => {
 	const requestLogin = useCallback(async () => {
 		try {
 			const client = await getAuth0Client();
-			const options = {
+			const options: RedirectLoginOptions = {
 				authorizationParams: {
 					redirect_uri: window.location.toString(),
+					scope,
 				},
 			};
 			await client.loginWithRedirect(options);

@@ -2,6 +2,7 @@ import {
 	Button,
 	apolloClient,
 	localStorageAuthKey,
+	localStorageRefreshTokenKey,
 	toast,
 } from '@exogee/graphweaver-admin-ui-components';
 import { LogoutIcon } from '../../assets/16-logout';
@@ -19,6 +20,7 @@ export const Logout = ({ onLogout }: LogoutProps) => {
 	const handleOnLogout = async () => {
 		try {
 			localStorage.removeItem(localStorageAuthKey);
+			localStorage.removeItem(localStorageRefreshTokenKey);
 
 			// We do NOT want to call apolloClient.resetStore() here.
 			// This refetches all active queries, which causes calls to the backend, which causes the user to be redirected
