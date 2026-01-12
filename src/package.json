@@ -3,7 +3,7 @@
 	"description": "Graphweaver: Quickly build a GraphQL server which connects to all your datasources",
 	"private": true,
 	"license": "Apache-2.0",
-	"packageManager": "pnpm@9.11.0",
+	"packageManager": "pnpm@10.28.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/exogee-technology/graphweaver.git"
