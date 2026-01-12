@@ -462,8 +462,8 @@ importers:
         specifier: 19.2.3
         version: 19.2.3
       wouter:
-        specifier: 3.7.1
-        version: 3.7.1(react@19.2.3)
+        specifier: 3.9.0
+        version: 3.9.0(react@19.2.3)
     devDependencies:
       '@types/node':
         specifier: 24.10.0
@@ -742,8 +742,8 @@ importers:
         specifier: 19.2.3
         version: 19.2.3(react@19.2.3)
       wouter:
-        specifier: 3.7.1
-        version: 3.7.1(react@19.2.3)
+        specifier: 3.9.0
+        version: 3.9.0(react@19.2.3)
       xero-node:
         specifier: 13.3.1
         version: 13.3.1
@@ -785,8 +785,8 @@ importers:
         specifier: 6.0.2
         version: 6.0.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       wouter:
-        specifier: 3.7.1
-        version: 3.7.1(react@19.2.3)
+        specifier: 3.9.0
+        version: 3.9.0(react@19.2.3)
     devDependencies:
       '@chialab/esbuild-plugin-html':
         specifier: 0.19.0
@@ -897,8 +897,8 @@ importers:
         specifier: 0.9.0
         version: 0.9.0(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
       wouter:
-        specifier: 3.7.1
-        version: 3.7.1(react@19.2.3)
+        specifier: 3.9.0
+        version: 3.9.0(react@19.2.3)
       zod:
         specifier: 4.3.5
         version: 4.3.5
@@ -1079,8 +1079,8 @@ importers:
         specifier: 1.0.6
         version: 1.0.6(react@19.2.3)
       wouter:
-        specifier: 3.7.1
-        version: 3.7.1(react@19.2.3)
+        specifier: 3.9.0
+        version: 3.9.0(react@19.2.3)
     devDependencies:
       '@auth0/auth0-spa-js':
         specifier: 2.11.0
@@ -11130,8 +11130,9 @@ packages:
   sax@1.4.1:
     resolution: {integrity: sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==}
 
-  sax@1.4.3:
-    resolution: {integrity: sha512-yqYn1JhPczigF94DMS+shiDMjDowYO6y9+wB/4WgO0Y19jWYk0lQ4tuG5KI7kj4FTp1wxPj5IFfcrz/s1c3jjQ==}
+  sax@1.4.4:
+    resolution: {integrity: sha512-1n3r/tGXO6b6VXMdFT54SHzT9ytu9yr7TaELowdYpMqY/Ao7EnlQGmAQ1+RatX7Tkkdm6hONI2owqNx2aZj5Sw==}
+    engines: {node: '>=11.0.0'}
 
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
@@ -12118,8 +12119,8 @@ packages:
   wordwrap@1.0.0:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
 
-  wouter@3.7.1:
-    resolution: {integrity: sha512-od5LGmndSUzntZkE2R5CHhoiJ7YMuTIbiXsa0Anytc2RATekgv4sfWRAxLEULBrp7ADzinWQw8g470lkT8+fOw==}
+  wouter@3.9.0:
+    resolution: {integrity: sha512-sF/od/PIgqEQBQcrN7a2x3MX6MQE6nW0ygCfy9hQuUkuB28wEZuu/6M5GyqkrrEu9M6jxdkgE12yDFsQMKos4Q==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -24312,7 +24313,7 @@ snapshots:
 
   sax@1.4.1: {}
 
-  sax@1.4.3: {}
+  sax@1.4.4: {}
 
   scheduler@0.27.0: {}
 
@@ -25404,7 +25405,7 @@ snapshots:
 
   wordwrap@1.0.0: {}
 
-  wouter@3.7.1(react@19.2.3):
+  wouter@3.9.0(react@19.2.3):
     dependencies:
       mitt: 3.0.1
       react: 19.2.3
@@ -25477,7 +25478,7 @@ snapshots:
 
   xml2js@0.6.2:
     dependencies:
-      sax: 1.4.3
+      sax: 1.4.4
       xmlbuilder: 11.0.1
 
   xmlbuilder@11.0.1: {}
