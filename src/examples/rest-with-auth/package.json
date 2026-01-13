@@ -39,7 +39,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "24.10.0",
-		"dotenv-cli": "10.0.0",
+		"dotenv-cli": "11.0.0",
 		"typescript": "5.9.3",
 		"vite": "7.3.0"
 	},
