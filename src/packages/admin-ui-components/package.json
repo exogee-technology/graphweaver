@@ -68,7 +68,7 @@
 		"@storybook/react-vite": "10.1.11",
 		"@types/graphql-deduplicator": "2.0.2",
 		"@types/luxon": "3.7.1",
-		"@types/papaparse": "5.3.16",
+		"@types/papaparse": "5.5.2",
 		"@types/react": "19.2.7",
 		"@types/react-syntax-highlighter": "15.5.13",
 		"esbuild": "0.27.1",
