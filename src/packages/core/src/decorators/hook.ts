@@ -24,8 +24,10 @@ export function Hook<G, P extends HookParams<G, BaseContext>>(
 			);
 		}
 
-		// If we're decorating a method, we use the constructor name, otherwise we use the target name because we're directly decorating the class.
-		const typeName = descriptor?.value ? target.constructor.name : target.name;
+		// For instance methods, target is the prototype so we need target.constructor.name.
+		// For everything else (static methods, class decorators), target is the class itself.
+		const isInstanceMethod = descriptor?.value && typeof target !== 'function';
+		const typeName = isInstanceMethod ? target.constructor.name : target.name;
 		const hookManager = (hookManagerMap.get(typeName) as HookManager<G>) || new HookManager<G>();
 
 		if (descriptor?.value) {
