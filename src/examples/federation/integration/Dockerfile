@@ -1,4 +1,4 @@
-FROM node:25.0.0-alpine
+FROM node:25.3.0-alpine
 WORKDIR /app
 COPY index.js index.js
 ENV GRAPHWEAVER_API_PORT=4001
