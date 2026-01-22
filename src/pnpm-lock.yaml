@@ -1265,11 +1265,11 @@ importers:
         specifier: 24.10.0
         version: 24.10.0
       aws-cdk:
-        specifier: 2.1101.0
-        version: 2.1101.0
+        specifier: 2.1102.0
+        version: 2.1102.0
       aws-cdk-lib:
-        specifier: 2.234.1
-        version: 2.234.1(constructs@10.4.3)
+        specifier: 2.235.1
+        version: 2.235.1(constructs@10.4.3)
       constructs:
         specifier: 10.4.3
         version: 10.4.3
@@ -2095,8 +2095,8 @@ packages:
   '@auth0/auth0-spa-js@2.11.0':
     resolution: {integrity: sha512-MZuUkB6cYAWm2uswWhEj8aMS7sw6zx8cs5YyPbrHCF+MlScLgfOkUnGe0tbnv7592xQ6M2h4lB66WyemFQEmPA==}
 
-  '@aws-cdk/asset-awscli-v1@2.2.258':
-    resolution: {integrity: sha512-TL3I9cIue0bAsuwrmjgjAQaEH6JL09y49FVQMDhrz4jJ2iPKuHtdrYd7ydm02t1YZdPZE2M0VNj6VD4fGIFpvw==}
+  '@aws-cdk/asset-awscli-v1@2.2.261':
+    resolution: {integrity: sha512-XkKvgG/OxrEYtVTt2Q9gaD58Qn90fnX/dNczL4k6myeii7UgAGPmqh+I+1uKohCWGKIKd+4Gz2xWBL/tPi4YIA==}
 
   '@aws-cdk/asset-node-proxy-agent-v6@2.1.0':
     resolution: {integrity: sha512-7bY3J8GCVxLupn/kNmpPc5VJz8grx+4RKfnnJiO1LG+uxkZfANZG3RMHhE+qQxxwkyQ9/MfPtTpf748UhR425A==}
@@ -7149,8 +7149,8 @@ packages:
     resolution: {integrity: sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g==}
     engines: {node: '>=6.0.0'}
 
-  aws-cdk-lib@2.234.1:
-    resolution: {integrity: sha512-2oNqAA1qjF9xHCom6yHuY8KE6UltK7pTg3egf/t1+C6/OFEaw9+jyhCWmTasGmvjyQSkbvKiCPZco0l+XVyxiQ==}
+  aws-cdk-lib@2.235.1:
+    resolution: {integrity: sha512-qKAsbunxtveIOIaeJSBgH2PZgdIiPkKtfsa+BxeNDOv2idw6Oa0dJW3Q0sdu8XBopY1KZI2Owrg8r56BOyyohA==}
     engines: {node: '>= 18.0.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -7167,8 +7167,8 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.1101.0:
-    resolution: {integrity: sha512-5EP+t13OFzE0SaK+KY/di9ZcXQYwnhDtM8kqEMjEvqhj+K3eqtV0DDI1YjthOoVMBAHgZK9juKPqxfwwRprBPQ==}
+  aws-cdk@2.1102.0:
+    resolution: {integrity: sha512-M/TeLiZERo88hB7FIbT+LyzKQBQuxiGW34oSSfy9+rYTuGwJrO9z6ZZrBNO8/jODT2iR7z0pa3CPsdUVC71oOw==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
 
@@ -11556,6 +11556,7 @@ packages:
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
 
   tarn@3.0.2:
     resolution: {integrity: sha512-51LAVKUSZSVfI05vjPESNc5vwqqZpbXCsU+/+wxlOrUjk2SnFTt97v9ZgQrD4YmxYW1Px6w2KjaDitCfkvgxMQ==}
@@ -12541,7 +12542,7 @@ snapshots:
       dpop: 2.1.1
       es-cookie: 1.3.2
 
-  '@aws-cdk/asset-awscli-v1@2.2.258': {}
+  '@aws-cdk/asset-awscli-v1@2.2.261': {}
 
   '@aws-cdk/asset-node-proxy-agent-v6@2.1.0': {}
 
@@ -19677,14 +19678,14 @@ snapshots:
 
   await-to-js@3.0.0: {}
 
-  aws-cdk-lib@2.234.1(constructs@10.4.3):
+  aws-cdk-lib@2.235.1(constructs@10.4.3):
     dependencies:
-      '@aws-cdk/asset-awscli-v1': 2.2.258
+      '@aws-cdk/asset-awscli-v1': 2.2.261
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
       '@aws-cdk/cloud-assembly-schema': 48.20.0
       constructs: 10.4.3
 
-  aws-cdk@2.1101.0:
+  aws-cdk@2.1102.0:
     optionalDependencies:
       fsevents: 2.3.2
 
