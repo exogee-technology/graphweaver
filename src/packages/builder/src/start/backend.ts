@@ -1,4 +1,5 @@
 import path from 'path';
+import { spawn } from 'node:child_process';
 import { rimraf } from 'rimraf';
 import { build } from 'esbuild';
 import dotenv from 'dotenv';
@@ -97,7 +98,28 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	await Promise.all([checkNativeModules, buildBackend]);
 
 	const buildDir = path.posix.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
-	const { graphweaver, handler } = await import(buildDir);
+	const { graphweaver, handler, azureHandler } = await import(buildDir);
+
+	if (azureHandler && !handler) {
+		// Azure Functions: spawn func start; project graphql.js loads built backend from .graphweaver/backend
+		const funcPort = port + 1;
+		const child = spawn('func', ['start', '--port', String(funcPort)], {
+			cwd: process.cwd(),
+			stdio: 'inherit',
+			env: process.env,
+			shell: isWindows(),
+		});
+		child.on('error', (err) => {
+			console.error('Failed to start Azure Functions Core Tools (func). Is it installed?', err);
+			process.exit(1);
+		});
+		child.on('exit', (code) => {
+			if (code != null && code !== 0) {
+				process.exit(code);
+			}
+		});
+		return;
+	}
 
 	if (!handler) {
 		if (additionalFunctions.length > 0) {
@@ -158,7 +180,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	// We don't have types for serverless offline and that's ok.
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-expect-error
 	const { default: ServerlessOffline } = await import('serverless-offline');
 
 	const logLevel = process.env.LOGGING_LEVEL || 'trace';

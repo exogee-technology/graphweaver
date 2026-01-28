@@ -8,8 +8,6 @@ class Connection extends SqliteConnection {
 		await this.client.raw('pragma foreign_keys = on');
 	}
 	private getPatchedWasmDialect() {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore - we need to call the private message
 		const { Sqlite3Dialect } = MonkeyPatchable;
 
 		if (Sqlite3Dialect.prototype.___patched) {

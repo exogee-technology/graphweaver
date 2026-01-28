@@ -27,6 +27,24 @@ export const buildOutputPathFor = (userSuppliedPath: string) => {
 	);
 };
 
+/** Default backend entry path (source). */
+export const defaultBackendEntryPath = path.join(process.cwd(), 'src', 'backend', 'index.ts');
+
+/**
+ * Detects serverless mode from the backend entry file.
+ * Returns 'lambda' | 'azure' | 'standalone'.
+ */
+export const getBackendEntryMode = async (): Promise<'lambda' | 'azure' | 'standalone'> => {
+	try {
+		const content = await fs.promises.readFile(defaultBackendEntryPath, 'utf8');
+		if (content.includes('graphweaver.handler')) return 'lambda';
+		if (content.includes('graphweaver.azureHandler')) return 'azure';
+	} catch {
+		// file missing or unreadable
+	}
+	return 'standalone';
+};
+
 export const baseEsbuildConfig: BuildOptions = {
 	minify: false,
 	bundle: true,
@@ -139,9 +157,13 @@ export const addStartFunctionIfNeeded = () => ({
 		build.onLoad({ filter: /src\/backend\/index\.ts$/ }, async (args: OnLoadArgs) => {
 			const input = await fs.promises.readFile(args.path, 'utf8');
 
-			// If the graphweaver app is a lambda function then there is nothing to change
+			// If the graphweaver app is a lambda or Azure function then there is nothing to change
 			if (input.includes('graphweaver.handler')) {
 				console.log('Lambda handler detected. No changes needed.');
+				return { contents: input };
+			}
+			if (input.includes('graphweaver.azureHandler')) {
+				console.log('Azure handler detected. No changes needed.');
 				return { contents: input };
 			}
 

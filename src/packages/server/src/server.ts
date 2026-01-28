@@ -17,7 +17,12 @@ import { ApolloServer, BaseContext, GraphQLRequest } from '@apollo/server';
 import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
 
 import { LogErrors, LogRequests, corsPlugin, dedupeGraphQL } from './apollo-plugins';
-import { StartServerOptions, startStandaloneServer, startServerless } from './integrations';
+import {
+	StartServerOptions,
+	startServerless,
+	startServerlessAzure,
+	startStandaloneServer,
+} from './integrations';
 import { GraphweaverConfig, mergeConfig } from './config';
 import { enableTracing } from './trace';
 import { pluginManager } from './plugin-manager';
@@ -147,6 +152,21 @@ export default class Graphweaver<TContext extends BaseContext> {
 			graphweaverPlugins: this.graphweaverPlugins as Set<
 				GraphweaverPlugin<AWSLambda.APIGatewayProxyResult>
 			>,
+		});
+	}
+
+	public azureHandler(): import('./integrations/azure').AzureHttpHandler {
+		logger.info(`Graphweaver Azure handler called`);
+
+		if (this.config.fastifyOptions) {
+			logger.warn(
+				"Fastify options have been configured, but we're running in Azure Functions mode, so they will be ignored."
+			);
+		}
+
+		return startServerlessAzure({
+			server: this.server,
+			graphweaverPlugins: this.graphweaverPlugins as Set<GraphweaverPlugin<unknown>>,
 		});
 	}
 

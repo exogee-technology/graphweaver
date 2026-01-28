@@ -1,0 +1,6 @@
+node_modules/
+.graphweaver/
+dist/
+lib/
+*.sqlite
+local.settings.json

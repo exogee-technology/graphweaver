@@ -1,5 +1,5 @@
 import path from 'path';
-import { writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { build } from 'esbuild';
 import { rimraf } from 'rimraf';
 import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
@@ -10,6 +10,7 @@ import {
 	buildOutputPathFor,
 	checkPackageForNativeModules,
 	checkTypescriptTypes,
+	getBackendEntryMode,
 	getExternalModules,
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
@@ -90,6 +91,49 @@ export const buildBackend = async () => {
 					JSON.stringify(result.metafile, null, 2)
 				);
 		}
+	}
+
+	const entryMode = await getBackendEntryMode();
+	if (entryMode === 'azure') {
+		const distDir = path.resolve(process.cwd(), 'dist');
+		if (!existsSync(distDir)) {
+			mkdirSync(distDir, { recursive: true });
+		}
+		writeFileSync(
+			path.join(distDir, 'host.json'),
+			JSON.stringify(
+				{
+					version: '2.0',
+					extensionBundle: {
+						id: 'Microsoft.Azure.Functions.ExtensionBundle',
+						version: '[4.*, 5.0.0)',
+					},
+					extensions: {
+						http: {
+							routePrefix: '',
+						},
+					},
+				},
+				null,
+				2
+			)
+		);
+		// Azure Functions v4 Node entry: register the GraphQL handler with the app.
+		writeFileSync(
+			path.join(distDir, 'graphql.js'),
+			`// Azure Functions v4 entry - registers Graphweaver Azure handler
+const { app } = require('@azure/functions');
+const { azureHandler } = require('./backend/index');
+
+app.http('graphql', {
+  methods: ['GET', 'POST', 'OPTIONS'],
+  authLevel: 'anonymous',
+  route: '/',
+  handler: azureHandler,
+});
+`
+		);
+		console.log(' - Azure output written: dist/host.json, dist/graphql.js');
 	}
 
 	console.log('\nBackend Build Finished! ');

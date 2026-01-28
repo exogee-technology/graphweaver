@@ -55,6 +55,9 @@ export function useGenrePopularityLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GenrePopularityQuery, GenrePopularityQueryVariables>(GenrePopularityDocument, options);
         }
+// @ts-ignore
+export function useGenrePopularitySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GenrePopularityQuery, GenrePopularityQueryVariables>): Apollo.UseSuspenseQueryResult<GenrePopularityQuery, GenrePopularityQueryVariables>;
+export function useGenrePopularitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GenrePopularityQuery, GenrePopularityQueryVariables>): Apollo.UseSuspenseQueryResult<GenrePopularityQuery | undefined, GenrePopularityQueryVariables>;
 export function useGenrePopularitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GenrePopularityQuery, GenrePopularityQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GenrePopularityQuery, GenrePopularityQueryVariables>(GenrePopularityDocument, options);
