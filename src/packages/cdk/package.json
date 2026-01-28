@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-cdk",
-	"version": "2.20.9",
+	"version": "2.21.0",
 	"description": "Deploy Graphweaver to AWS",
 	"license": "Apache-2.0",
 	"sideEffects": false,
