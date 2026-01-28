@@ -83,7 +83,7 @@
 		"typescript": "5.9.3",
 		"vite": "7.3.0",
 		"vite-plugin-graphweaver": "workspace:*",
-		"vitest": "4.0.3"
+		"vitest": "4.0.18"
 	},
 	"keywords": [
 		"graphql",
