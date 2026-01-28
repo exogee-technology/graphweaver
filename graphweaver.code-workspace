@@ -17,6 +17,10 @@
       "path": "src/examples/s3-storage"
     },
     {
+      "name": "➡️ Example: Azure Functions",
+      "path": "src/examples/azure-functions"
+    },
+    {
       "name": "➡️ Example: Federation",
       "path": "src/examples/federation"
     },

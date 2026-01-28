@@ -151,6 +151,49 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
+  examples/azure-functions:
+    dependencies:
+      '@azure/functions':
+        specifier: 4.11.0
+        version: 4.11.0
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars':
+        specifier: workspace:*
+        version: link:../../packages/scalars
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@mikro-orm/core':
+        specifier: 6.6.2
+        version: 6.6.2
+      '@mikro-orm/knex':
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
+      '@mikro-orm/sqlite':
+        specifier: 6.6.2
+        version: 6.6.2(@mikro-orm/core@6.6.2)
+      graphql:
+        specifier: 16.12.0
+        version: 16.12.0
+      mikro-orm-sqlite-wasm:
+        specifier: workspace:*
+        version: link:../../packages/mikro-orm-sqlite-wasm
+    devDependencies:
+      '@types/node':
+        specifier: 24.10.0
+        version: 24.10.0
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
   examples/databases:
     dependencies:
       '@apollo/server':
@@ -1815,9 +1858,15 @@ importers:
       '@as-integrations/aws-lambda':
         specifier: 4.0.1
         version: 4.0.1(@apollo/server@5.2.0(graphql@16.12.0))
+      '@as-integrations/azure-functions':
+        specifier: 0.2.3
+        version: 0.2.3(@apollo/server@5.2.0(graphql@16.12.0))
       '@as-integrations/fastify':
         specifier: 3.1.0
         version: 3.1.0(@apollo/server@5.2.0(graphql@16.12.0))(fastify@5.6.2)
+      '@azure/functions':
+        specifier: 4.11.0
+        version: 4.11.0
       '@escape.tech/graphql-armor':
         specifier: 3.2.0
         version: 3.2.0(@apollo/server@5.2.0(graphql@16.12.0))(@envelop/core@5.4.0)(@escape.tech/graphql-armor-types@0.7.0)
@@ -2084,6 +2133,12 @@ packages:
     engines: {node: '>=16.0'}
     peerDependencies:
       '@apollo/server': ^5.0.0
+
+  '@as-integrations/azure-functions@0.2.3':
+    resolution: {integrity: sha512-NiP3GRxXLtOed2YDvmKp6Lb5+/DFPM7Eg/zrYnA7RCqdLb3gA0Wj0F6Bl/DubvH83jFjfgmmtI0qSj+T/wKoNw==}
+    engines: {node: '>=18.0'}
+    peerDependencies:
+      '@apollo/server': ^4 || ^5
 
   '@as-integrations/fastify@3.1.0':
     resolution: {integrity: sha512-hfK5adsybNj0qRc+5BiCOy50SqqOhPIctvaaGsjqq7ui8lO/TZkLtz6IvDhWC70vOcMXJuMJCTTEb4hex8RVgw==}
@@ -2422,6 +2477,17 @@ packages:
   '@azure/core-util@1.13.1':
     resolution: {integrity: sha512-XPArKLzsvl0Hf0CaGyKHUyVgF7oDnhKoP85Xv6M4StF/1AhfORhZudHtOyf2s+FcbuQ9dPRAjB8J2KvRRMUK2A==}
     engines: {node: '>=20.0.0'}
+
+  '@azure/functions-extensions-base@0.2.0':
+    resolution: {integrity: sha512-ncCkHBNQYJa93dBIh+toH0v1iSgCzSo9tr94s6SMBe7DPWREkaWh8cq33A5P4rPSFX1g5W+3SPvIzDr/6/VOWQ==}
+    engines: {node: '>=18.0'}
+
+  '@azure/functions@3.5.1':
+    resolution: {integrity: sha512-6UltvJiuVpvHSwLcK/Zc6NfUwlkDLOFFx97BHCJzlWNsfiWwzwmTsxJXg4kE/LemKTHxPpfoPE+kOJ8hAdiKFQ==}
+
+  '@azure/functions@4.11.0':
+    resolution: {integrity: sha512-J0We2gav3YZFLO9pJlXDKUSOT0r/DzkUaJTaruhm8pwoSMbi4zjsS5N6fARrTel+IBCm77hlD0IgZSKSWvVpUw==}
+    engines: {node: '>=20.0'}
 
   '@azure/identity@4.13.0':
     resolution: {integrity: sha512-uWC0fssc+hs1TGGVkkghiaFkkS7NkTxfnCH+Hdg+yTehTpMcehpok4PgUKKdyCH+9ldu6FhiHRv84Ntqj1vVcw==}
@@ -7673,6 +7739,10 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
+  cookie@0.7.2:
+    resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
+    engines: {node: '>= 0.6'}
+
   cookie@1.0.2:
     resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
     engines: {node: '>=18'}
@@ -12529,6 +12599,12 @@ snapshots:
       '@apollo/server': 5.2.0(graphql@16.12.0)
       '@types/aws-lambda': 8.10.156
 
+  '@as-integrations/azure-functions@0.2.3(@apollo/server@5.2.0(graphql@16.12.0))':
+    dependencies:
+      '@apollo/server': 5.2.0(graphql@16.12.0)
+      '@azure/functions': 3.5.1
+      '@azure/functions-v4': '@azure/functions@4.11.0'
+
   '@as-integrations/fastify@3.1.0(@apollo/server@5.2.0(graphql@16.12.0))(fastify@5.6.2)':
     dependencies:
       '@apollo/server': 5.2.0(graphql@16.12.0)
@@ -13546,6 +13622,20 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+
+  '@azure/functions-extensions-base@0.2.0': {}
+
+  '@azure/functions@3.5.1':
+    dependencies:
+      iconv-lite: 0.6.3
+      long: 4.0.0
+      uuid: 8.3.2
+
+  '@azure/functions@4.11.0':
+    dependencies:
+      '@azure/functions-extensions-base': 0.2.0
+      cookie: 0.7.2
+      long: 4.0.0
 
   '@azure/identity@4.13.0':
     dependencies:
@@ -20314,6 +20404,8 @@ snapshots:
   content-type@1.0.5: {}
 
   convert-source-map@2.0.0: {}
+
+  cookie@0.7.2: {}
 
   cookie@1.0.2: {}
 

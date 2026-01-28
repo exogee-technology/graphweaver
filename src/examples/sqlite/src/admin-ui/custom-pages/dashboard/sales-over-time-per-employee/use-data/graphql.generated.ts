@@ -54,6 +54,9 @@ export function useSalesPerEmployeeLazyQuery(baseOptions?: Apollo.LazyQueryHookO
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SalesPerEmployeeQuery, SalesPerEmployeeQueryVariables>(SalesPerEmployeeDocument, options);
         }
+// @ts-ignore
+export function useSalesPerEmployeeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SalesPerEmployeeQuery, SalesPerEmployeeQueryVariables>): Apollo.UseSuspenseQueryResult<SalesPerEmployeeQuery, SalesPerEmployeeQueryVariables>;
+export function useSalesPerEmployeeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SalesPerEmployeeQuery, SalesPerEmployeeQueryVariables>): Apollo.UseSuspenseQueryResult<SalesPerEmployeeQuery | undefined, SalesPerEmployeeQueryVariables>;
 export function useSalesPerEmployeeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SalesPerEmployeeQuery, SalesPerEmployeeQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<SalesPerEmployeeQuery, SalesPerEmployeeQueryVariables>(SalesPerEmployeeDocument, options);
