@@ -180,7 +180,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	// We don't have types for serverless offline and that's ok.
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-expect-error
 	const { default: ServerlessOffline } = await import('serverless-offline');
 
 	const logLevel = process.env.LOGGING_LEVEL || 'trace';

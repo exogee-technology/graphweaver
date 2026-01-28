@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore This file is the only one we need for the bundle
+// @ts-expect-error This file is the only one we need for the bundle
 import { argon2id } from 'hash-wasm/dist/argon2.umd.min.js';
 import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import generatePassword from 'omgopass';
