@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "2.20.9",
+	"version": "2.21.0",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-scalars",
-	"version": "2.20.9",
+	"version": "2.21.0",
 	"description": "Common scalar types for use with @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"main": "lib/index.js",
