@@ -8,6 +8,7 @@ export default TypeScriptESLint.config(
 	{
 		ignores: [
 			'**/{app,dist,public,lib,build,.graphweaver,local_modules}/**/*',
+			'**/storybook-static/**',
 			'examples/federation/integration/index.js',
 			'packages/cli/bin/index.js',
 			'packages/cli/test-init.js',
