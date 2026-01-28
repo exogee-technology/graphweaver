@@ -33,7 +33,7 @@
 		"luxon": "3.7.2"
 	},
 	"devDependencies": {
-		"@types/lodash": "4.17.21",
+		"@types/lodash": "4.17.23",
 		"@types/luxon": "3.7.1",
 		"@types/node": "24.10.0",
 		"esbuild": "0.27.1",
