@@ -1,0 +1,28 @@
+{
+    "name": "client-side-keys",
+    "version": "0.1.0",
+    "description": "client-side-keys Graphweaver Project",
+    "scripts": {
+        "build": "graphweaver build",
+        "start": "graphweaver start",
+        "watch": "graphweaver watch",
+        "import": "graphweaver import"
+    },
+    "dependencies": {
+        "@as-integrations/aws-lambda": "4.0.1",
+        "@exogee/graphweaver": "2.21.0",
+        "@exogee/graphweaver-scalars": "2.21.0",
+        "@exogee/graphweaver-server": "2.21.0",
+        "@exogee/graphweaver-mikroorm": "2.21.0",
+        "@mikro-orm/core": "6.6.2",
+        "@mikro-orm/knex": "6.6.2",
+        "@mikro-orm/postgresql": "6.6.2",
+        "pg": "8.12.0",
+        "graphql": "16.12.0"
+    },
+    "devDependencies": {
+        "@types/node": "24.10.0",
+        "graphweaver": "2.21.0",
+        "typescript": "5.9.3"
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "noUnusedLocals": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "target": "es2019",
+        "module": "es2020",
+        "moduleResolution": "bundler",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true
+    },
+    "exclude": [
+        "**/node_modules/**",
+        "**/lib/**"
+    ],
+    "include": [
+        "./src"
+    ]
+}

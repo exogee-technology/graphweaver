@@ -12,6 +12,7 @@ import { logger } from '@exogee/logger';
 
 import { ConnectionManager } from '../database';
 import { isEntityWithSinglePrimaryKey } from '../introspection/generate';
+import { graphweaverMetadata } from '@exogee/graphweaver';
 
 interface AssignOptions {
 	// Whether this assign should be allowed to create new entities.
@@ -73,6 +74,8 @@ export const assign = async <T extends AnyEntity<T>>(
 
 			const visitedEntities = new Set<T>();
 
+			const gwMetadata = graphweaverMetadata.getEntityByName(metadata.name ?? '');
+
 			for (const subvalue of value) {
 				let entity: T | undefined;
 
@@ -82,10 +85,11 @@ export const assign = async <T extends AnyEntity<T>>(
 						.getUnitOfWork()
 						.getById(propertyMetadata.type, subvalue[relatedPrimaryKeyField]);
 
-					if (!entity) {
+					if (!entity && !gwMetadata?.apiOptions?.clientGeneratedPrimaryKeys) {
 						// There are two cases here: either the user is trying to assign properties to the entity as well as changing members of a collection,
 						// or they're just changing members of a collection.
 						// For the former we actually need the entity from the DB, while for the latter we can let it slide and just pass an ID entity on down.
+						// TODO: Raise ticket re: nested create w client-side keys and fix
 						const subvalueKeys = Object.keys(subvalue);
 						if (subvalueKeys.length === 1 && subvalueKeys[0] === relatedPrimaryKeyField) {
 							// It's just the ID.
@@ -109,9 +113,9 @@ export const assign = async <T extends AnyEntity<T>>(
 						}
 					}
 
-					if (!entity) {
+					if (!entity && !gwMetadata?.apiOptions?.clientGeneratedPrimaryKeys) {
 						throw new Error(
-							`Attempted to assign as an update to '${propertyMetadata.name}' property of ${metadata.name} Entity, but even after a full fetch to the database ${propertyMetadata.type} with ID of ${subvalue.id} could not be found.`
+							`Attempted to assign as an update to '${propertyMetadata.name}' property of ${metadata.name} Entity, but even after a full fetch to the database ${propertyMetadata.type} with ID of ${subvalue[relatedPrimaryKeyField]} could not be found.`
 						);
 					}
 				}
