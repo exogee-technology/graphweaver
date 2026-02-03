@@ -177,7 +177,7 @@ export type Mutation = {
   deleteUser?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Users with a filter. */
   deleteUsers?: Maybe<Scalars['Boolean']['output']>;
-  exampleMutation?: Maybe<Array<Maybe<User>>>;
+  exampleMutation?: Maybe<User>;
   /** Update a single Tag. */
   updateTag?: Maybe<Tag>;
   /** Update many Tags. */

@@ -10,7 +10,7 @@ export class Tag {
 	description?: string;
 
 	@ManyToMany({
-		entity: () => Tag,
+		entity: () => Task,
 		pivotTable: 'task_tag',
 		joinColumn: 'tag_id',
 		inverseJoinColumn: 'task_id',

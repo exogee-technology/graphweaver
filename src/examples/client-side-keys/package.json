@@ -10,10 +10,10 @@
     },
     "dependencies": {
         "@as-integrations/aws-lambda": "4.0.1",
-        "@exogee/graphweaver": "2.21.0",
-        "@exogee/graphweaver-scalars": "2.21.0",
-        "@exogee/graphweaver-server": "2.21.0",
-        "@exogee/graphweaver-mikroorm": "2.21.0",
+        "@exogee/graphweaver": "workspace:*",
+        "@exogee/graphweaver-scalars": "workspace:*",
+        "@exogee/graphweaver-server": "workspace:*",
+        "@exogee/graphweaver-mikroorm": "workspace:*",
         "@mikro-orm/core": "6.6.2",
         "@mikro-orm/knex": "6.6.2",
         "@mikro-orm/postgresql": "6.6.2",
@@ -22,7 +22,7 @@
     },
     "devDependencies": {
         "@types/node": "24.10.0",
-        "graphweaver": "2.21.0",
+        "graphweaver": "workspace:*",
         "typescript": "5.9.3"
     }
 }

@@ -34,7 +34,7 @@ export class User {
 
 graphweaverMetadata.addMutation({
 	name: 'exampleMutation',
-	getType: () => [User],
+	getType: () => User,
 	resolver: async () => {
 		const userEntity = graphweaverMetadata.getEntityByName('User') as EntityMetadata<User, OrmUser>;
 
