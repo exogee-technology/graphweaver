@@ -21,7 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "5.2.0",
+		"@apollo/server": "5.4.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"class-validator": "0.14.3",

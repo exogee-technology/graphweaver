@@ -24,7 +24,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "5.2.0",
+		"@apollo/server": "5.4.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
