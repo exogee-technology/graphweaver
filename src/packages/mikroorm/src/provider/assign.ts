@@ -239,26 +239,21 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 	em: EntityManager;
 	clientGeneratedPrimaryKeys?: boolean;
 }) => {
-	const create = options?.create ?? true;
-	const update = options?.update ?? true;
-
-	if ((data as any)[primaryKeyField]) {
-
-		if (!entity && clientGeneratedPrimaryKeys) {
-			// Entity doesn't exist but client-generated keys are enabled, this is a create
-			if (!create) {
-				throw new Error(
-					`Creates are disabled, but create value ${JSON.stringify(
-						data
-					)} was passed with a client-generated primary key.`
-				);
-			}
-
-			const newEntity = em.create<T>(entityType, {} as any);
-			return assign(newEntity, data, options, visited);
+	const createAllowed = options?.create ?? true;
+	const updateAllowed = options?.update ?? true;
+	const hasPrimaryKey = (data as any)[primaryKeyField] !== undefined;
+	const createEntity = () => {
+		if (!createAllowed) {
+			throw new Error(
+				`Creates are disabled, but value ${JSON.stringify(data)} was passed.`
+			);
 		}
 
-		if (!update) {
+		const newEntity = em.create<T>(entityType, {} as any);
+		return assign(newEntity, data, options, visited);
+	};
+	const updateEntity = () => {
+		if (!updateAllowed) {
 			throw new Error(
 				`Updates are disabled, but update value ${JSON.stringify(
 					data
@@ -274,19 +269,16 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 			);
 		}
 
-		// Ok, we need to recurse here.
 		return assign(entity, data, options, visited);
-	} else {
-		if (!create) {
-			throw new Error(
-				`Creates are disabled, but update value ${JSON.stringify(
-					data
-				)} was passed which does not have an ID property.`
-			);
+	};
+
+	if (hasPrimaryKey) {
+		if (!entity && clientGeneratedPrimaryKeys) {
+			return createEntity();
 		}
 
-		// We don't want Mikro to manage the data merging here, we'll do it in the next line.
-		const entity = em.create<T>(entityType, {} as any);
-		return assign(entity, data, options, visited);
+		return updateEntity();
 	}
+
+	return createEntity();
 };
