@@ -12,7 +12,7 @@ import { logger } from '@exogee/logger';
 
 import { ConnectionManager } from '../database';
 import { isEntityWithSinglePrimaryKey } from '../introspection/generate';
-import { graphweaverMetadata } from '@exogee/graphweaver';
+import { getGwMetadataForOrmClass } from './gw-metadata-lookup';
 
 interface AssignOptions {
 	// Whether this assign should be allowed to create new entities.
@@ -74,9 +74,7 @@ export const assign = async <T extends AnyEntity<T>>(
 
 			const visitedEntities = new Set<T>();
 
-			const relatedGwMetadata = graphweaverMetadata.getEntityByName(
-				relatedEntity?.className ?? ''
-			);
+			const relatedGwMetadata = getGwMetadataForOrmClass(propertyMetadata.entity());
 			const clientGeneratedPrimaryKeys = relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
 
 			for (const subvalue of value) {
@@ -92,7 +90,6 @@ export const assign = async <T extends AnyEntity<T>>(
 						// There are two cases here: either the user is trying to assign properties to the entity as well as changing members of a collection,
 						// or they're just changing members of a collection.
 						// For the former we actually need the entity from the DB, while for the latter we can let it slide and just pass an ID entity on down.
-						// TODO: Raise ticket re: nested create w client-side keys and fix
 						const subvalueKeys = Object.keys(subvalue);
 						if (subvalueKeys.length === 1 && subvalueKeys[0] === relatedPrimaryKeyField) {
 							// It's just the ID.
@@ -131,7 +128,7 @@ export const assign = async <T extends AnyEntity<T>>(
 					options,
 					visited,
 					em,
-					clientGeneratedPrimaryKeys: clientGeneratedPrimaryKeys,
+					clientGeneratedPrimaryKeys,
 				});
 
 				// Ok, now we've got the created or updated entity, ensure it's in the collection
@@ -193,9 +190,9 @@ export const assign = async <T extends AnyEntity<T>>(
 						);
 					}
 
-					const relatedGwMetadata = graphweaverMetadata.getEntityByName(
-						relatedEntity?.className ?? ''
-					);
+					const relatedGwMetadata = getGwMetadataForOrmClass(propertyMetadata.entity());
+					const clientGeneratedPrimaryKeys =
+						relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
 
 					const newEntity = await createOrAssignEntity<T>({
 						entity: (entityPropertyValue as Reference<T>)?.unwrap(),
@@ -205,7 +202,7 @@ export const assign = async <T extends AnyEntity<T>>(
 						options,
 						visited,
 						em,
-						clientGeneratedPrimaryKeys: relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys,
+						clientGeneratedPrimaryKeys,
 					});
 
 					(relatedEntity as any)[property] = Reference.create(newEntity);
