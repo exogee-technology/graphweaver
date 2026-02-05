@@ -23,7 +23,7 @@
 	],
 	"dependencies": {
 		"@apollo/client": "3.13.5",
-		"@apollo/server": "5.2.0",
+		"@apollo/server": "5.4.0",
 		"@as-integrations/aws-lambda": "4.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",

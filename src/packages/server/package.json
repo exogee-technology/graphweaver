@@ -23,7 +23,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "5.2.0",
+		"@apollo/server": "5.4.0",
 		"@as-integrations/aws-lambda": "4.0.1",
 		"@as-integrations/azure-functions": "0.2.3",
 		"@as-integrations/fastify": "3.1.0",
