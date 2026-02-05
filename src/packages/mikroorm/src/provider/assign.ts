@@ -191,8 +191,7 @@ export const assign = async <T extends AnyEntity<T>>(
 					}
 
 					const relatedGwMetadata = getGwMetadataForOrmClass(propertyMetadata.entity());
-					const clientGeneratedPrimaryKeys =
-						relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
+					const clientGeneratedPrimaryKeys = relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
 
 					const newEntity = await createOrAssignEntity<T>({
 						entity: (entityPropertyValue as Reference<T>)?.unwrap(),

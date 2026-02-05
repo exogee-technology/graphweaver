@@ -238,8 +238,6 @@ describe('EXOGW-473 - Create nested entities with clientGeneratedPrimaryKeys via
 			`,
 		});
 
-		console.log(JSON.stringify(response.body, null, 2));
-
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
 		expect(response.body.singleResult.data?.exampleMutation?.id).toBe('1');

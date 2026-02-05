@@ -13,9 +13,6 @@ let cacheBuilt = false;
  *
  * Lazily builds a reverse lookup map on first call by iterating all registered
  * Graphweaver entities and matching on their provider's ORM entity type.
- *
- * Accepts EntityName<T> (the same type as propertyMetadata.entity()) but can only
- * perform the lookup when a class constructor is provided.
  */
 export const getGwMetadataForOrmClass = <T>(ormClass: EntityName<T>): EntityMetadata | undefined => {
 
