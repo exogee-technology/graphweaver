@@ -6,7 +6,6 @@ import {
 	Collection,
 	Ref,
 	ManyToOne,
-	ManyToMany,
 	OneToMany,
 	PrimaryKey,
 	Property,
@@ -23,23 +22,6 @@ import {
 import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { EntityManager, SqliteDriver } from '@mikro-orm/sqlite';
 
-@DataEntity({ tableName: 'tag' })
-class OrmTag {
-	@PrimaryKey({ type: 'string' })
-	id!: string;
-
-	@Property({ type: 'text', nullable: true })
-	description?: string;
-
-	@ManyToMany({
-		entity: () => OrmTask,
-		pivotTable: 'task_tag',
-		joinColumn: 'tag_id',
-		inverseJoinColumn: 'task_id',
-	})
-	tasks = new Collection<OrmTask>(this);
-}
-
 @DataEntity({ tableName: 'task' })
 class OrmTask {
 	@PrimaryKey({ type: 'string' })
@@ -50,14 +32,6 @@ class OrmTask {
 
 	@Property({ type: 'text', nullable: true })
 	description?: string;
-
-	@ManyToMany({
-		entity: () => OrmTag,
-		pivotTable: 'task_tag',
-		joinColumn: 'task_id',
-		inverseJoinColumn: 'tag_id',
-	})
-	tags = new Collection<OrmTag>(this);
 }
 
 @DataEntity({ tableName: 'user' })
@@ -78,28 +52,11 @@ class OrmUser {
 const connection = {
 	connectionManagerId: 'exogw473',
 	mikroOrmConfig: {
-		entities: [OrmTag, OrmTask, OrmUser],
+		entities: [OrmTask, OrmUser],
 		driver: SqliteDriver,
 		dbName: ':memory:',
 	},
 };
-
-@Entity<Tag>('Tag', {
-	provider: new MikroBackendProvider(OrmTag, connection),
-	apiOptions: {
-		clientGeneratedPrimaryKeys: true,
-	},
-})
-class Tag {
-	@Field(() => ID, { primaryKeyField: true })
-	id!: string;
-
-	@Field(() => String, { nullable: true })
-	description?: string;
-
-	@RelationshipField<Task>(() => [Task], { relatedField: 'tags' })
-	tasks!: Task[];
-}
 
 @Entity<Task>('Task', {
 	provider: new MikroBackendProvider(OrmTask, connection),
@@ -116,9 +73,6 @@ class Task {
 
 	@Field(() => String, { nullable: true })
 	description?: string;
-
-	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
-	tags!: Tag[];
 }
 
 @Entity<User>('User', {
@@ -191,20 +145,10 @@ beforeAll(async () => {
 	await em
 		.getConnection()
 		.execute('CREATE TABLE task (id TEXT PRIMARY KEY, description TEXT, user_id TEXT)');
-	await em
-		.getConnection()
-		.execute('CREATE TABLE tag (id TEXT PRIMARY KEY, description TEXT)');
-	await em
-		.getConnection()
-		.execute(
-			'CREATE TABLE task_tag (task_id TEXT, tag_id TEXT, PRIMARY KEY (task_id, tag_id))'
-		);
 });
 
 afterAll(async () => {
 	assert(em !== undefined);
-	await em.getConnection().execute('DROP TABLE task_tag');
-	await em.getConnection().execute('DROP TABLE tag');
 	await em.getConnection().execute('DROP TABLE task');
 	await em.getConnection().execute('DROP TABLE user');
 	await em.getConnection().close();
@@ -212,8 +156,6 @@ afterAll(async () => {
 
 beforeEach(async () => {
 	assert(em !== undefined);
-	await em.getConnection().execute('DELETE FROM task_tag');
-	await em.getConnection().execute('DELETE FROM tag');
 	await em.getConnection().execute('DELETE FROM task');
 	await em.getConnection().execute('DELETE FROM user');
 });
