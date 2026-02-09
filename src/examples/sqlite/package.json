@@ -12,7 +12,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/client": "3.13.5",
+		"@apollo/client": "4.1.4",
 		"@as-integrations/aws-lambda": "4.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
