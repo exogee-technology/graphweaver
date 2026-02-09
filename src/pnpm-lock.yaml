@@ -1341,8 +1341,8 @@ importers:
         specifier: workspace:*
         version: link:../config
       '@graphql-tools/utils':
-        specifier: 10.11.0
-        version: 10.11.0(graphql@16.12.0)
+        specifier: 11.0.0
+        version: 11.0.0(graphql@16.12.0)
       '@mikro-orm/core':
         specifier: 6.6.2
         version: 6.6.2
@@ -1436,8 +1436,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       '@graphql-tools/utils':
-        specifier: 10.11.0
-        version: 10.11.0(graphql@16.12.0)
+        specifier: 11.0.0
+        version: 11.0.0(graphql@16.12.0)
       '@opentelemetry/api':
         specifier: 1.9.0
         version: 1.9.0
