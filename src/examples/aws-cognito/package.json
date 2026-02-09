@@ -27,7 +27,7 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"dotenv": "17.2.3",
 		"graphql": "16.12.0",
-		"react": "19.2.3"
+		"react": "19.2.4"
 	},
 	"devDependencies": {
 		"@types/node": "24.10.0",
