@@ -47,7 +47,7 @@
 		"@types/jsonwebtoken": "9.0.10",
 		"@types/node": "24.10.0",
 		"@types/omgopass": "3.2.3",
-		"jsonwebtoken": "9.0.2",
+		"jsonwebtoken": "9.0.3",
 		"prettier": "3.6.2",
 		"typescript": "5.9.3",
 		"vitest": "4.0.18"
