@@ -149,7 +149,6 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 	if (!keyStore[loaderKey]) {
 		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
 		if (!entity?.provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
-		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {
 			if (!entity?.provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
