@@ -99,16 +99,19 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 	 */
 	const dependencyInjector =
 		(primaryKey: string) =>
-		(targetNodeId: string, foreignKey: string) =>
+		(targetNodeId: string, foreignKey: string, isRelatedFieldList = false) =>
 		(value: (G & (object | undefined)) | null) => {
 			const targetNode = nodes.get(targetNodeId);
 			if (!targetNode || !value || !value.hasOwnProperty(primaryKey)) {
 				throw new Error(`Source node ${targetNodeId} not found`);
 			}
 
-			targetNode[foreignKey as keyof typeof targetNode] = {
+			const ref = {
 				[primaryKey as keyof typeof value]: value[primaryKey as keyof typeof value] as G[keyof G],
 			} as G[keyof G];
+			targetNode[foreignKey as keyof typeof targetNode] = isRelatedFieldList
+				? ([ref] as G[keyof G])
+				: ref;
 			return;
 		};
 
@@ -237,9 +240,13 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 							const relatedField = relationship.relationshipInfo?.relatedField;
 							deps.push([newOperationId, operationId]);
 							const injector = dependencyInjector(String(primaryKeyField).toString());
+							const relatedFieldMeta = relatedEntityMetadata.fields[relatedField];
+							const { isList: isRelatedFieldList } = getFieldTypeWithMetadata(
+								relatedFieldMeta.getType
+							);
 							childNode.forEach((_, i) => {
 								operationProcesses.push({
-									inject: injector(`${newOperationId}:${i}`, relatedField),
+									inject: injector(`${newOperationId}:${i}`, relatedField, isRelatedFieldList),
 									type: 'post' as const,
 								});
 							});
@@ -280,8 +287,12 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 							deps.push([newOperationId, operationId]);
 
 							const injector = dependencyInjector(String(primaryKeyField).toString());
+							const relatedFieldMeta = relatedEntityMetadata.fields[relatedField];
+							const { isList: isRelatedFieldList } = getFieldTypeWithMetadata(
+								relatedFieldMeta.getType
+							);
 							operationProcesses.push({
-								inject: injector(`${newOperationId}:${index}`, relatedField),
+								inject: injector(`${newOperationId}:${index}`, relatedField, isRelatedFieldList),
 								type: 'post',
 							});
 
