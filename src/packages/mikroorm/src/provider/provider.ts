@@ -644,7 +644,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 					const { [primaryKeyField]: primaryKey } = item as any;
 
 					if (primaryKey) {
-						entity = await this.database.em.findOne(this.entityType, primaryKey, {
+						entity = await this.database.em.findOne(this.entityType, { [primaryKeyField]: primaryKey }, {
 							populate: [
 								...this.visitPathForPopulate(this.entityType.name, item),
 							] as `${string}.`[],
