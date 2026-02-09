@@ -342,6 +342,7 @@ if (globalWithMetadataVersion[graphweaverMetadataVersion] === undefined) {
 class Metadata {
 	private metadataByType = new Map<unknown, MetadataType>();
 	private nameLookupCache = new Map<string, MetadataType>();
+	private typeByDataEntityLookup = new Map<unknown, unknown>();
 
 	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
 	private additionalMutationsLookup = new Map<string, AdditionalOperationInformation>();
@@ -410,6 +411,10 @@ class Metadata {
 		};
 
 		this.metadataByType.set(args.target, existingMetadata);
+
+		if (args.provider?.entityType) {
+			this.typeByDataEntityLookup.set(args.provider.entityType, args.target);
+		}
 	}
 
 	public collectProviderInformationForEntity<G = unknown, D = unknown>(args: {
@@ -629,6 +634,19 @@ class Metadata {
 		return this.metadataByType.get(type)?.type === 'inputType';
 	}
 
+	// get the metadata by provider.entityType (if it exists)
+	public getEntityMetadataByDataEntity<G = unknown, D = unknown>(dataEntityClass: unknown): EntityMetadata<G, D> | undefined {
+		if (typeof dataEntityClass !== 'function') return undefined;
+
+		const entityClass = this.typeByDataEntityLookup.get(dataEntityClass);
+		if (!entityClass) return undefined;
+
+		const meta = this.metadataByType.get(entityClass);
+		if (!isEntityMetadata(meta)) return undefined;
+
+		return meta;
+	}
+
 	public get typeCounts() {
 		const counts = {
 			entity: 0,
@@ -761,6 +779,7 @@ class Metadata {
 		this.federationSubgraphName = undefined;
 		this.metadataByType.clear();
 		this.nameLookupCache.clear();
+		this.typeByDataEntityLookup.clear();
 		this.additionalMutationsLookup.clear();
 		this.additionalQueriesLookup.clear();
 	}

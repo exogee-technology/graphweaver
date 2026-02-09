@@ -9,6 +9,7 @@ import {
 	wrap,
 } from '@mikro-orm/core';
 import { logger } from '@exogee/logger';
+import { graphweaverMetadata } from '@exogee/graphweaver';
 
 import { ConnectionManager } from '../database';
 import { isEntityWithSinglePrimaryKey } from '../introspection/generate';
@@ -73,6 +74,9 @@ export const assign = async <T extends AnyEntity<T>>(
 
 			const visitedEntities = new Set<T>();
 
+			const relatedGwMetadata = graphweaverMetadata.getEntityMetadataByDataEntity(propertyMetadata.entity());
+			const clientGeneratedPrimaryKeys = relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
+
 			for (const subvalue of value) {
 				let entity: T | undefined;
 
@@ -82,7 +86,7 @@ export const assign = async <T extends AnyEntity<T>>(
 						.getUnitOfWork()
 						.getById(propertyMetadata.type, subvalue[relatedPrimaryKeyField]);
 
-					if (!entity) {
+					if (!entity && !clientGeneratedPrimaryKeys) {
 						// There are two cases here: either the user is trying to assign properties to the entity as well as changing members of a collection,
 						// or they're just changing members of a collection.
 						// For the former we actually need the entity from the DB, while for the latter we can let it slide and just pass an ID entity on down.
@@ -109,9 +113,9 @@ export const assign = async <T extends AnyEntity<T>>(
 						}
 					}
 
-					if (!entity) {
+					if (!entity && !clientGeneratedPrimaryKeys) {
 						throw new Error(
-							`Attempted to assign as an update to '${propertyMetadata.name}' property of ${metadata.name} Entity, but even after a full fetch to the database ${propertyMetadata.type} with ID of ${subvalue.id} could not be found.`
+							`Attempted to assign as an update to '${propertyMetadata.name}' property of ${metadata.name} Entity, but even after a full fetch to the database ${propertyMetadata.type} with ID of ${subvalue[relatedPrimaryKeyField]} could not be found.`
 						);
 					}
 				}
@@ -124,6 +128,7 @@ export const assign = async <T extends AnyEntity<T>>(
 					options,
 					visited,
 					em,
+					clientGeneratedPrimaryKeys,
 				});
 
 				// Ok, now we've got the created or updated entity, ensure it's in the collection
@@ -185,6 +190,9 @@ export const assign = async <T extends AnyEntity<T>>(
 						);
 					}
 
+					const relatedGwMetadata = graphweaverMetadata.getEntityMetadataByDataEntity(propertyMetadata.entity());
+					const clientGeneratedPrimaryKeys = relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
+
 					const newEntity = await createOrAssignEntity<T>({
 						entity: (entityPropertyValue as Reference<T>)?.unwrap(),
 						entityType: propertyMetadata.type,
@@ -193,6 +201,7 @@ export const assign = async <T extends AnyEntity<T>>(
 						options,
 						visited,
 						em,
+						clientGeneratedPrimaryKeys,
 					});
 
 					(relatedEntity as any)[property] = Reference.create(newEntity);
@@ -215,6 +224,7 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 	options,
 	visited,
 	em,
+	clientGeneratedPrimaryKeys,
 }: {
 	entity?: T;
 	entityType: string;
@@ -223,12 +233,23 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 	options?: AssignOptions;
 	visited: Set<AnyEntity<any>>;
 	em: EntityManager;
+	clientGeneratedPrimaryKeys?: boolean;
 }) => {
-	const create = options?.create ?? true;
-	const update = options?.update ?? true;
+	const createAllowed = options?.create ?? true;
+	const updateAllowed = options?.update ?? true;
+	const hasPrimaryKey = (data as any)[primaryKeyField] !== undefined;
+	const createEntity = () => {
+		if (!createAllowed) {
+			throw new Error(
+				`Creates are disabled, but value ${JSON.stringify(data)} was passed.`
+			);
+		}
 
-	if ((data as any)[primaryKeyField]) {
-		if (!update) {
+		const newEntity = em.create<T>(entityType, {} as any);
+		return assign(newEntity, data, options, visited);
+	};
+	const updateEntity = () => {
+		if (!updateAllowed) {
 			throw new Error(
 				`Updates are disabled, but update value ${JSON.stringify(
 					data
@@ -244,19 +265,16 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 			);
 		}
 
-		// Ok, we need to recurse here.
 		return assign(entity, data, options, visited);
-	} else {
-		if (!create) {
-			throw new Error(
-				`Creates are disabled, but update value ${JSON.stringify(
-					data
-				)} was passed which does not have an ID property.`
-			);
+	};
+
+	if (hasPrimaryKey) {
+		if (!entity && clientGeneratedPrimaryKeys) {
+			return createEntity();
 		}
 
-		// We don't want Mikro to manage the data merging here, we'll do it in the next line.
-		const entity = em.create<T>(entityType, {} as any);
-		return assign(entity, data, options, visited);
+		return updateEntity();
 	}
+
+	return createEntity();
 };
