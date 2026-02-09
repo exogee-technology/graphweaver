@@ -632,19 +632,36 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			'Running create or update many with args'
 		);
 
+		const meta = this.database.em.getMetadata().get(this.entityType.name);
+		const primaryKeyField = meta.primaryKeys[0];
+		const gwMetadata = graphweaverMetadata.getEntityMetadataByDataEntity(this.entityType);
+		const clientGeneratedPrimaryKeys = gwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
+
 		const entities = await this.database.transactional<D[]>(async () => {
 			return Promise.all<D>(
 				items.map(async (item) => {
 					let entity;
-					const { id } = item as any;
-					if (id) {
-						entity = await this.database.em.findOneOrFail(this.entityType, id, {
+					const { [primaryKeyField]: primaryKey } = item as any;
+
+					if (primaryKey) {
+						entity = await this.database.em.findOne(this.entityType, { [primaryKeyField]: primaryKey }, {
 							populate: [
 								...this.visitPathForPopulate(this.entityType.name, item),
 							] as `${string}.`[],
 						});
-						logger.trace({ item, entity: this.entityType.name }, 'Running update with item');
-						await this.mapAndAssignKeys(entity, this.entityType, item);
+
+						if (entity) {
+							logger.trace({ item, entity: this.entityType.name }, 'Running update with item');
+							await this.mapAndAssignKeys(entity, this.entityType, item);
+						} else if (clientGeneratedPrimaryKeys) {
+							entity = new this.entityType();
+							await this.mapAndAssignKeys(entity, this.entityType, item);
+							logger.trace({ item, entity: this.entityType.name }, 'Running create with client-generated key');
+						} else {
+							throw new Error(
+								`Entity ${this.entityType.name} with primary key '${primaryKey}' not found and clientGeneratedPrimaryKeys is not enabled.`
+							);
+						}
 					} else {
 						entity = new this.entityType();
 						await this.mapAndAssignKeys(entity, this.entityType, item);
