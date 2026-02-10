@@ -18,7 +18,7 @@
 		"@mikro-orm/core": "6.6.2",
 		"@mikro-orm/knex": "6.6.2",
 		"@mikro-orm/mssql": "6.6.2",
-		"tedious": "19.2.0",
+		"tedious": "19.2.1",
 		"graphql": "16.12.0"
 	},
 	"devDependencies": {
