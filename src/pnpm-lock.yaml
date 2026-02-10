@@ -1859,8 +1859,8 @@ importers:
         specifier: 4.0.1
         version: 4.0.1(@apollo/server@5.4.0(graphql@16.12.0))
       '@as-integrations/azure-functions':
-        specifier: 0.2.3
-        version: 0.2.3(@apollo/server@5.4.0(graphql@16.12.0))
+        specifier: 0.3.0
+        version: 0.3.0(@apollo/server@5.4.0(graphql@16.12.0))(@azure/functions@4.11.0)
       '@as-integrations/fastify':
         specifier: 3.1.0
         version: 3.1.0(@apollo/server@5.4.0(graphql@16.12.0))(fastify@5.7.3)
@@ -2134,11 +2134,12 @@ packages:
     peerDependencies:
       '@apollo/server': ^5.0.0
 
-  '@as-integrations/azure-functions@0.2.3':
-    resolution: {integrity: sha512-NiP3GRxXLtOed2YDvmKp6Lb5+/DFPM7Eg/zrYnA7RCqdLb3gA0Wj0F6Bl/DubvH83jFjfgmmtI0qSj+T/wKoNw==}
-    engines: {node: '>=18.0'}
+  '@as-integrations/azure-functions@0.3.0':
+    resolution: {integrity: sha512-QZnwN+pPjRTw2R0Y+0X5kxUIl88ry+g41zNhTGVXMzak5VOVHKPW87meGq/wsce4cAnbUH5Ihf2XZXPm0PCG7w==}
+    engines: {node: '>=22.0'}
     peerDependencies:
       '@apollo/server': ^4 || ^5
+      '@azure/functions': ^4
 
   '@as-integrations/fastify@3.1.0':
     resolution: {integrity: sha512-hfK5adsybNj0qRc+5BiCOy50SqqOhPIctvaaGsjqq7ui8lO/TZkLtz6IvDhWC70vOcMXJuMJCTTEb4hex8RVgw==}
@@ -2481,9 +2482,6 @@ packages:
   '@azure/functions-extensions-base@0.2.0':
     resolution: {integrity: sha512-ncCkHBNQYJa93dBIh+toH0v1iSgCzSo9tr94s6SMBe7DPWREkaWh8cq33A5P4rPSFX1g5W+3SPvIzDr/6/VOWQ==}
     engines: {node: '>=18.0'}
-
-  '@azure/functions@3.5.1':
-    resolution: {integrity: sha512-6UltvJiuVpvHSwLcK/Zc6NfUwlkDLOFFx97BHCJzlWNsfiWwzwmTsxJXg4kE/LemKTHxPpfoPE+kOJ8hAdiKFQ==}
 
   '@azure/functions@4.11.0':
     resolution: {integrity: sha512-J0We2gav3YZFLO9pJlXDKUSOT0r/DzkUaJTaruhm8pwoSMbi4zjsS5N6fARrTel+IBCm77hlD0IgZSKSWvVpUw==}
@@ -12772,11 +12770,10 @@ snapshots:
       '@apollo/server': 5.4.0(graphql@16.12.0)
       '@types/aws-lambda': 8.10.156
 
-  '@as-integrations/azure-functions@0.2.3(@apollo/server@5.4.0(graphql@16.12.0))':
+  '@as-integrations/azure-functions@0.3.0(@apollo/server@5.4.0(graphql@16.12.0))(@azure/functions@4.11.0)':
     dependencies:
       '@apollo/server': 5.4.0(graphql@16.12.0)
-      '@azure/functions': 3.5.1
-      '@azure/functions-v4': '@azure/functions@4.11.0'
+      '@azure/functions': 4.11.0
 
   '@as-integrations/fastify@3.1.0(@apollo/server@5.4.0(graphql@16.12.0))(fastify@5.7.3)':
     dependencies:
@@ -13797,12 +13794,6 @@ snapshots:
       - supports-color
 
   '@azure/functions-extensions-base@0.2.0': {}
-
-  '@azure/functions@3.5.1':
-    dependencies:
-      iconv-lite: 0.6.3
-      long: 4.0.0
-      uuid: 8.3.2
 
   '@azure/functions@4.11.0':
     dependencies:
