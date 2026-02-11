@@ -22,6 +22,39 @@ export const resetDatabase = async () => {
 		);
 		return;
 	}
+	if (database === Database.POSTGRES) {
+		const { Client } = await import('pg');
+		const client = new Client({
+			host: process.env.DATABASE_HOST || 'localhost',
+			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 5432,
+			user: process.env.DATABASE_USERNAME || 'postgres',
+			password: process.env.DATABASE_PASSWORD || 'postgres',
+			database: process.env.DATABASE_NAME || 'gw',
+		});
+
+		await client.connect();
+		const sql = fs.readFileSync(path.join(process.cwd(), 'databases', 'postgres.sql')).toString();
+		await client.query('DROP SCHEMA public CASCADE');
+		await client.query('CREATE SCHEMA public');
+		await client.query(sql);
+		await client.end();
+		return;
+	}
+	// if (database === Database.MYSQL) {
+	// 	const mysql = await import('mysql2/promise');
+	// 	const connection = await mysql.createConnection({
+	// 		host: process.env.DATABASE_HOST || 'localhost',
+	// 		port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 3306,
+	// 		user: process.env.DATABASE_USERNAME || 'mysql',
+	// 		password: process.env.DATABASE_PASSWORD || 'mysql',
+	// 		multipleStatements: true,
+	// 	});
+
+	// 	const sql = fs.readFileSync(path.join(process.cwd(), 'databases', 'mysql.sql')).toString();
+	// 	await connection.query(sql);
+	// 	await connection.end();
+	// 	return;
+	// }
 };
 
 export function bodyHasText(searchText: string | RegExp) {

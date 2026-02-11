@@ -1,5 +1,5 @@
 import { ConnectionOptions, DatabaseType } from '../database';
-import { generate } from './generate';
+import { generate, APIOptions } from './generate';
 
-export const introspection = async (databaseType: DatabaseType, options: ConnectionOptions) =>
-	generate(databaseType, options);
+export const introspection = async (databaseType: DatabaseType, options: ConnectionOptions, apiOptions?: APIOptions) =>
+	generate(databaseType, options, apiOptions);

@@ -114,8 +114,12 @@ yargs
 					alias: 'o',
 					type: 'boolean',
 					describe: 'Overwrite all existing files.',
+				})
+				.option('clientGeneratedPrimaryKeys', {
+					type: 'boolean',
+					describe: 'Whether to allow client generated primary keys for introspected entities.',
 				}),
-		handler: async ({ source, database, host, port, password, user, overwrite }) => {
+		handler: async ({ source, database, host, port, password, user, overwrite, clientGeneratedPrimaryKeys }) => {
 			console.log('Importing data source...');
 			// Do we have any pre-configured options?
 			const { import: importOptions } = config();
@@ -128,6 +132,7 @@ yargs
 				if (user === undefined) user = importOptions.user;
 				if (password === undefined) password = importOptions.password;
 				if (overwrite === undefined) overwrite = importOptions.overwrite;
+				if (clientGeneratedPrimaryKeys === undefined) clientGeneratedPrimaryKeys = importOptions.clientGeneratedPrimaryKeys;
 			}
 
 			if (source) console.log(`Source: ${source}`);
@@ -145,7 +150,7 @@ yargs
 				throw new Error(`Unsupported source: ${source}`);
 			}
 
-			await importDataSource(source, database, host, port, password, user, overwrite);
+			await importDataSource(source, database, host, port, password, user, overwrite, clientGeneratedPrimaryKeys);
 		},
 	})
 	.command({
