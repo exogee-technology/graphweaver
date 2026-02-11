@@ -95,6 +95,7 @@ class TypeCache {
 	public readonly updateTypes = new Map<string, GraphQLInputObjectType>();
 	public readonly createOrUpdateTypes = new Map<string, GraphQLInputObjectType>();
 	public readonly paginationTypes = new Map<string, GraphQLInputObjectType>();
+	public readonly deleteOneTypes = new Map<string, GraphQLInputObjectType>();
 }
 type EntityFilter = (entity: EntityMetadata<any, any>) => boolean;
 const typeCaches = new Map<EntityFilter | undefined, TypeCache>();
@@ -209,15 +210,6 @@ const graphQLTypeForUnion = (
 
 	return new GraphQLNonNull(new GraphQLList(unionType));
 };
-
-// All entities are deleted by primary key, so we only need one of these.
-const deleteInput = new GraphQLInputObjectType({
-	name: 'DeleteOneFilterInput',
-	extensions: { graphweaverSchemaInfo: { type: 'deleteOneFilterInput' } },
-	fields: {
-		id: { type: new GraphQLNonNull(ID) },
-	},
-});
 
 // All aggregations follow the same shape so we only need one of those too.
 const aggregationResult = new GraphQLObjectType({
@@ -731,6 +723,30 @@ const generateGraphQLInputFieldsForEntity =
 		return fields;
 	};
 
+const deleteOneTypeForEntity = (
+	entity: EntityMetadata<any, any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let deleteType = typeCache.deleteOneTypes.get(entity.name);
+
+	if (!deleteType) {
+		let primaryKeyFieldName = entity.primaryKeyField ?? 'id';
+		deleteType = new GraphQLInputObjectType({
+			name: `${entity.name}DeleteOneFilterInput`,
+			description: `Data needed to delete one ${entity.name}.`,
+			extensions: { graphweaverSchemaType: 'deleteOneFilterInput' },
+			fields: {
+				[primaryKeyFieldName]: { type: new GraphQLNonNull(ID) },
+			}
+		});
+
+		typeCache.deleteOneTypes.set(entity.name, deleteType);
+	}
+
+	return deleteType;
+};
+
 const insertTypeForEntity = (
 	entity: EntityMetadata<any, any>,
 	entityFilter: EntityFilter | undefined
@@ -884,7 +900,6 @@ class SchemaBuilderImplementation {
 			graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult');
 
 		yield aggregationResult;
-		yield deleteInput;
 	}
 
 	private graphQLTypeForArgs(
@@ -1181,7 +1196,7 @@ class SchemaBuilderImplementation {
 						type: GraphQLBoolean,
 						args: {
 							filter: {
-								type: new GraphQLNonNull(deleteInput),
+								type: new GraphQLNonNull(deleteOneTypeForEntity(entity, entityFilter)),
 							},
 						},
 						extensions: {
