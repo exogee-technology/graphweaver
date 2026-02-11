@@ -10,7 +10,7 @@ import {
 	CREATE_ALBUM,
 	CREATE_ALBUM_WITH_NESTED_ARTIST,
 	CREATE_PLAYLIST,
-	// CREATE_PLAYLIST_WITH_TRACKS,
+	CREATE_PLAYLIST_WITH_TRACKS,
 } from '../../shared';
 
 describe('create mutations', () => {
@@ -40,7 +40,7 @@ describe('create mutations', () => {
 	test('should create an album with nested new artist (ManyToOne)', async () => {
 		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
 			.mutate(CREATE_ALBUM_WITH_NESTED_ARTIST)
-			.variables({ input: { albumId: '349', title: 'Test Album', artist: { artistId: '277', name: 'New Artist' } } })
+			.variables({ input: { albumId: '349', title: 'Test Album Two', artist: { artistId: '277', name: 'New Artist' } } })
 			.expectNoErrors();
 
 		expect(data?.createAlbum?.albumId).toBeDefined();
@@ -51,7 +51,7 @@ describe('create mutations', () => {
 	test('should create an artist with nested albums (OneToMany)', async () => {
 		const { data } = await request<{ createArtist: Artist }>(config.baseUrl)
 			.mutate(CREATE_ARTIST_WITH_ALBUMS)
-			.variables({ input: { artistId: '278', name: 'Test Artist', albums: [{ albumId: '350', title: 'Album One' }] } })
+			.variables({ input: { artistId: '278', name: 'Test Artist', albums: [{ albumId: '351', title: 'Album One' }] } })
 			.expectNoErrors();
 
 		expect(data?.createArtist?.artistId).toBeDefined();
@@ -69,22 +69,22 @@ describe('create mutations', () => {
 		expect(data?.createPlaylist?.name).toBe('Test Playlist');
 	});
 
-	// test('should create a playlist with existing tracks (ManyToMany)', async () => {
-	// 	const { data } = await request<{ createPlaylist: Playlist }>(config.baseUrl)
-	// 		.mutate(CREATE_PLAYLIST_WITH_TRACKS)
-	// 		.variables({
-	// 			input: {
-	// 				playlistId: '20',
-	// 				name: 'Test Playlist',
-	// 				tracks: [{ trackId: '1' }, { trackId: '2' }],
-	// 			},
-	// 		})
-	// 		.expectNoErrors();
+	test('should create a playlist with existing tracks (ManyToMany)', async () => {
+		const { data } = await request<{ createPlaylist: Playlist }>(config.baseUrl)
+			.mutate(CREATE_PLAYLIST_WITH_TRACKS)
+			.variables({
+				input: {
+					playlistId: '20',
+					name: 'Test Playlist',
+					tracks: [{ trackId: '1' }, { trackId: '2' }],
+				},
+			})
+			.expectNoErrors();
 
-	// 	expect(data?.createPlaylist?.playlistId).toBeDefined();
-	// 	expect(data?.createPlaylist?.name).toBe('Test Playlist');
-	// 	expect(data?.createPlaylist?.tracks).toHaveLength(2);
-	// 	expect(data?.createPlaylist?.tracks?.map((t) => t.trackId)).toContain('1');
-	// 	expect(data?.createPlaylist?.tracks?.map((t) => t.trackId)).toContain('2');
-	// });
+		expect(data?.createPlaylist?.playlistId).toBeDefined();
+		expect(data?.createPlaylist?.name).toBe('Test Playlist');
+		expect(data?.createPlaylist?.tracks).toHaveLength(2);
+		expect(data?.createPlaylist?.tracks?.map((t) => t.trackId)).toContain('1');
+		expect(data?.createPlaylist?.tracks?.map((t) => t.trackId)).toContain('2');
+	});
 });

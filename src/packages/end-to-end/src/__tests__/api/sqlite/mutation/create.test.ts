@@ -26,7 +26,7 @@ describe('create mutations', () => {
 		expect(data?.createArtist?.name).toBe('Test Artist');
 	});
 
-	test('should create an album with existing artist FK', async () => {
+	test('should create an album with existing artist FK (ManyToOne)', async () => {
 		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
 			.mutate(CREATE_ALBUM)
 			.variables({ input: { title: 'Test Album', artist: { artistId: 1 } } })
@@ -39,7 +39,7 @@ describe('create mutations', () => {
 	test('should create an album with nested new artist (ManyToOne)', async () => {
 		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
 			.mutate(CREATE_ALBUM_WITH_NESTED_ARTIST)
-			.variables({ input: { title: 'Test Album', artist: { name: 'New Artist' } } })
+			.variables({ input: { title: 'Test Album Two', artist: { name: 'New Artist' } } })
 			.expectNoErrors();
 
 		expect(data?.createAlbum?.albumId).toBe('348');
