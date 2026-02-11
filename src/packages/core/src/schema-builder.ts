@@ -731,7 +731,7 @@ const deleteOneTypeForEntity = (
 	let deleteType = typeCache.deleteOneTypes.get(entity.name);
 
 	if (!deleteType) {
-		let primaryKeyFieldName = entity.primaryKeyField ?? 'id';
+		const primaryKeyFieldName = entity.primaryKeyField ?? 'id';
 		deleteType = new GraphQLInputObjectType({
 			name: `${entity.name}DeleteOneFilterInput`,
 			description: `Data needed to delete one ${entity.name}.`,

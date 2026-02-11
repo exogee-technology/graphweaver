@@ -1,5 +1,4 @@
 import request from 'supertest-graphql';
-
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
 import {

@@ -1,5 +1,4 @@
 import request from 'supertest-graphql';
-
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
 import {
@@ -13,7 +12,6 @@ import {
 	DELETE_ALBUM,
 	DELETE_PLAYLIST,
 	GET_ALBUMS,
-	GET_ARTISTS,
 } from '../../shared';
 
 describe('delete mutations', () => {
