@@ -583,7 +583,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 	@TraceMethod()
 	public async updateMany(
-		updateItems: (Partial<D> & { id: string })[],
+		updateItems: Partial<D>[],
 		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - updateMany ${this.entityType.name}`);
@@ -593,14 +593,16 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		);
 
 		const meta = this.database.em.getMetadata().get(this.entityType.name);
+		const primaryKeyField = meta.primaryKeys[0];
 
 		const entities = await this.database.transactional<D[]>(async () => {
 			return Promise.all<D>(
 				updateItems.map(async (item) => {
-					if (!item?.id) throw new Error('You must pass an ID for this entity to update it.');
+					const { [primaryKeyField]: primaryKey } = item as any;
+					if (!primaryKey) throw new Error('You must pass an ID for this entity to update it.');
 
 					// Find the entity in the database
-					const entity = await this.database.em.findOneOrFail(this.entityType, item.id, {
+					const entity = await this.database.em.findOneOrFail(this.entityType, { [primaryKeyField]: primaryKey } as any, {
 						populate: [...this.visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
 					});
 

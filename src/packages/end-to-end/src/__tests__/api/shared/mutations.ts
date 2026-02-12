@@ -125,6 +125,57 @@ export const UPDATE_PLAYLIST_WITH_TRACKS = gql`
 	}
 `;
 
+// ── Create Many Mutations ──
+export const CREATE_MANY_ARTISTS = gql`
+  mutation CreateArtists($input: [ArtistInsertInput!]!) {
+    createArtists(input: $input) {
+      artistId
+      name
+    }
+  }
+`;
+
+export const CREATE_MANY_ALBUMS = gql`
+	mutation CreateAlbums($input: [AlbumInsertInput!]!) {
+		createAlbums(input: $input) {
+			albumId
+			title
+		}
+	}
+`;
+
+// ── Update Many Mutations ──
+export const UPDATE_MANY_ARTISTS = gql`
+	mutation UpdateArtists($input: [ArtistUpdateInput!]!) {
+		updateArtists(input: $input) {
+			artistId
+			name
+		}
+	}
+`;
+
+export const UPDATE_MANY_ALBUMS = gql`
+	mutation UpdateAlbums($input: [AlbumUpdateInput!]!) {
+		updateAlbums(input: $input) {
+			albumId
+			title
+		}
+	}
+`;
+
+// ── Delete Many Mutations ──
+export const DELETE_MANY_ARTISTS = gql`
+	mutation DeleteArtists($filter: ArtistsListFilter!) {
+		deleteArtists(filter: $filter)
+	}
+`;
+
+export const DELETE_MANY_ALBUMS = gql`
+	mutation DeleteAlbums($filter: AlbumsListFilter!) {
+		deleteAlbums(filter: $filter)
+	}
+`;
+
 // ── Delete Mutations ──
 export const DELETE_ARTIST = gql`
 	mutation DeleteArtist($filter: ArtistDeleteOneFilterInput!){
