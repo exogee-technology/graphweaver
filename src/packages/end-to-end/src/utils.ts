@@ -40,21 +40,21 @@ export const resetDatabase = async () => {
 		await client.end();
 		return;
 	}
-	// if (database === Database.MYSQL) {
-	// 	const mysql = await import('mysql2/promise');
-	// 	const connection = await mysql.createConnection({
-	// 		host: process.env.DATABASE_HOST || 'localhost',
-	// 		port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 3306,
-	// 		user: process.env.DATABASE_USERNAME || 'mysql',
-	// 		password: process.env.DATABASE_PASSWORD || 'mysql',
-	// 		multipleStatements: true,
-	// 	});
+	if (database === Database.MYSQL) {
+		const mysql = await import('mysql2/promise');
+		const connection = await mysql.createConnection({
+			host: process.env.DATABASE_HOST || 'localhost',
+			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 3306,
+			user: process.env.DATABASE_USERNAME || 'mysql',
+			password: process.env.DATABASE_PASSWORD || 'mysql',
+			multipleStatements: true,
+		});
 
-	// 	const sql = fs.readFileSync(path.join(process.cwd(), 'databases', 'mysql.sql')).toString();
-	// 	await connection.query(sql);
-	// 	await connection.end();
-	// 	return;
-	// }
+		const sql = fs.readFileSync(path.join(process.cwd(), 'databases', 'mysql.sql')).toString();
+		await connection.query(sql);
+		await connection.end();
+		return;
+	}
 };
 
 export function bodyHasText(searchText: string | RegExp) {
