@@ -602,12 +602,11 @@ const updateMany = async <G = unknown, D = unknown>(
 	if (!meta || !meta.provider) {
 		throw new Error('Missing metadata or provider');
 	}
-	const clientGeneratedPrimaryKeys = meta.apiOptions?.clientGeneratedPrimaryKeys;
+
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
-	if (nodes.some((n) => isDefined(n[primaryKeyField])) && clientGeneratedPrimaryKeys !== true) {
-		throw new Error(
-			`Cannot create entity with ID because clientGeneratedPrimaryKeys is not enabled.`
-		);
+
+	if (nodes.some((n) => !isDefined(n[primaryKeyField]))) {
+		throw new Error(`Cannot update entity without an ID.`);
 	}
 
 	const createdEntities = await meta.provider.updateMany(
