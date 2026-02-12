@@ -9,7 +9,6 @@ import {
 	DELETE_MANY_ARTISTS,
 	DELETE_MANY_ALBUMS,
 	GET_ARTISTS,
-	GET_ALBUMS,
 } from '../../shared';
 
 describe('deleteMany mutations', () => {

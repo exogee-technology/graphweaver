@@ -1,7 +1,7 @@
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
-import { Artist, Album, UPDATE_MANY_ARTISTS, UPDATE_MANY_ALBUMS } from '../../shared';
+import { Artist, UPDATE_MANY_ARTISTS } from '../../shared';
 
 describe('updateMany mutations', () => {
 	beforeEach(resetDatabase);

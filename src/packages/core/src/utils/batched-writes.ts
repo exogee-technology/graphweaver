@@ -609,7 +609,7 @@ const updateMany = async <G = unknown, D = unknown>(
 		throw new Error(`Cannot update entity without an ID.`);
 	}
 
-	const createdEntities = await meta.provider.updateMany(
+	const updatedEntities = await meta.provider.updateMany(
 		nodes.map((n) =>
 			isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
 				? meta.target.toBackendEntity(n)
@@ -617,7 +617,7 @@ const updateMany = async <G = unknown, D = unknown>(
 		)
 	);
 
-	return createdEntities.map((entity) => fromBackendEntity(meta, entity));
+	return updatedEntities.map((entity) => fromBackendEntity(meta, entity));
 };
 
 /**
