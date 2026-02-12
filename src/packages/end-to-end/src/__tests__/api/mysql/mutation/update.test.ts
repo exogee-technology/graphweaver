@@ -12,8 +12,8 @@ import {
 } from '../../shared';
 
 describe('update mutations', () => {
-	beforeAll(resetDatabase);
-	afterAll(resetDatabase);
+	beforeAll(resetDatabase, 10_000);
+	afterAll(resetDatabase, 10_000);
 
 	test('should update artist name', async () => {
 		const { data } = await request<{ updateArtist: Artist }>(config.baseUrl)
