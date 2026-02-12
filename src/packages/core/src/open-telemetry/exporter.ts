@@ -5,6 +5,7 @@ import {
 	SpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
 import { ExportResult, ExportResultCode, hrTimeToNanoseconds } from '@opentelemetry/core';
+import { logger } from '@exogee/logger';
 
 import { BackendProvider } from '../types';
 
@@ -71,18 +72,29 @@ export class JsonSpanExporter implements SpanExporter {
 			throw new Error('createTraces method is not implemented in the dataProvider');
 		}
 
-		await this.dataProvider.createTraces(spans.map((span) => this.exportInfo(span)));
+		try {
+			await this.dataProvider.createTraces(spans.map((span) => this.exportInfo(span)));
 
-		if (this.queue.length > 0) {
-			const toSave = this.queue;
+			if (this.queue.length > 0) {
+				const toSave = this.queue;
+				this.queue = [];
+				return this.saveSpans(toSave, done);
+			}
+
+			this.locked = false;
+
+			if (done) {
+				return done({ code: ExportResultCode.SUCCESS });
+			}
+		} catch (error) {
+			logger.warn({ error }, 'Failed to save trace spans, discarding batch');
+
+			this.locked = false;
 			this.queue = [];
-			return this.saveSpans(toSave, done);
-		}
 
-		this.locked = false;
-
-		if (done) {
-			return done({ code: ExportResultCode.SUCCESS });
+			if (done) {
+				return done({ code: ExportResultCode.FAILED });
+			}
 		}
 	}
 }
