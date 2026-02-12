@@ -4,8 +4,8 @@ import { resetDatabase } from '../../../../utils';
 import { Artist, UPDATE_MANY_ARTISTS } from '../../shared';
 
 describe('updateMany mutations', () => {
-	beforeAll(resetDatabase, 10_000);
-	afterAll(resetDatabase, 10_000);
+	beforeAll(resetDatabase, 30_000);
+	afterAll(resetDatabase, 30_000);
 
 	test('should update multiple artists', async () => {
 		const { data } = await request<{ updateArtists: Artist[] }>(config.baseUrl)

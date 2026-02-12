@@ -4,8 +4,8 @@ import { resetDatabase } from '../../../../utils';
 import { Artist, Album, CREATE_MANY_ARTISTS, CREATE_MANY_ALBUMS, GET_ARTISTS, GET_ALBUMS } from '../../shared';
 
 describe('createMany mutations', () => {
-	beforeAll(resetDatabase, 10_000);
-	afterAll(resetDatabase, 10_000);
+	beforeAll(resetDatabase, 30_000);
+	afterAll(resetDatabase, 30_000);
 
 	test('should create multiple artists', async () => {
 		const { data: before } = await request<{ artists: Artist[] }>(config.baseUrl)

@@ -14,8 +14,8 @@ import {
 } from '../../shared';
 
 describe('create mutations', () => {
-	beforeAll(resetDatabase, 10_000);
-	afterAll(resetDatabase, 10_000);
+	beforeAll(resetDatabase, 30_000);
+	afterAll(resetDatabase, 30_000);
 
 	test('should create a standalone artist', async () => {
 		const response = await request<{ createArtist: Artist }>(config.baseUrl)

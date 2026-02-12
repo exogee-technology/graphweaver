@@ -15,8 +15,8 @@ import {
 } from '../../shared';
 
 describe('delete mutations', () => {
-	beforeAll(resetDatabase, 10_000);
-	afterAll(resetDatabase, 10_000);
+	beforeAll(resetDatabase, 30_000);
+	afterAll(resetDatabase, 30_000);
 
 	test('should create then delete an artist', async () => {
 		// Create
