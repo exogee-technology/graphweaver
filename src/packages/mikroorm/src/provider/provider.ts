@@ -722,11 +722,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		const entities = await this.database.transactional<D[]>(async () => {
 			const results = await Promise.all(
 				createItems.map(async (item) => {
-					const entity = new this.entityType();
-					await this.mapAndAssignKeys(entity, this.entityType, item);
+				const entity = new this.entityType();
+				await this.mapAndAssignKeys(entity, this.entityType, item);
 
-					this.database.em.persist(entity as Partial<D>);
-					return entity;
+				this.database.em.persist(entity as Partial<D>);
+				return entity;
 				})
 			);
 
