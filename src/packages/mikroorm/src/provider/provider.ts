@@ -706,11 +706,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	@TraceMethod()
 	public async createMany(createItems: Partial<D>[], trace?: TraceOptions): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - createMany ${this.entityType.name}`);
-		return this._createMany(createItems);
+		return await this._createMany(createItems);
 	}
 
 	public async createTraces(createItems: Partial<D>[]): Promise<D[]> {
-		return this._createMany(createItems);
+		return await this._createMany(createItems);
 	}
 
 	private async _createMany(createItems: Partial<D>[]) {
