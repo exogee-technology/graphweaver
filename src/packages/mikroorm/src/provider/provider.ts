@@ -361,6 +361,13 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		return collectedPaths;
 	};
 
+	// Some connections (ex. sqlite) require an explicit flush during batch inserts 
+	// to retrieve user defined primary keys correctly.
+	private flushOnBatchInserts() {
+		const driver = this.em.getDriver();
+		return driver.constructor.name === 'SqliteDriver';
+	};
+
 	@TraceMethod()
 	public async find(
 		filter: Filter<D>,
@@ -728,8 +735,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 				result.push(entity);
 			}
 
-			const driver = this.em.getDriver();
-			if (driver.constructor.name === 'SqliteDriver') {
+			if (this.flushOnBatchInserts()) {
 				await this.database.em.flush();
 			}
 
