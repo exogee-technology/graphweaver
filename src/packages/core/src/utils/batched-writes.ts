@@ -328,8 +328,9 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 		}
 	}
 
+	const rootOperationId = crypto.randomUUID();
 	if (Array.isArray(rootInput)) {
-		await traverse(rootInput, rootMeta, rootInfo, rootContext, crypto.randomUUID(), 0).catch(
+		await traverse(rootInput, rootMeta, rootInfo, rootContext, rootOperationId, 0).catch(
 			(e) => {
 				throw e;
 			}
@@ -341,11 +342,16 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 	const batches =
 		deps.length > 0 ? layeredToposort(Array.from(tasks.keys()), deps) : [Array.from(tasks.keys())];
 
+	// Use the root task's operations to determine return order.
+	// This ensures only root-level entities are returned, in their original input order.
+	const rootTask = tasks.get(rootOperationId);
+	const rootReturnOrder = rootTask?.operations.map((op) => op.nodeId) ?? [];
+
 	return {
 		tasks,
 		nodes,
 		batches,
-		returnOrder: returnOrder.reverse(),
+		returnOrder: rootReturnOrder,
 	};
 };
 
@@ -487,9 +493,9 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 		await Promise.all(promises);
 	}
 
-	const rootNode = returnOrder?.[0] ? results.get(returnOrder[0]) : null;
-
-	return rootNode ? [rootNode] : [];
+	return returnOrder
+		.map((nodeId) => results.get(nodeId) ?? null)
+		.filter((result): result is G & object => result !== null);
 };
 
 /**
@@ -596,15 +602,14 @@ const updateMany = async <G = unknown, D = unknown>(
 	if (!meta || !meta.provider) {
 		throw new Error('Missing metadata or provider');
 	}
-	const clientGeneratedPrimaryKeys = meta.apiOptions?.clientGeneratedPrimaryKeys;
+
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
-	if (nodes.some((n) => isDefined(n[primaryKeyField])) && clientGeneratedPrimaryKeys !== true) {
-		throw new Error(
-			`Cannot create entity with ID because clientGeneratedPrimaryKeys is not enabled.`
-		);
+
+	if (nodes.some((n) => !isDefined(n[primaryKeyField]))) {
+		throw new Error(`Cannot update entity without an ID.`);
 	}
 
-	const createdEntities = await meta.provider.updateMany(
+	const updatedEntities = await meta.provider.updateMany(
 		nodes.map((n) =>
 			isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
 				? meta.target.toBackendEntity(n)
@@ -612,7 +617,7 @@ const updateMany = async <G = unknown, D = unknown>(
 		)
 	);
 
-	return createdEntities.map((entity) => fromBackendEntity(meta, entity));
+	return updatedEntities.map((entity) => fromBackendEntity(meta, entity));
 };
 
 /**

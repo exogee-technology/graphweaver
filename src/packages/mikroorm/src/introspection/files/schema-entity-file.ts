@@ -33,7 +33,8 @@ export class SchemaEntityFile extends BaseFile {
 		protected readonly namingStrategy: NamingStrategy,
 		protected readonly platform: Platform,
 		protected readonly databaseType: DatabaseType,
-		protected readonly entityLookup: Map<string, EntityMetadata<any>>
+		protected readonly entityLookup: Map<string, EntityMetadata<any>>,
+		protected readonly clientGeneratedPrimaryKeys: boolean,
 	) {
 		super(meta, namingStrategy, platform);
 	}
@@ -105,7 +106,7 @@ export class SchemaEntityFile extends BaseFile {
 
 		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection, { backendDisplayName: '${friendlyNameForDatabaseType(this.databaseType)}'})`;
 
-		if (props.length === 1 && props[0].primary) {
+		if ((props.length === 1 && props[0].primary) || this.clientGeneratedPrimaryKeys) {
 			// Special case. If there's a single primary key field in this entity, right now that requires that it's a client side generated primary key.
 			// There's no reason this has to be the case, but it's a current limitation, so we should generate a working project for them.
 			// We should be able to remove this in the future and allow users to use it both ways.

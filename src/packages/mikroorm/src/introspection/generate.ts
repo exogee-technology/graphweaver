@@ -217,7 +217,11 @@ export const isEntityWithSinglePrimaryKey = (meta?: EntityMetadata) => {
 	return meta.primaryKeys.length === 1;
 };
 
-export const generate = async (databaseType: DatabaseType, options: ConnectionOptions) => {
+export interface APIOptions {
+	clientGeneratedPrimaryKeys?: boolean;
+}
+
+export const generate = async (databaseType: DatabaseType, options: ConnectionOptions, apiOptions?: APIOptions) => {
 	try {
 		await openConnection(databaseType, options);
 
@@ -264,7 +268,8 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 					namingStrategy,
 					platform,
 					databaseType,
-					entityLookup
+					entityLookup,
+					apiOptions?.clientGeneratedPrimaryKeys ?? false
 				);
 				source.push(dataEntityFile, schemaEntityFile);
 				summaryOfEntities.push({

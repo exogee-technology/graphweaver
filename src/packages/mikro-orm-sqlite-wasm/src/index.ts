@@ -35,6 +35,13 @@ class Connection extends SqliteConnection {
 				case 'del':
 					callMethod = 'run';
 					break;
+				case 'raw':
+					if (obj.sql.startsWith('delete')) {
+						callMethod = 'run';
+					} else {
+						callMethod = 'all';
+					}
+					break;
 				default:
 					callMethod = 'all';
 			}
