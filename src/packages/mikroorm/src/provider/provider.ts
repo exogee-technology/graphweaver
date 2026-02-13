@@ -727,7 +727,12 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 				this.database.em.persist(entity as Partial<D>);
 				result.push(entity);
 			}
-			await this.database.em.flush();
+
+			const driver = this.em.getDriver();
+			if (driver.constructor.name === 'SqliteDriver') {
+				await this.database.em.flush();
+			}
+
 			return result;
 		});
 
