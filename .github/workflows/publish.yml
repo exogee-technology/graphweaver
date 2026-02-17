@@ -51,9 +51,14 @@ jobs:
       - name: Build CLI tool 🔧
         run: pnpm build
 
-      # Publish version to public repository
+      # pnpm publish runs npm publish under the hood; npm 11.5.1+ is required for OIDC (https://github.com/pnpm/pnpm/issues/9812)
+      - name: Ensure npm 11.5.1+ for OIDC
+        run: npm install -g npm@11
+
       - name: Publish package on NPM 📦
         run: pnpm -r publish --no-git-checks --access=public
+        env:
+          NODE_AUTH_TOKEN: ""
 
       - name: Update deployment status (success)
         if: success()
