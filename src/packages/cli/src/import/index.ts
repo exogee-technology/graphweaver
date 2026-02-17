@@ -70,7 +70,8 @@ export const importDataSource = async (
 	port?: number,
 	password?: string,
 	user?: string,
-	overwriteAllFiles?: boolean
+	overwriteAllFiles?: boolean,
+	clientGeneratedPrimaryKeys?: boolean,
 ) => {
 	const databaseOptions = await promptForDatabaseOptions({
 		source,
@@ -80,14 +81,16 @@ export const importDataSource = async (
 		password,
 		user,
 	});
-
+	const apiOptions = {
+		clientGeneratedPrimaryKeys: clientGeneratedPrimaryKeys ?? false,
+	};
 	// check we have all the dependencies needed to run the import
 	await checkForMissingDependencies(source);
 
 	const spinner = ora('Introspecting...').start();
 
 	try {
-		const files = await startIntrospection(databaseOptions);
+		const files = await startIntrospection(databaseOptions, apiOptions);
 		spinner.stop();
 
 		let fileCount = 0;

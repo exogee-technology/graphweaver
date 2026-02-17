@@ -361,6 +361,13 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		return collectedPaths;
 	};
 
+	// Some connections (ex. sqlite) require an explicit flush during batch inserts 
+	// to retrieve user defined primary keys correctly.
+	private flushOnBatchInserts() {
+		const driver = this.em.getDriver();
+		return driver.constructor.name === 'SqliteDriver';
+	};
+
 	@TraceMethod()
 	public async find(
 		filter: Filter<D>,
@@ -583,7 +590,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 	@TraceMethod()
 	public async updateMany(
-		updateItems: (Partial<D> & { id: string })[],
+		updateItems: Partial<D>[],
 		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - updateMany ${this.entityType.name}`);
@@ -593,14 +600,16 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		);
 
 		const meta = this.database.em.getMetadata().get(this.entityType.name);
+		const primaryKeyField = meta.primaryKeys[0];
 
 		const entities = await this.database.transactional<D[]>(async () => {
 			return Promise.all<D>(
 				updateItems.map(async (item) => {
-					if (!item?.id) throw new Error('You must pass an ID for this entity to update it.');
+					const { [primaryKeyField]: primaryKey } = item as any;
+					if (!primaryKey) throw new Error('You must pass an ID for this entity to update it.');
 
 					// Find the entity in the database
-					const entity = await this.database.em.findOneOrFail(this.entityType, item.id, {
+					const entity = await this.database.em.findOneOrFail(this.entityType, { [primaryKeyField]: primaryKey } as any, {
 						populate: [...this.visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
 					});
 
@@ -718,14 +727,19 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		);
 
 		const entities = await this.database.transactional<D[]>(async () => {
-			return Promise.all<D>(
-				createItems.map(async (item) => {
-					const entity = new this.entityType();
-					await this.mapAndAssignKeys(entity, this.entityType, item);
-					this.database.em.persist(entity as Partial<D>);
-					return entity;
-				})
-			);
+			const result: D[] = [];
+			for (const item of createItems) {
+				const entity = new this.entityType();
+				await this.mapAndAssignKeys(entity, this.entityType, item);
+				this.database.em.persist(entity as Partial<D>);
+				result.push(entity);
+			}
+
+			if (this.flushOnBatchInserts()) {
+				await this.database.em.flush();
+			}
+
+			return result;
 		});
 
 		logger.trace({ entity: this.entityType.name, entities }, 'created items');

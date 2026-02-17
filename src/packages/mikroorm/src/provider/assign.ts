@@ -86,7 +86,7 @@ export const assign = async <T extends AnyEntity<T>>(
 						.getUnitOfWork()
 						.getById(propertyMetadata.type, subvalue[relatedPrimaryKeyField]);
 
-					if (!entity && !clientGeneratedPrimaryKeys) {
+					if (!entity) {
 						// There are two cases here: either the user is trying to assign properties to the entity as well as changing members of a collection,
 						// or they're just changing members of a collection.
 						// For the former we actually need the entity from the DB, while for the latter we can let it slide and just pass an ID entity on down.

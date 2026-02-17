@@ -103,6 +103,7 @@ export interface ImportOptions {
 	user?: string;
 	password?: string;
 	overwrite?: boolean;
+	clientGeneratedPrimaryKeys?: boolean;
 }
 
 export interface ConfigOptions {
