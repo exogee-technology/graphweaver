@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-azure-functions",
-	"version": "2.20.11",
+	"version": "2.20.12",
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",

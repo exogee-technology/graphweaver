@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-apollo-client",
-	"version": "2.21.2",
+	"version": "2.21.3",
 	"description": "Useful helpers for working with Apollo Client and Graphweaver",
 	"license": "Apache-2.0",
 	"sideEffects": false,

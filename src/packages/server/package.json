@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-server",
-	"version": "2.21.2",
+	"version": "2.21.3",
 	"description": "Server support for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"repository": {

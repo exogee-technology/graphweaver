@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth-ui-components",
-	"version": "2.21.2",
+	"version": "2.21.3",
 	"description": "Components from Graphweaver's Auth UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
 	"repository": {
