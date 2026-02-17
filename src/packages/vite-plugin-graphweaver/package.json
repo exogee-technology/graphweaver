@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-graphweaver",
-	"version": "2.21.1",
+	"version": "2.21.2",
 	"description": "A vite plugin for use with @exogee/graphweaver's admin UI",
 	"license": "Apache-2.0",
 	"repository": {
