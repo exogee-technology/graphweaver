@@ -35,5 +35,9 @@
 	"dependencies": {
 		"@aws-sdk/client-cognito-identity-provider": "3.986.0",
 		"@exogee/graphweaver-rest-legacy": "workspace:*"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
 	}
 }

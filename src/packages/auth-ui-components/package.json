@@ -3,6 +3,10 @@
 	"version": "2.21.1",
 	"description": "Components from Graphweaver's Auth UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"type": "module",
 	"sideEffects": false,
 	"scripts": {

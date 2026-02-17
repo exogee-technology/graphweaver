@@ -3,6 +3,10 @@
 	"version": "2.21.1",
 	"description": "A vite plugin for use with @exogee/graphweaver's admin UI",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"sideEffects": false,

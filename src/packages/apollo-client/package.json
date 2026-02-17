@@ -39,5 +39,9 @@
 		"postgresql",
 		"mysql",
 		"sqlite"
-	]
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	}
 }
