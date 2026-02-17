@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@as-integrations/aws-lambda": "4.0.1",
-		"@auth0/auth0-spa-js": "2.11.0",
+		"@auth0/auth0-spa-js": "2.16.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
