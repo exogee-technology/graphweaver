@@ -2,6 +2,10 @@
 	"name": "@exogee/graphweaver-example-xero",
 	"version": "2.21.2",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
 	"scripts": {

@@ -2,6 +2,10 @@
 	"name": "@exogee/graphweaver-example-rest-with-auth",
 	"version": "2.21.2",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"private": true,
 	"description": "Example of connecting a Rest API with a MySQL database and complex auth.",
 	"main": "lib/index.js",

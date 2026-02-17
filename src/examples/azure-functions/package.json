@@ -2,6 +2,10 @@
 	"name": "@exogee/graphweaver-example-azure-functions",
 	"version": "2.20.11",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"private": true,
 	"description": "Example of running Graphweaver on Azure Functions with a SQLite backend.",
 	"main": "graphql.js",
