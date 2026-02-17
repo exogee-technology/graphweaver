@@ -7,6 +7,7 @@ jobs:
     permissions:
       contents: write
       deployments: write
+      id-token: write
     defaults:
       run:
         working-directory: src
@@ -53,8 +54,6 @@ jobs:
       # Publish version to public repository
       - name: Publish package on NPM 📦
         run: pnpm -r publish --no-git-checks --access=public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Update deployment status (success)
         if: success()
