@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "2.21.1",
+	"version": "2.21.2",
 	"description": "Graphweaver Test Suite",
 	"license": "Apache-2.0",
 	"scripts": {
