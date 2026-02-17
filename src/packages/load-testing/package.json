@@ -4,6 +4,10 @@
 	"private": true,
 	"description": "Graphweaver Load Testing Suite",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"keywords": [
 		"graphql",
 		"gql",

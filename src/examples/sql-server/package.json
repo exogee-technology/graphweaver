@@ -1,4 +1,8 @@
 {
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"name": "sql-server",
 	"version": "0.1.0",
 	"description": "sql-server Graphweaver Project",

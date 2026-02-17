@@ -2,6 +2,10 @@
 	"name": "@exogee/graphweaver-example-auth-zero",
 	"version": "2.21.2",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"private": true,
 	"description": "Example of connecting a SQLite database with Auth0.",
 	"scripts": {

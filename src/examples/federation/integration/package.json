@@ -1,4 +1,8 @@
 {
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"name": "federation-integration-test",
 	"scripts": {
 		"build": "docker build --platform linux/amd64 -t gw-integration:test .",
