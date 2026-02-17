@@ -1,5 +1,5 @@
 import type { InvocationContext, HttpRequest } from '@azure/functions';
-import { v4 } from '@as-integrations/azure-functions';
+import { startServerAndCreateHandler } from '@as-integrations/azure-functions';
 import { GraphweaverPlugin } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import type { ApolloServer } from '@apollo/server';
@@ -22,7 +22,7 @@ export const startServerlessAzure = ({
 	graphweaverPlugins: Set<GraphweaverPlugin<unknown>>;
 	server: ApolloServer<any>;
 }): AzureHttpHandler => {
-	const handler = v4.startServerAndCreateHandler(server);
+	const handler = startServerAndCreateHandler(server);
 
 	return (request: HttpRequest, context: InvocationContext) =>
 		onRequestWrapper<unknown>(graphweaverPlugins, async () => {
