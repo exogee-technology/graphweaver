@@ -3,6 +3,10 @@
 	"version": "2.21.1",
 	"description": "Common logging output for Exogee projects",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"sideEffects": false,
 	"directories": {
 		"lib": "lib"

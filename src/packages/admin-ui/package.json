@@ -5,6 +5,10 @@
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"sideEffects": false,
 	"directories": {
 		"dist": "dist"

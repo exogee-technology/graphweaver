@@ -3,6 +3,10 @@
 	"version": "2.21.1",
 	"description": "Common scalar types for use with @exogee/graphweaver",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"sideEffects": false,
