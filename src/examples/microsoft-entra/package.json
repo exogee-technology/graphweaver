@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@as-integrations/aws-lambda": "4.0.1",
-		"@azure/msal-browser": "4.25.1",
+		"@azure/msal-browser": "5.2.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
