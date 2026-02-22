@@ -19,9 +19,9 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
-		"@mikro-orm/core": "6.6.2",
-		"@mikro-orm/knex": "6.6.2",
-		"@mikro-orm/mssql": "6.6.2",
+		"@mikro-orm/core": "6.6.7",
+		"@mikro-orm/knex": "6.6.7",
+		"@mikro-orm/mssql": "6.6.7",
 		"tedious": "19.2.1",
 		"graphql": "16.12.0"
 	},
