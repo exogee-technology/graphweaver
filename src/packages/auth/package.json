@@ -33,7 +33,7 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@simplewebauthn/server": "13.2.2",
+		"@simplewebauthn/server": "13.2.3",
 		"apollo-server-errors": "3.3.1",
 		"graphql": "16.12.0",
 		"hash-wasm": "4.12.0",
