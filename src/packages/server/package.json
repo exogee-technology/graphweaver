@@ -46,7 +46,7 @@
 		"@escape.tech/graphql-armor-types": "0.7.0",
 		"@types/graphql-deduplicator": "2.0.2",
 		"esbuild": "0.27.1",
-		"glob": "11.1.0",
+		"glob": "13.0.6",
 		"typescript": "5.9.3",
 		"vitest": "4.0.18"
 	},
