@@ -853,8 +853,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1(esbuild@0.27.1)
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       graphql:
         specifier: 16.12.0
         version: 16.12.0
@@ -983,8 +983,8 @@ importers:
         specifier: 2.4.6
         version: 2.4.6(@types/react@19.2.13)(react@19.2.4)
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       graphql:
         specifier: 16.12.0
         version: 16.12.0
@@ -1086,8 +1086,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -1153,8 +1153,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       react:
         specifier: 19.2.4
         version: 19.2.4
@@ -1244,8 +1244,8 @@ importers:
         specifier: 3.1.5
         version: 3.1.5(esbuild@0.27.1)
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       graphql:
         specifier: 16.12.0
         version: 16.12.0
@@ -1323,8 +1323,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1488,8 +1488,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1629,8 +1629,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1654,8 +1654,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       tsx:
         specifier: 4.20.6
         version: 4.20.6
@@ -1724,8 +1724,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       graphql:
         specifier: 16.12.0
         version: 16.12.0
@@ -1764,8 +1764,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -1819,8 +1819,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -1847,8 +1847,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       graphql:
         specifier: 16.12.0
         version: 16.12.0
@@ -1911,8 +1911,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1942,8 +1942,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1961,8 +1961,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1998,8 +1998,8 @@ importers:
         specifier: 0.27.1
         version: 0.27.1
       glob:
-        specifier: 11.1.0
-        version: 11.1.0
+        specifier: 13.0.6
+        version: 13.0.6
       graphql:
         specifier: 16.12.0
         version: 16.12.0
@@ -2977,8 +2977,8 @@ packages:
   '@codemirror/state@6.5.4':
     resolution: {integrity: sha512-8y7xqG/hpB53l25CIoit9/ngxdfoG+fx+V3SHBrinnhOtLvKHRyAJJuHzkWrR4YXXLX8eXBsejgAAxHUOdW1yw==}
 
-  '@codemirror/view@6.39.14':
-    resolution: {integrity: sha512-WJcvgHm/6Q7dvGT0YFv/6PSkoc36QlR0VCESS6x9tGsnF1lWLmmYxOgX3HH6v8fo6AvSLgpcs+H0Olre6MKXlg==}
+  '@codemirror/view@6.39.15':
+    resolution: {integrity: sha512-aCWjgweIIXLBHh7bY6cACvXuyrZ0xGafjQ2VInjp4RM4gMfscK5uESiNdrH0pE+e1lZr2B4ONGsjchl2KsKZzg==}
 
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
@@ -4509,18 +4509,6 @@ packages:
     peerDependenciesMeta:
       '@types/node':
         optional: true
-
-  '@isaacs/balanced-match@4.0.1':
-    resolution: {integrity: sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==}
-    engines: {node: 20 || >=22}
-
-  '@isaacs/brace-expansion@5.0.0':
-    resolution: {integrity: sha512-ZT55BDLV0yv0RBm2czMiZ+SqCGO7AvmOM3G/w2xhVPH+te0aKgFjmBvGlL1dH+ql2tgGO3MVrbb3jCKyvpgnxA==}
-    engines: {node: 20 || >=22}
-
-  '@isaacs/brace-expansion@5.0.1':
-    resolution: {integrity: sha512-WMz71T1JS624nWj2n2fnYAuPovhv7EUhk69R6i9dsVyzxt5eM3bjwvgk9L+APE1TRscGysAVMANkB0jh0LQZrQ==}
-    engines: {node: 20 || >=22}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -7438,6 +7426,10 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
+  balanced-match@4.0.4:
+    resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
+    engines: {node: 18 || 20 || >=22}
+
   base-64@1.0.0:
     resolution: {integrity: sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==}
 
@@ -7503,8 +7495,9 @@ packages:
   brace-expansion@1.1.12:
     resolution: {integrity: sha512-9T9UjW3r0UW5c1Q7GTwllptXwhvYmEzFhzMfZ9H7FQWt+uZePjZPjBP/W1ZEyZ1twGWom5/56TF4lPcqjnDHcg==}
 
-  brace-expansion@2.0.2:
-    resolution: {integrity: sha512-Jt0vHyM+jmUBqojB7E1NIYadt0vI0Qxjxd2TErW94wDz+E2LAm5vKMXXwg6ZZBTHPuUlDgQHKXvjGBdfcF1ZDQ==}
+  brace-expansion@5.0.3:
+    resolution: {integrity: sha512-fy6KJm2RawA5RcHkLa1z/ScpBeA762UF9KmZQxwIbDtRJrgLzM10depAiEQ+CXYcoiqW1/m96OAAoke2nE9EeA==}
+    engines: {node: 18 || 20 || >=22}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -8926,15 +8919,9 @@ packages:
     deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
-  glob@11.1.0:
-    resolution: {integrity: sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==}
-    engines: {node: 20 || >=22}
-    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
-    hasBin: true
-
-  glob@13.0.1:
-    resolution: {integrity: sha512-B7U/vJpE3DkJ5WXTgTpTRN63uV42DseiXXKMwG14LQBXmsdeIoHAPbU/MEo6II0k5ED74uc2ZGTC6MwHFQhF6w==}
-    engines: {node: 20 || >=22}
+  glob@13.0.6:
+    resolution: {integrity: sha512-Wjlyrolmm8uDpm/ogGyXZXb1Z+Ca2B8NbJwqBVg0axK9GbBeoS7yGV6vjXnYdGm6X53iehEuxxbyiKp8QmN4Vw==}
+    engines: {node: 18 || 20 || >=22}
 
   glob@7.1.7:
     resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
@@ -9495,10 +9482,6 @@ packages:
   jackspeak@3.4.3:
     resolution: {integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==}
 
-  jackspeak@4.1.1:
-    resolution: {integrity: sha512-zptv57P3GpL+O0I7VdMJNBZCu+BPHVQUk55Ft8/QCJjTVxrnJHuVuX/0Bl2A6/+2oyR/ZMEuFKwmzqqZ/U5nPQ==}
-    engines: {node: 20 || >=22}
-
   java-invoke-local@0.0.6:
     resolution: {integrity: sha512-gZmQKe1QrfkkMjCn8Qv9cpyJFyogTYqkP5WCobX5RNaHsJzIV/6NvAnlnouOcwKr29QrxLGDGcqYuJ+ae98s1A==}
     hasBin: true
@@ -10025,12 +10008,12 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
-  lru-cache@11.2.2:
-    resolution: {integrity: sha512-F9ODfyqML2coTIsQpSkRHnLSZMtkU8Q+mSfcaIyKwy58u+8k5nvAYeiNhsyMARvzNcXJ9QfWVrcPsC9e9rAxtg==}
-    engines: {node: 20 || >=22}
-
   lru-cache@11.2.5:
     resolution: {integrity: sha512-vFrFJkWtJvJnD5hg+hJvVE8Lh/TcMzKnTgCWmtBipwI5yLX/iX+5UB2tfuyODF5E7k9xEzMdYgGqaSb1c0c5Yw==}
+    engines: {node: 20 || >=22}
+
+  lru-cache@11.2.6:
+    resolution: {integrity: sha512-ESL2CrkS/2wTPfuend7Zhkzo2u0daGJ/A2VucJOgQ/C48S/zB8MMeMHSGKYpXhIjbPxfuezITkaBH1wqv00DDQ==}
     engines: {node: 20 || >=22}
 
   lru-cache@5.1.1:
@@ -10201,19 +10184,18 @@ packages:
   minimalistic-crypto-utils@1.0.1:
     resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
 
-  minimatch@10.1.1:
-    resolution: {integrity: sha512-enIvLvRAFZYXJzkCYG5RKmPfrFArdLv+R+lbQ53BmIMLIry74bjKzX6iHAm8WYamJkhSSEabrWN5D97XnKObjQ==}
-    engines: {node: 20 || >=22}
-
-  minimatch@10.1.2:
-    resolution: {integrity: sha512-fu656aJ0n2kcXwsnwnv9g24tkU5uSmOlTjd6WyyaKm2Z+h1qmY6bAjrcaIxF/BslFqbZ8UBtbJi7KgQOZD2PTw==}
-    engines: {node: 20 || >=22}
+  minimatch@10.2.2:
+    resolution: {integrity: sha512-+G4CpNBxa5MprY+04MbgOw1v7So6n5JY166pFi9KfYwT78fxScCeSNQSNzp6dpPSW2rONOps6Ocam1wFhCgoVw==}
+    engines: {node: 18 || 20 || >=22}
 
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
-  minimatch@9.0.5:
-    resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
+  minimatch@3.1.3:
+    resolution: {integrity: sha512-M2GCs7Vk83NxkUyQV1bkABc4yxgz9kILhHImZiBPAZ9ybuvCb0/H7lEl5XvIg3g+9d4eNotkZA5IWwYl0tibaA==}
+
+  minimatch@9.0.6:
+    resolution: {integrity: sha512-kQAVowdR33euIqeA0+VZTDqU+qo1IeVY+hrKYtZMio3Pg0P0vuh/kwRylLUddJhB6pf3q/botcOvRtx4IN1wqQ==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   minimist@1.2.8:
@@ -10247,8 +10229,8 @@ packages:
     resolution: {integrity: sha512-3FnjYuehv9k6ovOEbyOswadCDPX1piCfhV8ncmYtHOjuPwylVWsghTLo7rabjC3Rx5xD4HDx8Wm1xnMF7S5qFQ==}
     engines: {node: '>=8'}
 
-  minipass@7.1.2:
-    resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
+  minipass@7.1.3:
+    resolution: {integrity: sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   minizlib@2.1.2:
@@ -10686,9 +10668,9 @@ packages:
     resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
     engines: {node: '>=16 || 14 >=14.18'}
 
-  path-scurry@2.0.1:
-    resolution: {integrity: sha512-oWyT4gICAu+kaA7QWk/jvCHWarMKNs6pXOGWKDTr7cw4IGcUbW+PeTfbaQiLGheFRpjo6O9J0PmyMfQPjH71oA==}
-    engines: {node: 20 || >=22}
+  path-scurry@2.0.2:
+    resolution: {integrity: sha512-3O/iVVsJAPsOnpwWIeD+d6z/7PmqApyQePUtCndjatj/9I5LylHvt5qluFaBT3I5h3r1ejfR056c+FCv+NnNXg==}
+    engines: {node: 18 || 20 || >=22}
 
   path-to-regexp@2.4.0:
     resolution: {integrity: sha512-G6zHoVqC6GGTQkZwF4lkuEyMbVOjoBKAEybQUypI1WTkqinCOrq2x6U2+phkJ1XsEMTy4LjtwPI7HW+NVrRR2w==}
@@ -10870,6 +10852,7 @@ packages:
   prebuild-install@7.1.3:
     resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
     engines: {node: '>=10'}
+    deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
     hasBin: true
 
   prelude-ls@1.2.1:
@@ -14405,7 +14388,7 @@ snapshots:
   '@codemirror/language@6.0.0':
     dependencies:
       '@codemirror/state': 6.5.4
-      '@codemirror/view': 6.39.14
+      '@codemirror/view': 6.39.15
       '@lezer/common': 1.5.1
       '@lezer/highlight': 1.2.3
       '@lezer/lr': 1.4.8
@@ -14415,7 +14398,7 @@ snapshots:
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.39.14':
+  '@codemirror/view@6.39.15':
     dependencies:
       '@codemirror/state': 6.5.4
       crelt: 1.0.6
@@ -14762,7 +14745,7 @@ snapshots:
     dependencies:
       '@eslint/object-schema': 2.1.7
       debug: 4.4.3
-      minimatch: 3.1.2
+      minimatch: 3.1.3
     transitivePeerDependencies:
       - supports-color
 
@@ -14783,7 +14766,7 @@ snapshots:
       ignore: 5.3.2
       import-fresh: 3.3.1
       js-yaml: 4.1.0
-      minimatch: 3.1.2
+      minimatch: 3.1.3
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -16347,16 +16330,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.10.0
 
-  '@isaacs/balanced-match@4.0.1': {}
-
-  '@isaacs/brace-expansion@5.0.0':
-    dependencies:
-      '@isaacs/balanced-match': 4.0.1
-
-  '@isaacs/brace-expansion@5.0.1':
-    dependencies:
-      '@isaacs/balanced-match': 4.0.1
-
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
@@ -16746,7 +16719,7 @@ snapshots:
 
   '@joshwooding/vite-plugin-react-docgen-typescript@0.6.4(typescript@5.9.3)(vite@7.3.0(@types/node@25.2.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.8.2))':
     dependencies:
-      glob: 13.0.1
+      glob: 13.0.6
       react-docgen-typescript: 2.4.0(typescript@5.9.3)
       vite: 7.3.0(@types/node@25.2.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.8.2)
     optionalDependencies:
@@ -19496,7 +19469,7 @@ snapshots:
       '@typescript-eslint/types': 8.49.0
       '@typescript-eslint/visitor-keys': 8.49.0
       debug: 4.4.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       semver: 7.7.3
       tinyglobby: 0.2.15
       ts-api-utils: 2.1.0(typescript@5.9.3)
@@ -19511,7 +19484,7 @@ snapshots:
       '@typescript-eslint/types': 8.52.0
       '@typescript-eslint/visitor-keys': 8.52.0
       debug: 4.4.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       semver: 7.7.3
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@5.9.3)
@@ -20085,6 +20058,8 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
+  balanced-match@4.0.4: {}
+
   base-64@1.0.0: {}
 
   base-x@3.0.11:
@@ -20167,9 +20142,9 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@2.0.2:
+  brace-expansion@5.0.3:
     dependencies:
-      balanced-match: 1.0.2
+      balanced-match: 4.0.4
 
   braces@3.0.3:
     dependencies:
@@ -21823,32 +21798,23 @@ snapshots:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 3.4.3
-      minimatch: 9.0.5
-      minipass: 7.1.2
+      minimatch: 9.0.6
+      minipass: 7.1.3
       package-json-from-dist: 1.0.1
       path-scurry: 1.11.1
 
-  glob@11.1.0:
+  glob@13.0.6:
     dependencies:
-      foreground-child: 3.3.1
-      jackspeak: 4.1.1
-      minimatch: 10.1.1
-      minipass: 7.1.2
-      package-json-from-dist: 1.0.1
-      path-scurry: 2.0.1
-
-  glob@13.0.1:
-    dependencies:
-      minimatch: 10.1.2
-      minipass: 7.1.2
-      path-scurry: 2.0.1
+      minimatch: 10.2.2
+      minipass: 7.1.3
+      path-scurry: 2.0.2
 
   glob@7.1.7:
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 3.1.3
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -21857,7 +21823,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 3.1.3
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -21943,7 +21909,7 @@ snapshots:
       cosmiconfig: 8.3.6(typescript@5.9.3)
       graphql: 16.12.0
       jiti: 2.6.1
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       string-env-interpolation: 1.0.1
       tslib: 2.8.1
     transitivePeerDependencies:
@@ -22451,10 +22417,6 @@ snapshots:
       '@isaacs/cliui': 8.0.2
     optionalDependencies:
       '@pkgjs/parseargs': 0.11.0
-
-  jackspeak@4.1.1:
-    dependencies:
-      '@isaacs/cliui': 8.0.2
 
   java-invoke-local@0.0.6: {}
 
@@ -23233,9 +23195,9 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  lru-cache@11.2.2: {}
-
   lru-cache@11.2.5: {}
+
+  lru-cache@11.2.6: {}
 
   lru-cache@5.1.1:
     dependencies:
@@ -23394,21 +23356,21 @@ snapshots:
 
   minimalistic-crypto-utils@1.0.1: {}
 
-  minimatch@10.1.1:
+  minimatch@10.2.2:
     dependencies:
-      '@isaacs/brace-expansion': 5.0.0
-
-  minimatch@10.1.2:
-    dependencies:
-      '@isaacs/brace-expansion': 5.0.1
+      brace-expansion: 5.0.3
 
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.12
 
-  minimatch@9.0.5:
+  minimatch@3.1.3:
     dependencies:
-      brace-expansion: 2.0.2
+      brace-expansion: 1.1.12
+
+  minimatch@9.0.6:
+    dependencies:
+      brace-expansion: 5.0.3
 
   minimist@1.2.8: {}
 
@@ -23447,7 +23409,7 @@ snapshots:
 
   minipass@5.0.0: {}
 
-  minipass@7.1.2: {}
+  minipass@7.1.3: {}
 
   minizlib@2.1.2:
     dependencies:
@@ -23899,12 +23861,12 @@ snapshots:
   path-scurry@1.11.1:
     dependencies:
       lru-cache: 10.4.3
-      minipass: 7.1.2
+      minipass: 7.1.3
 
-  path-scurry@2.0.1:
+  path-scurry@2.0.2:
     dependencies:
-      lru-cache: 11.2.2
-      minipass: 7.1.2
+      lru-cache: 11.2.6
+      minipass: 7.1.3
 
   path-to-regexp@2.4.0: {}
 
@@ -25228,7 +25190,7 @@ snapshots:
     dependencies:
       '@istanbuljs/schema': 0.1.3
       glob: 7.2.3
-      minimatch: 3.1.2
+      minimatch: 3.1.3
 
   thread-stream@4.0.0:
     dependencies:
