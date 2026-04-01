@@ -10,7 +10,7 @@
  * (PostgreSQL must be reachable with standard e2e credentials and database `gw`.)
  */
 import gql from 'graphql-tag';
-import assert from 'assert';
+import assert from 'node:assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
 	Entity as DataEntity,
@@ -73,7 +73,7 @@ class OrmBatchFlushGrandchild {
 
 const dbConfig = {
 	host: process.env.DATABASE_HOST || 'localhost',
-	port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT, 10) : 5432,
+	port: process.env.DATABASE_PORT ? Number.parseInt(process.env.DATABASE_PORT, 10) : 5432,
 	user: process.env.DATABASE_USERNAME || 'postgres',
 	password: process.env.DATABASE_PASSWORD || 'postgres',
 	dbName: process.env.DATABASE_NAME || 'gw',
