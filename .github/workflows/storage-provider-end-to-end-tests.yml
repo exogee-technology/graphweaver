@@ -59,9 +59,11 @@ jobs:
 
       - name: Configure MinIO (S3)
         run: |
-          # Wait on the runner; service health-cmd with quoted curl breaks docker create arg parsing on the Actions runner.
-          for i in $(seq 1 60); do
-            curl -sf http://127.0.0.1:9000/minio/health/live && break
+          # Steps use bash -e: a failing curl must not run at top level in the loop body (use if).
+          for _ in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:9000/minio/health/live; then
+              break
+            fi
             sleep 1
           done
           curl -sf http://127.0.0.1:9000/minio/health/live
