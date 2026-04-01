@@ -129,10 +129,6 @@ export enum AggregationType {
   Count = 'COUNT'
 }
 
-export type DeleteOneFilterInput = {
-  id: Scalars['ID']['input'];
-};
-
 export type DetailPanelInputComponent = {
   __typename?: 'DetailPanelInputComponent';
   name: DetailPanelInputComponentOption;
