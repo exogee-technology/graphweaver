@@ -33,7 +33,6 @@ jobs:
           MINIO_ROOT_PASSWORD: minioadmin
         ports:
           - 9000:9000
-        options: --health-cmd "curl -f http://localhost:9000/minio/health/live"
 
     steps:
       - name: Checkout repository
@@ -60,6 +59,12 @@ jobs:
 
       - name: Configure MinIO (S3)
         run: |
+          # Wait on the runner; service health-cmd with quoted curl breaks docker create arg parsing on the Actions runner.
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:9000/minio/health/live && break
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:9000/minio/health/live
           aws configure set aws_access_key_id minioadmin
           aws configure set aws_secret_access_key minioadmin
           aws configure set default.region us-east-1
