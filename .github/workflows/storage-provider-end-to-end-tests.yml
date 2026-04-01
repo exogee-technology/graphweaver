@@ -51,10 +51,12 @@ jobs:
 
       # minio/minio image CMD is only `minio` (prints help). It needs `server /data`, which
       # jobs.services cannot pass after the image (see actions/runner#2139). Start it here instead.
+      # Map host 9010 -> container 9000 so presigned uploads do not collide with Graphweaver's
+      # admin UI, which binds port 9000 on the runner.
       - name: Start MinIO
         run: |
           docker run -d --name gw-minio \
-            -p 9000:9000 \
+            -p 9010:9000 \
             -e MINIO_ROOT_USER=minioadmin \
             -e MINIO_ROOT_PASSWORD=minioadmin \
             minio/minio:latest \
@@ -63,16 +65,16 @@ jobs:
       - name: Configure MinIO (S3)
         run: |
           for _ in $(seq 1 60); do
-            if curl -sf http://127.0.0.1:9000/minio/health/live; then
+            if curl -sf http://127.0.0.1:9010/minio/health/live; then
               break
             fi
             sleep 1
           done
-          curl -sf http://127.0.0.1:9000/minio/health/live
+          curl -sf http://127.0.0.1:9010/minio/health/live
           aws configure set aws_access_key_id minioadmin
           aws configure set aws_secret_access_key minioadmin
           aws configure set default.region us-east-1
-          aws s3 mb s3://my-bucket --endpoint-url=http://127.0.0.1:9000
+          aws s3 mb s3://my-bucket --endpoint-url=http://127.0.0.1:9010
 
       - name: Install dependencies
         run: pnpm i
@@ -88,7 +90,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_AWS_S3_BUCKET: my-bucket
-          envkey_AWS_S3_ENDPOINT: http://127.0.0.1:9000
+          envkey_AWS_S3_ENDPOINT: http://127.0.0.1:9010
           envkey_AWS_REGION: "us-east-1"
           envkey_AWS_ACCESS_KEY_ID: minioadmin
           envkey_AWS_SECRET_ACCESS_KEY: minioadmin
