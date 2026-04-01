@@ -6,8 +6,6 @@ For running locally it is handy to have a local S3 env. For this we recommend ru
 
 [https://min.io/docs/minio/macos/index.html](https://min.io/docs/minio/macos/index.html)
 
-** An alternative option is to use Localstack, see details below **
-
 Once Minio is installed you can start the server with the following command:
 
 `MINIO_ROOT_USER=root MINIO_ROOT_PASSWORD=<choose a password> minio server ~/data --address :9003 --console-address :50003`
@@ -55,18 +53,10 @@ pnpm i
 pnpm start
 ```
 
-## Using with Localstack
+You can also run MinIO in Docker (similar to CI):
 
-```
-brew install localstack/tap/localstack-cli
-SERVICES=s3 DISABLE_CUSTOM_CORS_S3=1 DISABLE_CORS_CHECKS=1 localstack start
-aws configure set aws_access_key_id localstack
-aws configure set aws_secret_access_key localstack
-aws configure set default.region us-east-1
-```
+`docker run -p 9000:9000 -e MINIO_ROOT_USER=minioadmin -e MINIO_ROOT_PASSWORD=minioadmin minio/minio server /data`
 
-Create Bucket:
-`aws s3 mb s3://test --endpoint-url=http://s3.us-east-1.localhost.localstack.cloud:4566`
+Then create a bucket with the AWS CLI, pointing `AWS_S3_ENDPOINT` at `http://127.0.0.1:9000` and using the same root user and password as `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`:
 
-List Bucket:
-`aws s3 ls s3://test --endpoint-url=http://s3.us-east-1.localhost.localstack.cloud:4566`
+`aws s3 mb s3://test --endpoint-url=http://127.0.0.1:9000`

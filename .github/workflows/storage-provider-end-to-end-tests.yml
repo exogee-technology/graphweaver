@@ -26,14 +26,14 @@ jobs:
         ports:
           - 5432:5432
 
-      localstack:
-        image: localstack/localstack
+      minio:
+        image: minio/minio:latest
         env:
-          SERVICES: s3
-          DISABLE_CUSTOM_CORS_S3: 1
-          DISABLE_CORS_CHECKS: 1
-          DATA_DIR: /tmp/localstack/data
-        ports: ["4566:4566"]
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+        ports:
+          - 9000:9000
+        options: --health-cmd "curl -f http://localhost:9000/minio/health/live"
 
     steps:
       - name: Checkout repository
@@ -58,12 +58,12 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
 
-      - name: Configure localstack
+      - name: Configure MinIO (S3)
         run: |
-          aws configure set aws_access_key_id localstack
-          aws configure set aws_secret_access_key localstack
+          aws configure set aws_access_key_id minioadmin
+          aws configure set aws_secret_access_key minioadmin
           aws configure set default.region us-east-1
-          aws s3 mb s3://my-bucket --endpoint-url=http://s3.us-east-1.localhost.localstack.cloud:4566
+          aws s3 mb s3://my-bucket --endpoint-url=http://127.0.0.1:9000
 
       - name: Install dependencies
         run: pnpm i
@@ -79,10 +79,10 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_AWS_S3_BUCKET: my-bucket
-          envkey_AWS_S3_ENDPOINT: http://s3.us-east-1.localhost.localstack.cloud:4566
+          envkey_AWS_S3_ENDPOINT: http://127.0.0.1:9000
           envkey_AWS_REGION: "us-east-1"
-          envkey_AWS_ACCESS_KEY_ID: localstack
-          envkey_AWS_SECRET_ACCESS_KEY: localstack
+          envkey_AWS_ACCESS_KEY_ID: minioadmin
+          envkey_AWS_SECRET_ACCESS_KEY: minioadmin
           envkey_PGHOST: localhost
           envkey_PGPORT: 5432
           envkey_PGDATABASE: gw_storage_provider
