@@ -26,14 +26,6 @@ jobs:
         ports:
           - 5432:5432
 
-      minio:
-        image: minio/minio:latest
-        env:
-          MINIO_ROOT_USER: minioadmin
-          MINIO_ROOT_PASSWORD: minioadmin
-        ports:
-          - 9000:9000
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -57,9 +49,19 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
 
+      # minio/minio image CMD is only `minio` (prints help). It needs `server /data`, which
+      # jobs.services cannot pass after the image (see actions/runner#2139). Start it here instead.
+      - name: Start MinIO
+        run: |
+          docker run -d --name gw-minio \
+            -p 9000:9000 \
+            -e MINIO_ROOT_USER=minioadmin \
+            -e MINIO_ROOT_PASSWORD=minioadmin \
+            minio/minio:latest \
+            server /data
+
       - name: Configure MinIO (S3)
         run: |
-          # Steps use bash -e: a failing curl must not run at top level in the loop body (use if).
           for _ in $(seq 1 60); do
             if curl -sf http://127.0.0.1:9000/minio/health/live; then
               break
