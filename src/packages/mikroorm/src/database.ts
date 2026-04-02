@@ -65,7 +65,7 @@ class DatabaseImplementation {
 
 	public async transactional<T>(
 		callback: () => Promise<T>,
-		isolationLevel: IsolationLevel = IsolationLevel.READ_COMMITTED
+		isolationLevel: IsolationLevel = IsolationLevel.REPEATABLE_READ
 	) {
 		logger.trace('Database::transactional() enter');
 
