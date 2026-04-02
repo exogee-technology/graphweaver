@@ -4,37 +4,48 @@ import {
 	SimpleSpanProcessor,
 	SpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
-import { ExportResult, ExportResultCode, hrTimeToNanoseconds } from '@opentelemetry/core';
+import { context } from '@opentelemetry/api';
+import {
+	ExportResult,
+	ExportResultCode,
+	hrTimeToNanoseconds,
+	suppressTracing,
+} from '@opentelemetry/core';
 
 import { BackendProvider } from '../types';
 
 export class JsonSpanExporter implements SpanExporter {
-	private queue: ReadableSpan[];
-	private locked: boolean = false;
+	/**
+	 * Serialize trace DB writes: (1) avoids overlapping `createTraces` on the single pooled
+	 * connection, (2) ensures every OTEL export callback runs (lock+queue dropped callbacks).
+	 * ALS on `Database` does not order OTEL work vs in-flight Knex commits — deferral below does.
+	 */
+	private exportChain: Promise<void> = Promise.resolve();
 
-	constructor(private dataProvider: BackendProvider<unknown>) {
-		this.queue = [];
-	}
+	constructor(private readonly dataProvider: BackendProvider<unknown>) {}
 	/**
 	 * Export spans.
 	 * @param spans
 	 * @param resultCallback
 	 */
 	export(spans: ReadableSpan[], resultCallback: (result: ExportResult) => void) {
-		if (this.locked) {
-			this.queue.push(...spans);
-			return;
-		} else {
-			this.locked = true;
-			return this.saveSpans(spans, resultCallback);
-		}
+		this.exportChain = this.exportChain.then(async () => {
+			try {
+				await this.persistSpans(spans);
+				resultCallback({ code: ExportResultCode.SUCCESS });
+			} catch (error) {
+				resultCallback({
+					code: ExportResultCode.FAILED,
+					error: error instanceof Error ? error : new Error(String(error)),
+				});
+			}
+		});
 	}
 	/**
 	 * Shutdown the exporter.
 	 */
-	shutdown() {
-		this.saveSpans([]);
-		return this.forceFlush();
+	shutdown(): Promise<void> {
+		return this.exportChain;
 	}
 	/**
 	 * Exports any pending spans in exporter
@@ -58,32 +69,21 @@ export class JsonSpanExporter implements SpanExporter {
 		};
 	}
 
-	/**
-	 * Showing spans in console
-	 * @param spans
-	 * @param done
-	 */
-	private async saveSpans(
-		spans: ReadableSpan[],
-		done?: (result: ExportResult) => void
-	): Promise<void> {
+	private async persistSpans(spans: ReadableSpan[]): Promise<void> {
+		if (spans.length === 0) {
+			return;
+		}
 		if (!this.dataProvider.createTraces) {
 			throw new Error('createTraces method is not implemented in the dataProvider');
 		}
 
-		await this.dataProvider.createTraces(spans.map((span) => this.exportInfo(span)));
+		// Yield so Knex/Mikro can finish async commit for other work on this connection before we
+		// start another transaction (pool max 1). Complements AsyncLocalStorage on Database.
+		await new Promise<void>((resolve) => setImmediate(resolve));
 
-		if (this.queue.length > 0) {
-			const toSave = this.queue;
-			this.queue = [];
-			return this.saveSpans(toSave, done);
-		}
-
-		this.locked = false;
-
-		if (done) {
-			return done({ code: ExportResultCode.SUCCESS });
-		}
+		await context.with(suppressTracing(context.active()), async () =>
+			this.dataProvider.createTraces!(spans.map((span) => this.exportInfo(span)))
+		);
 	}
 }
 

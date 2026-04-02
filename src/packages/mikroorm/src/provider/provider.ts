@@ -361,13 +361,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		return collectedPaths;
 	};
 
-	// Some connections (ex. sqlite) require an explicit flush during batch inserts 
-	// to retrieve user defined primary keys correctly.
-	private flushOnBatchInserts() {
-		const driver = this.em.getDriver();
-		return driver.constructor.name === 'SqliteDriver';
-	};
-
 	@TraceMethod()
 	public async find(
 		filter: Filter<D>,
@@ -735,9 +728,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 				result.push(entity);
 			}
 
-			if (this.flushOnBatchInserts()) {
-				await this.database.em.flush();
-			}
+			// Flush so database-generated primary keys (e.g. PostgreSQL identity) are assigned
+			// before we return entities to Graphweaver — nested createOrUpdate batching reads PKs
+			// from these objects when wiring FK injectors.
+			await this.database.em.flush();
 
 			return result;
 		});

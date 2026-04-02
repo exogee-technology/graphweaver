@@ -169,6 +169,11 @@ export type AlbumCreateOrUpdateInput = {
   tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
 
+/** Data needed to delete one Album. */
+export type AlbumDeleteOneFilterInput = {
+  albumId: Scalars['ID']['input'];
+};
+
 /** Data needed to create Albums. */
 export type AlbumInsertInput = {
   artist?: InputMaybe<ArtistCreateOrUpdateInput>;
@@ -249,6 +254,11 @@ export type ArtistCreateOrUpdateInput = {
   albums?: InputMaybe<Array<AlbumCreateOrUpdateInput>>;
   artistId?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to delete one Artist. */
+export type ArtistDeleteOneFilterInput = {
+  artistId: Scalars['ID']['input'];
 };
 
 /** Data needed to create Artists. */
@@ -361,6 +371,11 @@ export type CustomerCreateOrUpdateInput = {
   phone?: InputMaybe<Scalars['String']['input']>;
   postalCode?: InputMaybe<Scalars['String']['input']>;
   state?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to delete one Customer. */
+export type CustomerDeleteOneFilterInput = {
+  customerId: Scalars['ID']['input'];
 };
 
 /** Data needed to create Customers. */
@@ -570,10 +585,6 @@ export type CustomersPaginationInput = {
   orderBy?: InputMaybe<CustomersOrderByInput>;
 };
 
-export type DeleteOneFilterInput = {
-  id: Scalars['ID']['input'];
-};
-
 export type DetailPanelInputComponent = {
   __typename?: 'DetailPanelInputComponent';
   name: DetailPanelInputComponentOption;
@@ -659,6 +670,11 @@ export type EmployeeCreateOrUpdateInput = {
   postalCode?: InputMaybe<Scalars['String']['input']>;
   state?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to delete one Employee. */
+export type EmployeeDeleteOneFilterInput = {
+  employeeId: Scalars['ID']['input'];
 };
 
 /** Data needed to create Employees. */
@@ -922,6 +938,11 @@ export type GenreCreateOrUpdateInput = {
   tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
 
+/** Data needed to delete one Genre. */
+export type GenreDeleteOneFilterInput = {
+  genreId: Scalars['ID']['input'];
+};
+
 /** Data needed to create Genres. */
 export type GenreInsertInput = {
   genreId: Scalars['ID']['input'];
@@ -1027,6 +1048,11 @@ export type InvoiceCreateOrUpdateInput = {
   total?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Data needed to delete one Invoice. */
+export type InvoiceDeleteOneFilterInput = {
+  invoiceId: Scalars['ID']['input'];
+};
+
 /** Data needed to create Invoices. */
 export type InvoiceInsertInput = {
   billingAddress?: InputMaybe<Scalars['String']['input']>;
@@ -1078,6 +1104,11 @@ export type InvoiceLineCreateOrUpdateInput = {
   quantity?: InputMaybe<Scalars['Float']['input']>;
   track?: InputMaybe<TrackCreateOrUpdateInput>;
   unitPrice?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to delete one InvoiceLine. */
+export type InvoiceLineDeleteOneFilterInput = {
+  invoiceLineId: Scalars['ID']['input'];
 };
 
 /** Data needed to create InvoiceLines. */
@@ -1305,6 +1336,11 @@ export type MediaTypeCreateOrUpdateInput = {
   mediaTypeId?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
+};
+
+/** Data needed to delete one MediaType. */
+export type MediaTypeDeleteOneFilterInput = {
+  mediaTypeId: Scalars['ID']['input'];
 };
 
 /** Data needed to create MediaTypes. */
@@ -1657,7 +1693,7 @@ export type MutationCreateTracksArgs = {
 
 
 export type MutationDeleteAlbumArgs = {
-  filter: DeleteOneFilterInput;
+  filter: AlbumDeleteOneFilterInput;
 };
 
 
@@ -1667,7 +1703,7 @@ export type MutationDeleteAlbumsArgs = {
 
 
 export type MutationDeleteArtistArgs = {
-  filter: DeleteOneFilterInput;
+  filter: ArtistDeleteOneFilterInput;
 };
 
 
@@ -1677,7 +1713,7 @@ export type MutationDeleteArtistsArgs = {
 
 
 export type MutationDeleteCustomerArgs = {
-  filter: DeleteOneFilterInput;
+  filter: CustomerDeleteOneFilterInput;
 };
 
 
@@ -1687,7 +1723,7 @@ export type MutationDeleteCustomersArgs = {
 
 
 export type MutationDeleteEmployeeArgs = {
-  filter: DeleteOneFilterInput;
+  filter: EmployeeDeleteOneFilterInput;
 };
 
 
@@ -1697,7 +1733,7 @@ export type MutationDeleteEmployeesArgs = {
 
 
 export type MutationDeleteGenreArgs = {
-  filter: DeleteOneFilterInput;
+  filter: GenreDeleteOneFilterInput;
 };
 
 
@@ -1707,12 +1743,12 @@ export type MutationDeleteGenresArgs = {
 
 
 export type MutationDeleteInvoiceArgs = {
-  filter: DeleteOneFilterInput;
+  filter: InvoiceDeleteOneFilterInput;
 };
 
 
 export type MutationDeleteInvoiceLineArgs = {
-  filter: DeleteOneFilterInput;
+  filter: InvoiceLineDeleteOneFilterInput;
 };
 
 
@@ -1727,7 +1763,7 @@ export type MutationDeleteInvoicesArgs = {
 
 
 export type MutationDeleteMediaTypeArgs = {
-  filter: DeleteOneFilterInput;
+  filter: MediaTypeDeleteOneFilterInput;
 };
 
 
@@ -1737,7 +1773,7 @@ export type MutationDeleteMediaTypesArgs = {
 
 
 export type MutationDeletePlaylistArgs = {
-  filter: DeleteOneFilterInput;
+  filter: PlaylistDeleteOneFilterInput;
 };
 
 
@@ -1747,7 +1783,7 @@ export type MutationDeletePlaylistsArgs = {
 
 
 export type MutationDeleteTrackArgs = {
-  filter: DeleteOneFilterInput;
+  filter: TrackDeleteOneFilterInput;
 };
 
 
@@ -1878,6 +1914,11 @@ export type PlaylistCreateOrUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   playlistId?: InputMaybe<Scalars['ID']['input']>;
   tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
+};
+
+/** Data needed to delete one Playlist. */
+export type PlaylistDeleteOneFilterInput = {
+  playlistId: Scalars['ID']['input'];
 };
 
 /** Data needed to create Playlists. */
@@ -2329,6 +2370,11 @@ export type TrackCreateOrUpdateInput = {
   playlists?: InputMaybe<Array<PlaylistCreateOrUpdateInput>>;
   trackId?: InputMaybe<Scalars['ID']['input']>;
   unitPrice?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to delete one Track. */
+export type TrackDeleteOneFilterInput = {
+  trackId: Scalars['ID']['input'];
 };
 
 /** Data needed to create Tracks. */

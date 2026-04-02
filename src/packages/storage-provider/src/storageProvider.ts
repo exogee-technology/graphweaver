@@ -72,6 +72,15 @@ export class S3StorageProvider {
 		});
 	}
 
+	private getS3Client() {
+		return new S3Client({
+			region: this.region,
+			...(this.endpoint
+				? { endpoint: this.endpoint, forcePathStyle: true }
+				: {}),
+		});
+	}
+
 	async getUploadUrl({ args: { key } }: ResolverOptions<{ key: string }>): Promise<{
 		url: string;
 		filename: string;
@@ -79,10 +88,7 @@ export class S3StorageProvider {
 	}> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
-		const s3 = new S3Client({
-			region: this.region,
-			...(this.endpoint ? { endpoint: this.endpoint } : {}),
-		});
+		const s3 = this.getS3Client();
 
 		const fileExtension = key.split('.').pop();
 		if (!fileExtension) {
@@ -106,10 +112,7 @@ export class S3StorageProvider {
 	async getDeleteUrl({ args: { key } }: ResolverOptions<{ key: string }>): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
-		const s3 = new S3Client({
-			region: this.region,
-			...(this.endpoint ? { endpoint: this.endpoint } : {}),
-		});
+		const s3 = this.getS3Client();
 
 		const command = new DeleteObjectCommand({
 			Bucket: this.bucketName,
@@ -122,10 +125,7 @@ export class S3StorageProvider {
 	async getDownloadUrlForKey(key: string): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
-		const s3 = new S3Client({
-			region: this.region,
-			...(this.endpoint ? { endpoint: this.endpoint } : {}),
-		});
+		const s3 = this.getS3Client();
 
 		const command = new GetObjectCommand({
 			Bucket: this.bucketName,
