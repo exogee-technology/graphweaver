@@ -42,7 +42,7 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
-		"@mikro-orm/core": "6.6.2",
+		"@mikro-orm/core": "6.6.10",
 		"@mikro-orm/postgresql": "6.6.2",
 		"@mikro-orm/sqlite": "6.6.2",
 		"dotenv-cli": "11.0.0",
