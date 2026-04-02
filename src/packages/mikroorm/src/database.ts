@@ -69,7 +69,7 @@ class DatabaseImplementation {
 	public get em() {
 		const tx = this.transactionalAsyncLocal.getStore();
 		if (tx) return tx.em;
-		return this.orm.em;
+		return this.orm.em as EntityManager;
 	}
 
 	public async transactional<T>(
