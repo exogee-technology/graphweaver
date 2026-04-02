@@ -22,7 +22,7 @@ export class JsonSpanExporter implements SpanExporter {
 	 */
 	private exportChain: Promise<void> = Promise.resolve();
 
-	constructor(private dataProvider: BackendProvider<unknown>) {}
+	constructor(private readonly dataProvider: BackendProvider<unknown>) {}
 	/**
 	 * Export spans.
 	 * @param spans
