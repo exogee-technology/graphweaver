@@ -151,6 +151,11 @@ export type CognitoUserCreateOrUpdateInput = {
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Data needed to delete one CognitoUser. */
+export type CognitoUserDeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
+};
+
 /** Data needed to create CognitoUsers. */
 export type CognitoUserInsertInput = {
   attributes?: InputMaybe<Scalars['String']['input']>;
@@ -271,10 +276,6 @@ export type CognitoUsersPaginationInput = {
   orderBy?: InputMaybe<CognitoUsersOrderByInput>;
 };
 
-export type DeleteOneFilterInput = {
-  id: Scalars['ID']['input'];
-};
-
 export type DetailPanelInputComponent = {
   __typename?: 'DetailPanelInputComponent';
   name: DetailPanelInputComponentOption;
@@ -322,7 +323,7 @@ export type MutationCreateOrUpdateCognitoUsersArgs = {
 
 
 export type MutationDeleteCognitoUserArgs = {
-  filter: DeleteOneFilterInput;
+  filter: CognitoUserDeleteOneFilterInput;
 };
 
 

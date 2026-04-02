@@ -138,10 +138,6 @@ export type CaseStudy = {
   description?: Maybe<Scalars['String']['output']>;
 };
 
-export type DeleteOneFilterInput = {
-  id: Scalars['ID']['input'];
-};
-
 export type DeprecatedProduct = {
   __typename?: 'DeprecatedProduct';
   createdBy?: Maybe<User>;
