@@ -1,5 +1,6 @@
 import './utils/change-tracker';
 
+import { AsyncLocalStorage } from 'node:async_hooks';
 import {
 	AnyEntity,
 	Connection,
@@ -43,10 +44,16 @@ const NumericIsolationLevels = {
 
 export type Database = typeof DatabaseImplementation.prototype;
 
+type TransactionalAsyncStore = {
+	em: EntityManager;
+	isolationLevel: IsolationLevel;
+};
+
 class DatabaseImplementation {
 	private cachedOrm?: MikroORM<IDatabaseDriver<Connection>>;
-	private transactionalEm?: EntityManager;
-	private transactionInProgressIsolationLevel?: IsolationLevel;
+	// Per-async-chain transactional em. This ensures we keep transactions isolated
+	// and they don't mingle.
+	private readonly transactionalAsyncLocal = new AsyncLocalStorage<TransactionalAsyncStore>();
 	private connectionOptions?: ConnectionOptions;
 
 	public get orm() {
@@ -60,7 +67,9 @@ class DatabaseImplementation {
 	}
 
 	public get em() {
-		return this.transactionalEm || (this.orm.em as EntityManager);
+		const tx = this.transactionalAsyncLocal.getStore();
+		if (tx) return tx.em;
+		return this.orm.em as EntityManager;
 	}
 
 	public async transactional<T>(
@@ -69,53 +78,51 @@ class DatabaseImplementation {
 	) {
 		logger.trace('Database::transactional() enter');
 
+		const current = this.transactionalAsyncLocal.getStore();
+
 		if (
-			this.transactionInProgressIsolationLevel &&
-			NumericIsolationLevels[this.transactionInProgressIsolationLevel] <
-				NumericIsolationLevels[isolationLevel]
+			current &&
+			NumericIsolationLevels[current.isolationLevel] < NumericIsolationLevels[isolationLevel]
 		) {
 			const error = new Error(
-				`Transaction in progress is ${this.transactionInProgressIsolationLevel} isolation level, but ${isolationLevel} was requested, which is more restrictive. Since we can't upgrade, this is an error.`
+				`Transaction in progress is ${current.isolationLevel} isolation level, but ${isolationLevel} was requested, which is more restrictive. Since we can't upgrade, this is an error.`
 			);
 			logger.error(error);
 			throw error;
 		}
 
-		if (this.transactionalEm) {
-			// Transaction is already in progress that is isolated enough. Run the callback without starting a new one.
+		if (current) {
+			// Same async chain already inside em.transactional — merge (savepoint / same Knex tx).
 			logger.trace(
 				'Transaction already in progress with sufficient isolation, proceeding without new transaction.'
 			);
 
 			return callback();
-		} else {
-			// Ok, start a new one.
-			logger.trace('Starting transaction');
+		}
 
-			return this.em.transactional(async (em) => {
-				this.transactionalEm = em;
-				this.transactionInProgressIsolationLevel = isolationLevel;
+		// New outer transaction — use root EM so we do not read transactionalAsyncLocal before it exists.
+		logger.trace('Starting transaction');
 
-				const driver = this.em.getDriver();
-				if (driver.constructor.name === 'SqliteDriver') {
-					logger.trace('All transactions in SQLite are SERIALIZABLE');
-				} else {
-					await em.execute(`SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
-				}
+		return this.orm.em.transactional(async (emArg) => {
+			const em = emArg as EntityManager;
+			const driver = em.getDriver();
+			if (driver.constructor.name === 'SqliteDriver') {
+				logger.trace('All transactions in SQLite are SERIALIZABLE');
+			} else {
+				await em.execute(`SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
+			}
 
+			return this.transactionalAsyncLocal.run({ em, isolationLevel }, async () => {
 				let result: T;
 				try {
 					result = await callback();
 				} catch (error) {
 					safeErrorLog(logger, error, 'Error in transaction');
 					throw error;
-				} finally {
-					delete this.transactionalEm;
-					delete this.transactionInProgressIsolationLevel;
 				}
 				return result;
 			});
-		}
+		});
 	}
 
 	public isolatedTest(test: () => any) {

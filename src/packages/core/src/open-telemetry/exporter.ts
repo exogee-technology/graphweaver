@@ -4,47 +4,37 @@ import {
 	SimpleSpanProcessor,
 	SpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
-import { context } from '@opentelemetry/api';
-import {
-	ExportResult,
-	ExportResultCode,
-	hrTimeToNanoseconds,
-	suppressTracing,
-} from '@opentelemetry/core';
+import { ExportResult, ExportResultCode, hrTimeToNanoseconds } from '@opentelemetry/core';
 
 import { BackendProvider } from '../types';
 
 export class JsonSpanExporter implements SpanExporter {
-	/**
-	 * Serializes exports so only one `createTraces` runs at a time (avoids overlapping work on the
-	 * single pooled connection) and every OTEL `resultCallback` is invoked
-	 */
-	private exportChain: Promise<void> = Promise.resolve();
+	private queue: ReadableSpan[];
+	private locked: boolean = false;
 
-	constructor(private dataProvider: BackendProvider<unknown>) {}
+	constructor(private dataProvider: BackendProvider<unknown>) {
+		this.queue = [];
+	}
 	/**
 	 * Export spans.
 	 * @param spans
 	 * @param resultCallback
 	 */
 	export(spans: ReadableSpan[], resultCallback: (result: ExportResult) => void) {
-		this.exportChain = this.exportChain.then(async () => {
-			try {
-				await this.persistSpans(spans);
-				resultCallback({ code: ExportResultCode.SUCCESS });
-			} catch (error) {
-				resultCallback({
-					code: ExportResultCode.FAILED,
-					error: error instanceof Error ? error : new Error(String(error)),
-				});
-			}
-		});
+		if (this.locked) {
+			this.queue.push(...spans);
+			return;
+		} else {
+			this.locked = true;
+			return this.saveSpans(spans, resultCallback);
+		}
 	}
 	/**
 	 * Shutdown the exporter.
 	 */
-	shutdown(): Promise<void> {
-		return this.exportChain;
+	shutdown() {
+		this.saveSpans([]);
+		return this.forceFlush();
 	}
 	/**
 	 * Exports any pending spans in exporter
@@ -69,17 +59,44 @@ export class JsonSpanExporter implements SpanExporter {
 	}
 
 	/**
-	 * Persists spans to the Trace entity (skipped when empty, e.g. shutdown).
+	 * Showing spans in console
+	 * @param spans
+	 * @param done
 	 */
-	private async persistSpans(spans: ReadableSpan[]): Promise<void> {
+	private async saveSpans(
+		spans: ReadableSpan[],
+		done?: (result: ExportResult) => void
+	): Promise<void> {
 		if (!this.dataProvider.createTraces) {
 			throw new Error('createTraces method is not implemented in the dataProvider');
 		}
-		if (spans.length === 0) return;
 
-		await context.with(suppressTracing(context.active()), async () =>
-			this.dataProvider.createTraces!(spans.map((span) => this.exportInfo(span)))
-		);
+		if (spans.length === 0) {
+			if (this.queue.length > 0) {
+				const toSave = this.queue;
+				this.queue = [];
+				return this.saveSpans(toSave, done);
+			}
+			this.locked = false;
+			if (done) {
+				return done({ code: ExportResultCode.SUCCESS });
+			}
+			return;
+		}
+
+		await this.dataProvider.createTraces!(spans.map((span) => this.exportInfo(span)));
+
+		if (this.queue.length > 0) {
+			const toSave = this.queue;
+			this.queue = [];
+			return this.saveSpans(toSave, done);
+		}
+
+		this.locked = false;
+
+		if (done) {
+			return done({ code: ExportResultCode.SUCCESS });
+		}
 	}
 }
 
