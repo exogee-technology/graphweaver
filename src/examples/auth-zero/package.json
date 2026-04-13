@@ -25,7 +25,7 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.6.2",
+		"@mikro-orm/core": "6.6.10",
 		"@mikro-orm/knex": "6.6.2",
 		"@mikro-orm/sqlite": "6.6.2",
 		"graphql": "16.12.0",

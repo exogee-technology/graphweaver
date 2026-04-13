@@ -67,7 +67,7 @@
 		}
 	},
 	"devDependencies": {
-		"@mikro-orm/core": "6.6.2",
+		"@mikro-orm/core": "6.6.10",
 		"@mikro-orm/knex": "6.6.2",
 		"@mikro-orm/mssql": "6.6.2",
 		"@mikro-orm/mysql": "6.6.2",
