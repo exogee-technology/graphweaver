@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth",
-	"version": "2.21.3",
+	"version": "2.22.0",
 	"description": "Row-Level Security support for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"repository": {
@@ -28,7 +28,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "5.4.0",
+		"@apollo/server": "5.5.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
@@ -50,7 +50,7 @@
 		"@types/node": "24.10.0",
 		"@types/otp-generator": "4.0.2",
 		"esbuild": "0.27.1",
-		"glob": "11.1.0",
+		"glob": "13.0.6",
 		"prettier": "3.6.2",
 		"typescript": "5.9.3",
 		"vitest": "4.0.18"

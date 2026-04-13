@@ -266,10 +266,6 @@ export type CredentialsPaginationInput = {
   orderBy?: InputMaybe<CredentialsOrderByInput>;
 };
 
-export type DeleteOneFilterInput = {
-  id: Scalars['ID']['input'];
-};
-
 export type DetailPanelInputComponent = {
   __typename?: 'DetailPanelInputComponent';
   name: DetailPanelInputComponentOption;
@@ -381,7 +377,7 @@ export type MutationCreateTasksArgs = {
 
 
 export type MutationDeleteTagArgs = {
-  filter: DeleteOneFilterInput;
+  filter: TagDeleteOneFilterInput;
 };
 
 
@@ -391,7 +387,7 @@ export type MutationDeleteTagsArgs = {
 
 
 export type MutationDeleteTaskArgs = {
-  filter: DeleteOneFilterInput;
+  filter: TaskDeleteOneFilterInput;
 };
 
 
@@ -700,6 +696,11 @@ export type TagCreateOrUpdateInput = {
   tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
 };
 
+/** Data needed to delete one Tag. */
+export type TagDeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
+};
+
 /** Data needed to create Tags. */
 export type TagInsertInput = {
   name: Scalars['String']['input'];
@@ -843,6 +844,11 @@ export type TaskCreateOrUpdateInput = {
   slug?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
   userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to delete one Task. */
+export type TaskDeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
 };
 
 /** Data needed to create Tasks. */

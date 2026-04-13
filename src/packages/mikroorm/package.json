@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "2.21.3",
+	"version": "2.22.0",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"repository": {
@@ -29,8 +29,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "5.4.0",
-		"@aws-sdk/client-secrets-manager": "3.991.0",
+		"@apollo/server": "5.5.0",
+		"@aws-sdk/client-secrets-manager": "3.1029.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
@@ -76,7 +76,7 @@
 		"@types/node": "24.10.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.27.1",
-		"glob": "11.1.0",
+		"glob": "13.0.6",
 		"graphql": "16.12.0",
 		"tsx": "4.20.6",
 		"typescript": "5.9.3",

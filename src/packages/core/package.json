@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "2.21.3",
+	"version": "2.22.0",
 	"description": "Graphweaver Core Package",
 	"license": "Apache-2.0",
 	"repository": {
@@ -26,7 +26,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "5.4.0",
+		"@apollo/server": "5.5.0",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/utils": "11.0.0",
@@ -48,7 +48,7 @@
 		"@opentelemetry/instrumentation": "0.212.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.27.1",
-		"glob": "11.1.0",
+		"glob": "13.0.6",
 		"typescript": "5.9.3",
 		"vitest": "4.0.18"
 	},

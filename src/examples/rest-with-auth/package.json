@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest-with-auth",
-	"version": "2.21.3",
+	"version": "2.22.0",
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
@@ -45,7 +45,7 @@
 		"@types/node": "24.10.0",
 		"dotenv-cli": "11.0.0",
 		"typescript": "5.9.3",
-		"vite": "7.3.0"
+		"vite": "7.3.2"
 	},
 	"keywords": [
 		"graphql",

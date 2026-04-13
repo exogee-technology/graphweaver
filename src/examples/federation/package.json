@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-federation",
 	"private": true,
-	"version": "2.21.3",
+	"version": "2.22.0",
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
@@ -24,7 +24,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/server": "5.4.0",
+		"@apollo/server": "5.5.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",

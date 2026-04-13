@@ -24,7 +24,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
-      - uses: pnpm/action-setup@v4.2.0
+      - uses: pnpm/action-setup@v6.0.0
         with:
           version: 9.15.3
 
@@ -79,7 +79,7 @@ jobs:
           pnpm test-ui-auth &&
           killall node
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report
