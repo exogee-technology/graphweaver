@@ -1305,11 +1305,11 @@ importers:
         specifier: 24.10.0
         version: 24.10.0
       aws-cdk:
-        specifier: 2.1115.1
-        version: 2.1115.1
+        specifier: 2.1118.0
+        version: 2.1118.0
       aws-cdk-lib:
-        specifier: 2.246.0
-        version: 2.246.0(constructs@10.4.3)
+        specifier: 2.249.0
+        version: 2.249.0(constructs@10.4.3)
       constructs:
         specifier: 10.4.3
         version: 10.4.3
@@ -2157,14 +2157,14 @@ packages:
   '@auth0/auth0-spa-js@2.16.0':
     resolution: {integrity: sha512-UTP45NqjC2jVc/WaWh+iYOZt6FajpTJc+3WzljbXBiv2f76wDw4Mt9hW/aShBovsRmvKEIHaCifD3c/Gxmo2ZQ==}
 
-  '@aws-cdk/asset-awscli-v1@2.2.263':
-    resolution: {integrity: sha512-X9JvcJhYcb7PHs8R7m4zMablO5C9PGb/hYfLnxds9h/rKJu6l7MiXE/SabCibuehxPnuO/vk+sVVJiUWrccarQ==}
+  '@aws-cdk/asset-awscli-v1@2.2.273':
+    resolution: {integrity: sha512-X57HYUtHt9BQrlrzUNcMyRsDUCoakYNnY6qh5lNwRCHPtQoTfXmuISkfLk0AjLkcbS5lw1LLTQFiQhTDXfiTvg==}
 
   '@aws-cdk/asset-node-proxy-agent-v6@2.1.1':
     resolution: {integrity: sha512-We4bmHaowOPHr+IQR4/FyTGjRfjgBj4ICMjtqmJeBDWad3Q/6St12NT07leNtyuukv2qMhtSZJQorD8KpKTwRA==}
 
-  '@aws-cdk/cloud-assembly-schema@53.11.0':
-    resolution: {integrity: sha512-sAkcWQz2hvblIDHe5pFXxyIPZuhDaYowGIpASK+LSDvknBpP7+y3fib/FMpSPQdyI6ZOmJPEQOnz553H7mPnBA==}
+  '@aws-cdk/cloud-assembly-schema@53.14.0':
+    resolution: {integrity: sha512-prx2sbFfKrVf3NNXMOmWq6lsIBeWQDIqMTILLAddGiidn9j7OnLUubknWpJlLozMveTvQELdI++nUwq6jwCm9g==}
     engines: {node: '>= 18.0.0'}
     bundledDependencies:
       - jsonschema
@@ -7249,8 +7249,8 @@ packages:
     resolution: {integrity: sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g==}
     engines: {node: '>=6.0.0'}
 
-  aws-cdk-lib@2.246.0:
-    resolution: {integrity: sha512-7OtF95mss9dWohopCNQKAlNFrMJwgOIvNTNgoOWWcKhULBf6UxKCaf6ATlnuysIWRGf2DHgcval/4+yySOKRBw==}
+  aws-cdk-lib@2.249.0:
+    resolution: {integrity: sha512-SRb6TpPtsaywyoihMAYKBKB6O4RwSKK4VMLZwZF4xAJ+bBv5TaQKyXw4gQvoktLvCs1Bnluci0F66VBMD4bIRw==}
     engines: {node: '>= 20.0.0'}
     peerDependencies:
       constructs: ^10.5.0
@@ -7268,8 +7268,8 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.1115.1:
-    resolution: {integrity: sha512-6vvSuHTq5FKClXIIXXvbmdYkzG+I6Ij80iXyg3Oky3+FZn+lYgYlM3RCS9gLWyJLhgcOhwB8jQpy6593OlbQcw==}
+  aws-cdk@2.1118.0:
+    resolution: {integrity: sha512-Tfd865GRewDTXIbTVtix/l+v8t3rZENvdHcQQZS2wXYVXfHzljULFXe9JKkgZUNDPB1zo9tSBUu8jjiHRm7nWg==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
 
@@ -8652,6 +8652,15 @@ packages:
 
   follow-redirects@1.15.11:
     resolution: {integrity: sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
+  follow-redirects@1.16.0:
+    resolution: {integrity: sha512-y5rN/uOsadFT/JfYwhxRS5R7Qce+g3zG97+JrtFZlC9klX/W5hD7iiLzScI4nZqUS7DNUdhPgw4xI8W2LuXlUw==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -12749,11 +12758,11 @@ snapshots:
       dpop: 2.1.1
       es-cookie: 1.3.2
 
-  '@aws-cdk/asset-awscli-v1@2.2.263': {}
+  '@aws-cdk/asset-awscli-v1@2.2.273': {}
 
   '@aws-cdk/asset-node-proxy-agent-v6@2.1.1': {}
 
-  '@aws-cdk/cloud-assembly-schema@53.11.0': {}
+  '@aws-cdk/cloud-assembly-schema@53.14.0': {}
 
   '@aws-crypto/crc32@5.2.0':
     dependencies:
@@ -19790,14 +19799,14 @@ snapshots:
 
   await-to-js@3.0.0: {}
 
-  aws-cdk-lib@2.246.0(constructs@10.4.3):
+  aws-cdk-lib@2.249.0(constructs@10.4.3):
     dependencies:
-      '@aws-cdk/asset-awscli-v1': 2.2.263
+      '@aws-cdk/asset-awscli-v1': 2.2.273
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.1
-      '@aws-cdk/cloud-assembly-schema': 53.11.0
+      '@aws-cdk/cloud-assembly-schema': 53.14.0
       constructs: 10.4.3
 
-  aws-cdk@2.1115.1: {}
+  aws-cdk@2.1118.0: {}
 
   aws-ssl-profiles@1.1.2: {}
 
@@ -19815,7 +19824,7 @@ snapshots:
 
   axios@1.15.0:
     dependencies:
-      follow-redirects: 1.15.11
+      follow-redirects: 1.16.0
       form-data: 4.0.5
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
@@ -21476,6 +21485,8 @@ snapshots:
   flatted@3.3.3: {}
 
   follow-redirects@1.15.11: {}
+
+  follow-redirects@1.16.0: {}
 
   for-each@0.3.5:
     dependencies:
