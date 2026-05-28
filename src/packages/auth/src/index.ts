@@ -1,4 +1,5 @@
 export * from './authentication';
+export * from './authorization-context';
 export * from './decorators';
 export * from './errors';
 export * from './helper-functions';
