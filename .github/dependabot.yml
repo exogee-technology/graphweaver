@@ -9,13 +9,17 @@ updates:
     open-pull-requests-limit: 5
 
   - package-ecosystem: npm
-    directory: "/src"
+    directories:
+      - "/src"
     schedule:
       interval: daily
       time: "03:00"
       timezone: Australia/Sydney
     open-pull-requests-limit: 10
     groups:
+      all:
+        group-by: dependency-name
+
       aws-sdk:
         patterns:
           - "@aws-sdk*"
