@@ -187,7 +187,7 @@ export class EntityManager<T extends BaseEntity> {
 
 		query = query || {};
 		if (!query.select) query.select = this.defaultSelectForEntity();
-		query = this.mapFieldsAndRelationshipsForEntity({ value: query });
+		this.mapFieldsAndRelationshipsForEntity({ value: query });
 	};
 
 	public readonly aggregate = async (type: Aggregate, query?: Partial<QueryOptions<T>>) => {
@@ -197,7 +197,7 @@ export class EntityManager<T extends BaseEntity> {
 		query = query || {};
 		if (!query.select) query.select = ['id' as keyof T];
 		query.aggregate = type;
-		query = this.mapFieldsAndRelationshipsForEntity({ value: query });
+		this.mapFieldsAndRelationshipsForEntity({ value: query });
 
 		// const [aggregateResponse] = result.value;
 		// return aggregateResponse[type as keyof typeof aggregateResponse];
@@ -211,7 +211,7 @@ export class EntityManager<T extends BaseEntity> {
 		query = query || {};
 		if (!query.select) query.select = this.defaultSelectForEntity();
 		query.limit = 1;
-		query = this.mapFieldsAndRelationshipsForEntity({ value: query });
+		this.mapFieldsAndRelationshipsForEntity({ value: query });
 
 		return null;
 	};
