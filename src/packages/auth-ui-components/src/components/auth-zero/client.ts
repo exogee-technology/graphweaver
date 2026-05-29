@@ -34,7 +34,7 @@ export const getAuth0Client = async () => {
 	} catch (err: any) {
 		const message = err.message || 'Unknown error.';
 		console.error('Error creating Auth0 client:', err);
-		throw new Error(`Failed to create Auth0 client: ${message}`);
+		throw new Error(`Failed to create Auth0 client: ${message}`, { cause: err });
 	}
 
 	return auth0Client;

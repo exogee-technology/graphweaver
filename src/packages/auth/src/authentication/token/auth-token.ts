@@ -81,7 +81,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 			return token;
 		} catch (err) {
 			safeErrorLog(logger, err);
-			throw new Error('Could not generate token');
+			throw new Error('Could not generate token', { cause: err });
 		}
 	}
 
@@ -132,7 +132,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 			return new AuthToken(`${TOKEN_PREFIX} ${token}`);
 		} catch (err) {
 			safeErrorLog(logger, err);
-			throw new Error('Token step-up failed');
+			throw new Error('Token step-up failed', { cause: err });
 		}
 	}
 }

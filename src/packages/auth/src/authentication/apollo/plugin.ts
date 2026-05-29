@@ -269,7 +269,7 @@ export const authApolloPlugin = <R>(
 
 				willSendResponse: async ({ response, contextValue }) => {
 					// Let's check if we are a guest and have received any errors
-					let errors = (response.body as any)?.singleResult?.errors;
+					const errors = (response.body as any)?.singleResult?.errors;
 
 					if (contextValue.user?.roles?.includes('GUEST') && response && errors) {
 						// If we received a forbidden error we need to redirect, set the header to tell the client to do so.
@@ -318,13 +318,12 @@ export const authApolloPlugin = <R>(
 					// Let's check if we have any Restricted Field Errors
 					if (errors?.some(didEncounterRestrictedFieldError)) {
 						// Here we are cleaning up the error messages to remove the empty data entity
-						errors = errors?.map((error: any) => {
+						errors?.forEach((error: any) => {
 							if (error.extensions?.isRestrictedFieldError) {
 								delete error.path;
 								delete (response.body as any)?.singleResult.data;
 								delete error.extensions.isRestrictedFieldError;
 							}
-							return error;
 						});
 					}
 				},

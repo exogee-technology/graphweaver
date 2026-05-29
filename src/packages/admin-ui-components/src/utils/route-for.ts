@@ -50,11 +50,11 @@ export const routeFor = ({
 		return `/${chunks.join('/')}`;
 	}
 
-	let entityName = null;
-
-	if (type) entityName = type.replaceAll(cleaningPattern, '');
-	else if (typeof entity === 'string') entityName = entity;
-	else entityName = entity?.name;
+	const entityName = type
+		? type.replaceAll(cleaningPattern, '')
+		: typeof entity === 'string'
+			? entity
+			: entity?.name;
 
 	const chunks = [entityName];
 	if (id) chunks.push(id);

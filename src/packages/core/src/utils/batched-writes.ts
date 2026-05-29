@@ -162,7 +162,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 		processing: OperationProcess<G>[];
 	} | null> {
 		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
-		let type: 'create' | 'update' = 'create';
+		let type: 'create' | 'update';
 		if (Array.isArray(input)) {
 			const results = await Promise.allSettled(
 				input.map((node, i) => traverse(node, meta, info, context, operationId, i))

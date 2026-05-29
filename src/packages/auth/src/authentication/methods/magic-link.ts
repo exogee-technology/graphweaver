@@ -98,7 +98,7 @@ export class MagicLink extends BaseAuthMethod {
 
 	async generateMagicLink(username: string, ctx: AuthorizationContext) {
 		// check that the user exists
-		let user = undefined;
+		let user: UserProfile<unknown>;
 		try {
 			user = await this.getUser(username);
 			// if the user does not exist, silently fail

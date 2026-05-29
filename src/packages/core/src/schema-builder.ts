@@ -252,7 +252,8 @@ export const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 			} catch (e) {
 				console.error(e);
 				throw new Error(
-					`Could not map TypeScript type ${String(type)} to a GraphQL scalar for field ${field.name} on entity ${field.target.name}. Original Error: ${e}`
+					`Could not map TypeScript type ${String(type)} to a GraphQL scalar for field ${field.name} on entity ${field.target.name}. Original Error: ${e}`,
+					{ cause: e }
 				);
 			}
 		}
@@ -354,12 +355,13 @@ const graphQLTypeForInput = (
 						}
 
 						fields[field.name] = { type: graphQLType };
-					} catch (e) {
-						safeErrorLog(logger, e);
-						throw new Error(
-							`Error while generating schema for input type. Field: ${field.name}, Type: ${String(field.getType())}, Input: ${input.name}. Original Error: ${e}`
-						);
-					}
+				} catch (e) {
+					safeErrorLog(logger, e);
+					throw new Error(
+						`Error while generating schema for input type. Field: ${field.name}, Type: ${String(field.getType())}, Input: ${input.name}. Original Error: ${e}`,
+						{ cause: e }
+					);
+				}
 				}
 
 				return fields;
@@ -395,7 +397,7 @@ export const graphQLTypeForEntity = (
 				for (const field of Object.values(entity.fields)) {
 					// Let's try to resolve the GraphQL type involved here.
 					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(field.getType);
-					let graphQLType: GraphQLOutputType | undefined = undefined;
+					let graphQLType: GraphQLOutputType | undefined;
 					let resolve = undefined;
 					const args: ObjMap<GraphQLArgumentConfig> = {};
 
@@ -445,12 +447,13 @@ export const graphQLTypeForEntity = (
 								directives: field.directives ?? {},
 							},
 						};
-					} catch (e) {
-						safeErrorLog(logger, e);
-						throw new Error(
-							`Error while generating schema for entity. Field: ${field.name}, Type: ${String(field.getType())}, Entity: ${entity.name}. Original Error: ${e}`
-						);
-					}
+				} catch (e) {
+					safeErrorLog(logger, e);
+					throw new Error(
+						`Error while generating schema for entity. Field: ${field.name}, Type: ${String(field.getType())}, Entity: ${entity.name}. Original Error: ${e}`,
+						{ cause: e }
+					);
+				}
 
 					// If the it's a related entity and the provider supports it, we should add aggregation to the relationship.
 					if (
@@ -937,12 +940,13 @@ class SchemaBuilderImplementation {
 						? { defaultValue: details.defaultValue }
 						: {}),
 				};
-			} catch (e) {
-				safeErrorLog(logger, e);
-				throw new Error(
-					`Error while generating schema for args. Name: ${name}, Details: ${details}, Args: ${JSON.stringify(args)}. Original Error: ${e}`
-				);
-			}
+		} catch (e) {
+			safeErrorLog(logger, e);
+			throw new Error(
+				`Error while generating schema for args. Name: ${name}, Details: ${details}, Args: ${JSON.stringify(args)}. Original Error: ${e}`,
+				{ cause: e }
+			);
+		}
 		}
 
 		return map;
@@ -1058,12 +1062,13 @@ class SchemaBuilderImplementation {
 								},
 							};
 						}
-					} catch (e) {
-						safeErrorLog(logger, e);
-						throw new Error(
-							`Error while generating schema for custom query. Name: ${customQuery.name}, Type: ${String(customQuery.getType())}, Args: ${JSON.stringify(customQuery.args)}. Original Error: ${e}`
-						);
-					}
+				} catch (e) {
+					safeErrorLog(logger, e);
+					throw new Error(
+						`Error while generating schema for custom query. Name: ${customQuery.name}, Type: ${String(customQuery.getType())}, Args: ${JSON.stringify(customQuery.args)}. Original Error: ${e}`,
+						{ cause: e }
+					);
+				}
 				}
 				return fields;
 			},

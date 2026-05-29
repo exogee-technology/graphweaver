@@ -94,7 +94,7 @@ export const constructFilterForRelatedEntity = <G, R, C extends BaseContext>(
 	if (filter) _and.push(filter);
 
 	// Lets check the relationship type and add the appropriate filter.
-	let relationshipFilterChunk: Filter<R> | undefined = undefined;
+	let relationshipFilterChunk: Filter<R> | undefined;
 
 	if (idValue) {
 		if (Array.isArray(idValue)) {

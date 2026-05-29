@@ -428,12 +428,14 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			if ((err as PostgresError)?.routine === 'InitializeSessionUserId') {
 				// Throw if the user credentials are incorrect
 				throw new Error(
-					'Database connection failed, please check you are using the correct user credentials for the database.'
+					'Database connection failed, please check you are using the correct user credentials for the database.',
+					{ cause: err }
 				);
 			} else if ((err as PostgresError)?.code === 'ECONNREFUSED') {
 				// Throw if the database address or port is incorrect
 				throw new Error(
-					'Database connection failed, please check you are using the correct address and port for the database.'
+					'Database connection failed, please check you are using the correct address and port for the database.',
+					{ cause: err }
 				);
 			} else {
 				throw err;
@@ -891,12 +893,14 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			if ((err as PostgresError)?.routine === 'InitializeSessionUserId') {
 				// Throw if the user credentials are incorrect
 				throw new Error(
-					'Database connection failed, please check you are using the correct user credentials for the database.'
+					'Database connection failed, please check you are using the correct user credentials for the database.',
+					{ cause: err }
 				);
 			} else if ((err as PostgresError)?.code === 'ECONNREFUSED') {
 				// Throw if the database address or port is incorrect
 				throw new Error(
-					'Database connection failed, please check you are using the correct address and port for the database.'
+					'Database connection failed, please check you are using the correct address and port for the database.',
+					{ cause: err }
 				);
 			} else {
 				throw err;

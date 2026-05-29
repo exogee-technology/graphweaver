@@ -110,9 +110,9 @@ export const PopoverMenu: React.FC<PopoverMenuProps> = ({
 		const estimatedPopoverWidth = 250; // Based on min-width and typical content
 		const estimatedPopoverHeight = 150; // Estimated based on typical content
 
-		let top = 0;
-		let left = 0;
-		let actualPlacement = placement;
+		let top: number;
+		let left: number;
+		const actualPlacement = placement;
 
 		// Calculate initial position based on placement (viewport-relative for fixed positioning)
 		switch (placement) {
@@ -168,7 +168,6 @@ export const PopoverMenu: React.FC<PopoverMenuProps> = ({
 			// If top placement would go above viewport, try flipping to bottom
 			if (actualPlacement.includes('top')) {
 				top = triggerRect.bottom + offset;
-				actualPlacement = actualPlacement.replace('top', 'bottom') as typeof placement;
 			} else {
 				top = margin;
 			}
@@ -176,7 +175,6 @@ export const PopoverMenu: React.FC<PopoverMenuProps> = ({
 			// If bottom placement would go below viewport, try flipping to top
 			if (actualPlacement.includes('bottom')) {
 				top = triggerRect.top - offset - estimatedPopoverHeight;
-				actualPlacement = actualPlacement.replace('bottom', 'top') as typeof placement;
 
 				// Double-check if flipped position is still too high
 				if (top < margin) {

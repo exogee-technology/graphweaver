@@ -164,7 +164,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 		password: string,
 		context: AuthorizationContext
 	): Promise<UserProfile<unknown>> {
-		let credential = undefined;
+		let credential: CredentialStorage | null | undefined;
 
 		// This string should be kept consistent across each error state.
 		// If it changes, it is possible for a hacker to enumerate the user accounts

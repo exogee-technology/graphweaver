@@ -255,7 +255,7 @@ export async function checkEntityPermission<G = unknown, D = unknown>(
 		if ((error as any).message === GENERIC_AUTH_ERROR_MESSAGE) {
 			throw error;
 		}
-		throw new Error('An unexpected error has occurred');
+		throw new Error('An unexpected error has occurred', { cause: error });
 	}
 }
 

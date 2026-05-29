@@ -205,6 +205,6 @@ export const checkTypescriptTypes = async () => {
 		});
 	} catch (error: any) {
 		console.error(`Checking of Typescript types failed: ${error}`);
-		throw new Error('Checking of Typescript types failed');
+		throw new Error('Checking of Typescript types failed', { cause: error });
 	}
 };

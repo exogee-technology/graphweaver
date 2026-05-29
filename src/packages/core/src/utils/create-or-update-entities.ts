@@ -45,7 +45,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 		if (error instanceof Error) {
 			throw error; // Just re-throw if it's already an Error object
 		} else {
-			throw new Error(String(error)); // Convert to Error if it's not
+			throw new Error(String(error), { cause: error }); // Convert to Error if it's not
 		}
 	}
 };
