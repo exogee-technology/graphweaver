@@ -99,15 +99,25 @@ export const getAccessFilter = async (
 	return evaluateAccessControlValue(readEntry);
 };
 
-export const requiredPermissionsForAction = (intent: any): AccessType => {
+/**
+ * Infer the access type implied by a nested relationship input node.
+ * Uses the related entity's primary key field (defaults to `id`) so entities with
+ * non-`id` PKs (e.g. `{ appId }`) are classified the same way as `{ id }` links.
+ * Aligns with `getRelationshipAccessTypeForArg` in the before-create ACL hook.
+ */
+export const requiredPermissionsForAction = (
+	intent: any,
+	primaryKeyField: string = 'id'
+): AccessType => {
 	const keys = Object.keys(intent);
 	const length = keys.length;
+	const primaryKeyValue = intent?.[primaryKeyField];
 
-	if (length === 1 && intent.id !== undefined) {
+	if (length === 1 && primaryKeyValue !== undefined) {
 		return AccessType.Read;
-	} else if (length > 1 && intent.id !== undefined) {
+	} else if (length > 1 && primaryKeyValue !== undefined) {
 		return AccessType.Update;
-	} else if (Object.keys(intent).length > 0 && intent.id === undefined) {
+	} else if (length > 0 && primaryKeyValue === undefined) {
 		return AccessType.Create;
 	}
 
@@ -307,15 +317,16 @@ export async function checkAuthorization<G = unknown>(
 				continue;
 			}
 
-			const accessType = requiredPermissionsForAction(value);
+			const relatedPrimaryKeyField = relatedEntityMetadata.primaryKeyField ?? 'id';
 			const values = Array.isArray(value) ? value : [value];
 			for (const item of values) {
-				const relatedId = item[relatedEntityMetadata.primaryKeyField ?? 'id'];
+				const relatedId = item[relatedPrimaryKeyField];
 
-				// We only check the nested inputs with ID's, this is because if there was no ID
+				// We only check the nested inputs with primary keys, this is because if there was no PK
 				// supplied in the input args then the entity has been created in the data source.
-				// The creation hook will triggered for that entity and the permissions checked
+				// The creation hook will be triggered for that entity and the permissions checked
 				if (relatedId) {
+					const accessType = requiredPermissionsForAction(item, relatedPrimaryKeyField);
 					relatedEntityAuthChecks.push(
 						checkAuthorization(
 							relatedEntityMetadata.name,
