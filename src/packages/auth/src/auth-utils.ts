@@ -317,7 +317,8 @@ export async function checkAuthorization<G = unknown>(
 				continue;
 			}
 
-			const relatedPrimaryKeyField = relatedEntityMetadata.primaryKeyField ?? 'id';
+			const relatedPrimaryKeyField =
+				graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 			const values = Array.isArray(value) ? value : [value];
 			for (const item of values) {
 				const relatedId = item[relatedPrimaryKeyField];

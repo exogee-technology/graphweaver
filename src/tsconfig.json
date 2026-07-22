@@ -3,7 +3,7 @@
 		"target": "es2021",
 		"module": "es2020",
 		"moduleResolution": "bundler",
-		"lib": ["ES6", "es2021"],
+		"lib": ["ES6", "es2021", "ES2022.Error"],
 		"allowJs": true,
 		"jsx": "react",
 		"declaration": true,
