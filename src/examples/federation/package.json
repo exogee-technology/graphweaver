@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-federation",
 	"private": true,
-	"version": "2.23.0",
+	"version": "2.23.1",
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
