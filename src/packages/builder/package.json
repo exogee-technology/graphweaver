@@ -53,7 +53,7 @@
 		"@types/omgopass": "3.2.3",
 		"jsonwebtoken": "9.0.3",
 		"prettier": "3.6.2",
-		"typescript": "5.9.3",
+		"typescript": "7.0.2",
 		"vitest": "4.1.0"
 	},
 	"keywords": [
