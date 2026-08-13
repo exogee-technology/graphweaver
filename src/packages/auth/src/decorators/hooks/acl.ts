@@ -251,14 +251,14 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 			);
 
 			if (filterKey === '_and' || filterKey === '_or') {
-				value.forEach((item) => {
+				(value as Filter<unknown>[]).forEach((item) => {
 					recurseThroughArg(entityMetadata, item);
 				});
 				continue;
 			}
 
 			if (filterKey === '_not') {
-				recurseThroughArg(entityMetadata, value);
+				recurseThroughArg(entityMetadata, value as Filter<unknown>);
 				continue;
 			}
 
