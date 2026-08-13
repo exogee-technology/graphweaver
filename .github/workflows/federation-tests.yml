@@ -46,7 +46,7 @@ jobs:
         run: |
           pnpm print
 
-      - uses: apollographql/federation-subgraph-compatibility@v2
+      - uses: apollographql/federation-subgraph-compatibility@v3
         with:
           # [Required] Docker Compose file to start up the subgraph
           compose: "docker-compose.yaml"
