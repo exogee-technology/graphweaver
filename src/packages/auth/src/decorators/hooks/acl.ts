@@ -8,7 +8,6 @@ import {
 	ResolveTree,
 	graphweaverMetadata,
 	isEntityMetadata,
-	isTopLevelFilterProperty,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -251,10 +250,15 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 				filterKey
 			);
 
-			if (isTopLevelFilterProperty(filterKey)) {
+			if (filterKey === '_and' || filterKey === '_or') {
 				value.forEach((item) => {
 					recurseThroughArg(entityMetadata, item);
 				});
+				continue;
+			}
+
+			if (filterKey === '_not') {
+				recurseThroughArg(entityMetadata, value);
 				continue;
 			}
 
