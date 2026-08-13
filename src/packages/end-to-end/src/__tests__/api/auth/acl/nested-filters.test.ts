@@ -162,4 +162,41 @@ describe('ACL - Nested Filters', () => {
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
 	});
+
+	test('should check relationship permissions inside a _not filter', async () => {
+		assert(token);
+
+		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnTrackDataProvider = jest.spyOn(trackDataProvider, 'find');
+
+		const response = await graphweaver.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query artists($filter: ArtistsListFilter) {
+					artists(filter: $filter) {
+						id
+					}
+				}
+			`,
+			variables: {
+				filter: {
+					_not: {
+						albums: {
+							tracks: {
+								id: '1',
+							},
+						},
+					},
+				},
+			},
+		});
+
+		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnTrackDataProvider).not.toHaveBeenCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
 });

@@ -16,7 +16,14 @@ import { Field, ID, Entity, RelationshipField, BaseDataProvider } from '@exogee/
 import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
-import { ApplyAccessControlList, CredentialStorage, hashPassword, Password, setAddUserToContext, UserProfile } from '@exogee/graphweaver-auth';
+import {
+	ApplyAccessControlList,
+	CredentialStorage,
+	hashPassword,
+	Password,
+	setAddUserToContext,
+	UserProfile,
+} from '@exogee/graphweaver-auth';
 
 /* SQLite data entities */
 
@@ -53,9 +60,9 @@ const connection = {
 
 /* Graphweaver Entities */
 @ApplyAccessControlList({
-    Everyone: {
-        all: (context) => ({ id: context.user?.id }),
-    },
+	Everyone: {
+		all: (context) => ({ id: context.user?.id }),
+	},
 })
 @Entity('Album', {
 	provider: new MikroBackendProvider(OrmAlbum, connection),
@@ -71,12 +78,12 @@ export class Album {
 }
 
 @ApplyAccessControlList({
-    Everyone: {
-        all: (context) => {
-            if (context.user?.roles?.[0] === 'admin') return true;
-            return { id: "2" };
-        },
-    },
+	Everyone: {
+		all: (context) => {
+			if (context.user?.roles?.[0] === 'admin') return true;
+			return { id: '2' };
+		},
+	},
 })
 @Entity('Artist', {
 	provider: new MikroBackendProvider(OrmArtist, connection),
@@ -90,9 +97,9 @@ export class Artist {
 }
 
 const user = new UserProfile({
-    id: '1',
-    roles: ['admin'],
-    displayName: 'Test User',
+	id: '1',
+	roles: ['admin'],
+	displayName: 'Test User',
 });
 
 const cred: CredentialStorage = {
@@ -102,123 +109,175 @@ const cred: CredentialStorage = {
 };
 
 class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
-    async findOne() {
-        cred.password = await hashPassword(cred.password ?? '');
-        return cred;
-    }
+	async findOne() {
+		cred.password = await hashPassword(cred.password ?? '');
+		return cred;
+	}
 }
 
 export const password = new Password({
-    provider: new PasswordBackendProvider('password'),
-    getUserProfile: async () => user,
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async () => user,
 });
 
 setAddUserToContext(async () => user);
-
 
 const graphweaver = new Graphweaver();
 
 let token: string | undefined;
 
 describe('Compound filter tests', () => {
-    beforeAll(async () => {
-        await ConnectionManager.connect('sqlite', connection);
-        const loginResponse = await graphweaver.executeOperation<{
-            loginPassword: { authToken: string };
-        }>({
-            query: gql`
-                mutation loginPassword($username: String!, $password: String!) {
-                    loginPassword(username: $username, password: $password) {
-                        authToken
-                    }
-                }
-            `,
-            variables: {
-                username: 'test',
-                password: 'test123',
-            },
-        });
+	beforeAll(async () => {
+		await ConnectionManager.connect('sqlite', connection);
+		const loginResponse = await graphweaver.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				username: 'test',
+				password: 'test123',
+			},
+		});
 
-        assert(loginResponse.body.kind === 'single');
-        expect(loginResponse.body.singleResult.errors).toBeUndefined();
+		assert(loginResponse.body.kind === 'single');
+		expect(loginResponse.body.singleResult.errors).toBeUndefined();
 
-        token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
-        expect(token).toContain('Bearer ');
-    });
-    test('Top-level _and filter', async () => {
-        const response = await graphweaver.executeOperation({
-            http: { headers: new Headers({ authorization: token ?? '' }) } as any,
-            query: gql`
-                query artists($filter: ArtistsListFilter) {
-                    artists(filter: $filter) {
-                        id
-                    }
-                }
-            `,
-            variables: {
-                "filter": {
-                  "_and": [
-                    { "id": "2"}, 
-                    { "id": "1"}
-                  ]
-                }
-              }
-        });
+		token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
+		expect(token).toContain('Bearer ');
+	});
+	test('Top-level _and filter', async () => {
+		const response = await graphweaver.executeOperation({
+			http: { headers: new Headers({ authorization: token ?? '' }) } as any,
+			query: gql`
+				query artists($filter: ArtistsListFilter) {
+					artists(filter: $filter) {
+						id
+					}
+				}
+			`,
+			variables: {
+				filter: {
+					_and: [{ id: '2' }, { id: '1' }],
+				},
+			},
+		});
 
-        assert(response.body.kind === 'single');
-        expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
-        expect(response.body.singleResult.data?.artists).toHaveLength(0);
-    });
-    test('Top-level _or filter', async () => {
-        const response = await graphweaver.executeOperation<{
-            artists: { id: string }[];
-        }>({
-            http: { headers: new Headers({ authorization: token ?? '' }) } as any,
-            query: gql`
-                query artists($filter: ArtistsListFilter) {
-                    artists(filter: $filter) {
-                        id
-                    }
-                }
-            `,
-            variables: {
-                "filter": {
-                  "_or": [
-                    { "id": "2"}, 
-                    { "id": "1"}
-                  ]
-                }
-              }
-        });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
+		expect(response.body.singleResult.data?.artists).toHaveLength(0);
+	});
+	test('Top-level _or filter', async () => {
+		const response = await graphweaver.executeOperation<{
+			artists: { id: string }[];
+		}>({
+			http: { headers: new Headers({ authorization: token ?? '' }) } as any,
+			query: gql`
+				query artists($filter: ArtistsListFilter) {
+					artists(filter: $filter) {
+						id
+					}
+				}
+			`,
+			variables: {
+				filter: {
+					_or: [{ id: '2' }, { id: '1' }],
+				},
+			},
+		});
 
-        assert(response.body.kind === 'single');
-        expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
-        expect(response.body.singleResult.data?.artists).toHaveLength(2);
-    });
-    test('ACLs are still being respected', async () => {
-        const response = await graphweaver.executeOperation<{
-            artists: { id: string }[];
-        }>({
-            query: gql`
-                query artists($filter: ArtistsListFilter) {
-                    artists(filter: $filter) {
-                        id
-                    }
-                }
-            `,
-            variables: {
-                "filter": {
-                  "_or": [
-                    { "id": "2"}, 
-                    { "id": "1"}
-                  ]
-                }
-              }
-        });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
+		expect(response.body.singleResult.data?.artists).toHaveLength(2);
+	});
+	test('Top-level _not filter works for list and aggregate queries', async () => {
+		const response = await graphweaver.executeOperation<{
+			artists: { id: string }[];
+			artists_aggregate: { count: number };
+		}>({
+			http: { headers: new Headers({ authorization: token ?? '' }) } as any,
+			query: gql`
+				query artists($filter: ArtistsListFilter) {
+					artists(filter: $filter) {
+						id
+					}
+					artists_aggregate(filter: $filter) {
+						count
+					}
+				}
+			`,
+			variables: {
+				filter: {
+					_not: {
+						id: '2',
+					},
+				},
+			},
+		});
 
-        assert(response.body.kind === 'single');
-        expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
-        expect(response.body.singleResult.data?.artists).toHaveLength(1);
-        expect(response.body.singleResult.data?.artists[0].id).toEqual("2");
-    });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data?.artists).not.toContainEqual({ id: '2' });
+		expect(response.body.singleResult.data?.artists_aggregate.count).toBe(
+			response.body.singleResult.data?.artists.length
+		);
+	});
+	test('Top-level _not filter supports nested _and and _or filters', async () => {
+		const response = await graphweaver.executeOperation<{
+			artists: { id: string }[];
+		}>({
+			http: { headers: new Headers({ authorization: token ?? '' }) } as any,
+			query: gql`
+				query artists($filter: ArtistsListFilter) {
+					artists(filter: $filter) {
+						id
+					}
+				}
+			`,
+			variables: {
+				filter: {
+					_not: {
+						_and: [
+							{
+								_or: [{ id: '1' }, { id: '2' }],
+							},
+						],
+					},
+				},
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data?.artists).not.toContainEqual({ id: '1' });
+		expect(response.body.singleResult.data?.artists).not.toContainEqual({ id: '2' });
+	});
+	test('ACLs are still being respected', async () => {
+		const response = await graphweaver.executeOperation<{
+			artists: { id: string }[];
+		}>({
+			query: gql`
+				query artists($filter: ArtistsListFilter) {
+					artists(filter: $filter) {
+						id
+					}
+				}
+			`,
+			variables: {
+				filter: {
+					_or: [{ id: '2' }, { id: '1' }],
+				},
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
+		expect(response.body.singleResult.data?.artists).toHaveLength(1);
+		expect(response.body.singleResult.data?.artists[0].id).toEqual('2');
+	});
 });

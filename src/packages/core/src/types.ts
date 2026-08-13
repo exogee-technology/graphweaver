@@ -69,7 +69,7 @@ export type FilterEntity<G> = {
 export type FilterTopLevelProperties<G> = {
 	_and?: Filter<G>[];
 	_or?: Filter<G>[];
-	_not?: Filter<G>[];
+	_not?: Filter<G>;
 };
 
 // ❗ This is used by the permissions system, so if you update the above, then update this list too.
