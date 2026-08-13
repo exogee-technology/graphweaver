@@ -41,7 +41,7 @@
 		"concurrently": "10.0.4",
 		"eslint": "10.4.0",
 		"eslint-config-prettier": "10.1.8",
-		"globals": "17.8.0",
+		"globals": "17.9.0",
 		"prettier": "3.6.2",
 		"turbo": "2.10.7",
 		"typescript": "5.9.3",
