@@ -35,7 +35,7 @@
 		"version:bump": "pnpm -r version"
 	},
 	"devDependencies": {
-		"@bessonovs/set-project-references": "0.0.10",
+		"@bessonovs/set-project-references": "0.0.12",
 		"@eslint/js": "10.0.1",
 		"@types/eslint-config-prettier": "6.11.3",
 		"concurrently": "10.0.4",
