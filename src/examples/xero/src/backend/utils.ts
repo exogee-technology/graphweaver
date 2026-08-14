@@ -25,7 +25,7 @@ export const forEachTenant = async <T = unknown>(
 ): Promise<WithTenantId<T>[]> => {
 	if (!xero.tenants.length) await xero.updateTenants(false);
 
-	const [tenantFilter] = splitFilter(filter);
+	const [tenantFilter] = splitFilter(filter ?? {});
 
 	const filteredTenants = tenantFilter
 		? xero.tenants.filter(inMemoryFilterFor(tenantFilter))
@@ -163,7 +163,10 @@ export const compareFn = <T, K>(get: (t: T) => K, ascOrDesc: Sort): ((a: T, b: T
 	};
 };
 
-export const orderedResult = <T>(result: T[], sortFields: Record<string, Sort>) => {
+export const orderedResult = <T extends Record<string, any>>(
+	result: T[],
+	sortFields: Record<string, Sort>
+) => {
 	// Use the first record returned
 	if (result.length > 0) {
 		const [firstRecord] = result;

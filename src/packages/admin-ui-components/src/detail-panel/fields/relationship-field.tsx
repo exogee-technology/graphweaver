@@ -69,7 +69,7 @@ export const RelationshipField = ({
 					}
 				}
 			}
-			helpers.setValue(result);
+			void helpers.setValue(result);
 		},
 		[field, helpers]
 	);
@@ -91,7 +91,7 @@ export const RelationshipField = ({
 			const query = getRelationshipQuery(relatedEntity);
 
 			const orderByForQuery = relatedEntity.summaryField
-				? { [relatedEntity.summaryField as string]: 'ASC' }
+				? { [relatedEntity.summaryField]: 'ASC' }
 				: { [relatedEntity.primaryKeyField]: 'ASC' };
 
 			const generatedFilter = substringFilterForFields(searchableFields, searchTerm ?? '');

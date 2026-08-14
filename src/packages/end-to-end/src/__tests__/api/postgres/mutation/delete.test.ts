@@ -1,3 +1,4 @@
+import { after, before, describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
@@ -15,8 +16,8 @@ import {
 } from '../../shared';
 
 describe('delete mutations', () => {
-	beforeAll(resetDatabase);
-	afterAll(resetDatabase);
+	before(resetDatabase);
+	after(resetDatabase);
 
 	test('should create then delete an artist', async () => {
 		// Create

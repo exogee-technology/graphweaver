@@ -84,7 +84,7 @@
 		"react": "19.2.4",
 		"react-dom": "19.2.4",
 		"storybook": "10.5.7",
-		"typescript": "5.9.3",
+		"typescript": "7.0.2",
 		"vite": "7.3.2",
 		"vite-plugin-graphweaver": "workspace:*",
 		"vitest": "4.1.0"

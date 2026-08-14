@@ -10,7 +10,7 @@ import { OperationDefinitionNode, parse } from 'graphql';
 export const enableTracing = <TContext extends BaseContext>(server: ApolloServer<TContext>) => {
 	// Wrap the executeHTTPGraphQLRequest method with a trace span
 	// This will allow us to trace the entire request from start to finish
-	const executeHTTPGraphQLRequest = server.executeHTTPGraphQLRequest;
+	const executeHTTPGraphQLRequest = server.executeHTTPGraphQLRequest.bind(server);
 	server.executeHTTPGraphQLRequest = trace((request, trace) => {
 		const body = request.httpGraphQLRequest.body as
 			| { operationName: string; query: string }

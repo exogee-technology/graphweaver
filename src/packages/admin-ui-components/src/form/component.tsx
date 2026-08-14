@@ -341,7 +341,7 @@ export const useCreateForm = <T extends Record<string, any>>(props: {
 			(e: React.FormEvent) => {
 				e.preventDefault();
 				e.stopPropagation();
-				form.handleSubmit();
+				void form.handleSubmit();
 			},
 			[form]
 		);

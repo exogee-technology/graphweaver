@@ -10,6 +10,7 @@ graphweaverMetadata.addQuery({
 	args: { filename: () => String },
 	resolver: async ({ args }: ResolverOptions<{ filename: string }>) => {
 		const db = ConnectionManager.database(pgConnection.connectionManagerId);
+		if (!db) throw new Error('Database connection not found');
 		const result = await db.em.findOne(OrmSubmission, { image: { filename: args.filename } });
 
 		return result ? fromBackendEntity(Submission, result) : null;

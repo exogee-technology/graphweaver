@@ -1,3 +1,4 @@
+import { describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -65,7 +66,7 @@ class MagicLinkBackendProvider extends BaseDataProvider<AuthenticationBaseEntity
 	}
 }
 
-const sendMagicLink = jest.fn(() => Promise.resolve(true));
+const sendMagicLink = mock.fn(() => Promise.resolve(true));
 
 export const magicLink = new MagicLink({
 	provider: new MagicLinkBackendProvider('magicLink'),
@@ -81,7 +82,7 @@ const graphweaver = new Graphweaver();
 
 describe('Magic Link Authentication - Login', () => {
 	test('should be able to login with magic link.', async () => {
-		const redeemMagicLinkSpy = jest.spyOn(MagicLinkBackendProvider.prototype, 'updateOne');
+		const redeemMagicLinkSpy = mock.method(MagicLinkBackendProvider.prototype, 'updateOne');
 
 		const sendResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
@@ -125,8 +126,8 @@ describe('Magic Link Authentication - Login', () => {
 		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
 
 		// Check that the email and redeem methods have been called
-		expect(sendMagicLink).toHaveBeenCalledTimes(1);
-		expect(sendMagicLink).toHaveBeenCalledWith(
+		expect(sendMagicLink.mock.callCount()).toBe(1);
+		expect(sendMagicLink.mock.calls[0].arguments).toEqual([
 			new URL(
 				`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=http%3A%2F%2Flocalhost%3A9000%2F&providers=${AuthenticationMethod.MAGIC_LINK}&token=${MOCK_TOKEN}&username=${user.username}`
 			),
@@ -136,11 +137,14 @@ describe('Magic Link Authentication - Login', () => {
 				userId: user.id,
 				data: { token: MOCK_TOKEN },
 				createdAt: MOCK_CREATED_AT,
-			}
-		);
-		expect(redeemMagicLinkSpy).toHaveBeenCalledTimes(1);
-		expect(redeemMagicLinkSpy).toHaveBeenCalledWith('1', {
-			data: { token: MOCK_TOKEN, redeemedAt },
-		});
+			},
+		]);
+		expect(redeemMagicLinkSpy.mock.callCount()).toBe(1);
+		expect(redeemMagicLinkSpy.mock.calls[0].arguments).toEqual([
+			'1',
+			{
+				data: { token: MOCK_TOKEN, redeemedAt },
+			},
+		]);
 	});
 });

@@ -9,14 +9,15 @@ interface PieDataItem {
 
 type GenreId = string;
 
-export const getPieData = (data: GenrePopularityQuery) => {
+export const getPieData = (data: GenrePopularityQuery | undefined) => {
 	const pieDataMap: Map<GenreId, PieDataItem> = new Map();
 	data?.genres?.forEach((genre) => {
+		if (!genre) return;
 		genre.tracks?.forEach((track) => {
-			track.invoiceLines?.forEach((invoiceLine) => {
+			track?.invoiceLines?.forEach((invoiceLine) => {
 				const genreId = genre.genreId;
 				const pieDataItem = pieDataMap.get(genreId);
-				const quantity = invoiceLine.quantity ?? 0;
+				const quantity = invoiceLine?.quantity ?? 0;
 				if (pieDataItem) {
 					pieDataItem.value += quantity;
 				} else {

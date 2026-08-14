@@ -11,16 +11,16 @@ test('Ensure filtering by multiple items works', async ({ page }) => {
 	await page.getByTestId('combo-option-Aaron Copland & London Symphony Orchestra').click();
 
 	// Those rows should look like this:
-	await expect(await page.getByTestId('table').getByRole('row').nth(1)).toContainText(
+	await expect(page.getByTestId('table').getByRole('row').nth(1)).toContainText(
 		'For Those About To Rock We Salute You'
 	);
-	await expect(await page.getByTestId('table').getByRole('row').nth(2)).toContainText(
+	await expect(page.getByTestId('table').getByRole('row').nth(2)).toContainText(
 		'Let There Be Rock'
 	);
-	await expect(await page.getByTestId('table').getByRole('row').nth(3)).toContainText(
+	await expect(page.getByTestId('table').getByRole('row').nth(3)).toContainText(
 		'A Copland Celebration, Vol. I'
 	);
 
 	// And there should be exactly 5 rows in the table: one header, one footer, and 3 data rows.
-	await expect(await page.getByTestId('table').getByRole('row').count()).toBe(5);
+	await expect(page.getByTestId('table').getByRole('row')).toHaveCount(5);
 });

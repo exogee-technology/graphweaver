@@ -1,7 +1,7 @@
 import esbuild from 'esbuild';
 import { copy } from 'esbuild-plugin-copy';
 
-(async () => {
+void (async () => {
 	const { glob } = await import('glob');
 	const entryPoints = await glob('./src/**/*.{ts,tsx,css}');
 

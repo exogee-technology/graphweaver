@@ -1,3 +1,4 @@
+import { afterEach, describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -67,7 +68,7 @@ class MagicLinkBackendProvider extends BaseDataProvider<AuthenticationBaseEntity
 	}
 }
 
-const sendMagicLink = jest.fn(() => Promise.resolve(true));
+const sendMagicLink = mock.fn(() => Promise.resolve(true));
 
 export const magicLink = new MagicLink({
 	provider: new MagicLinkBackendProvider('magicLink'),
@@ -84,7 +85,7 @@ const graphweaver = new Graphweaver();
 
 describe('Magic Link Authentication - Challenge', () => {
 	afterEach(() => {
-		jest.restoreAllMocks();
+		mock.restoreAll();
 	});
 
 	test('should fail challenge if not logged in.', async () => {
@@ -201,7 +202,8 @@ describe('Magic Link Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.verifyLoginMagicLink?.authToken;
 		assert(token);
 
-		jest.spyOn(MagicLinkBackendProvider.prototype, 'findOne').mockImplementationOnce(
+		const s = mock.method(MagicLinkBackendProvider.prototype, 'findOne');
+		s.mock.mockImplementationOnce(
 			async () =>
 				({
 					userId: user.id,

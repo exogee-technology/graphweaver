@@ -1,7 +1,15 @@
+import { beforeEach, describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
-import { Artist, Album, CREATE_MANY_ARTISTS, CREATE_MANY_ALBUMS, GET_ARTISTS, GET_ALBUMS } from '../../shared';
+import {
+	Artist,
+	Album,
+	CREATE_MANY_ARTISTS,
+	CREATE_MANY_ALBUMS,
+	GET_ARTISTS,
+	GET_ALBUMS,
+} from '../../shared';
 
 describe('createMany mutations', () => {
 	beforeEach(resetDatabase);

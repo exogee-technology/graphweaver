@@ -1,3 +1,4 @@
+import { describe, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -28,7 +29,7 @@ describe('Aggregation - Not Supported in Provider', () => {
 	}
 
 	/** Setup entities and resolvers  */
-	@Entity<DeprecatedProduct>('DeprecatedProduct', {
+	@Entity('DeprecatedProduct', {
 		provider: new JsonDataProvider('json'),
 	})
 	class DeprecatedProduct {
@@ -44,6 +45,9 @@ describe('Aggregation - Not Supported in Provider', () => {
 		@Field(() => String)
 		createdBy!: string;
 	}
+
+	// Entity registration is side-effectful; keep a reference so the class is not unused.
+	void DeprecatedProduct;
 
 	const graphweaver = new Graphweaver();
 

@@ -46,10 +46,11 @@
 	},
 	"devDependencies": {
 		"@opentelemetry/instrumentation": "0.212.0",
+		"@types/node": "24.10.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.28.1",
 		"glob": "13.0.6",
-		"typescript": "5.9.3",
+		"typescript": "7.0.2",
 		"vitest": "4.1.0"
 	},
 	"keywords": [

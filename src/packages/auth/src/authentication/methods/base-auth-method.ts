@@ -22,8 +22,8 @@ export class BaseAuthMethod {
 	constructor() {
 		this.addRequestContext();
 		this.addApolloPlugin();
-		this.ensureAdminUIMetadataIsAuthenticated();
-		this.filterAdminUIMetadataColumns();
+		void this.ensureAdminUIMetadataIsAuthenticated();
+		void this.filterAdminUIMetadataColumns();
 	}
 
 	private addRequestContext = () => {

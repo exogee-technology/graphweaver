@@ -1,4 +1,12 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import {
+	Collection,
+	Entity,
+	ManyToOne,
+	OneToMany,
+	PrimaryKey,
+	Property,
+	Ref,
+} from '@mikro-orm/core';
 import { Customer } from './customer';
 
 @Entity({ tableName: 'Employee' })
@@ -15,7 +23,13 @@ export class Employee {
 	@Property({ fieldName: 'Title', type: 'string', length: 30, nullable: true })
 	title?: string;
 
-	@ManyToOne({ entity: () => Employee, ref: true, fieldName: 'ReportsTo', nullable: true, index: 'IFK_EmployeeReportsTo' })
+	@ManyToOne({
+		entity: () => Employee,
+		ref: true,
+		fieldName: 'ReportsTo',
+		nullable: true,
+		index: 'IFK_EmployeeReportsTo',
+	})
 	employee?: Ref<Employee>;
 
 	@Property({ fieldName: 'BirthDate', type: 'datetime', length: 3, nullable: true })

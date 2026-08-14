@@ -6,7 +6,9 @@ import { InvoiceLine as OrmInvoiceLine } from '../entities';
 import { connection } from '../database';
 
 @Entity<InvoiceLine>('InvoiceLine', {
-	provider: new MikroBackendProvider(OrmInvoiceLine, connection, { backendDisplayName: 'SQL Server' }),
+	provider: new MikroBackendProvider(OrmInvoiceLine, connection, {
+		backendDisplayName: 'SQL Server',
+	}),
 })
 export class InvoiceLine {
 	@Field(() => ID, { primaryKeyField: true })

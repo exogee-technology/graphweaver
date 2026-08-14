@@ -127,12 +127,12 @@ export const UPDATE_PLAYLIST_WITH_TRACKS = gql`
 
 // ── Create Many Mutations ──
 export const CREATE_MANY_ARTISTS = gql`
-  mutation CreateArtists($input: [ArtistInsertInput!]!) {
-    createArtists(input: $input) {
-      artistId
-      name
-    }
-  }
+	mutation CreateArtists($input: [ArtistInsertInput!]!) {
+		createArtists(input: $input) {
+			artistId
+			name
+		}
+	}
 `;
 
 export const CREATE_MANY_ALBUMS = gql`
@@ -178,19 +178,19 @@ export const DELETE_MANY_ALBUMS = gql`
 
 // ── Delete Mutations ──
 export const DELETE_ARTIST = gql`
-	mutation DeleteArtist($filter: ArtistDeleteOneFilterInput!){
+	mutation DeleteArtist($filter: ArtistDeleteOneFilterInput!) {
 		deleteArtist(filter: $filter)
 	}
 `;
 
 export const DELETE_ALBUM = gql`
-	mutation DeleteAlbum($filter: AlbumDeleteOneFilterInput!){
+	mutation DeleteAlbum($filter: AlbumDeleteOneFilterInput!) {
 		deleteAlbum(filter: $filter)
 	}
 `;
 
 export const DELETE_PLAYLIST = gql`
-	mutation DeletePlaylist($filter: PlaylistDeleteOneFilterInput!){
+	mutation DeletePlaylist($filter: PlaylistDeleteOneFilterInput!) {
 		deletePlaylist(filter: $filter)
 	}
 `;

@@ -18,10 +18,10 @@ export const SecretFieldComponent = (args: CustomFieldArgs) => {
 			['encrypt']
 		);
 		const { k: secretValue } = await crypto.subtle.exportKey('jwk', secretKey);
-		setFieldValue('secret', secretValue);
+		void setFieldValue('secret', secretValue);
 
 		const generatedKey = window.crypto.randomUUID();
-		setFieldValue('key', generatedKey);
+		void setFieldValue('key', generatedKey);
 
 		setHasGeneratedSecret(true);
 	};

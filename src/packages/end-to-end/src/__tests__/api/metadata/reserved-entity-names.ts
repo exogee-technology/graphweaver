@@ -1,3 +1,4 @@
+import { test } from 'node:test';
 import { Field, ID, Entity } from '@exogee/graphweaver';
 
 // ESLint, I know it looks like the entities in this file aren't used, but they actually are.

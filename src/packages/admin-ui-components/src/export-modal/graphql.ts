@@ -20,7 +20,10 @@ export const listEntityForExport = (
 	return gql`
 		query entityCSVExport($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
 			result: ${queryName}(filter: $filter, pagination: $pagination) {
-				${generateGqlSelectForEntityFields(entity.fields.filter((field) => !field.hideInTable), entityByType)}
+				${generateGqlSelectForEntityFields(
+					entity.fields.filter((field) => !field.hideInTable),
+					entityByType
+				)}
 			}
 			${entityCanCount ? `aggregate: ${queryName}_aggregate(filter: $filter) { count }` : ''}
 		}

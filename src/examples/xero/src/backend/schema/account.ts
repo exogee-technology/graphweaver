@@ -33,11 +33,11 @@ const provider = new XeroBackendProvider('Account', {
 					orderByToString(sortFields)
 				);
 
-				for (const account of accounts) {
-					(account as XeroAccount & { id: string }).id = account.accountID;
+				for (const account of accounts ?? []) {
+					(account as XeroAccount & { id: string }).id = account.accountID ?? '';
 				}
 
-				return accounts;
+				return accounts ?? [];
 			},
 			filter
 		);

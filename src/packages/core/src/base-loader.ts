@@ -169,7 +169,7 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 			if (!entity.provider.entityType)
 				throw new Error('EntityType is required on provider at this stage.');
 
-			const records = await entity.provider!.findByRelatedId(
+			const records = await entity.provider.findByRelatedId(
 				entity.provider.entityType,
 				relatedField,
 				keys,
@@ -195,9 +195,7 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 						// ManyToManys come back this way.
 						for (const subRecord of relatedRecord as Iterable<D>) {
 							const stringPrimaryKey = String(
-								subRecord[
-									(fieldTypeMetadata.primaryKeyField ?? 'id') as keyof D
-								]
+								subRecord[(fieldTypeMetadata.primaryKeyField ?? 'id') as keyof D]
 							);
 							if (!lookup[stringPrimaryKey]) lookup[stringPrimaryKey] = [];
 							lookup[stringPrimaryKey].push(record);

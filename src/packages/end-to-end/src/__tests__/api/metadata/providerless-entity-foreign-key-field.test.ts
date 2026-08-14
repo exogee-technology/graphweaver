@@ -1,3 +1,4 @@
+import { test } from 'node:test';
 import assert from 'assert';
 import { Field, ID, Entity, RelationshipField, BackendProvider } from '@exogee/graphweaver';
 import Graphweaver from '@exogee/graphweaver-server';

@@ -21,7 +21,7 @@ export class Submission {
 
 	@RelationshipField<Submission>(() => ImageNote, {
 		id: (entity) => {
-			if (!entity.imageNote) return null;
+			if (!entity.imageNote) return undefined;
 			return entity.imageNote.id;
 		},
 		nullable: true,

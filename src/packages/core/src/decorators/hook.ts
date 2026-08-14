@@ -42,6 +42,6 @@ export function Hook<G, P extends HookParams<G, BaseContext>>(
 		}
 
 		hookManagerMap.set(typeName, hookManager);
-		(target as any).hookManager = hookManager;
+		target.hookManager = hookManager;
 	};
 }

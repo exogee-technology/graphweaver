@@ -17,7 +17,7 @@ const validateMikroOrmPeerAndDevVersionsMatch = async () => {
 	}
 };
 
-(async () => {
+void (async () => {
 	const esbuild = await import('esbuild');
 	const { glob } = await import('glob');
 

@@ -71,7 +71,7 @@ export const importDataSource = async (
 	password?: string,
 	user?: string,
 	overwriteAllFiles?: boolean,
-	clientGeneratedPrimaryKeys?: boolean,
+	clientGeneratedPrimaryKeys?: boolean
 ) => {
 	const databaseOptions = await promptForDatabaseOptions({
 		source,
@@ -85,7 +85,7 @@ export const importDataSource = async (
 		clientGeneratedPrimaryKeys: clientGeneratedPrimaryKeys ?? false,
 	};
 	// check we have all the dependencies needed to run the import
-	await checkForMissingDependencies(source);
+	checkForMissingDependencies(source);
 
 	const spinner = ora('Introspecting...').start();
 

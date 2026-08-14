@@ -195,7 +195,7 @@ export class EntityManager<T extends BaseEntity> {
 		this.assertEntityProperties(entityPath !== undefined && entityName !== undefined);
 
 		query = query || {};
-		if (!query.select) query.select = ['id' as keyof T];
+		if (!query.select) query.select = ['id'];
 		query.aggregate = type;
 		this.mapFieldsAndRelationshipsForEntity({ value: query });
 

@@ -118,10 +118,6 @@ export class MagicLink extends BaseAuthMethod {
 			type: AuthenticationType.MagicLinkChallenge,
 			userId: user.id,
 			createdAt_gt: period,
-		} as {
-			type: AuthenticationType.MagicLinkChallenge;
-			userId: string;
-			createdAt_gt: Date;
 		});
 
 		// Check rate limiting conditions for magic link creation

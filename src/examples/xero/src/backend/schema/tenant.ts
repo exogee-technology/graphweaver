@@ -25,7 +25,7 @@ const provider = new XeroBackendProvider('Tenant', {
 
 		// We want to clone the tenants so we don't mutate Xero's internal state
 		// When setting our id to tenantId.
-		const copy = JSON.parse(JSON.stringify(xero.tenants));
+		const copy = JSON.parse(JSON.stringify(xero.tenants)) as XeroTenant[];
 		copy.forEach((tenant) => (tenant.id = tenant.tenantId));
 
 		const sortFields = order ?? defaultSort;

@@ -11,18 +11,35 @@
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		"types": ["*"]
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"],
 	"include": ["./src"],
 	"references": [
-		{ "path": "../../packages/admin-ui-components" },
-		{ "path": "../../packages/admin-ui" },
-		{ "path": "../../packages/builder" },
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/mikro-orm-sqlite-wasm" },
-		{ "path": "../../packages/mikroorm" },
-		{ "path": "../../packages/rest" },
-		{ "path": "../../packages/server" }
+		{
+			"path": "../../packages/admin-ui-components"
+		},
+		{
+			"path": "../../packages/admin-ui"
+		},
+		{
+			"path": "../../packages/builder"
+		},
+		{
+			"path": "../../packages/core"
+		},
+		{
+			"path": "../../packages/mikro-orm-sqlite-wasm"
+		},
+		{
+			"path": "../../packages/mikroorm"
+		},
+		{
+			"path": "../../packages/rest"
+		},
+		{
+			"path": "../../packages/server"
+		}
 	]
 }

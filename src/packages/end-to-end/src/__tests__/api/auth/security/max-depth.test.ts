@@ -1,5 +1,6 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
+import { describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -72,8 +73,8 @@ describe('Security', () => {
 	new __StubAuthMethod_FOR_TESTING_ONLY().toString();
 
 	test('should check the depth of a query and error when it reaches seven.', async () => {
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'find');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			query: gql`
@@ -100,8 +101,8 @@ describe('Security', () => {
 			`,
 		});
 
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toContain(
@@ -110,8 +111,8 @@ describe('Security', () => {
 	});
 
 	test('should check the depth of a query and error when it reaches seven on a fragment.', async () => {
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'find');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			query: gql`
@@ -141,8 +142,8 @@ describe('Security', () => {
 			`,
 		});
 
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toContain(

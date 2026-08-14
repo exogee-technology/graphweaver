@@ -36,7 +36,7 @@ const getLoadOneLoader = <T extends BaseEntity>(odataType: EntityConstructor<T>)
 					return { [odataType.prototype._fieldMap.get('id')]: k };
 				}),
 			};
-			const manager = new EntityManager(odataType as any);
+			const manager = new EntityManager(odataType);
 			const records = await getAllMatchingRecords(manager, filter);
 
 			logger.trace(`REST DataLoader: Loading ${odataType.name} got ${records.length} result(s).`);
@@ -46,7 +46,7 @@ const getLoadOneLoader = <T extends BaseEntity>(odataType: EntityConstructor<T>)
 			const lookup: { [key: string]: T } = {};
 			for (const record of records) {
 				// TODO: as any here is really gross. Find a better way to type T.
-				lookup[(record as any).id] = record as any;
+				lookup[(record as any).id] = record;
 			}
 			return keys.map((key) => lookup[key]);
 		};
@@ -126,7 +126,7 @@ const getRelatedIdLoader = <T extends BaseEntity, O extends BaseEntity>(
 				`REST DataLoader: Loading ${odataType.name}.${relatedIdField} in (${keys.join(', ')})`
 			);
 
-			const { _relationshipMap, _aliasMap } = odataType?.prototype as EntityConstructor<T>;
+			const { _relationshipMap, _aliasMap } = odataType.prototype as EntityConstructor<T>;
 			const alias = _aliasMap?.get(relatedIdField);
 			const relationship = _relationshipMap?.get(alias ?? relatedIdField);
 
@@ -158,7 +158,7 @@ const getRelatedIdLoader = <T extends BaseEntity, O extends BaseEntity>(
 export const RestLoaders = {
 	loadOne: <T extends BaseEntity>(odataType: EntityConstructor<T>, id: string) => {
 		const loader = getLoadOneLoader(odataType);
-		return loader.load(id) as unknown as Promise<T>;
+		return loader.load(id);
 	},
 
 	loadByRelatedId: <T extends BaseEntity, O extends BaseEntity>({

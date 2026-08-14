@@ -24,11 +24,11 @@ test('should allow an admin to create a user', async ({ page }) => {
 	await page.getByPlaceholder('Confirm').click();
 	await page.getByPlaceholder('Confirm').fill('test1234');
 	await page.getByRole('button', { name: 'Save' }).click();
-	const element = await page.getByText('has been successfully created');
+	const element = page.getByText('has been successfully created');
 	await expect(element).toHaveCount(1);
 
 	// Check that the created item is in the table
-	const tableElement = await page.getByRole('cell', { name: username });
+	const tableElement = page.getByRole('cell', { name: username });
 	await expect(tableElement).toHaveCount(1);
 });
 
@@ -53,7 +53,7 @@ test('should not allow a non-admin to create a user', async ({ page }) => {
 	await page.getByPlaceholder('Password').press('Tab');
 	await page.getByPlaceholder('Confirm').fill('test1234');
 	await page.getByRole('button', { name: 'Save' }).click();
-	const element = await page.getByText(
+	const element = page.getByText(
 		'Permission Denied: You do not have permission to create credentials'
 	);
 	await expect(element).toHaveCount(1);

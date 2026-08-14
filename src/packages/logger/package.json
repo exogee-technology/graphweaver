@@ -30,7 +30,7 @@
 		"@types/node": "24.10.0",
 		"esbuild": "0.28.1",
 		"glob": "13.0.6",
-		"typescript": "5.9.3"
+		"typescript": "7.0.2"
 	},
 	"keywords": [
 		"graphql",

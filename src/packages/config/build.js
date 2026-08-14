@@ -2,7 +2,7 @@
 const { build } = require('esbuild');
 const { dependencies, devDependencies } = require('./package.json');
 
-(async () => {
+void (async () => {
 	await build({
 		entryPoints: ['./src/index.ts'],
 		outdir: 'lib',

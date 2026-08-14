@@ -75,9 +75,7 @@ export class S3StorageProvider {
 	private getS3Client() {
 		return new S3Client({
 			region: this.region,
-			...(this.endpoint
-				? { endpoint: this.endpoint, forcePathStyle: true }
-				: {}),
+			...(this.endpoint ? { endpoint: this.endpoint, forcePathStyle: true } : {}),
 		});
 	}
 

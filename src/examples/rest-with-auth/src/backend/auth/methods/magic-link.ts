@@ -17,6 +17,7 @@ export const magicLink = new MagicLink({
 	 */
 	getUser: async (username: string): Promise<UserProfile<Roles>> => {
 		const database = ConnectionManager.database(myConnection.connectionManagerId);
+		if (!database) throw new Error('Database connection not found');
 		const credential = await database.em.findOneOrFail(Credential, { username });
 
 		const user = fromBackendEntity(

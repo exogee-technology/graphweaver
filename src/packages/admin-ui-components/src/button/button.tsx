@@ -5,8 +5,8 @@ import styles from './styles.module.css';
 import { useLocation } from 'wouter';
 
 export interface ButtonProps {
-	onClick?(): any /** Event emitted when clicked */;
-	onClickOutside?(e: MouseEvent): any /** Event emitted when outside */;
+	onClick?: () => any /** Event emitted when clicked */;
+	onClickOutside?: (e: MouseEvent) => any /** Event emitted when outside */;
 	href?: string;
 	className?: string;
 	type?: 'submit' | 'reset' | 'button';

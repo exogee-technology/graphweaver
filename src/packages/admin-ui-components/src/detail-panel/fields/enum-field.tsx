@@ -19,9 +19,9 @@ export const EnumField = ({
 
 	const handleOnChange = (selected: SelectOption[]) => {
 		if (multiple) {
-			helpers.setValue(selected.map(({ value }) => value));
+			void helpers.setValue(selected.map(({ value }) => value));
 		} else {
-			helpers.setValue(selected[0]?.value);
+			void helpers.setValue(selected[0]?.value);
 		}
 	};
 

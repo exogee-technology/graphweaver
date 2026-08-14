@@ -2,7 +2,7 @@ import { CustomField } from '@exogee/graphweaver-admin-ui-components';
 
 import { Link } from './link';
 
-export const customFields = new Map<string, CustomField[]>();
+export const customFields = new Map<string, CustomField<any>[]>();
 customFields.set('Task', [
 	{
 		name: 'search',

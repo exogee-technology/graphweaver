@@ -1,5 +1,6 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
+import { before, describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -63,7 +64,7 @@ const graphweaver = new Graphweaver();
 let token: string | undefined;
 
 describe('ACL - Without Transaction Before Hook', () => {
-	beforeAll(async () => {
+	before(async () => {
 		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
@@ -90,7 +91,7 @@ describe('ACL - Without Transaction Before Hook', () => {
 	test('should return forbidden in the before create hook when the ACL returns a function of a filter and there is no transaction.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'createOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -103,7 +104,7 @@ describe('ACL - Without Transaction Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -112,7 +113,7 @@ describe('ACL - Without Transaction Before Hook', () => {
 	test('should return forbidden in the before update hook when the ACL returns a function of a filter and there is no transaction.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'updateOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -125,7 +126,7 @@ describe('ACL - Without Transaction Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');

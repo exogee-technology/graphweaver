@@ -31,7 +31,9 @@ export const DateField = (props: Props) => {
 			{({ field, form }: FieldProps) => (
 				<div style={{ position: 'relative' }}>
 					<DatePicker
-						onChange={(startDate) => form.setFieldValue(field.name, startDate)}
+						onChange={(startDate) => {
+							void form.setFieldValue(field.name, startDate);
+						}}
 						isRangePicker={false}
 						startDate={field.value}
 						filterType={filterType}

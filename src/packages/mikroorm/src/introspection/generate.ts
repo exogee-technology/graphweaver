@@ -221,7 +221,11 @@ export interface APIOptions {
 	clientGeneratedPrimaryKeys?: boolean;
 }
 
-export const generate = async (databaseType: DatabaseType, options: ConnectionOptions, apiOptions?: APIOptions) => {
+export const generate = async (
+	databaseType: DatabaseType,
+	options: ConnectionOptions,
+	apiOptions?: APIOptions
+) => {
 	try {
 		await openConnection(databaseType, options);
 

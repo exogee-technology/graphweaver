@@ -257,7 +257,7 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 
 		// Evaluate each filter function
 		const evaluatedFilters = await Promise.all(
-			consolidatedAccessControlValue.map((filter) => filter(authContext as TContext))
+			consolidatedAccessControlValue.map(async (filter) => filter(authContext as TContext))
 		);
 
 		// Filter out the non-object filters as these are checked elsewhere

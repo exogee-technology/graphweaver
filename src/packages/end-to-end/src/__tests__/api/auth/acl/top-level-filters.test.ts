@@ -1,6 +1,7 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 process.env.DATABASE = 'sqlite';
 
+import { before, describe, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -127,7 +128,7 @@ const graphweaver = new Graphweaver();
 let token: string | undefined;
 
 describe('Compound filter tests', () => {
-	beforeAll(async () => {
+	before(async () => {
 		await ConnectionManager.connect('sqlite', connection);
 		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };

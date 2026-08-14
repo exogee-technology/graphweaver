@@ -168,7 +168,7 @@ export class Web3 extends BaseAuthMethod {
 			const mfa = await this.multiFactorAuthentication();
 			if (mfa) await checkAuthentication(mfa, AccessType.Create, context.token);
 
-			const { address } = await Web3Token.verify(token);
+			const { address } = Web3Token.verify(token);
 
 			return this.saveWalletAddress(context.user.id, address);
 		} catch (e) {
@@ -192,7 +192,7 @@ export class Web3 extends BaseAuthMethod {
 			if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 
 			// Verify wallet address belongs to the logged in user
-			const { address } = await Web3Token.verify(token);
+			const { address } = Web3Token.verify(token);
 			const walletAddress = await this.getWalletAddress(userId, address);
 
 			// Double check the wallet address is for the current user

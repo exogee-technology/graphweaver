@@ -10,15 +10,26 @@
 		"moduleResolution": "bundler",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"types": ["*"]
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"],
 	"include": ["./src"],
 	"references": [
-		{ "path": "../../packages/builder" },
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/mikro-orm-sqlite-wasm" },
-		{ "path": "../../packages/mikroorm" },
-		{ "path": "../../packages/server" }
+		{
+			"path": "../../packages/builder"
+		},
+		{
+			"path": "../../packages/core"
+		},
+		{
+			"path": "../../packages/mikro-orm-sqlite-wasm"
+		},
+		{
+			"path": "../../packages/mikroorm"
+		},
+		{
+			"path": "../../packages/server"
+		}
 	]
 }

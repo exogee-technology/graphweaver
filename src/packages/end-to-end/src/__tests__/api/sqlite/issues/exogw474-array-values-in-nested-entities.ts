@@ -1,3 +1,4 @@
+import { after, before, beforeEach, describe, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -11,12 +12,7 @@ import {
 	PrimaryKey,
 	Property,
 } from '@mikro-orm/core';
-import {
-	Field,
-	ID,
-	Entity,
-	RelationshipField,
-} from '@exogee/graphweaver';
+import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
 import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { EntityManager, SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -116,7 +112,7 @@ class Task {
 	@Field(() => String, { nullable: true })
 	description?: string;
 
-	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks'})
+	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
 	tags!: Tag[];
 }
 
@@ -157,7 +153,7 @@ type UserResult = {
 const graphweaver = new Graphweaver();
 let em: EntityManager | undefined = undefined;
 
-beforeAll(async () => {
+before(async () => {
 	const connectionResult = await ConnectionManager.connect('exogw473', connection);
 	em = connectionResult?.em;
 	assert(em !== undefined);
@@ -181,7 +177,7 @@ beforeAll(async () => {
 		);
 });
 
-afterAll(async () => {
+after(async () => {
 	assert(em !== undefined);
 	await em.getConnection().execute('DROP TABLE task_tag');
 	await em.getConnection().execute('DROP TABLE tag');
@@ -256,14 +252,22 @@ describe('EXOGW-474 - Array values in nested entities', () => {
 		expect(response.body.singleResult.data?.createUser?.email).toBe('example@email.com');
 		expect(response.body.singleResult.data?.createUser?.tasks).toHaveLength(2);
 		expect(response.body.singleResult.data?.createUser?.tasks?.[0]?.taskId).toBe('3');
-		expect(response.body.singleResult.data?.createUser?.tasks?.[0]?.description).toBe('Walk the dog');
+		expect(response.body.singleResult.data?.createUser?.tasks?.[0]?.description).toBe(
+			'Walk the dog'
+		);
 		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.taskId).toBe('4');
-		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.description).toBe('Make dinner');
+		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.description).toBe(
+			'Make dinner'
+		);
 		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.tags).toHaveLength(2);
 		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.tags?.[0]?.tagId).toBe('1');
-		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.tags?.[0]?.description).toBe('URGENT');
+		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.tags?.[0]?.description).toBe(
+			'URGENT'
+		);
 		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.tags?.[1]?.tagId).toBe('2');
-		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.tags?.[1]?.description).toBe('YUM');
+		expect(response.body.singleResult.data?.createUser?.tasks?.[1]?.tags?.[1]?.description).toBe(
+			'YUM'
+		);
 
 		// Get Tasks with Tags
 		const taskResponse = await graphweaver.executeOperation<{

@@ -1,5 +1,6 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
+import { before, describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -56,7 +57,7 @@ const graphweaver = new Graphweaver();
 let token: string | undefined;
 
 describe('ACL - Implicit Deny', () => {
-	beforeAll(async () => {
+	before(async () => {
 		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
@@ -83,7 +84,7 @@ describe('ACL - Implicit Deny', () => {
 	test('should return forbidden in the before read hook when listing an entity when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -96,7 +97,7 @@ describe('ACL - Implicit Deny', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -105,7 +106,7 @@ describe('ACL - Implicit Deny', () => {
 	test('should return forbidden in the before create hook when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'createOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -118,7 +119,7 @@ describe('ACL - Implicit Deny', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -127,7 +128,7 @@ describe('ACL - Implicit Deny', () => {
 	test('should return forbidden in the before update hook when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'updateOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -140,7 +141,7 @@ describe('ACL - Implicit Deny', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -149,7 +150,7 @@ describe('ACL - Implicit Deny', () => {
 	test('should return forbidden in the before delete hook when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'deleteOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -160,7 +161,7 @@ describe('ACL - Implicit Deny', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -169,7 +170,7 @@ describe('ACL - Implicit Deny', () => {
 	test('should return forbidden in the before delete hook when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteMany');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'deleteMany');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -180,7 +181,7 @@ describe('ACL - Implicit Deny', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');

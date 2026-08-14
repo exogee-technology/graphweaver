@@ -1,11 +1,19 @@
+import { after, before, describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
-import { Artist, Album, CREATE_MANY_ARTISTS, CREATE_MANY_ALBUMS, GET_ARTISTS, GET_ALBUMS } from '../../shared';
+import {
+	Artist,
+	Album,
+	CREATE_MANY_ARTISTS,
+	CREATE_MANY_ALBUMS,
+	GET_ARTISTS,
+	GET_ALBUMS,
+} from '../../shared';
 
 describe('createMany mutations', () => {
-	beforeAll(resetDatabase);
-	afterAll(resetDatabase);
+	before(resetDatabase);
+	after(resetDatabase);
 
 	test('should create multiple artists', async () => {
 		const { data: before } = await request<{ artists: Artist[] }>(config.baseUrl)
@@ -14,7 +22,12 @@ describe('createMany mutations', () => {
 
 		const response = await request<{ createArtists: Artist[] }>(config.baseUrl)
 			.mutate(CREATE_MANY_ARTISTS)
-			.variables({ input: [{ artistId: '276', name: 'Artist One' }, {  artistId: '277', name: 'Artist Two' }] })
+			.variables({
+				input: [
+					{ artistId: '276', name: 'Artist One' },
+					{ artistId: '277', name: 'Artist Two' },
+				],
+			})
 			.expectNoErrors();
 
 		expect(response.data?.createArtists).toHaveLength(2);

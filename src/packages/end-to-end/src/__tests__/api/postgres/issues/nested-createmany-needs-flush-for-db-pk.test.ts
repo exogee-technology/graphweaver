@@ -6,9 +6,10 @@
  * Repro requires: parent with multiple children in one createMany batch, at least one
  * child having nested grandchildren (second child has components pattern).
  *
- * Run: `DATABASE=postgres pnpm exec jest --runInBand --forceExit -- api/postgres/issues/nested-createmany-needs-flush-for-db-pk.test.ts`
+ * Run: `DATABASE=postgres pnpm node-test src/__tests__/api/postgres/issues/nested-createmany-needs-flush-for-db-pk.test.ts`
  * (PostgreSQL must be reachable with standard e2e credentials and database `gw`.)
  */
+import { after, before, beforeEach, describe, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'node:assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -143,7 +144,7 @@ const shouldRun = process.env.DATABASE === 'postgres';
 (shouldRun ? describe : describe.skip)(
 	'Postgres nested create — createMany must flush for DB-assigned PKs (batched writes inject)',
 	() => {
-		beforeAll(async () => {
+		before(async () => {
 			const { Client } = await import('pg');
 			const client = new Client({
 				host: dbConfig.host,
@@ -183,7 +184,7 @@ const shouldRun = process.env.DATABASE === 'postgres';
 			assert(em !== undefined);
 		});
 
-		afterAll(async () => {
+		after(async () => {
 			if (!shouldRun || !em) return;
 			const { Client } = await import('pg');
 			const client = new Client({

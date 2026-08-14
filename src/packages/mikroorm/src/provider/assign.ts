@@ -37,7 +37,7 @@ export const assign = async <T extends AnyEntity<T>>(
 	visited.add(entity);
 
 	// We'll need the metadata for this entity to be able to traverse the properties later.
-	const metadata = wrap(entity, true).__meta!;
+	const metadata = wrap(entity, true).__meta;
 
 	for (const [property, value] of Object.entries(data)) {
 		const entityPropertyValue = entity[property as keyof T];
@@ -74,8 +74,11 @@ export const assign = async <T extends AnyEntity<T>>(
 
 			const visitedEntities = new Set<T>();
 
-			const relatedGwMetadata = graphweaverMetadata.getEntityMetadataByDataEntity(propertyMetadata.entity());
-			const clientGeneratedPrimaryKeys = relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
+			const relatedGwMetadata = graphweaverMetadata.getEntityMetadataByDataEntity(
+				propertyMetadata.entity()
+			);
+			const clientGeneratedPrimaryKeys =
+				relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
 
 			for (const subvalue of value) {
 				let entity: T | undefined;
@@ -190,8 +193,11 @@ export const assign = async <T extends AnyEntity<T>>(
 						);
 					}
 
-					const relatedGwMetadata = graphweaverMetadata.getEntityMetadataByDataEntity(propertyMetadata.entity());
-					const clientGeneratedPrimaryKeys = relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
+					const relatedGwMetadata = graphweaverMetadata.getEntityMetadataByDataEntity(
+						propertyMetadata.entity()
+					);
+					const clientGeneratedPrimaryKeys =
+						relatedGwMetadata?.apiOptions?.clientGeneratedPrimaryKeys ?? false;
 
 					const newEntity = await createOrAssignEntity<T>({
 						entity: (entityPropertyValue as Reference<T>)?.unwrap(),
@@ -240,9 +246,7 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 	const hasPrimaryKey = (data as any)[primaryKeyField] !== undefined;
 	const createEntity = () => {
 		if (!createAllowed) {
-			throw new Error(
-				`Creates are disabled, but value ${JSON.stringify(data)} was passed.`
-			);
+			throw new Error(`Creates are disabled, but value ${JSON.stringify(data)} was passed.`);
 		}
 
 		const newEntity = em.create<T>(entityType, {} as any);

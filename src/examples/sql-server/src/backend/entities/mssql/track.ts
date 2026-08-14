@@ -1,4 +1,13 @@
-import { Collection, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import {
+	Collection,
+	Entity,
+	ManyToMany,
+	ManyToOne,
+	OneToMany,
+	PrimaryKey,
+	Property,
+	Ref,
+} from '@mikro-orm/core';
 import { Album } from './album';
 import { Genre } from './genre';
 import { InvoiceLine } from './invoice-line';
@@ -13,13 +22,30 @@ export class Track {
 	@Property({ fieldName: 'Name', type: 'string', length: 200 })
 	name!: string;
 
-	@ManyToOne({ entity: () => Album, ref: true, fieldName: 'AlbumId', nullable: true, index: 'IFK_TrackAlbumId' })
+	@ManyToOne({
+		entity: () => Album,
+		ref: true,
+		fieldName: 'AlbumId',
+		nullable: true,
+		index: 'IFK_TrackAlbumId',
+	})
 	album?: Ref<Album>;
 
-	@ManyToOne({ entity: () => MediaType, ref: true, fieldName: 'MediaTypeId', index: 'IFK_TrackMediaTypeId' })
+	@ManyToOne({
+		entity: () => MediaType,
+		ref: true,
+		fieldName: 'MediaTypeId',
+		index: 'IFK_TrackMediaTypeId',
+	})
 	mediaType!: Ref<MediaType>;
 
-	@ManyToOne({ entity: () => Genre, ref: true, fieldName: 'GenreId', nullable: true, index: 'IFK_TrackGenreId' })
+	@ManyToOne({
+		entity: () => Genre,
+		ref: true,
+		fieldName: 'GenreId',
+		nullable: true,
+		index: 'IFK_TrackGenreId',
+	})
 	genre?: Ref<Genre>;
 
 	@Property({ fieldName: 'Composer', type: 'string', length: 220, nullable: true })

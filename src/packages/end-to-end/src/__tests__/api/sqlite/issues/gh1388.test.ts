@@ -1,3 +1,4 @@
+import { beforeEach, describe, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -85,7 +86,7 @@ describe('Top level and/or/not', () => {
 		});
 		assert(response3.body.kind === 'single');
 		expect(response3.body.singleResult.errors).toBe(undefined);
-		const totalCount: number = (response3.body.singleResult.data?.albums_aggregate as any).count;
+		const totalCount: number = (response3.body.singleResult.data?.albums_aggregate as any)?.count;
 
 		const response4 = await graphweaver.executeOperation({
 			query: gql`
@@ -98,6 +99,6 @@ describe('Top level and/or/not', () => {
 		});
 		assert(response4.body.kind === 'single');
 		expect(response4.body.singleResult.errors).toBe(undefined);
-		expect((response4.body.singleResult.data?.albums_aggregate as any).count).toBe(totalCount - 1);
+		expect((response4.body.singleResult.data?.albums_aggregate as any)?.count).toBe(totalCount - 1);
 	});
 });

@@ -14,7 +14,7 @@ test('Ensure media is uploaded on create', async ({ page }) => {
 	await fileChooser.setFiles(path.join(__dirname, './fixtures/pickle.png'));
 
 	await page.getByRole('button', { name: 'Save' }).click();
-	await expect(await page.getByText('has been successfully created.')).toBeVisible();
+	await expect(page.getByText('has been successfully created.')).toBeVisible();
 });
 
 test('Ensure media is uploaded on update', async ({ page }) => {
@@ -30,7 +30,7 @@ test('Ensure media is uploaded on update', async ({ page }) => {
 	await fileChooser.setFiles(path.join(__dirname, './fixtures/tomato-chair.png'));
 
 	await page.getByRole('button', { name: 'Save' }).click();
-	await expect(await page.getByText('has been successfully updated.')).toBeVisible();
+	await expect(page.getByText('has been successfully updated.')).toBeVisible();
 });
 
 test('Ensure media is deleted', async ({ page }) => {
@@ -43,5 +43,5 @@ test('Ensure media is deleted', async ({ page }) => {
 	await page.getByRole('button', { name: 'Delete' }).click();
 
 	await page.getByRole('button', { name: 'Save' }).click();
-	await expect(await page.getByText('has been successfully updated.')).toBeVisible();
+	await expect(page.getByText('has been successfully updated.')).toBeVisible();
 });

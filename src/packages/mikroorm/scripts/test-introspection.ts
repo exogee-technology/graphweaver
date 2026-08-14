@@ -10,4 +10,4 @@ const go = async () => {
 	});
 };
 
-go();
+void go();

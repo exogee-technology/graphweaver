@@ -47,7 +47,10 @@
 	"devDependencies": {
 		"@types/node": "24.10.0",
 		"dotenv-cli": "11.0.0",
-		"typescript": "5.9.3"
+		"typescript": "7.0.2",
+		"@types/react": "19.2.13",
+		"@types/react-dom": "19.2.3",
+		"@types/react-syntax-highlighter": "15.5.13"
 	},
 	"keywords": [
 		"graphql",

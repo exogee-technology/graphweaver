@@ -1,11 +1,12 @@
+import { after, before, describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
 import { Artist, UPDATE_MANY_ARTISTS } from '../../shared';
 
 describe('updateMany mutations', () => {
-	beforeAll(resetDatabase);
-	afterAll(resetDatabase);
+	before(resetDatabase);
+	after(resetDatabase);
 
 	test('should update multiple artists', async () => {
 		const { data } = await request<{ updateArtists: Artist[] }>(config.baseUrl)

@@ -111,7 +111,7 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 		}
 
 		// Alrighty, let's remember this for the future.
-		setFieldValue(field.name, {
+		void setFieldValue(field.name, {
 			filename: uploadUrl.filename,
 			type: uploadUrl.type,
 			[internalKey]: {
@@ -126,7 +126,7 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 
 	const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
-			handleFileUpload(event.target.files[0]);
+			void handleFileUpload(event.target.files[0]);
 		}
 	};
 
@@ -139,7 +139,7 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 			return;
 		}
 
-		setFieldValue(field.name, null);
+		void setFieldValue(field.name, null);
 		setMediaHasChanged(true);
 	};
 

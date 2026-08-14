@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { type EntityMetadata, type EntityProperty, type NamingStrategy, type Platform, ReferenceKind } from '@mikro-orm/core';
+import {
+	type EntityMetadata,
+	type EntityProperty,
+	type NamingStrategy,
+	type Platform,
+	ReferenceKind,
+} from '@mikro-orm/core';
 import { SchemaEntityFile } from './files/schema-entity-file';
 
 const mockPlatform = {
@@ -28,7 +34,11 @@ const makeScalarProp = (overrides: Partial<EntityProperty>): EntityProperty =>
 		generated: undefined,
 		...overrides,
 	}) as EntityProperty;
-const makeMeta = (className: string, pkProp: EntityProperty, extraProps: EntityProperty[] = []): EntityMetadata => {
+const makeMeta = (
+	className: string,
+	pkProp: EntityProperty,
+	extraProps: EntityProperty[] = []
+): EntityMetadata => {
 	const allProps = [pkProp, ...extraProps];
 	return {
 		className,

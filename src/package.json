@@ -23,8 +23,8 @@
 		"fix:project:references": "pnpm set-project-references --save",
 		"force:build": "TURBO_FORCE=true pnpm build",
 		"format": "pnpm prettier",
-		"lint:fix": "eslint . --fix",
-		"lint": "eslint .",
+		"lint:fix": "oxlint --fix .",
+		"lint": "oxlint .",
 		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build:packages && sleep 0.5 && pnpm packages:pack",
 		"packages:pack": "turbo --filter \"!./examples/**\" package:pack -- --pack-destination ../../.packs",
 		"prettier": "prettier --write .",
@@ -36,16 +36,13 @@
 	},
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.12",
-		"@eslint/js": "10.0.1",
-		"@types/eslint-config-prettier": "6.11.3",
+		"@types/node": "24.10.0",
 		"concurrently": "10.0.4",
-		"eslint": "10.4.0",
-		"eslint-config-prettier": "10.1.8",
-		"globals": "17.9.0",
+		"oxlint": "1.78.0",
+		"oxlint-tsgolint": "7.0.2001",
 		"prettier": "3.6.2",
 		"turbo": "2.10.9",
-		"typescript": "5.9.3",
-		"typescript-eslint": "8.60.0"
+		"typescript": "7.0.2"
 	},
 	"pnpm": {
 		"overrides": {

@@ -1,3 +1,4 @@
+import { after, before, describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
@@ -12,14 +13,19 @@ import {
 } from '../../shared';
 
 describe('deleteMany mutations', () => {
-	beforeAll(resetDatabase);
-	afterAll(resetDatabase);
+	before(resetDatabase);
+	after(resetDatabase);
 
 	test('should create then delete multiple artists', async () => {
 		// Create
 		const { data: createData } = await request<{ createArtists: Artist[] }>(config.baseUrl)
 			.mutate(CREATE_MANY_ARTISTS)
-			.variables({ input: [{ artistId: '276', name: 'To Delete One' }, { artistId: '277', name: 'To Delete Two' }] })
+			.variables({
+				input: [
+					{ artistId: '276', name: 'To Delete One' },
+					{ artistId: '277', name: 'To Delete Two' },
+				],
+			})
 			.expectNoErrors();
 
 		expect(createData?.createArtists).toHaveLength(2);
@@ -71,7 +77,12 @@ describe('deleteMany mutations', () => {
 		// Create
 		const { data: createData } = await request<{ createArtists: Artist[] }>(config.baseUrl)
 			.mutate(CREATE_MANY_ARTISTS)
-			.variables({ input: [{ artistId: '276', name: 'Temporary One' }, { artistId: '277', name: 'Temporary Two' }] })
+			.variables({
+				input: [
+					{ artistId: '276', name: 'Temporary One' },
+					{ artistId: '277', name: 'Temporary Two' },
+				],
+			})
 			.expectNoErrors();
 
 		const ids = createData?.createArtists?.map((a) => a.artistId) ?? [];

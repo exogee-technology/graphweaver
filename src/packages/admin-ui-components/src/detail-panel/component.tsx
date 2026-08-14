@@ -250,7 +250,7 @@ const PersistForm = ({ name }: { name: string }) => {
 	useEffect(() => {
 		// Check if we have saved session form state and auto-submit after auth step-up
 		const savedSessionState = window.sessionStorage.getItem(name);
-		if (savedSessionState && !isSubmitting) submitForm();
+		if (savedSessionState && !isSubmitting) void submitForm();
 	}, []);
 
 	useEffect(() => {
@@ -274,7 +274,7 @@ const DetailForm = ({
 	initialValues: Record<string, any>;
 	entity: Entity;
 	detailFields: (EntityField | CustomField)[];
-	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
+	onSubmit: (values: any, actions: FormikHelpers<any>) => void | Promise<unknown>;
 	onCancel: () => void;
 	persistName: string;
 	isReadOnly?: boolean;

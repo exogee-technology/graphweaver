@@ -1,5 +1,5 @@
 import esbuild from 'esbuild';
-(async () => {
+void (async () => {
 	await esbuild.build({
 		outdir: 'lib',
 		format: 'esm',

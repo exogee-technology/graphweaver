@@ -11,10 +11,12 @@ export const useData = () => {
 		const salesPerEmployeeId = new Map<EmployeeId, Map<DateSlot, TotalSales>>();
 		const employeeIds: EmployeeId[] = [];
 		queryData?.employees?.forEach((employee) => {
+			if (!employee) return;
 			const employeeId = `${employee.firstName} ${employee.lastName} - id:${employee.employeeId}`;
 			employeeIds.push(employeeId);
-			employee.customers.forEach((customer) => {
-				customer.invoices.forEach((invoice) => {
+			employee.customers?.forEach((customer) => {
+				customer?.invoices?.forEach((invoice) => {
+					if (!invoice) return;
 					const total = parseFloat(invoice.total);
 					const date = DateTime.fromISO(invoice.invoiceDate);
 					// too many days, let's group by month

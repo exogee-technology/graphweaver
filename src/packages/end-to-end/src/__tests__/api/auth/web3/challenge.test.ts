@@ -1,3 +1,4 @@
+import { afterEach, describe, it, mock } from 'node:test';
 import {
 	AuthenticationMethod,
 	UserProfile,
@@ -101,7 +102,7 @@ const graphweaver = new Graphweaver();
 
 describe('web3 challenge', () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		mock.reset();
 	});
 
 	it('should return an OTP challenge when checking if we can enrol an web3 wallet address', async () => {
@@ -212,9 +213,9 @@ describe('web3 challenge', () => {
 			expires_in: '1d',
 		});
 
-		jest.spyOn(web3 as any, 'multiFactorAuthentication').mockImplementation(() => undefined);
+		mock.method(web3 as any, 'multiFactorAuthentication', () => undefined);
 
-		const spy = jest.spyOn(Web3.prototype, 'saveWalletAddress');
+		const spy = mock.method(Web3.prototype, 'saveWalletAddress');
 		const web3Address = await ethers_signer.getAddress();
 
 		const response = await graphweaver.executeOperation({
@@ -231,7 +232,7 @@ describe('web3 challenge', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
-		expect(spy).toHaveBeenCalledWith(user.id, web3Address.toLowerCase());
+		expect(spy.mock.calls[0].arguments).toEqual([user.id, web3Address.toLowerCase()]);
 	});
 
 	it('should return true for verify wallet and step up the token with wb3', async () => {

@@ -2,7 +2,7 @@ import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
 export interface CorsPluginOptions {
-	validateOrigin?(origin: string): boolean;
+	validateOrigin?: (origin: string) => boolean;
 }
 
 export const corsPlugin = ({

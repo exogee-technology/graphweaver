@@ -7,7 +7,7 @@ const { dependencies, devDependencies } = require('./package.json');
 
 const exec = promisify(nodeExec);
 
-(async () => {
+void (async () => {
 	// Build the CLI
 	await build({
 		entryPoints: ['./src/index.ts'],

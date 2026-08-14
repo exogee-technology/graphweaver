@@ -1,3 +1,4 @@
+import { afterEach, describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -11,7 +12,6 @@ import {
 	OneTimePassword,
 	OneTimePasswordData,
 	AuthenticationMethod,
-	OneTimePasswordEntity,
 	setAddUserToContext,
 	setImplicitAllow,
 } from '@exogee/graphweaver-auth';
@@ -95,7 +95,7 @@ const graphweaver = new Graphweaver();
 
 describe('One Time Password Authentication - Challenge', () => {
 	afterEach(() => {
-		jest.restoreAllMocks();
+		mock.restoreAll();
 	});
 
 	test('should fail challenge if not logged in.', async () => {
@@ -143,14 +143,11 @@ describe('One Time Password Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		jest.spyOn(OneTimePassword.prototype, 'getOTP').mockImplementation(
-			async () =>
-				({
-					userId: user.id,
-					data: { code: MOCK_CODE },
-					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
-				}) as OneTimePasswordEntity
-		);
+		mock.method(OneTimePassword.prototype, 'getOTP', async () => ({
+			userId: user.id,
+			data: { code: MOCK_CODE },
+			createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
+		}));
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -195,7 +192,7 @@ describe('One Time Password Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		jest.spyOn(OneTimePassword.prototype, 'redeemOTP').mockImplementation(async () => true);
+		mock.method(OneTimePassword.prototype, 'redeemOTP', async () => true);
 
 		const response = await graphweaver.executeOperation<{
 			result: { authToken: string };

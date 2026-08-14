@@ -40,9 +40,7 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	await expect(page.locator('form')).toContainText('11 Selected');
 	await page.getByRole('button', { name: 'Save' }).click();
 	await expect(
-		await page.getByText(
-			'Item 1 For Those About To Rock We Salute You has been successfully updated.'
-		)
+		page.getByText('Item 1 For Those About To Rock We Salute You has been successfully updated.')
 	).toBeVisible();
 });
 
@@ -54,7 +52,7 @@ test('Should allow navigation around using a keyboard', async ({ page }) => {
 	await page.getByTestId('employee-filter').press('ArrowDown', { delay: 300 });
 	await page.getByTestId('employee-filter').press('ArrowDown', { delay: 300 });
 	await page.getByTestId('employee-filter').press('Enter', { delay: 300 });
-	await expect(await page.getByText('IT Manager×')).toBeVisible();
+	await expect(page.getByText('IT Manager×')).toBeVisible();
 	await page.getByText('IT Manager×').press('Delete');
-	await expect(await page.getByText('IT Manager×')).not.toBeVisible();
+	await expect(page.getByText('IT Manager×')).not.toBeVisible();
 });

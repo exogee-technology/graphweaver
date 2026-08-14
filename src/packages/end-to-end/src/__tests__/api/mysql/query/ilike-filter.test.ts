@@ -1,3 +1,4 @@
+import { describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
@@ -29,14 +30,14 @@ describe('ilike operator handling', () => {
 			`)
 			.variables({
 				filter: {
-					title_ilike: 'The %'
+					title_ilike: 'The %',
 				},
 			})
 			.expectNoErrors();
 
 		expect(data?.albums).toHaveLength(30);
 
-        const likeData = await request<{ albums: Album[] }>(config.baseUrl)
+		const likeData = await request<{ albums: Album[] }>(config.baseUrl)
 			.query(gql`
 				query Albums($filter: AlbumsListFilter) {
 					albums(filter: $filter) {
@@ -51,7 +52,7 @@ describe('ilike operator handling', () => {
 			`)
 			.variables({
 				filter: {
-					title_like: 'The %'
+					title_like: 'The %',
 				},
 			})
 			.expectNoErrors();

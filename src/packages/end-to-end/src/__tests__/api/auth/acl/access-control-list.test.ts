@@ -1,5 +1,6 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
+import { before, describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -58,7 +59,7 @@ const graphweaver = new Graphweaver();
 let token: string | undefined;
 
 describe('ACL - Access Control Lists', () => {
-	beforeAll(async () => {
+	before(async () => {
 		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
@@ -85,7 +86,7 @@ describe('ACL - Access Control Lists', () => {
 	test('should return forbidden in the before read hook when listing an entity when no an acl evaluates to false.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnDataProvider = mock.method(artistDataProvider, 'find');
 
 		AclMap.delete('Artist');
 		ApplyAccessControlList({
@@ -105,7 +106,7 @@ describe('ACL - Access Control Lists', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -114,7 +115,7 @@ describe('ACL - Access Control Lists', () => {
 	test('should return forbidden in the before read hook when listing an entity when no an acl evaluates to promise false.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnDataProvider = mock.method(artistDataProvider, 'find');
 
 		AclMap.delete('Artist');
 		ApplyAccessControlList({
@@ -134,7 +135,7 @@ describe('ACL - Access Control Lists', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -143,7 +144,7 @@ describe('ACL - Access Control Lists', () => {
 	test('should return forbidden in the before read hook when listing an entity when no an acl evaluates to promise null.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnDataProvider = mock.method(artistDataProvider, 'find');
 
 		AclMap.delete('Artist');
 		ApplyAccessControlList({
@@ -163,7 +164,7 @@ describe('ACL - Access Control Lists', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -172,7 +173,7 @@ describe('ACL - Access Control Lists', () => {
 	test('should return forbidden in the before read hook when listing an entity when no an acl evaluates to promise undefined.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnDataProvider = mock.method(artistDataProvider, 'find');
 
 		AclMap.delete('Artist');
 		ApplyAccessControlList({
@@ -192,7 +193,7 @@ describe('ACL - Access Control Lists', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -201,7 +202,7 @@ describe('ACL - Access Control Lists', () => {
 	test('should call the data provider when a filter function returns a filter object.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnDataProvider = mock.method(artistDataProvider, 'find');
 
 		AclMap.delete('Artist');
 		ApplyAccessControlList({
@@ -223,13 +224,13 @@ describe('ACL - Access Control Lists', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBeGreaterThan(0);
 	});
 
 	test('should call the data provider when a filter function returns a boolean true.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnDataProvider = mock.method(artistDataProvider, 'find');
 
 		AclMap.delete('Artist');
 		ApplyAccessControlList({
@@ -249,13 +250,13 @@ describe('ACL - Access Control Lists', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBeGreaterThan(0);
 	});
 
 	test('should call the data provider when a acl returns a boolean of true.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnDataProvider = mock.method(artistDataProvider, 'find');
 
 		AclMap.delete('Artist');
 		ApplyAccessControlList({
@@ -275,6 +276,6 @@ describe('ACL - Access Control Lists', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBeGreaterThan(0);
 	});
 });

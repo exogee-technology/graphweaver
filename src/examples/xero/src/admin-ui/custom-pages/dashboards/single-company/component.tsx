@@ -34,8 +34,9 @@ export const SingleCompany = () => {
 
 	if (loading) return <Loader />;
 	if (error) return <p>Error loading report rows!</p>;
+	if (!data?.profitAndLossRows) return <p>No data</p>;
 
-	const rows = data.profitAndLossRows;
+	const rows = data.profitAndLossRows.filter((row): row is NonNullable<typeof row> => row != null);
 	const chartValues = categories.map((category) => ({
 		id: category,
 		data: rows

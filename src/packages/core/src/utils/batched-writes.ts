@@ -5,6 +5,7 @@
  * with proper dependency handling across related entities.
  */
 
+import { randomUUID } from 'node:crypto';
 import { isDefined } from 'class-validator';
 import {
 	fromBackendEntity,
@@ -169,9 +170,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			);
 
 			// Check for any rejected promises and throw the first error
-			const errors = results.filter(
-				(result) => result.status === 'rejected'
-			) as PromiseRejectedResult[];
+			const errors = results.filter((result) => result.status === 'rejected');
 			if (errors.length > 0) {
 				const reason = errors[0].reason;
 				// Make sure we're throwing an Error object
@@ -235,7 +234,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 						// As we are updating the parent from the child, we can remove this key
 						delete node[key as keyof Partial<G>];
 
-						const newOperationId = crypto.randomUUID();
+						const newOperationId = randomUUID();
 						if (relationship.relationshipInfo?.relatedField) {
 							const relatedField = relationship.relationshipInfo?.relatedField;
 							deps.push([newOperationId, operationId]);
@@ -254,7 +253,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 
 						await traverse(childNode, relatedEntityMetadata, info, context, newOperationId, index);
 					} else if (Object.keys(childNode).length > 0) {
-						const newOperationId = crypto.randomUUID();
+						const newOperationId = randomUUID();
 						if (relationship.relationshipInfo?.id) {
 							delete node[key as keyof Partial<G>];
 							deps.push([operationId, newOperationId]);
@@ -320,7 +319,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			returnOrder.push(nodeId);
 			return {
 				nodeId,
-				type: type as 'create' | 'update',
+				type: type,
 				processing: operationProcesses,
 			};
 		} else {
@@ -328,13 +327,11 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 		}
 	}
 
-	const rootOperationId = crypto.randomUUID();
+	const rootOperationId = randomUUID();
 	if (Array.isArray(rootInput)) {
-		await traverse(rootInput, rootMeta, rootInfo, rootContext, rootOperationId, 0).catch(
-			(e) => {
-				throw e;
-			}
-		);
+		await traverse(rootInput, rootMeta, rootInfo, rootContext, rootOperationId, 0).catch((e) => {
+			throw e;
+		});
 	} else {
 		throw new Error(`Unexpected Error: trying to create entity ${rootMeta.name}`);
 	}
@@ -472,7 +469,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 						updates.map((node) => nodes.get(node.nodeId)!)
 					).then((res) => {
 						for (let i = 0; i < res.length; i++) {
-							const result = res[i] as (G & (object | undefined)) | null;
+							const result = res[i];
 							for (const process of updates[i].processing.filter(
 								(process) => process.type === 'post'
 							)) {

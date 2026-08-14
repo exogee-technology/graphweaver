@@ -1,5 +1,6 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
+import { before, beforeEach, describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -70,7 +71,7 @@ const graphweaver = new Graphweaver();
 let token: string | undefined;
 
 describe('ACL - Create Or Update', () => {
-	beforeAll(async () => {
+	before(async () => {
 		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
@@ -95,14 +96,14 @@ describe('ACL - Create Or Update', () => {
 	});
 
 	beforeEach(() => {
-		jest.resetAllMocks();
+		mock.reset();
 	});
 
 	test('should return forbidden in the before create hook when user only has permission to update.', async () => {
 		assert(token);
 
-		const spyOnDataProviderUpdateOne = jest.spyOn(albumDataProvider, 'updateOne');
-		const spyOnDataProviderCreateOne = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProviderUpdateOne = mock.method(albumDataProvider, 'updateOne');
+		const spyOnDataProviderCreateOne = mock.method(albumDataProvider, 'createOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
@@ -123,8 +124,8 @@ describe('ACL - Create Or Update', () => {
 			`,
 		});
 
-		expect(spyOnDataProviderUpdateOne).not.toHaveBeenCalled();
-		expect(spyOnDataProviderCreateOne).not.toHaveBeenCalled();
+		expect(spyOnDataProviderUpdateOne.mock.callCount()).toBe(0);
+		expect(spyOnDataProviderCreateOne.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -133,8 +134,8 @@ describe('ACL - Create Or Update', () => {
 	test('should return forbidden in the before update hook when user only has permission to create.', async () => {
 		assert(token);
 
-		const spyOnDataProviderUpdateOne = jest.spyOn(albumDataProvider, 'updateOne');
-		const spyOnDataProviderCreateOne = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProviderUpdateOne = mock.method(albumDataProvider, 'updateOne');
+		const spyOnDataProviderCreateOne = mock.method(albumDataProvider, 'createOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
@@ -155,8 +156,8 @@ describe('ACL - Create Or Update', () => {
 			`,
 		});
 
-		expect(spyOnDataProviderUpdateOne).not.toHaveBeenCalled();
-		expect(spyOnDataProviderCreateOne).not.toHaveBeenCalled();
+		expect(spyOnDataProviderUpdateOne.mock.callCount()).toBe(0);
+		expect(spyOnDataProviderCreateOne.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -165,8 +166,8 @@ describe('ACL - Create Or Update', () => {
 	test('should allow in the before create hook when user has permission to create.', async () => {
 		assert(token);
 
-		const spyOnDataProviderUpdateOne = jest.spyOn(albumDataProvider, 'updateOne');
-		const spyOnDataProviderCreateOne = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProviderUpdateOne = mock.method(albumDataProvider, 'updateOne');
+		const spyOnDataProviderCreateOne = mock.method(albumDataProvider, 'createOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
@@ -187,15 +188,15 @@ describe('ACL - Create Or Update', () => {
 			`,
 		});
 
-		expect(spyOnDataProviderCreateOne).toHaveBeenCalled();
-		expect(spyOnDataProviderUpdateOne).not.toHaveBeenCalled();
+		expect(spyOnDataProviderCreateOne.mock.callCount()).toBeGreaterThan(0);
+		expect(spyOnDataProviderUpdateOne.mock.callCount()).toBe(0);
 	});
 
 	test('should allow in the before update hook when user has permission to update.', async () => {
 		assert(token);
 
-		const spyOnDataProviderUpdateOne = jest.spyOn(albumDataProvider, 'updateOne');
-		const spyOnDataProviderCreateOne = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProviderUpdateOne = mock.method(albumDataProvider, 'updateOne');
+		const spyOnDataProviderCreateOne = mock.method(albumDataProvider, 'createOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
@@ -216,7 +217,7 @@ describe('ACL - Create Or Update', () => {
 			`,
 		});
 
-		expect(spyOnDataProviderUpdateOne).toHaveBeenCalled();
-		expect(spyOnDataProviderCreateOne).not.toHaveBeenCalled();
+		expect(spyOnDataProviderUpdateOne.mock.callCount()).toBeGreaterThan(0);
+		expect(spyOnDataProviderCreateOne.mock.callCount()).toBe(0);
 	});
 });
