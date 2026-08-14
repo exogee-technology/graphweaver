@@ -18,10 +18,13 @@ export class Employee {
 	@Field(() => String)
 	firstName!: string;
 
-	@Field(() => String, { nullable: true, adminUIOptions: {summaryField:true} })
+	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	title?: string;
 
-	@RelationshipField<Employee>(() => Employee, { id: (entity) => entity.employee?.employeeId, nullable: true })
+	@RelationshipField<Employee>(() => Employee, {
+		id: (entity) => entity.employee?.employeeId,
+		nullable: true,
+	})
 	employee?: Employee;
 
 	@Field(() => ISODateStringScalar, { nullable: true })

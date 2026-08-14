@@ -40,9 +40,7 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	await expect(page.locator('form')).toContainText('11 Selected');
 	await page.getByRole('button', { name: 'Save' }).click();
 	await expect(
-		page.getByText(
-			'Item 1 For Those About To Rock We Salute You has been successfully updated.'
-		)
+		page.getByText('Item 1 For Those About To Rock We Salute You has been successfully updated.')
 	).toBeVisible();
 });
 

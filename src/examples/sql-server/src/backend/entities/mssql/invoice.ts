@@ -1,4 +1,12 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import {
+	Collection,
+	Entity,
+	ManyToOne,
+	OneToMany,
+	PrimaryKey,
+	Property,
+	Ref,
+} from '@mikro-orm/core';
 import { Customer } from './customer';
 import { InvoiceLine } from './invoice-line';
 
@@ -7,7 +15,12 @@ export class Invoice {
 	@PrimaryKey({ fieldName: 'InvoiceId', type: 'integer' })
 	invoiceId!: number;
 
-	@ManyToOne({ entity: () => Customer, ref: true, fieldName: 'CustomerId', index: 'IFK_InvoiceCustomerId' })
+	@ManyToOne({
+		entity: () => Customer,
+		ref: true,
+		fieldName: 'CustomerId',
+		index: 'IFK_InvoiceCustomerId',
+	})
 	customer!: Ref<Customer>;
 
 	@Property({ fieldName: 'InvoiceDate', type: 'datetime', length: 3 })

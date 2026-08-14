@@ -45,7 +45,10 @@ export class Customer {
 	@Field(() => String)
 	email!: string;
 
-	@RelationshipField<Customer>(() => Employee, { id: (entity) => entity.employee?.employeeId, nullable: true })
+	@RelationshipField<Customer>(() => Employee, {
+		id: (entity) => entity.employee?.employeeId,
+		nullable: true,
+	})
 	employee?: Employee;
 
 	@RelationshipField<Invoice>(() => [Invoice], { relatedField: 'customer' })

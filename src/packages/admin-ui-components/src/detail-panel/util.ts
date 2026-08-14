@@ -1,4 +1,4 @@
-import { Entity, EntityField } from "../utils";
+import { Entity, EntityField } from '../utils';
 
 // This is used to validate if a value is empty in the context of a form
 export const isValueEmpty = (value: unknown) =>
@@ -20,11 +20,19 @@ export const parseValueForForm = (fieldType: string, value: unknown) => {
 	return value;
 };
 
-const isObjectWithKeys = <T extends Record<string, unknown>, K extends keyof T, S extends keyof T>(value: unknown, key: K, summaryField: S): value is T & { [P in K | S]: unknown } => {
+const isObjectWithKeys = <T extends Record<string, unknown>, K extends keyof T, S extends keyof T>(
+	value: unknown,
+	key: K,
+	summaryField: S
+): value is T & { [P in K | S]: unknown } => {
 	return typeof value === 'object' && value !== null && key in value && summaryField in value;
 };
 
-export const transformValueForForm = (field: EntityField, value: unknown, entityByType: (entityType: string) => Entity) => {
+export const transformValueForForm = (
+	field: EntityField,
+	value: unknown,
+	entityByType: (entityType: string) => Entity
+) => {
 	if (field.relationshipType) {
 		const relatedEntity = entityByType(field.type);
 		const relatedEntityPrimaryKeyField = relatedEntity?.primaryKeyField;
@@ -50,4 +58,4 @@ export const transformValueForForm = (field: EntityField, value: unknown, entity
 	return value;
 };
 
-export const getFieldId = (fieldName: string) => `detail-panel-field-${fieldName}`
+export const getFieldId = (fieldName: string) => `detail-panel-field-${fieldName}`;

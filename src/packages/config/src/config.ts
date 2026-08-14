@@ -83,7 +83,9 @@ export interface ServerlessOfflineConfig {
 }
 
 export interface StartOptions {
-	onResolveEsbuildConfiguration: (options: ESBuildOptions) => Promise<ESBuildOptions> | ESBuildOptions;
+	onResolveEsbuildConfiguration: (
+		options: ESBuildOptions
+	) => Promise<ESBuildOptions> | ESBuildOptions;
 	onResolveViteConfiguration: (options: InlineConfig) => Promise<InlineConfig> | InlineConfig;
 	onResolveServerlessOfflineConfiguration: (
 		options: ServerlessOfflineConfig
@@ -91,7 +93,9 @@ export interface StartOptions {
 }
 
 export interface BuildOptions {
-	onResolveEsbuildConfiguration: (options: ESBuildOptions) => Promise<ESBuildOptions> | ESBuildOptions;
+	onResolveEsbuildConfiguration: (
+		options: ESBuildOptions
+	) => Promise<ESBuildOptions> | ESBuildOptions;
 	onResolveViteConfiguration: (options: InlineConfig) => Promise<InlineConfig> | InlineConfig;
 }
 

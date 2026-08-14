@@ -19,7 +19,12 @@ describe('deleteMany mutations', () => {
 		// Create
 		const { data: createData } = await request<{ createArtists: Artist[] }>(config.baseUrl)
 			.mutate(CREATE_MANY_ARTISTS)
-			.variables({ input: [{ artistId: '276', name: 'To Delete One' }, { artistId: '277', name: 'To Delete Two' }] })
+			.variables({
+				input: [
+					{ artistId: '276', name: 'To Delete One' },
+					{ artistId: '277', name: 'To Delete Two' },
+				],
+			})
 			.expectNoErrors();
 
 		expect(createData?.createArtists).toHaveLength(2);
@@ -71,7 +76,12 @@ describe('deleteMany mutations', () => {
 		// Create
 		const { data: createData } = await request<{ createArtists: Artist[] }>(config.baseUrl)
 			.mutate(CREATE_MANY_ARTISTS)
-			.variables({ input: [{ artistId: '276', name: 'Temporary One' }, { artistId: '277', name: 'Temporary Two' }] })
+			.variables({
+				input: [
+					{ artistId: '276', name: 'Temporary One' },
+					{ artistId: '277', name: 'Temporary Two' },
+				],
+			})
 			.expectNoErrors();
 
 		const ids = createData?.createArtists?.map((a) => a.artistId) ?? [];

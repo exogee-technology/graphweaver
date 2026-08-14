@@ -118,7 +118,16 @@ void yargs
 					type: 'boolean',
 					describe: 'Whether to allow client generated primary keys for introspected entities.',
 				}),
-		handler: async ({ source, database, host, port, password, user, overwrite, clientGeneratedPrimaryKeys }) => {
+		handler: async ({
+			source,
+			database,
+			host,
+			port,
+			password,
+			user,
+			overwrite,
+			clientGeneratedPrimaryKeys,
+		}) => {
 			console.log('Importing data source...');
 			// Do we have any pre-configured options?
 			const { import: importOptions } = config();
@@ -131,7 +140,8 @@ void yargs
 				if (user === undefined) user = importOptions.user;
 				if (password === undefined) password = importOptions.password;
 				if (overwrite === undefined) overwrite = importOptions.overwrite;
-				if (clientGeneratedPrimaryKeys === undefined) clientGeneratedPrimaryKeys = importOptions.clientGeneratedPrimaryKeys;
+				if (clientGeneratedPrimaryKeys === undefined)
+					clientGeneratedPrimaryKeys = importOptions.clientGeneratedPrimaryKeys;
 			}
 
 			if (source) console.log(`Source: ${source}`);
@@ -149,7 +159,16 @@ void yargs
 				throw new Error(`Unsupported source: ${source}`);
 			}
 
-			await importDataSource(source, database, host, port, password, user, overwrite, clientGeneratedPrimaryKeys);
+			await importDataSource(
+				source,
+				database,
+				host,
+				port,
+				password,
+				user,
+				overwrite,
+				clientGeneratedPrimaryKeys
+			);
 		},
 	})
 	.command({
@@ -329,16 +348,16 @@ void yargs
 
 				console.log('Waiting for changes... \n\n');
 
-			// Restart the process on file change
-			watcher.on('change', () => {
-				void (async () => {
-					console.log('File changed. Rebuilding generated files...');
-					await buildBackend();
-					await generateTypes();
-					console.log('Rebuild complete.\n\n');
-					console.log('Waiting for changes... \n\n');
-				})();
-			});
+				// Restart the process on file change
+				watcher.on('change', () => {
+					void (async () => {
+						console.log('File changed. Rebuilding generated files...');
+						await buildBackend();
+						await generateTypes();
+						console.log('Rebuild complete.\n\n');
+						console.log('Waiting for changes... \n\n');
+					})();
+				});
 			}
 		},
 	})

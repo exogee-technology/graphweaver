@@ -9,6 +9,11 @@ export class Playlist {
 	@Property({ fieldName: 'Name', type: 'string', length: 120, nullable: true })
 	name?: string;
 
-	@ManyToMany({ entity: () => Track, pivotTable: 'PlaylistTrack', joinColumn: 'PlaylistId', inverseJoinColumn: 'TrackId' })
+	@ManyToMany({
+		entity: () => Track,
+		pivotTable: 'PlaylistTrack',
+		joinColumn: 'PlaylistId',
+		inverseJoinColumn: 'TrackId',
+	})
 	tracks = new Collection<Track>(this);
 }

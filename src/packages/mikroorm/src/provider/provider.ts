@@ -585,10 +585,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	@TraceMethod()
-	public async updateMany(
-		updateItems: Partial<D>[],
-		trace?: TraceOptions
-	): Promise<D[]> {
+	public async updateMany(updateItems: Partial<D>[], trace?: TraceOptions): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - updateMany ${this.entityType.name}`);
 		logger.trace(
 			{ updateItems: sanitiseFilterForLogging(updateItems), entity: this.entityType.name },
@@ -605,9 +602,15 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 					if (!primaryKey) throw new Error('You must pass an ID for this entity to update it.');
 
 					// Find the entity in the database
-					const entity = await this.database.em.findOneOrFail(this.entityType, { [primaryKeyField]: primaryKey } as any, {
-						populate: [...this.visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
-					});
+					const entity = await this.database.em.findOneOrFail(
+						this.entityType,
+						{ [primaryKeyField]: primaryKey } as any,
+						{
+							populate: [
+								...this.visitPathForPopulate(this.entityType.name, item),
+							] as `${string}.`[],
+						}
+					);
 
 					// For an update we also want to go ahead and remove the primary key if it's autoincremented, as
 					// users should not be able to change the primary key. There are also scenarios like
@@ -649,11 +652,15 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 					const { [primaryKeyField]: primaryKey } = item as any;
 
 					if (primaryKey) {
-						entity = await this.database.em.findOne(this.entityType, { [primaryKeyField]: primaryKey }, {
-							populate: [
-								...this.visitPathForPopulate(this.entityType.name, item),
-							] as `${string}.`[],
-						});
+						entity = await this.database.em.findOne(
+							this.entityType,
+							{ [primaryKeyField]: primaryKey },
+							{
+								populate: [
+									...this.visitPathForPopulate(this.entityType.name, item),
+								] as `${string}.`[],
+							}
+						);
 
 						if (entity) {
 							logger.trace({ item, entity: this.entityType.name }, 'Running update with item');
@@ -661,7 +668,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 						} else if (clientGeneratedPrimaryKeys) {
 							entity = new this.entityType();
 							await this.mapAndAssignKeys(entity, this.entityType, item);
-							logger.trace({ item, entity: this.entityType.name }, 'Running create with client-generated key');
+							logger.trace(
+								{ item, entity: this.entityType.name },
+								'Running create with client-generated key'
+							);
 						} else {
 							throw new Error(
 								`Entity ${this.entityType.name} with primary key '${primaryKey}' not found and clientGeneratedPrimaryKeys is not enabled.`

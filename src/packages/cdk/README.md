@@ -4,17 +4,17 @@ This package simplifies the deployment of your Graphweaver GraphQL applications 
 
 ## Features
 
-* AWS CDK Integration: Easily define your infrastructure as code.
-* GraphQL Backend: Handles deployment and configuration of your GraphQL API.
-* Admin UI: Deploys and secures the Graphweaver admin interface.
-* Database: Deploys and secures a Postgres database and connects it to the backend.
-* Customizable: Tailor API domain, certificates, environment variables, and more.
+- AWS CDK Integration: Easily define your infrastructure as code.
+- GraphQL Backend: Handles deployment and configuration of your GraphQL API.
+- Admin UI: Deploys and secures the Graphweaver admin interface.
+- Database: Deploys and secures a Postgres database and connects it to the backend.
+- Customizable: Tailor API domain, certificates, environment variables, and more.
 
 ## Prerequisites
 
-* AWS Account: You'll need an active AWS account.
-* AWS CDK: Ensure the AWS CDK Toolkit is installed and configured.
-* Node.js and pnpm: For development and package management.
+- AWS Account: You'll need an active AWS account.
+- AWS CDK: Ensure the AWS CDK Toolkit is installed and configured.
+- Node.js and pnpm: For development and package management.
 
 ## Installation
 
@@ -35,7 +35,7 @@ import { Vpc, SecurityGroup, Port} from 'aws-cdk-lib/aws-ec2';
 
 const app = new App();
 const stack = new Stack(app, 'GraphweaverStack');
-const vpc = new Vpc(stack, 'GraphweaverVpc'); 
+const vpc = new Vpc(stack, 'GraphweaverVpc');
 
 // Create Security Group for the Database
 const dbSecurityGroup = new SecurityGroup(this, 'DbSecurityGroup', {

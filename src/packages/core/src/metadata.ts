@@ -635,7 +635,9 @@ class Metadata {
 	}
 
 	// get the metadata by provider.entityType (if it exists)
-	public getEntityMetadataByDataEntity<G = unknown, D = unknown>(dataEntityClass: unknown): EntityMetadata<G, D> | undefined {
+	public getEntityMetadataByDataEntity<G = unknown, D = unknown>(
+		dataEntityClass: unknown
+	): EntityMetadata<G, D> | undefined {
 		if (typeof dataEntityClass !== 'function') return undefined;
 
 		const entityClass = this.typeByDataEntityLookup.get(dataEntityClass);

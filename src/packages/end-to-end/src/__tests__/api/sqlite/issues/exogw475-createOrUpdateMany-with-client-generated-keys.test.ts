@@ -1,11 +1,7 @@
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	Entity as DataEntity,
-	PrimaryKey,
-	Property,
-} from '@mikro-orm/core';
+import { Entity as DataEntity, PrimaryKey, Property } from '@mikro-orm/core';
 import {
 	Field,
 	ID,
@@ -59,18 +55,14 @@ graphweaverMetadata.addMutation({
 	name: 'exampleCreateMutation',
 	getType: () => [User],
 	resolver: async () => {
-		const userEntity = graphweaverMetadata.getEntityByName(
-			'User'
-		) as EntityMetadata<User, OrmUser>;
+		const userEntity = graphweaverMetadata.getEntityByName('User') as EntityMetadata<User, OrmUser>;
 
 		const users = await userEntity.provider!.createOrUpdateMany([
-			{customPrimaryKeyField: 100, username: 'example_mutation', email: 'example@test.com'},
-			{username: 'example_mutation_2', email: 'example2@test.com'},
+			{ customPrimaryKeyField: 100, username: 'example_mutation', email: 'example@test.com' },
+			{ username: 'example_mutation_2', email: 'example2@test.com' },
 		]);
 
-		return users.map(user =>
-			fromBackendEntity(userEntity, user)
-		);
+		return users.map((user) => fromBackendEntity(userEntity, user));
 	},
 });
 
@@ -78,17 +70,13 @@ graphweaverMetadata.addMutation({
 	name: 'exampleUpdateMutation',
 	getType: () => [User],
 	resolver: async () => {
-		const userEntity = graphweaverMetadata.getEntityByName(
-			'User'
-		) as EntityMetadata<User, OrmUser>;
+		const userEntity = graphweaverMetadata.getEntityByName('User') as EntityMetadata<User, OrmUser>;
 
 		const users = await userEntity.provider!.createOrUpdateMany([
-			{customPrimaryKeyField: 100, username: 'updated_mutation', email: 'updated@test.com'},
+			{ customPrimaryKeyField: 100, username: 'updated_mutation', email: 'updated@test.com' },
 		]);
 
-		return users.map(user =>
-			fromBackendEntity(userEntity, user)
-		);
+		return users.map((user) => fromBackendEntity(userEntity, user));
 	},
 });
 
@@ -107,7 +95,9 @@ beforeAll(async () => {
 	assert(em !== undefined);
 	await em
 		.getConnection()
-		.execute('CREATE TABLE user (custom_primary_key_field INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT)');
+		.execute(
+			'CREATE TABLE user (custom_primary_key_field INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT)'
+		);
 });
 
 afterAll(async () => {

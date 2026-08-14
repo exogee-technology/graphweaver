@@ -58,5 +58,6 @@ export const resetDatabase = async () => {
 };
 
 export function bodyHasText(searchText: string | RegExp) {
-	return async (response: Response) => (await response.body()).toString().match(searchText) !== null;
+	return async (response: Response) =>
+		(await response.body()).toString().match(searchText) !== null;
 }

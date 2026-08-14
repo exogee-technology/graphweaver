@@ -88,19 +88,24 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	async decodeToken(authToken: string): Promise<JwtPayload> {
 		const token = removeAuthPrefixIfPresent(authToken);
 		return new Promise((resolve, reject) => {
-			jwt.verify(token, this.getSigningKey.bind(this), { algorithms: [algorithm] }, (err, payload) => {
-				if (err) {
-					safeErrorLog(logger, err);
-					return reject(err instanceof Error ? err : new Error(String(err)));
-				}
+			jwt.verify(
+				token,
+				this.getSigningKey.bind(this),
+				{ algorithms: [algorithm] },
+				(err, payload) => {
+					if (err) {
+						safeErrorLog(logger, err);
+						return reject(err instanceof Error ? err : new Error(String(err)));
+					}
 
-				if (typeof payload === 'string' || payload == undefined) {
-					logger.error('JWT token payload is not an object');
-					return reject(new Error('Verification of token failed'));
-				}
+					if (typeof payload === 'string' || payload == undefined) {
+						logger.error('JWT token payload is not an object');
+						return reject(new Error('Verification of token failed'));
+					}
 
-				return resolve(payload);
-			});
+					return resolve(payload);
+				}
+			);
 		});
 	}
 

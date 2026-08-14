@@ -6,13 +6,16 @@ export interface APIOptions {
 	clientGeneratedPrimaryKeys?: boolean;
 }
 
-export const startIntrospection = async (databaseOptions: DatabaseOptions, apiOptions?: APIOptions) => {
+export const startIntrospection = async (
+	databaseOptions: DatabaseOptions,
+	apiOptions?: APIOptions
+) => {
 	if (!databaseOptions.source) {
 		throw new Error('No source specified, please specify a data source.');
 	}
 
 	return introspection(
-		databaseOptions.source, 
+		databaseOptions.source,
 		{
 			mikroOrmConfig: {
 				host: databaseOptions.host,
@@ -22,6 +25,6 @@ export const startIntrospection = async (databaseOptions: DatabaseOptions, apiOp
 				port: databaseOptions.port,
 			},
 		},
-		apiOptions,
+		apiOptions
 	);
 };

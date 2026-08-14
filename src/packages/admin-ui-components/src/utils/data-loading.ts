@@ -13,7 +13,10 @@ export const queryForEntityEdit = (entity: Entity, entityByType?: (type: string)
 	return gql`
 		query AdminUIDetail($id: ID!) {
 			result: ${queryName}(id: $id) {
-				${generateGqlSelectForEntityFields(entity.fields.filter((field) => !field.hideInDetailForm), entityByType)}
+				${generateGqlSelectForEntityFields(
+					entity.fields.filter((field) => !field.hideInDetailForm),
+					entityByType
+				)}
 			}
 		}
 	`;

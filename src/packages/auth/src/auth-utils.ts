@@ -128,7 +128,7 @@ export const requiredPermissionsForAction = (
 };
 
 const permissionsErrorHandler = (error: any) => {
-	if ((error).name === 'NotFoundError') {
+	if (error.name === 'NotFoundError') {
 		logger.trace(
 			'Raising ForbiddenError: Could not find object in database (likely because a query did not pass a permission filter)'
 		);

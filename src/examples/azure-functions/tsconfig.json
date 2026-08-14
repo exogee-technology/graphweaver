@@ -11,17 +11,10 @@
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"types": [
-			"*"
-		]
+		"types": ["*"]
 	},
-	"exclude": [
-		"**/node_modules/**",
-		"**/lib/**"
-	],
-	"include": [
-		"./src"
-	],
+	"exclude": ["**/node_modules/**", "**/lib/**"],
+	"include": ["./src"],
 	"references": [
 		{
 			"path": "../../packages/builder"

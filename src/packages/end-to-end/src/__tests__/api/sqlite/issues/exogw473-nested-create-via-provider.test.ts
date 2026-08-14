@@ -99,9 +99,7 @@ graphweaverMetadata.addMutation({
 	name: 'exampleMutation',
 	getType: () => User,
 	resolver: async () => {
-		const userEntity = graphweaverMetadata.getEntityByName(
-			'User'
-		) as EntityMetadata<User, OrmUser>;
+		const userEntity = graphweaverMetadata.getEntityByName('User') as EntityMetadata<User, OrmUser>;
 
 		const user = await userEntity.provider!.createOne({
 			id: '1',

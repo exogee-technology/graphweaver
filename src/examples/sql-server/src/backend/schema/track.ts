@@ -15,7 +15,7 @@ export class Track {
 	@Field(() => ID, { primaryKeyField: true })
 	trackId!: number;
 
-	@Field(() => String, { adminUIOptions: {summaryField:true} })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	name!: string;
 
 	@RelationshipField<Track>(() => Album, { id: (entity) => entity.album?.albumId, nullable: true })

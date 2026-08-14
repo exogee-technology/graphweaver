@@ -11,7 +11,7 @@ export class Genre {
 	@Field(() => ID, { primaryKeyField: true })
 	genreId!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: {summaryField:true} })
+	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
 	@RelationshipField<Track>(() => [Track], { relatedField: 'genre' })

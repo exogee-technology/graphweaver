@@ -170,9 +170,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			);
 
 			// Check for any rejected promises and throw the first error
-			const errors = results.filter(
-				(result) => result.status === 'rejected'
-			);
+			const errors = results.filter((result) => result.status === 'rejected');
 			if (errors.length > 0) {
 				const reason = errors[0].reason;
 				// Make sure we're throwing an Error object
@@ -331,11 +329,9 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 
 	const rootOperationId = randomUUID();
 	if (Array.isArray(rootInput)) {
-		await traverse(rootInput, rootMeta, rootInfo, rootContext, rootOperationId, 0).catch(
-			(e) => {
-				throw e;
-			}
-		);
+		await traverse(rootInput, rootMeta, rootInfo, rootContext, rootOperationId, 0).catch((e) => {
+			throw e;
+		});
 	} else {
 		throw new Error(`Unexpected Error: trying to create entity ${rootMeta.name}`);
 	}

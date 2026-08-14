@@ -11,7 +11,7 @@ export class Artist {
 	@Field(() => ID, { primaryKeyField: true })
 	artistId!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: {summaryField:true} })
+	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
 	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })

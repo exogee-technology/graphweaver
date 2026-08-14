@@ -56,16 +56,18 @@ export const createProvider = <Context, D extends WithId>(options: ProviderOptio
 			this.remove = remove;
 			this.dataEntity = dataEntity;
 
-		this.initFn = new Promise<void>((resolve, reject) => {
-			if (!init) {
-				resolve();
-				return;
-			}
-			init().then((context) => {
-				this.context = context;
-				resolve();
-			}).catch(reject);
-		});
+			this.initFn = new Promise<void>((resolve, reject) => {
+				if (!init) {
+					resolve();
+					return;
+				}
+				init()
+					.then((context) => {
+						this.context = context;
+						resolve();
+					})
+					.catch(reject);
+			});
 		}
 
 		_mapDataEntity(dataEntity: D): D {

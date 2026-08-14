@@ -142,14 +142,11 @@ describe('One Time Password Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		jest.spyOn(OneTimePassword.prototype, 'getOTP').mockImplementation(
-			async () =>
-				({
-					userId: user.id,
-					data: { code: MOCK_CODE },
-					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
-				})
-		);
+		jest.spyOn(OneTimePassword.prototype, 'getOTP').mockImplementation(async () => ({
+			userId: user.id,
+			data: { code: MOCK_CODE },
+			createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
+		}));
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,

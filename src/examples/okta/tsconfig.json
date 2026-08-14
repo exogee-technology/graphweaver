@@ -12,17 +12,10 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"jsx": "react-jsx",
-		"types": [
-			"*"
-		]
+		"types": ["*"]
 	},
-	"include": [
-		"./src"
-	],
-	"exclude": [
-		"**/node_modules/**",
-		"**/lib/**"
-	],
+	"include": ["./src"],
+	"exclude": ["**/node_modules/**", "**/lib/**"],
 	"references": [
 		{
 			"path": "../../packages/admin-ui-components"

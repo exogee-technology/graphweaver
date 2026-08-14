@@ -355,13 +355,13 @@ const graphQLTypeForInput = (
 						}
 
 						fields[field.name] = { type: graphQLType };
-				} catch (e) {
-					safeErrorLog(logger, e);
-					throw new Error(
-						`Error while generating schema for input type. Field: ${field.name}, Type: ${String(field.getType())}, Input: ${input.name}. Original Error: ${e}`,
-						{ cause: e }
-					);
-				}
+					} catch (e) {
+						safeErrorLog(logger, e);
+						throw new Error(
+							`Error while generating schema for input type. Field: ${field.name}, Type: ${String(field.getType())}, Input: ${input.name}. Original Error: ${e}`,
+							{ cause: e }
+						);
+					}
 				}
 
 				return fields;
@@ -447,13 +447,13 @@ export const graphQLTypeForEntity = (
 								directives: field.directives ?? {},
 							},
 						};
-				} catch (e) {
-					safeErrorLog(logger, e);
-					throw new Error(
-						`Error while generating schema for entity. Field: ${field.name}, Type: ${String(field.getType())}, Entity: ${entity.name}. Original Error: ${e}`,
-						{ cause: e }
-					);
-				}
+					} catch (e) {
+						safeErrorLog(logger, e);
+						throw new Error(
+							`Error while generating schema for entity. Field: ${field.name}, Type: ${String(field.getType())}, Entity: ${entity.name}. Original Error: ${e}`,
+							{ cause: e }
+						);
+					}
 
 					// If the it's a related entity and the provider supports it, we should add aggregation to the relationship.
 					if (
@@ -741,7 +741,7 @@ const deleteOneTypeForEntity = (
 			extensions: { graphweaverSchemaType: 'deleteOneFilterInput' },
 			fields: {
 				[primaryKeyFieldName]: { type: new GraphQLNonNull(ID) },
-			}
+			},
 		});
 
 		typeCache.deleteOneTypes.set(entity.name, deleteType);
@@ -940,13 +940,13 @@ class SchemaBuilderImplementation {
 						? { defaultValue: details.defaultValue }
 						: {}),
 				};
-		} catch (e) {
-			safeErrorLog(logger, e);
-			throw new Error(
-				`Error while generating schema for args. Name: ${name}, Details: ${details}, Args: ${JSON.stringify(args)}. Original Error: ${e}`,
-				{ cause: e }
-			);
-		}
+			} catch (e) {
+				safeErrorLog(logger, e);
+				throw new Error(
+					`Error while generating schema for args. Name: ${name}, Details: ${details}, Args: ${JSON.stringify(args)}. Original Error: ${e}`,
+					{ cause: e }
+				);
+			}
 		}
 
 		return map;
@@ -1062,13 +1062,13 @@ class SchemaBuilderImplementation {
 								},
 							};
 						}
-				} catch (e) {
-					safeErrorLog(logger, e);
-					throw new Error(
-						`Error while generating schema for custom query. Name: ${customQuery.name}, Type: ${String(customQuery.getType())}, Args: ${JSON.stringify(customQuery.args)}. Original Error: ${e}`,
-						{ cause: e }
-					);
-				}
+					} catch (e) {
+						safeErrorLog(logger, e);
+						throw new Error(
+							`Error while generating schema for custom query. Name: ${customQuery.name}, Type: ${String(customQuery.getType())}, Args: ${JSON.stringify(customQuery.args)}. Original Error: ${e}`,
+							{ cause: e }
+						);
+					}
 				}
 				return fields;
 			},

@@ -12,7 +12,7 @@ export class Album {
 	@Field(() => ID, { primaryKeyField: true })
 	albumId!: number;
 
-	@Field(() => String, { adminUIOptions: {summaryField:true} })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	title!: string;
 
 	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.artistId })

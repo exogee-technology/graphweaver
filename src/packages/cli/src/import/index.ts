@@ -71,7 +71,7 @@ export const importDataSource = async (
 	password?: string,
 	user?: string,
 	overwriteAllFiles?: boolean,
-	clientGeneratedPrimaryKeys?: boolean,
+	clientGeneratedPrimaryKeys?: boolean
 ) => {
 	const databaseOptions = await promptForDatabaseOptions({
 		source,
