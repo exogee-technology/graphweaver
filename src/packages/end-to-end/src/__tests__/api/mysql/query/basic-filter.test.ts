@@ -1,3 +1,4 @@
+import { describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 

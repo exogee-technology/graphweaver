@@ -1,3 +1,4 @@
+import { before, describe, test } from 'node:test';
 import { CHARSET, GraphweaverFuzzClient, request } from '../utils';
 import { mathOperations, likeOperations } from '@exogee/graphweaver/src/operations';
 
@@ -11,12 +12,12 @@ const FIVE_SECONDS = 5 * 1000;
 const fuzzer = new GraphweaverFuzzClient();
 
 describe('Read operations (queries)', () => {
-	beforeAll(async () => {
+	before(async () => {
 		// From the REST with auth example README
 		await fuzzer.loginPassword('luke', 'lightsaber123');
 	});
 
-	test('Tasks', async () => {
+	test('Tasks', { timeout: 10_000 }, async () => {
 		const query = request`query tasks($filter: TasksListFilter!) { tasks(filter: $filter) { id description } }`;
 
 		const { data } = await fuzzer.makeRequest<{ tasks: Task[] }>(query, {
@@ -35,9 +36,9 @@ describe('Read operations (queries)', () => {
 			}
 			expect(expectedTaskIds.length).toBeGreaterThanOrEqual(tasks.length);
 		}
-	}, 10_000);
+	});
 
-	test('Blind MySQLi', async () => {
+	test('Blind MySQLi', { timeout: 10_000 }, async () => {
 		const taskQuery = request`query tasks($filter: TasksListFilter!) { tasks(filter: $filter) { id description } }`;
 		const payload = "'-SLEEP(30); #";
 
@@ -59,5 +60,5 @@ describe('Read operations (queries)', () => {
 		await tasksPromise;
 		const endTime = Date.now();
 		expect(endTime - startTime).toBeLessThan(FIVE_SECONDS);
-	}, 10_000);
+	});
 });

@@ -1,3 +1,4 @@
+import { test } from 'node:test';
 import { AdminUiEntityMetadata, Entity, Field, ID } from '@exogee/graphweaver';
 import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import Graphweaver from '@exogee/graphweaver-server';

@@ -1,3 +1,4 @@
+import { after, before, describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
@@ -14,8 +15,8 @@ import {
 } from '../../shared';
 
 describe('create mutations', () => {
-	beforeAll(resetDatabase);
-	afterAll(resetDatabase);
+	before(resetDatabase);
+	after(resetDatabase);
 
 	test('should create a standalone artist', async () => {
 		const response = await request<{ createArtist: Artist }>(config.baseUrl)

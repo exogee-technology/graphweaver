@@ -1,3 +1,4 @@
+import { after, before, beforeEach, describe, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -133,7 +134,7 @@ type UserResult = {
 const graphweaver = new Graphweaver();
 let em: EntityManager | undefined = undefined;
 
-beforeAll(async () => {
+before(async () => {
 	const connectionResult = await ConnectionManager.connect('exogw473', connection);
 	em = connectionResult?.em;
 	assert(em !== undefined);
@@ -145,7 +146,7 @@ beforeAll(async () => {
 		.execute('CREATE TABLE task (id TEXT PRIMARY KEY, description TEXT, user_id TEXT)');
 });
 
-afterAll(async () => {
+after(async () => {
 	assert(em !== undefined);
 	await em.getConnection().execute('DROP TABLE task');
 	await em.getConnection().execute('DROP TABLE user');

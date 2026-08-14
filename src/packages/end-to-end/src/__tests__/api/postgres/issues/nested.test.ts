@@ -1,6 +1,7 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 process.env.DATABASE = 'sqlite';
 
+import { after, before, beforeEach, describe, it } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -214,7 +215,7 @@ export class ChildWithBackendId {
 const graphweaver = new Graphweaver();
 let em: EntityManager | undefined = undefined;
 
-beforeAll(async () => {
+before(async () => {
 	const connectionResult = await ConnectionManager.connect('sqlite', connection);
 	em = connectionResult?.em;
 	assert(em !== undefined);
@@ -250,7 +251,7 @@ beforeAll(async () => {
 		);
 });
 
-afterAll(async () => {
+after(async () => {
 	assert(em !== undefined);
 	await em.getConnection().execute('DROP TABLE RootWithClientId');
 	await em.getConnection().execute('DROP TABLE RootWithBackendId');

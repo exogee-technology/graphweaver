@@ -169,6 +169,16 @@
 				"prefer-rest-params": "error",
 				"prefer-spread": "error"
 			}
+		},
+		{
+			"files": [
+				"packages/end-to-end/src/__tests__/api/**/*.{ts,tsx}",
+				"packages/end-to-end/src/__tests__/fuzzer/**/*.{ts,tsx}"
+			],
+			"rules": {
+				// node:test's describe/test return Promises; top-level suite registration is intentional.
+				"typescript/no-floating-promises": "off"
+			}
 		}
 	]
 }

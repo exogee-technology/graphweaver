@@ -1,5 +1,6 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
+import { before, describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -85,7 +86,7 @@ const graphweaver = new Graphweaver();
 let token: string | undefined;
 
 describe('ACL - Nested Before Hook', () => {
-	beforeAll(async () => {
+	before(async () => {
 		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({

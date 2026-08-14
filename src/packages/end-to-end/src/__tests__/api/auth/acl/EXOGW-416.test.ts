@@ -1,6 +1,7 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 process.env.DATABASE = 'sqlite';
 
+import { after, before, describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -133,7 +134,7 @@ let token: string | undefined;
 let em: EntityManager | undefined = undefined;
 
 describe('Nested entity queries should not bypass row-level security', () => {
-	beforeAll(async () => {
+	before(async () => {
 		const connectionResult = await ConnectionManager.connect('sqlite', connection);
 		em = connectionResult?.em;
 		assert(em !== undefined);
@@ -190,7 +191,7 @@ describe('Nested entity queries should not bypass row-level security', () => {
 		expect(token).toContain('Bearer ');
 	});
 
-	afterAll(async () => {
+	after(async () => {
 		// delete the task, tag, and task_tags tables
 		await em?.getConnection().execute('DROP TABLE `Task`');
 		await em?.getConnection().execute('DROP TABLE `Tag`');

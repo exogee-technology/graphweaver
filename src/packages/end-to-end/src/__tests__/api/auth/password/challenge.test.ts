@@ -1,6 +1,7 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN = '30m';
 
+import { describe, test } from 'node:test';
 import MockDate from 'mockdate';
 import gql from 'graphql-tag';
 import assert from 'assert';

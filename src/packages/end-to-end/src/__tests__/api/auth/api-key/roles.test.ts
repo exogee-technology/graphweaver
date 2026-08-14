@@ -1,5 +1,6 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
+import { before, describe, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -107,7 +108,7 @@ setAddUserToContext(async () => ({}) as UserProfile<any>);
 const graphweaver = new Graphweaver();
 
 describe('Role Assignment for API Key Authentication', () => {
-	beforeAll(async () => {
+	before(async () => {
 		await ConnectionManager.connect('InMemory', connection);
 		const database = ConnectionManager.database('InMemory');
 		await database?.orm.schema.createSchema();

@@ -1,3 +1,4 @@
+import { after, before, describe, test } from 'node:test';
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
@@ -12,8 +13,8 @@ import {
 } from '../../shared';
 
 describe('deleteMany mutations', () => {
-	beforeAll(resetDatabase, 30_000);
-	afterAll(resetDatabase, 30_000);
+	before(resetDatabase, { timeout: 30_000 });
+	after(resetDatabase, { timeout: 30_000 });
 
 	test('should create then delete multiple artists', async () => {
 		// Create

@@ -1,3 +1,4 @@
+import { describe, test } from 'node:test';
 import { GraphweaverFuzzClient, loginRequest, RequestError } from '../utils';
 
 // TODO: Use env variable

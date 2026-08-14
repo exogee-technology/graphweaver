@@ -1,5 +1,6 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
+import { describe, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 

@@ -1,3 +1,4 @@
+import { describe, mock, test } from 'node:test';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -139,8 +140,11 @@ describe('Magic Link Authentication - Login', () => {
 			},
 		]);
 		expect(redeemMagicLinkSpy.mock.callCount()).toBe(1);
-		expect(redeemMagicLinkSpy.mock.calls[0].arguments).toEqual(['1', {
-			data: { token: MOCK_TOKEN, redeemedAt },
-		}]);
+		expect(redeemMagicLinkSpy.mock.calls[0].arguments).toEqual([
+			'1',
+			{
+				data: { token: MOCK_TOKEN, redeemedAt },
+			},
+		]);
 	});
 });
