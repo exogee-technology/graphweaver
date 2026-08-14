@@ -57,6 +57,8 @@
 		"esbuild": "0.28.1",
 		"prettier": "3.6.2",
 		"typescript": "7.0.2",
-		"vite": "7.3.2"
+		"vite": "7.3.2",
+		"@types/react": "19.2.13",
+		"@types/react-dom": "19.2.3"
 	}
 }

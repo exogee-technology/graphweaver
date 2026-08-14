@@ -17,11 +17,7 @@
 		"noImplicitThis": true,
 		"noUnusedLocals": false,
 
-		"baseUrl": ".",
-		"paths": {
-			"*": ["@types/*"]
-		},
-		"typeRoots": ["@types", "node_modules/@types"],
+		"types": ["*"],
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 
@@ -30,7 +26,6 @@
 
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"ignoreDeprecations": "5.0",
 		"sourceMap": true
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"]

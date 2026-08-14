@@ -9,6 +9,7 @@ import { myConnection } from '../database';
 
 export const mapUserToProfile = async (user: User): Promise<UserProfile<Roles>> => {
 	const database = ConnectionManager.database(myConnection.connectionManagerId);
+	if (!database) throw new Error('Database connection not found');
 	const credential = await database.em.findOneOrFail(Credential, { id: user.url });
 
 	return new UserProfile({

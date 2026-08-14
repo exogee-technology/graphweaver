@@ -10,14 +10,30 @@
 		"moduleResolution": "bundler",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"types": [
+			"*"
+		]
 	},
-	"exclude": ["**/node_modules/**", "**/lib/**"],
-	"include": ["./src"],
+	"exclude": [
+		"**/node_modules/**",
+		"**/lib/**"
+	],
+	"include": [
+		"./src"
+	],
 	"references": [
-		{ "path": "../../packages/admin-ui-components" },
-		{ "path": "../../packages/builder" },
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/server" }
+		{
+			"path": "../../packages/admin-ui-components"
+		},
+		{
+			"path": "../../packages/builder"
+		},
+		{
+			"path": "../../packages/core"
+		},
+		{
+			"path": "../../packages/server"
+		}
 	]
 }

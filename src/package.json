@@ -38,6 +38,7 @@
 		"@bessonovs/set-project-references": "0.0.10",
 		"@eslint/js": "10.0.1",
 		"@types/eslint-config-prettier": "6.11.3",
+		"@types/node": "24.10.0",
 		"concurrently": "9.2.1",
 		"eslint": "10.4.0",
 		"eslint-config-prettier": "10.1.8",

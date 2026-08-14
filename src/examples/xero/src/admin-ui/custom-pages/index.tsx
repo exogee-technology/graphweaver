@@ -53,10 +53,12 @@ export const customPages = {
 
 		return [
 			{ name: 'All Companies', route: '/xero-dashboard' },
-			...data.tenants.map((tenant) => ({
-				name: tenant.tenantName,
-				route: `/xero-dashboard/${tenant.id}`,
-			})),
+			...data.tenants
+				.filter((tenant): tenant is NonNullable<typeof tenant> => tenant != null)
+				.map((tenant) => ({
+					name: tenant.tenantName,
+					route: `/xero-dashboard/${tenant.id}`,
+				})),
 		];
 	},
 };

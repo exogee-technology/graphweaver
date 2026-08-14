@@ -24,7 +24,11 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 
 	for (const data of report.reports) {
 		// Find the date buckets from the header. These are used later when adding rows.
-		const dates = data.rows?.[0].cells.slice(1).map(({ value }) => new Date(value));
+		const headerRow = data.rows?.[0];
+		const dates = headerRow?.cells
+			?.slice(1)
+			.map(({ value }) => new Date(value ?? ''))
+			.filter((date) => !Number.isNaN(date.getTime()));
 
 		if (!Array.isArray(dates)) {
 			console.warn('Could not read dates from report. Skipping.');
@@ -32,40 +36,42 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 		}
 
 		// Ok, read the rows.
-		for (const section of data.rows.slice(1)) {
+		for (const section of data.rows?.slice(1) ?? []) {
 			if (section.rowType === RowType.Section) {
-				for (const row of section.rows) {
-					const [description, ...otherCells] = row.cells;
+				for (const row of section.rows ?? []) {
+					const [description, ...otherCells] = row.cells ?? [];
+					if (!description) continue;
 
 					// We're using a normal for loop here to correlate each cell with the date
 					// from the header above.
 					for (let i = 0; i < otherCells.length; i++) {
 						const date = dates[i];
 						const value = otherCells[i];
+						if (!date || !value) continue;
 
 						const accountAttribute = value.attributes?.find(
-							(attribute) => attribute.id === 'account' && isUUID(attribute.value)
+							(attribute: { id?: string; value?: string }) =>
+								attribute.id === 'account' && isUUID(attribute.value)
 						);
 
-						results.push(
-							fromBackendEntity(ProfitAndLossRow, {
-								// @todo: This ID will not remain unchanged following a mutation -- though that may not be a problem.
-								id: generateId(
-									tenantId +
-										(accountAttribute?.value ?? '') +
-										(value.value || '') +
-										date.toString() +
-										(description.value || '')
-								),
-								tenantId,
-								accountId: accountAttribute?.value ?? null,
-								amount: parseFloat(value.value),
-								date,
-								description: description.value,
-								isCollection: () => false,
-								isReference: () => false,
-							})
-						);
+						const entity = fromBackendEntity(ProfitAndLossRow, {
+							// @todo: This ID will not remain unchanged following a mutation -- though that may not be a problem.
+							id: generateId(
+								tenantId +
+									(accountAttribute?.value ?? '') +
+									(value.value || '') +
+									date.toString() +
+									(description.value || '')
+							),
+							tenantId,
+							accountId: accountAttribute?.value ?? null,
+							amount: parseFloat(value.value ?? '0'),
+							date,
+							description: description.value,
+							isCollection: () => false,
+							isReference: () => false,
+						});
+						if (entity) results.push(entity);
 					}
 				}
 			}

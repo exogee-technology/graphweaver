@@ -28,6 +28,9 @@ importers:
       '@types/eslint-config-prettier':
         specifier: 6.11.3
         version: 6.11.3
+      '@types/node':
+        specifier: 24.10.0
+        version: 24.10.0
       concurrently:
         specifier: 9.2.1
         version: 9.2.1
@@ -107,6 +110,12 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
+      '@types/react':
+        specifier: 19.2.13
+        version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -144,6 +153,12 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
+      '@types/react':
+        specifier: 19.2.13
+        version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
       graphweaver:
         specifier: workspace:*
         version: link:../../packages/cli
@@ -266,6 +281,15 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
+      '@types/react':
+        specifier: 19.2.13
+        version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
+      '@types/react-syntax-highlighter':
+        specifier: 15.5.13
+        version: 15.5.13
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -352,6 +376,12 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
+      '@types/react':
+        specifier: 19.2.13
+        version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -410,6 +440,12 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
+      '@types/react':
+        specifier: 19.2.13
+        version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -508,6 +544,12 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
+      '@types/react':
+        specifier: 19.2.13
+        version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
       dotenv-cli:
         specifier: 11.0.0
         version: 11.0.0
@@ -581,6 +623,15 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
+      '@types/react':
+        specifier: 19.2.13
+        version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
+      '@types/react-syntax-highlighter':
+        specifier: 15.5.13
+        version: 15.5.13
       dotenv-cli:
         specifier: 11.0.0
         version: 11.0.0
@@ -703,6 +754,9 @@ importers:
       '@types/react':
         specifier: 19.2.13
         version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
       graphweaver:
         specifier: workspace:*
         version: link:../../packages/cli
@@ -791,6 +845,12 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
+      '@types/react':
+        specifier: 19.2.13
+        version: 19.2.13
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.13)
       esbuild:
         specifier: 0.28.1
         version: 0.28.1
@@ -1478,6 +1538,9 @@ importers:
       '@opentelemetry/instrumentation':
         specifier: 0.212.0
         version: 0.212.0(@opentelemetry/api@1.9.0)
+      '@types/node':
+        specifier: 24.10.0
+        version: 24.10.0
       '@types/pluralize':
         specifier: 0.0.33
         version: 0.0.33
@@ -1492,7 +1555,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: 4.1.0
-        version: 4.1.0(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(vite@7.3.2(@types/node@25.2.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.8.2))
+        version: 4.1.0(@opentelemetry/api@1.9.0)(@types/node@24.10.0)(vite@7.3.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.8.2))
 
   packages/end-to-end:
     dependencies:

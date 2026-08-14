@@ -14,13 +14,13 @@ import { Submission } from '../schema';
 @InputType('CreateThumbnailInput')
 class CreateThumbnailInput {
 	@Field(() => ID)
-	submissionId: number;
+	submissionId!: number;
 
 	@Field(() => Number)
-	width: number;
+	width!: number;
 
 	@Field(() => Number)
-	height: number;
+	height!: number;
 }
 
 graphweaverMetadata.addMutation({
@@ -36,11 +36,12 @@ graphweaverMetadata.addMutation({
 	}: ResolverOptions<{ input: CreateThumbnailInput }>) => {
 		// get the metadata of the submission to copy
 		const database = ConnectionManager.database(pgConnection.connectionManagerId);
+		if (!database) throw new Error('Database connection not found');
 		const submission = await database.em.findOneOrFail(Submission, {
 			id: args.input.submissionId.toString(),
 		});
 
-		const filename = submission.image.filename;
+		const filename = submission.image?.filename;
 
 		if (!filename) {
 			throw new Error('No filename attached to submission');

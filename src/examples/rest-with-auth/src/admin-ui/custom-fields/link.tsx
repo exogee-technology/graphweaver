@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import { MouseEvent } from 'react';
 
 import { CustomFieldArgs, OpenExternalIcon } from '@exogee/graphweaver-admin-ui-components';
 
@@ -10,7 +10,7 @@ interface Task {
 }
 
 export const Link = ({ entity }: CustomFieldArgs<Task>) => {
-	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {
+	const handleClick = (e: MouseEvent<HTMLDivElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
 		window.open(`https://google.com/search?q=${entity.user.label}`, '_blank', 'noreferrer');

@@ -38,12 +38,15 @@ export const AllCompanies = () => {
 
 	if (loading) return <Loader />;
 	if (error) return <p>Error loading report rows!</p>;
+	if (!data) return <p>No data</p>;
 
 	const { profitAndLossRows } = data;
+	if (!profitAndLossRows) return <p>No data</p>;
 
 	// Net Profit calculation
 	const tenantNetProfitMap = new Map<string, TenantNetProfitData>();
 	for (const row of profitAndLossRows) {
+		if (!row) continue;
 		// Net profit map per tenant
 		if (!tenantNetProfitMap.has(row.tenant.id)) {
 			tenantNetProfitMap.set(row.tenant.id, { id: row.tenant.tenantName, data: [] });

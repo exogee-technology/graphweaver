@@ -5,6 +5,7 @@
  * with proper dependency handling across related entities.
  */
 
+import { randomUUID } from 'node:crypto';
 import { isDefined } from 'class-validator';
 import {
 	fromBackendEntity,
@@ -235,7 +236,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 						// As we are updating the parent from the child, we can remove this key
 						delete node[key as keyof Partial<G>];
 
-						const newOperationId = crypto.randomUUID();
+						const newOperationId = randomUUID();
 						if (relationship.relationshipInfo?.relatedField) {
 							const relatedField = relationship.relationshipInfo?.relatedField;
 							deps.push([newOperationId, operationId]);
@@ -254,7 +255,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 
 						await traverse(childNode, relatedEntityMetadata, info, context, newOperationId, index);
 					} else if (Object.keys(childNode).length > 0) {
-						const newOperationId = crypto.randomUUID();
+						const newOperationId = randomUUID();
 						if (relationship.relationshipInfo?.id) {
 							delete node[key as keyof Partial<G>];
 							deps.push([operationId, newOperationId]);
@@ -328,7 +329,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 		}
 	}
 
-	const rootOperationId = crypto.randomUUID();
+	const rootOperationId = randomUUID();
 	if (Array.isArray(rootInput)) {
 		await traverse(rootInput, rootMeta, rootInfo, rootContext, rootOperationId, 0).catch(
 			(e) => {
