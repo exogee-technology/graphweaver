@@ -71,7 +71,7 @@ graphweaverMetadata.addMutation({
 		});
 
 		// create the new submission in the database
-		const result = await database.em.create(Submission, {
+		const result = database.em.create(Submission, {
 			image: {
 				filename: upload.filename,
 				type: upload.type,

@@ -80,7 +80,7 @@ export const Okta = () => {
 	};
 
 	useEffect(() => {
-		handleLogin();
+		void handleLogin();
 	}, []);
 
 	if (loading) return <div>Loading...</div>;

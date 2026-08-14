@@ -18,7 +18,7 @@ const friendlyNameForDatabaseType = (type: DatabaseType) => {
 	if (type === 'postgresql') return 'PostgreSQL';
 	if (type === 'sqlite') return 'SQLite';
 
-	throw new Error('Unimplemented database type: ' + type);
+	throw new Error('Unimplemented database type: ' + (type as string));
 };
 
 export class SchemaEntityFile extends BaseFile {

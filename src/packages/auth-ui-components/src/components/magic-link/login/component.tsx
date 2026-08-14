@@ -61,7 +61,7 @@ export const MagicLinkLogin = () => {
 			}
 		};
 
-		if (!initialized.current && token) verifyLink();
+		if (!initialized.current && token) void verifyLink();
 	}, []);
 
 	const handleOnSubmit = async (

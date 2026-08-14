@@ -172,7 +172,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			// Check for any rejected promises and throw the first error
 			const errors = results.filter(
 				(result) => result.status === 'rejected'
-			) as PromiseRejectedResult[];
+			);
 			if (errors.length > 0) {
 				const reason = errors[0].reason;
 				// Make sure we're throwing an Error object
@@ -321,7 +321,7 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 			returnOrder.push(nodeId);
 			return {
 				nodeId,
-				type: type as 'create' | 'update',
+				type: type,
 				processing: operationProcesses,
 			};
 		} else {
@@ -473,7 +473,7 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 						updates.map((node) => nodes.get(node.nodeId)!)
 					).then((res) => {
 						for (let i = 0; i < res.length; i++) {
-							const result = res[i] as (G & (object | undefined)) | null;
+							const result = res[i];
 							for (const process of updates[i].processing.filter(
 								(process) => process.type === 'post'
 							)) {

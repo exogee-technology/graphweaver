@@ -22,7 +22,7 @@ export class RequestContext {
 	static getAuthorizationContext():
 		| AuthContext<undefined>
 		| AuthContext<AuthorizationContext>
-		| undefined {
+		  {
 		const context = RequestContext.currentRequestContext();
 		logger.trace(`Getting BaseLoader from RequestContext with id: ${context?.id ?? 'undefined'}`);
 		return context ? context.authContext : undefined;

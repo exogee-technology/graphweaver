@@ -98,7 +98,7 @@ export const ExportModal = <TData extends object>({
 	};
 
 	useEffect(() => {
-		fetchAll();
+		void fetchAll();
 	}, []);
 
 	return (

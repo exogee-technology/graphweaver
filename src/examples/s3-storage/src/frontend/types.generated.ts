@@ -135,10 +135,6 @@ export type CreateThumbnailInput = {
   width: Scalars['Float']['input'];
 };
 
-export type DeleteOneFilterInput = {
-  id: Scalars['ID']['input'];
-};
-
 export type DetailPanelInputComponent = {
   __typename?: 'DetailPanelInputComponent';
   name: DetailPanelInputComponentOption;
@@ -232,6 +228,11 @@ export type ImageNoteCreateOrUpdateInput = {
   id: Scalars['ID']['input'];
   note?: InputMaybe<Scalars['String']['input']>;
   submission?: InputMaybe<SubmissionCreateOrUpdateInput>;
+};
+
+/** Data needed to delete one ImageNote. */
+export type ImageNoteDeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
 };
 
 /** Data needed to create ImageNotes. */
@@ -366,7 +367,7 @@ export type MutationCreateThumbnailArgs = {
 
 
 export type MutationDeleteImageNoteArgs = {
-  filter: DeleteOneFilterInput;
+  filter: ImageNoteDeleteOneFilterInput;
 };
 
 
@@ -376,7 +377,7 @@ export type MutationDeleteImageNotesArgs = {
 
 
 export type MutationDeleteSubmissionArgs = {
-  filter: DeleteOneFilterInput;
+  filter: SubmissionDeleteOneFilterInput;
 };
 
 
@@ -504,6 +505,11 @@ export type SubmissionCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
   imageNote?: InputMaybe<ImageNoteCreateOrUpdateInput>;
+};
+
+/** Data needed to delete one Submission. */
+export type SubmissionDeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
 };
 
 /** Data needed to create Submissions. */

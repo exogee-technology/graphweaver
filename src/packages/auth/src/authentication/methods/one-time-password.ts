@@ -101,10 +101,6 @@ export class OneTimePassword extends BaseAuthMethod {
 			type: AuthenticationType.OneTimePasswordChallenge,
 			userId,
 			createdAt_gt: period,
-		} as {
-			type: AuthenticationType.OneTimePasswordChallenge;
-			userId: string;
-			createdAt_gt: Date;
 		});
 	}
 

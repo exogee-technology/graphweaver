@@ -54,4 +54,4 @@ async function seedData() {
 	process.exit(0);
 }
 
-seedData();
+void seedData();

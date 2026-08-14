@@ -7,7 +7,7 @@ export function InputType(options: InputTypeOptions): ClassDecorator;
 export function InputType(nameOrOptions?: string | InputTypeOptions) {
 	return (target: any) => {
 		const options = typeof nameOrOptions === 'string' ? { name: nameOrOptions } : nameOrOptions;
-		const name = options?.name ?? (target as any).name;
+		const name = options?.name ?? (target).name;
 
 		if (!name) {
 			throw new Error('Could not determine name for input type.');

@@ -59,6 +59,7 @@
 		"@types/jest": "30.0.0",
 		"@types/node": "24.10.0",
 		"@types/pg": "8.15.4",
+		"@typescript/native": "npm:typescript@7.0.2",
 		"csv-parse": "6.1.0",
 		"dotenv": "17.2.3",
 		"graphql-tag": "2.12.6",
@@ -68,9 +69,9 @@
 		"mysql2": "3.15.3",
 		"pg": "8.16.3",
 		"supertest-graphql": "1.1.4",
-		"ts-jest": "29.4.5",
+		"ts-jest": "29.4.12",
 		"tsx": "4.20.6",
-		"typescript": "7.0.2"
+		"typescript": "npm:@typescript/typescript6@6.0.2"
 	},
 	"keywords": [
 		"graphql",

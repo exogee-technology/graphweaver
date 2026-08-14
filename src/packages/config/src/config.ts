@@ -83,16 +83,16 @@ export interface ServerlessOfflineConfig {
 }
 
 export interface StartOptions {
-	onResolveEsbuildConfiguration(options: ESBuildOptions): Promise<ESBuildOptions> | ESBuildOptions;
-	onResolveViteConfiguration(options: InlineConfig): Promise<InlineConfig> | InlineConfig;
-	onResolveServerlessOfflineConfiguration(
+	onResolveEsbuildConfiguration: (options: ESBuildOptions) => Promise<ESBuildOptions> | ESBuildOptions;
+	onResolveViteConfiguration: (options: InlineConfig) => Promise<InlineConfig> | InlineConfig;
+	onResolveServerlessOfflineConfiguration: (
 		options: ServerlessOfflineConfig
-	): Promise<ServerlessOfflineConfig> | ServerlessOfflineConfig;
+	) => Promise<ServerlessOfflineConfig> | ServerlessOfflineConfig;
 }
 
 export interface BuildOptions {
-	onResolveEsbuildConfiguration(options: ESBuildOptions): Promise<ESBuildOptions> | ESBuildOptions;
-	onResolveViteConfiguration(options: InlineConfig): Promise<InlineConfig> | InlineConfig;
+	onResolveEsbuildConfiguration: (options: ESBuildOptions) => Promise<ESBuildOptions> | ESBuildOptions;
+	onResolveViteConfiguration: (options: InlineConfig) => Promise<InlineConfig> | InlineConfig;
 }
 
 export interface ImportOptions {

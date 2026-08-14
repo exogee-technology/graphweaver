@@ -1,4 +1,4 @@
-(async () => {
+void (async () => {
 	const esbuild = await import('esbuild');
 	await esbuild.build({
 		outdir: 'lib',

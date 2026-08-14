@@ -89,9 +89,12 @@ export const ComboBox = ({
 	// Store the selected ids in a set for easy lookup - this is our source of truth for selection
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [valueArray]);
 
-	const sortOptionsBySelectedFirst = useCallback((opt1: SelectOption, opt2: SelectOption) => {
-		return (selectedIds.has(opt2.value) ? 1 : 0) - (selectedIds.has(opt1.value) ? 1 : 0)
-	}, [selectedIds]);
+	const sortOptionsBySelectedFirst = useCallback(
+		(opt1: SelectOption, opt2: SelectOption) => {
+			return (selectedIds.has(opt2.value) ? 1 : 0) - (selectedIds.has(opt1.value) ? 1 : 0);
+		},
+		[selectedIds]
+	);
 
 	// Calculate items once - use dynamic options if dataFetcher is provided, otherwise use static options
 	const options = useMemo(() => {
@@ -144,7 +147,7 @@ export const ComboBox = ({
 			if (mode === SelectMode.MULTI) {
 				if (change.selectedItem) {
 					if (selectedIds.has(change.selectedItem.value)) {
-						handleItemDeselect(change.selectedItem)
+						handleItemDeselect(change.selectedItem);
 					} else {
 						onChange([...valueArray, change.selectedItem]);
 					}
@@ -156,23 +159,21 @@ export const ComboBox = ({
 		stateReducer: (_state, actionAndChanges) => {
 			const { changes, type } = actionAndChanges;
 			switch (type) {
-			case useCombobox.stateChangeTypes.InputKeyDownEnter:
-			case useCombobox.stateChangeTypes.ItemClick:
-				return {
-				...changes,
-				// Keep the menu open after selection, if it's a multi-select
-				/* TODO: It would be much nicer UX if the menu didn't collapse every time you made a selection, 
-				 * if you're trying to select multiple options. There's a bug in the fetching logic at the moment,
-				 * something to do with the 'search' value being changed to the selected option when you click.
-				 */ 
-				// isOpen: mode === SelectMode.MULTI, 
-				}
+				case useCombobox.stateChangeTypes.InputKeyDownEnter:
+				case useCombobox.stateChangeTypes.ItemClick:
+					return {
+						...changes,
+						// Keep the menu open after selection, if it's a multi-select
+						/* TODO: It would be much nicer UX if the menu didn't collapse every time you made a selection,
+						 * if you're trying to select multiple options. There's a bug in the fetching logic at the moment,
+						 * something to do with the 'search' value being changed to the selected option when you click.
+						 */
+						// isOpen: mode === SelectMode.MULTI,
+					};
 			}
-			return changes
+			return changes;
 		},
 	});
-
-	
 
 	const fetchData = useCallback(
 		async (page: number, search: string) => {
@@ -191,14 +192,17 @@ export const ComboBox = ({
 				if (lastSearchTermRef.current === search) {
 					// Search term hasn't changed, merge the options in.
 					if (result && result.length > 0) {
-						setDynamicOptions((prev) => [...prev, ...result.filter(o => !optionIds.has(o.value))]);
+						setDynamicOptions((prev) => [
+							...prev,
+							...result.filter((o) => !optionIds.has(o.value)),
+						]);
 						setCurrentPage(page);
 					} else {
 						setHasReachedEnd(true);
 					}
 				} else {
 					// If the search term has changed, we need to reset the options
-					setDynamicOptions([...valueArray, ...result.filter(o => !selectedIds.has(o.value))]);
+					setDynamicOptions([...valueArray, ...result.filter((o) => !selectedIds.has(o.value))]);
 					setCurrentPage(1);
 					setHasReachedEnd(false);
 					fetchedPagesRef.current.clear();
@@ -226,7 +230,7 @@ export const ComboBox = ({
 		// Only trigger search if dropdown is open AND we have a dataFetcher
 		if (dataFetcher && searchTerm !== undefined && isOpen) {
 			const timeout = setTimeout(() => {
-				fetchData(1, searchTerm);
+				void fetchData(1, searchTerm);
 			}, searchDebounceMs);
 
 			setSearchTimeout(timeout);
@@ -246,7 +250,7 @@ export const ComboBox = ({
 			const threshold = 50; // pixels from bottom
 
 			if (scrollHeight - scrollTop - clientHeight < threshold) {
-				fetchData(currentPage + 1, searchTerm);
+				void fetchData(currentPage + 1, searchTerm);
 			}
 		},
 		[dataFetcher, isLoadingMore, hasReachedEnd, currentPage, searchTerm]
@@ -255,7 +259,7 @@ export const ComboBox = ({
 	useEffect(() => {
 		// Load initial data when dropdown is first opened.
 		// If the fetch has already happened this request is ignored.
-		if (dataFetcher && isOpen) fetchData(1, searchTerm);
+		if (dataFetcher && isOpen) void fetchData(1, searchTerm);
 	}, [dataFetcher, isOpen, searchTerm]);
 
 	// Clear typed text on blur if no item was selected
@@ -295,7 +299,6 @@ export const ComboBox = ({
 						toggleMenu();
 					}
 				}}
-				
 				data-testid={testId ? `${testId}-box` : undefined}
 			>
 				<div className={styles.inputContainer}>
@@ -322,25 +325,25 @@ export const ComboBox = ({
 							</div>
 						</div>
 					)}
-						<div className={styles.inputWrapper}>
-							{/* This input needs to render always. Keyboard navigation will break without it. */}
-							<input
-								readOnly={!allowFreeTyping}
-								className={styles.selectInput}
-								data-testid={testId ? `${testId}-input` : undefined}
-								{...getInputProps({
-									ref: inputRef,
-									onBlur: handleBlur,
-									onFocus: openMenu,
-									placeholder: valueArray.length === 0 ? placeholder : undefined
-								})}
-							/>
-						</div>
+					<div className={styles.inputWrapper}>
+						{/* This input needs to render always. Keyboard navigation will break without it. */}
+						<input
+							readOnly={!allowFreeTyping}
+							className={styles.selectInput}
+							data-testid={testId ? `${testId}-input` : undefined}
+							{...getInputProps({
+								ref: inputRef,
+								onBlur: handleBlur,
+								onFocus: openMenu,
+								placeholder: valueArray.length === 0 ? placeholder : undefined,
+							})}
+						/>
+					</div>
 					<button
 						type="button"
 						{...getToggleButtonProps({
 							onClick: () => !disabled && toggleMenu(),
-							onKeyDown: () => !disabled && toggleMenu()
+							onKeyDown: () => !disabled && toggleMenu(),
 						})}
 						className={clsx(styles.arrow, isOpen && styles.arrowOpen)}
 						aria-label="Toggle dropdown"
@@ -350,8 +353,6 @@ export const ComboBox = ({
 						<ChevronDownIcon />
 					</button>
 				</div>
-
-				
 			</div>
 
 			<ul
@@ -367,33 +368,27 @@ export const ComboBox = ({
 							{
 								// Bump selected options to the top of the list.
 								options.sort(sortOptionsBySelectedFirst).map((item, index) => {
-								const isSelected = selectedIds.has(item.value);
-								const testId = `${isSelected ? 'selected' : 'combo'}-option-${item.label}`
-								return (
-									<li
-										className={clsx(
-											styles.option,
-											{ 
+									const isSelected = selectedIds.has(item.value);
+									const testId = `${isSelected ? 'selected' : 'combo'}-option-${item.label}`;
+									return (
+										<li
+											className={clsx(styles.option, {
 												[styles.selectedOption]: isSelected,
 												[styles.highlighted]: highlightedIndex === index,
-												[styles.selectedOptionHighlighted]: isSelected &&  highlightedIndex === index,
-											}
-										)}
-										key={String(item.value)}
-										aria-label={item.label}
-										{...getItemProps({ item, index })}
-										data-testid={testId}
-										
-									>
-										<span>{item.label}</span>
-										{isSelected && (
-											<span>
-												&times;
-											</span>
-										)}
-									</li>
-								);
-							})}
+												[styles.selectedOptionHighlighted]:
+													isSelected && highlightedIndex === index,
+											})}
+											key={String(item.value)}
+											aria-label={item.label}
+											{...getItemProps({ item, index })}
+											data-testid={testId}
+										>
+											<span>{item.label}</span>
+											{isSelected && <span>&times;</span>}
+										</li>
+									);
+								})
+							}
 
 							{/* Show a message if there are no options */}
 							{options.length === 0 && (

@@ -166,7 +166,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		return startServerlessAzure({
 			server: this.server,
-			graphweaverPlugins: this.graphweaverPlugins as Set<GraphweaverPlugin<unknown>>,
+			graphweaverPlugins: this.graphweaverPlugins,
 		});
 	}
 

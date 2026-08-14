@@ -5,16 +5,16 @@ export interface WithId {
 }
 
 export interface ProviderOptions<Context, D> {
-	init?(): Promise<Context>;
-	create?(context: Context, entity: Partial<D>): Promise<D>;
-	read(
+	init?: () => Promise<Context>;
+	create?: (context: Context, entity: Partial<D>) => Promise<D>;
+	read: (
 		context: Context,
 		filter: Filter<D>,
 		pagination?: Partial<PaginationOptions>
-	): Promise<D | D[]>;
-	update?(context: Context, id: string, entity: Partial<D>): Promise<D>;
-	remove?(context: Context, filter: Filter<D>): Promise<boolean>;
-	search?(context: Context, term: string): Promise<D[]>;
+	) => Promise<D | D[]>;
+	update?: (context: Context, id: string, entity: Partial<D>) => Promise<D>;
+	remove?: (context: Context, filter: Filter<D>) => Promise<boolean>;
+	search?: (context: Context, term: string) => Promise<D[]>;
 	backendId: string;
 	dataEntity?: () => { new (...args: any[]): D };
 }
@@ -56,16 +56,16 @@ export const createProvider = <Context, D extends WithId>(options: ProviderOptio
 			this.remove = remove;
 			this.dataEntity = dataEntity;
 
-			this.initFn = new Promise<void>((resolve) => {
-				if (!init) {
-					resolve();
-					return;
-				}
-				init().then((context) => {
-					this.context = context;
-					resolve();
-				});
-			});
+		this.initFn = new Promise<void>((resolve, reject) => {
+			if (!init) {
+				resolve();
+				return;
+			}
+			init().then((context) => {
+				this.context = context;
+				resolve();
+			}).catch(reject);
+		});
 		}
 
 		_mapDataEntity(dataEntity: D): D {

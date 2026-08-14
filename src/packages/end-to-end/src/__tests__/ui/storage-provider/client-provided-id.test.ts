@@ -15,10 +15,10 @@ test('Ensure a new image note can be created when an ID is provided', async ({ p
 	await fileChooser.setFiles(path.join(__dirname, './fixtures/pickle.png'));
 
 	await page.getByRole('button', { name: 'Save' }).click();
-	await expect(await page.getByText('has been successfully created.')).toBeVisible();
+	await expect(page.getByText('has been successfully created.')).toBeVisible();
 
 	// get ID from the submission
-	const table = await page.getByTestId('table');
+	const table = page.getByTestId('table');
 	const submissionId = await table.locator('tbody tr td:nth-child(2)').first().innerText();
 
 	expect(submissionId).not.toBeNull();
@@ -53,7 +53,7 @@ test('Ensure a new image note cannot be created when an ID is not provided', asy
 	await fileChooser.setFiles(path.join(__dirname, './fixtures/pickle.png'));
 
 	await page.getByRole('button', { name: 'Save' }).click();
-	await expect(await page.getByText('has been successfully created.')).toBeVisible();
+	await expect(page.getByText('has been successfully created.')).toBeVisible();
 
 	// get ID from the submission
 	const table = page.getByTestId('table');

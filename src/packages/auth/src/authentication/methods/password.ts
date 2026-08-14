@@ -67,8 +67,8 @@ export type PasswordOptions<D extends CredentialStorage> = {
 	) => Promise<UserProfile<unknown>>;
 	acl?: AccessControlList<Credential, AuthorizationContext>;
 	assertPasswordStrength?: (password?: string) => boolean;
-	onUserAuthenticated?(userId: string, context: AuthorizationContext): Promise<null>;
-	onUserRegistered?(userId: string, context: AuthorizationContext): Promise<null>;
+	onUserAuthenticated?: (userId: string, context: AuthorizationContext) => Promise<null>;
+	onUserRegistered?: (userId: string, context: AuthorizationContext) => Promise<null>;
 };
 
 const sensitiveFields = new Set(['password']);
@@ -190,7 +190,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 
 		if (await verifyPassword(password, credential.password)) {
 			const profile = this.getUserProfile(credential.id, PasswordOperation.LOGIN, context);
-			this.onUserAuthenticated?.(credential.id, context);
+			void this.onUserAuthenticated?.(credential.id, context);
 			return profile;
 		}
 
@@ -217,11 +217,11 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 		const credential = await this.provider.createOne({
 			username: item.username,
 			password: passwordHash,
-		} as Credential & { password: string });
+		});
 
 		const [entity] = await runAfterHooks(HookRegister.AFTER_CREATE, [credential], params);
 		if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
-		this.onUserRegistered?.(entity.id, params.context);
+		void this.onUserRegistered?.(entity.id, params.context);
 
 		return this.getUserProfile(entity.id, PasswordOperation.REGISTER, params.context);
 	}

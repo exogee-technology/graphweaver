@@ -11,7 +11,6 @@ import {
 	OneTimePassword,
 	OneTimePasswordData,
 	AuthenticationMethod,
-	OneTimePasswordEntity,
 	setAddUserToContext,
 	setImplicitAllow,
 } from '@exogee/graphweaver-auth';
@@ -149,7 +148,7 @@ describe('One Time Password Authentication - Challenge', () => {
 					userId: user.id,
 					data: { code: MOCK_CODE },
 					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
-				}) as OneTimePasswordEntity
+				})
 		);
 
 		const response = await graphweaver.executeOperation({

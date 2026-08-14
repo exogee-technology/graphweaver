@@ -85,7 +85,7 @@ export const importDataSource = async (
 		clientGeneratedPrimaryKeys: clientGeneratedPrimaryKeys ?? false,
 	};
 	// check we have all the dependencies needed to run the import
-	await checkForMissingDependencies(source);
+	checkForMissingDependencies(source);
 
 	const spinner = ora('Introspecting...').start();
 

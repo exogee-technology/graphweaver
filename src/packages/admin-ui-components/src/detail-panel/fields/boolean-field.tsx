@@ -20,7 +20,7 @@ export const BooleanField = ({
 			return value[0]?.value;
 		},
 	});
-	
+
 	return (
 		<Field name={field.name}>
 			{({ field, form }: FieldProps) => (
@@ -30,7 +30,9 @@ export const BooleanField = ({
 						{ value: false, label: 'false' },
 					]}
 					value={field.value}
-					onChange={(selected: SelectOption[]) => form.setFieldValue(field.name, selected)}
+					onChange={(selected: SelectOption[]) => {
+						void form.setFieldValue(field.name, selected);
+					}}
 					mode={SelectMode.SINGLE}
 					disabled={disabled}
 					autoFocus={autoFocus}

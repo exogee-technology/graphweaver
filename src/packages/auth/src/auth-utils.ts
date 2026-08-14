@@ -128,7 +128,7 @@ export const requiredPermissionsForAction = (
 };
 
 const permissionsErrorHandler = (error: any) => {
-	if ((error as any).name === 'NotFoundError') {
+	if ((error).name === 'NotFoundError') {
 		logger.trace(
 			'Raising ForbiddenError: Could not find object in database (likely because a query did not pass a permission filter)'
 		);
@@ -197,7 +197,7 @@ export async function checkEntityPermission<G = unknown, D = unknown>(
 	const acl = getACL(entityName);
 	const accessControlEntry = buildAccessControlEntryForUser(
 		acl,
-		getRolesFromAuthorizationContext() as string[]
+		getRolesFromAuthorizationContext()
 	);
 
 	const accessControlValue = accessControlEntry[accessType];

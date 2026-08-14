@@ -24,6 +24,6 @@ test('should error if password is not strong enough', async ({ page }) => {
 	await page.getByPlaceholder('Confirm').click();
 	await page.getByPlaceholder('Confirm').fill('test123');
 	await page.getByRole('button', { name: 'Save' }).click();
-	const element = await page.getByText('Password not strong enough.');
+	const element = page.getByText('Password not strong enough.');
 	await expect(element).toHaveCount(1);
 });

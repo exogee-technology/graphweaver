@@ -494,7 +494,7 @@ export const afterCreateOrUpdate = (
 					)
 				: undefined
 		);
-		await Promise.all(authChecks);
+		await Promise.all(authChecks.filter((check) => check != null));
 		return params;
 	};
 };

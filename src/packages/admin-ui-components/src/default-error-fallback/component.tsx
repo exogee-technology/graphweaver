@@ -56,7 +56,7 @@ export const DefaultErrorFallback = ({ error }: FallbackProps) => {
 					<Spacer height={40} />
 					<Button
 						onClick={() => {
-							navigator.clipboard.writeText(
+							void navigator.clipboard.writeText(
 								JSON.stringify(error, Object.getOwnPropertyNames(error), 4)
 							);
 							setShowingCopied(true);

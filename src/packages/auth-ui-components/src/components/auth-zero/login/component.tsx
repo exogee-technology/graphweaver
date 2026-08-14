@@ -28,10 +28,10 @@ export const Auth0 = () => {
 
 			if (code && state) {
 				// The user is coming back from the Auth0 login page
-				processRedirect();
+				void processRedirect();
 			} else {
 				// The user is coming to the page for the first time
-				requestLogin();
+				void requestLogin();
 			}
 		}
 	}, []);

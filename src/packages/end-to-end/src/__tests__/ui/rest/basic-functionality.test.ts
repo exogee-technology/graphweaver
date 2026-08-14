@@ -38,10 +38,10 @@ test('Ensure people can be filtered', async ({ page }) => {
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	// Only Darth Vader should be showing.
-	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(1);
-	await expect(
-		await page.getByTestId('table').locator('tbody').locator('tr').nth(0).textContent()
-	).toBe('4Darth Vader202136none41.9BBY');
+	await expect(page.getByTestId('table').locator('tbody').locator('tr')).toHaveCount(1);
+	await expect(page.getByTestId('table').locator('tbody').locator('tr').nth(0)).toHaveText(
+		'4Darth Vader202136none41.9BBY'
+	);
 
 	await page.getByTestId('url-filter').getByLabel('Toggle').click();
 	await page.getByTestId('combo-option-2').click();
@@ -49,19 +49,19 @@ test('Ensure people can be filtered', async ({ page }) => {
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	// Now Darth Vader and C-3PO should be showing.
-	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(2);
-	await expect(
-		await page.getByTestId('table').locator('tbody').locator('tr').nth(0).textContent()
-	).toBe('2C-3PO16775n/a112BBY');
-	await expect(
-		await page.getByTestId('table').locator('tbody').locator('tr').nth(1).textContent()
-	).toBe('4Darth Vader202136none41.9BBY');
+	await expect(page.getByTestId('table').locator('tbody').locator('tr')).toHaveCount(2);
+	await expect(page.getByTestId('table').locator('tbody').locator('tr').nth(0)).toHaveText(
+		'2C-3PO16775n/a112BBY'
+	);
+	await expect(page.getByTestId('table').locator('tbody').locator('tr').nth(1)).toHaveText(
+		'4Darth Vader202136none41.9BBY'
+	);
 
 	// Clear the filters, and we should be back to everyone.
 	await page.getByRole('button', { name: 'Clear Filters' }).click();
 	await page.waitForURL((url) => !url.toString().includes('filters'));
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
-	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(50);
+	await expect(page.getByTestId('table').locator('tbody').locator('tr')).toHaveCount(50);
 });
 
 test('Ensure vehicles can be filtered', async ({ page }) => {
@@ -73,10 +73,10 @@ test('Ensure vehicles can be filtered', async ({ page }) => {
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	// Only the Sand Crawler should be showing.
-	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(1);
-	await expect(
-		await page.getByTestId('table').locator('tbody').locator('tr').nth(0).textContent()
-	).toBe('4Sand CrawlerDigger CrawlerCorellia Mining Corporation15000036.8 4630');
+	await expect(page.getByTestId('table').locator('tbody').locator('tr')).toHaveCount(1);
+	await expect(page.getByTestId('table').locator('tbody').locator('tr').nth(0)).toHaveText(
+		'4Sand CrawlerDigger CrawlerCorellia Mining Corporation15000036.8 4630'
+	);
 
 	await page.getByTestId('url-filter').getByLabel('Toggle').click();
 	await page.getByTestId('combo-option-14').click();
@@ -84,17 +84,17 @@ test('Ensure vehicles can be filtered', async ({ page }) => {
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	// Now Sand Crawler and Snowspeeder should be showing.
-	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(2);
-	await expect(
-		await page.getByTestId('table').locator('tbody').locator('tr').nth(0).textContent()
-	).toBe('4Sand CrawlerDigger CrawlerCorellia Mining Corporation15000036.8 4630');
-	await expect(
-		await page.getByTestId('table').locator('tbody').locator('tr').nth(1).textContent()
-	).toBe('14Snowspeedert-47 airspeederIncom corporationunknown4.520Luke Skywalker, Wedge Antilles');
+	await expect(page.getByTestId('table').locator('tbody').locator('tr')).toHaveCount(2);
+	await expect(page.getByTestId('table').locator('tbody').locator('tr').nth(0)).toHaveText(
+		'4Sand CrawlerDigger CrawlerCorellia Mining Corporation15000036.8 4630'
+	);
+	await expect(page.getByTestId('table').locator('tbody').locator('tr').nth(1)).toHaveText(
+		'14Snowspeedert-47 airspeederIncom corporationunknown4.520Luke Skywalker, Wedge Antilles'
+	);
 
 	// Clear the filters, and we should be back to all vehicles.
 	await page.getByRole('button', { name: 'Clear Filters' }).click();
 	await page.waitForURL((url) => !url.toString().includes('filters'));
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
-	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(39);
+	await expect(page.getByTestId('table').locator('tbody').locator('tr')).toHaveCount(39);
 });

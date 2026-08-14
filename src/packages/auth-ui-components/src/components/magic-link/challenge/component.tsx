@@ -64,8 +64,8 @@ export const MagicLinkChallenge = () => {
 			}
 		};
 
-		if (!initialized.current && !token) sendLink();
-		if (!initialized.current && token) verifyLink();
+		if (!initialized.current && !token) void sendLink();
+		if (!initialized.current && token) void verifyLink();
 	}, []);
 
 	return (

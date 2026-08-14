@@ -25,7 +25,7 @@ export const Router = () => {
 	const [routes, setRoutes] = useState<RouteObject[] | null>(null);
 
 	useEffect(() => {
-		(async () => {
+		void (async () => {
 			setRoutes([...(await customPages.routes()), ...loadAuthRoutes()]);
 		})();
 	}, []);

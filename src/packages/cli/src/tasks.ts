@@ -13,7 +13,7 @@ const asyncExec = async (command: string) =>
 
 		execCommand.on('close', (code) => {
 			if (code === 0) return resolve();
-			else return reject(`Process exited with code ${code}`);
+			else return reject(new Error(`Process exited with code ${code}`));
 		});
 	});
 

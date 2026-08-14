@@ -114,7 +114,7 @@ export const EntityList = <TData extends Record<string, unknown>>({
 		);
 	};
 
-	const handleFetchNextPage = async () => {
+	const handleFetchNextPage = () => {
 		const lastElement = data?.result?.[data.result.length - 1];
 
 		let detailFilter = variables.detailFilter ?? {};
@@ -130,7 +130,7 @@ export const EntityList = <TData extends Record<string, unknown>>({
 			offset = nextPage * PAGE_SIZE;
 		}
 
-		fetchMore({
+		void fetchMore({
 			variables: {
 				...variables,
 				pagination: {

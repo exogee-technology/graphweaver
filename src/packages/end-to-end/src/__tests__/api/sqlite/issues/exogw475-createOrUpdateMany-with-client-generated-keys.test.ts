@@ -64,8 +64,8 @@ graphweaverMetadata.addMutation({
 		) as EntityMetadata<User, OrmUser>;
 
 		const users = await userEntity.provider!.createOrUpdateMany([
-			{customPrimaryKeyField: 100, username: 'example_mutation', email: 'example@test.com'} as unknown as Partial<OrmUser>,
-			{username: 'example_mutation_2', email: 'example2@test.com'} as unknown as Partial<OrmUser>,
+			{customPrimaryKeyField: 100, username: 'example_mutation', email: 'example@test.com'},
+			{username: 'example_mutation_2', email: 'example2@test.com'},
 		]);
 
 		return users.map(user =>
@@ -83,7 +83,7 @@ graphweaverMetadata.addMutation({
 		) as EntityMetadata<User, OrmUser>;
 
 		const users = await userEntity.provider!.createOrUpdateMany([
-			{customPrimaryKeyField: 100, username: 'updated_mutation', email: 'updated@test.com'} as unknown as Partial<OrmUser>,
+			{customPrimaryKeyField: 100, username: 'updated_mutation', email: 'updated@test.com'},
 		]);
 
 		return users.map(user =>

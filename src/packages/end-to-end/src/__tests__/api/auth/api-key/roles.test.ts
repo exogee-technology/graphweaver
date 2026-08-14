@@ -120,7 +120,7 @@ describe('Role Assignment for API Key Authentication', () => {
 			revoked: false,
 			roles: [Roles.LIGHT_SIDE],
 		});
-		if (testLightSideApiKey) database?.em.persistAndFlush(testLightSideApiKey);
+		if (testLightSideApiKey) void database?.em.persistAndFlush(testLightSideApiKey);
 
 		const testDarkSideApiKey = database?.em.create(OrmApiKey, {
 			key: 'test_darkside',
@@ -129,7 +129,7 @@ describe('Role Assignment for API Key Authentication', () => {
 			revoked: false,
 			roles: [Roles.DARK_SIDE],
 		});
-		if (testDarkSideApiKey) database?.em.persistAndFlush(testDarkSideApiKey);
+		if (testDarkSideApiKey) void database?.em.persistAndFlush(testDarkSideApiKey);
 	});
 
 	test('should create task successfully when dark side has all permissions.', async () => {

@@ -8,5 +8,5 @@ test('should update number field from the detail panel', async ({ page }) => {
 	await page.getByLabel('quantity').click();
 	await page.getByLabel('quantity').fill('3');
 	await page.getByRole('button', { name: 'Save' }).click();
-	await expect(await page.getByText('has been successfully updated.')).toBeVisible();
+	await expect(page.getByText('has been successfully updated.')).toBeVisible();
 });

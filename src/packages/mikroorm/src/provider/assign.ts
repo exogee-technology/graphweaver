@@ -37,7 +37,7 @@ export const assign = async <T extends AnyEntity<T>>(
 	visited.add(entity);
 
 	// We'll need the metadata for this entity to be able to traverse the properties later.
-	const metadata = wrap(entity, true).__meta!;
+	const metadata = wrap(entity, true).__meta;
 
 	for (const [property, value] of Object.entries(data)) {
 		const entityPropertyValue = entity[property as keyof T];

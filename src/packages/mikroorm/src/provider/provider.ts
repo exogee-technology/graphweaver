@@ -165,7 +165,8 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 	// This is exposed for use in the RLS package
 	public get transactional() {
-		return this.database.transactional;
+		const db = this.database;
+		return db.transactional.bind(db);
 	}
 
 	public async withTransaction<T>(callback: () => Promise<T>) {
@@ -209,7 +210,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		this.backendDisplayName = options.backendDisplayName;
 		this.connection = connection;
 		this.addRequestContext();
-		this.connectToDatabase();
+		void this.connectToDatabase();
 	}
 	private getDbType(): DatabaseType {
 		const driver = this.em.getDriver().constructor.name;

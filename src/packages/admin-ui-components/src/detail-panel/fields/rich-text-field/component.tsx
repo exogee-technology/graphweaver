@@ -26,7 +26,7 @@ export const RichTextField = (props: Props) => {
 				content={content}
 				slotBefore={isReadOnly ? undefined : <MenuBar options={options} />}
 				onUpdate={(props) => {
-					setValue(
+					void setValue(
 						asMarkdown
 							? (
 									props.editor.storage as unknown as { markdown: MarkdownStorage }

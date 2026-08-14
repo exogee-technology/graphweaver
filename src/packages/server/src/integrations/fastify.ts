@@ -44,7 +44,7 @@ export const startStandaloneServer = async <TContext extends BaseContext>(
 
 	fastify.addHook('onRequest', (_, __, done) => {
 		logger.trace('onRequest hook called');
-		onRequestWrapper(plugins, async () => done());
+		void onRequestWrapper(plugins, async () => done());
 	});
 
 	// Always flush the logger on each request so logs get persisted.

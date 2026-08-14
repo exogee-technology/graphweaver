@@ -3,7 +3,6 @@ import chokidar from 'chokidar';
 import semver from 'semver';
 import {
 	Source,
-	StartOptions,
 	analyseBundle,
 	buildBackend,
 	buildFrontend,
@@ -22,7 +21,7 @@ const MINIMUM_NODE_SUPPORTED = '18.0.0';
 
 const yargs = yargsFactory(process.argv.slice(2));
 
-yargs
+void yargs
 	.scriptName('graphweaver')
 	.env('GRAPHWEAVER')
 	.check(() => {
@@ -77,7 +76,7 @@ yargs
 			if (version) console.log(`Graphweaver Version: ${version}`);
 			console.log();
 
-			init({ name, version, backends });
+			await init({ name, version, backends });
 		},
 	})
 	.command({
@@ -256,11 +255,11 @@ yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await startBackend(args as any);
+				await startBackend(args);
 				await generateTypes();
 			}
 			if (environment === 'frontend' || environment === 'all') {
-				await startFrontend(args as StartOptions);
+				await startFrontend(args);
 			}
 		},
 	})
@@ -287,12 +286,12 @@ yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await startBackend(args as any);
+				await startBackend(args);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				// Logic to start the process
 				console.log('Watch process started...');
-				await startFrontend(args as StartOptions);
+				await startFrontend(args);
 
 				const buildDir = path.posix.join(
 					'file://',
@@ -330,14 +329,16 @@ yargs
 
 				console.log('Waiting for changes... \n\n');
 
-				// Restart the process on file change
-				watcher.on('change', async () => {
+			// Restart the process on file change
+			watcher.on('change', () => {
+				void (async () => {
 					console.log('File changed. Rebuilding generated files...');
 					await buildBackend();
 					await generateTypes();
 					console.log('Rebuild complete.\n\n');
 					console.log('Waiting for changes... \n\n');
-				});
+				})();
+			});
 			}
 		},
 	})

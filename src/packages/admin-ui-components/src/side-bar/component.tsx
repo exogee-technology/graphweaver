@@ -23,7 +23,7 @@ export const SideBar = () => {
 	const [userDashboardLinks, setUserDashboardLinks] = useState<NavLinkExport[]>([]);
 
 	useEffect(() => {
-		(async () => {
+		void (async () => {
 			const navLinks = customPages.navLinks ? await customPages.navLinks() : [];
 			const links = navLinks
 				.flat()
