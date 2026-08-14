@@ -35,16 +35,16 @@
 		"version:bump": "pnpm -r version"
 	},
 	"devDependencies": {
-		"@bessonovs/set-project-references": "0.0.10",
+		"@bessonovs/set-project-references": "0.0.12",
 		"@eslint/js": "10.0.1",
 		"@types/eslint-config-prettier": "6.11.3",
 		"@types/node": "24.10.0",
-		"concurrently": "9.2.1",
+		"concurrently": "10.0.4",
 		"eslint": "10.4.0",
 		"eslint-config-prettier": "10.1.8",
-		"globals": "17.3.0",
+		"globals": "17.9.0",
 		"prettier": "3.6.2",
-		"turbo": "2.9.14",
+		"turbo": "2.10.9",
 		"typescript": "7.0.2",
 		"typescript-eslint": "8.60.0"
 	},

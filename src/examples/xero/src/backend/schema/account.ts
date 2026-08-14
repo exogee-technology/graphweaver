@@ -78,7 +78,9 @@ const xeroFilterFrom = (filter: Filter<Account> | Filter<Account>[]) => {
 			const keyParts = key.split('_', 2);
 			const replacedKey = keyParts[0] === 'id' ? 'AccountID' : keyParts[0];
 			let subFilter =
-				typeof value === 'object' ? xeroFilterFrom(value) : (value as string | undefined);
+				typeof value === 'object'
+					? xeroFilterFrom(value as Filter<Account> | Filter<Account>[])
+					: (value as string | undefined);
 
 			// Some Xero types need to be quoted.
 			if (isUUID(subFilter, 4)) {
