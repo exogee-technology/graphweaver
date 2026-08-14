@@ -4,6 +4,8 @@
 **/build/**
 **/dist/**
 **/.graphweaver/**
+**/.turbo/**
+**/.packs/**
 .eslintrc.js
 *.generated.ts
 pnpm-lock.yaml

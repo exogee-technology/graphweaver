@@ -137,9 +137,9 @@ describe('ACL - Nested Filters', () => {
 	test('should return forbidden in the before read hook when filtering a nested entity when no permission applied to tracks.', async () => {
 		assert(token);
 
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
-		const spyOnTrackDataProvider = jest.spyOn(trackDataProvider, 'find');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'find');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'find');
+		const spyOnTrackDataProvider = mock.method(trackDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -155,9 +155,9 @@ describe('ACL - Nested Filters', () => {
 			`,
 		});
 
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
-		expect(spyOnTrackDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnTrackDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -166,9 +166,9 @@ describe('ACL - Nested Filters', () => {
 	test('should check relationship permissions inside a _not filter', async () => {
 		assert(token);
 
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
-		const spyOnTrackDataProvider = jest.spyOn(trackDataProvider, 'find');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'find');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'find');
+		const spyOnTrackDataProvider = mock.method(trackDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -192,9 +192,9 @@ describe('ACL - Nested Filters', () => {
 			},
 		});
 
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
-		expect(spyOnTrackDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnTrackDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');

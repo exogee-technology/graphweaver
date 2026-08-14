@@ -94,7 +94,7 @@ const graphweaver = new Graphweaver();
 
 describe('One Time Password Authentication - Challenge', () => {
 	afterEach(() => {
-		jest.restoreAllMocks();
+		mock.restoreAll();
 	});
 
 	test('should fail challenge if not logged in.', async () => {
@@ -142,7 +142,7 @@ describe('One Time Password Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		jest.spyOn(OneTimePassword.prototype, 'getOTP').mockImplementation(async () => ({
+		mock.method(OneTimePassword.prototype, 'getOTP', async () => ({
 			userId: user.id,
 			data: { code: MOCK_CODE },
 			createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
@@ -191,7 +191,7 @@ describe('One Time Password Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		jest.spyOn(OneTimePassword.prototype, 'redeemOTP').mockImplementation(async () => true);
+		mock.method(OneTimePassword.prototype, 'redeemOTP', async () => true);
 
 		const response = await graphweaver.executeOperation<{
 			result: { authToken: string };

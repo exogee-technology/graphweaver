@@ -200,7 +200,7 @@ describe('Nested entity queries should not bypass row-level security', () => {
 	});
 
 	test('Should only return tasks that the user has access to when asking for tags', async () => {
-		const spyOnArtistDataProvider = jest.spyOn(taskProvider, 'findByRelatedId');
+		const spyOnArtistDataProvider = mock.method(taskProvider, 'findByRelatedId');
 		// create 3 tasks for our user and another 3 for a different user
 		const task1ForAuthenticatedUser = new OrmTask('task1ForAuthenticatedUser', user.id);
 		const task2ForAuthenticatedUser = new OrmTask('task2ForAuthenticatedUser', user.id);
@@ -269,6 +269,6 @@ describe('Nested entity queries should not bypass row-level security', () => {
 		});
 
 		// If this is called more than once then we are not batching properly
-		expect(spyOnArtistDataProvider).toHaveBeenCalledTimes(1);
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(1);
 	});
 });

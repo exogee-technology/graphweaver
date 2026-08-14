@@ -89,7 +89,7 @@ describe('ACL - Basic Before Hook', () => {
 	test('should return forbidden in the before read hook when listing a single entity when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'findOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'findOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -102,7 +102,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -111,7 +111,7 @@ describe('ACL - Basic Before Hook', () => {
 	test('should return forbidden in the before read hook when listing an entity when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -124,7 +124,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -133,7 +133,7 @@ describe('ACL - Basic Before Hook', () => {
 	test('should return forbidden in the before read hook when listing an entity multiple times when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -149,7 +149,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -158,7 +158,7 @@ describe('ACL - Basic Before Hook', () => {
 	test('should return forbidden in the before create hook when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'createOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -171,7 +171,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -180,7 +180,7 @@ describe('ACL - Basic Before Hook', () => {
 	test('should return forbidden in the before update hook when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'updateOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -193,7 +193,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -202,7 +202,7 @@ describe('ACL - Basic Before Hook', () => {
 	test('should return forbidden in the before delete hook when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'deleteOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -213,7 +213,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -222,7 +222,7 @@ describe('ACL - Basic Before Hook', () => {
 	test('should return forbidden in the before delete hook when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteMany');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'deleteMany');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -233,7 +233,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');

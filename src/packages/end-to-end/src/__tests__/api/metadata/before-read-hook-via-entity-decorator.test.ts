@@ -8,7 +8,7 @@ import { Field, ID, Entity, HookRegister } from '@exogee/graphweaver';
 
 describe('Hooks', () => {
 	test('should correctly call a hook when the hook was passed in via the @Entity decorator', async () => {
-		const hookFunction = jest.fn((params: any) => params);
+		const hookFunction = mock.fn((params: any) => params);
 
 		@Entity('User', {
 			hooks: { [HookRegister.BEFORE_READ]: [hookFunction] },
@@ -50,6 +50,6 @@ describe('Hooks', () => {
 		});
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
-		expect(hookFunction).toHaveBeenCalled();
+		expect(hookFunction.mock.callCount()).toBeGreaterThan(0);
 	});
 });

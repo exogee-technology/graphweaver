@@ -112,8 +112,8 @@ describe('ACL - Nested Before Hook', () => {
 	test('should return forbidden in the before read hook when listing a nested entity when no permission applied.', async () => {
 		assert(token);
 
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'find');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -129,8 +129,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -139,8 +139,8 @@ describe('ACL - Nested Before Hook', () => {
 	test('should return forbidden in the before read hook when listing a nested entity when no permission applied and renaming the field.', async () => {
 		assert(token);
 
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'find');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -156,8 +156,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -166,8 +166,8 @@ describe('ACL - Nested Before Hook', () => {
 	test('should return forbidden in the before read hook when filtering by an entity without permission.', async () => {
 		assert(token);
 
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'find');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -180,8 +180,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -190,8 +190,8 @@ describe('ACL - Nested Before Hook', () => {
 	test('should return forbidden in the before create hook when creating a nested entity and no permission applied.', async () => {
 		assert(token);
 
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'createOne');
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'createOne');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'createOne');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'createOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -204,8 +204,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -214,13 +214,13 @@ describe('ACL - Nested Before Hook', () => {
 	test('should return forbidden in the before create hook when no permission to the nested entity being read.', async () => {
 		assert(token);
 
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'createOne');
-		const spyOnArtistDataProviderFindOne = jest.spyOn(artistDataProvider, 'findOne');
-		const spyOnArtistDataProviderFindByRelatedId = jest.spyOn(
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'createOne');
+		const spyOnArtistDataProviderFindOne = mock.method(artistDataProvider, 'findOne');
+		const spyOnArtistDataProviderFindByRelatedId = mock.method(
 			artistDataProvider,
 			'findByRelatedId'
 		);
-		const spyOnArtistDataProviderFind = jest.spyOn(artistDataProvider, 'find');
+		const spyOnArtistDataProviderFind = mock.method(artistDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -236,10 +236,10 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
-		expect(spyOnArtistDataProviderFindOne).not.toHaveBeenCalled();
-		expect(spyOnArtistDataProviderFindByRelatedId).not.toHaveBeenCalled();
-		expect(spyOnArtistDataProviderFind).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnArtistDataProviderFindOne.mock.callCount()).toBe(0);
+		expect(spyOnArtistDataProviderFindByRelatedId.mock.callCount()).toBe(0);
+		expect(spyOnArtistDataProviderFind.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -248,7 +248,7 @@ describe('ACL - Nested Before Hook', () => {
 	test('should return forbidden in the before create hook when no permission to the nested entity being linked.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'createOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -261,7 +261,7 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -270,8 +270,8 @@ describe('ACL - Nested Before Hook', () => {
 	test('should return forbidden in the before update hook when no permission applied and updating nested entity.', async () => {
 		assert(token);
 
-		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
-		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'updateOne');
+		const spyOnAlbumDataProvider = mock.method(albumDataProvider, 'updateOne');
+		const spyOnArtistDataProvider = mock.method(artistDataProvider, 'updateOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -286,8 +286,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
-		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
+		expect(spyOnAlbumDataProvider.mock.callCount()).toBe(0);
+		expect(spyOnArtistDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -296,7 +296,7 @@ describe('ACL - Nested Before Hook', () => {
 	test('should return forbidden in the before update hook when no permission to the nested entity being linked.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'updateOne');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -309,7 +309,7 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
 	});

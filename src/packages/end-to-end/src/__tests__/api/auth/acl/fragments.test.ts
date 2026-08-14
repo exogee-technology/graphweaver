@@ -112,7 +112,7 @@ describe('ACL - Fragments', () => {
 	test('should return forbidden in the before read hook when listing an entity when no permission applied through an Album fragment spread.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -131,7 +131,7 @@ describe('ACL - Fragments', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -140,7 +140,7 @@ describe('ACL - Fragments', () => {
 	test('should return forbidden in the before read hook when listing an entity when no permission applied through an Artist fragment spread.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -159,7 +159,7 @@ describe('ACL - Fragments', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -168,7 +168,7 @@ describe('ACL - Fragments', () => {
 	test('should return forbidden in the before read hook when listing an entity when no permission applied through an inline fragment.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnDataProvider = mock.method(albumDataProvider, 'find');
 
 		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -186,7 +186,7 @@ describe('ACL - Fragments', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toHaveBeenCalled();
+		expect(spyOnDataProvider.mock.callCount()).toBe(0);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
