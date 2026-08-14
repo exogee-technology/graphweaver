@@ -65,7 +65,7 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 							),
 							tenantId,
 							accountId: accountAttribute?.value ?? null,
-							amount: parseFloat(value.value ?? '0'),
+							amount: Number.parseFloat(value.value ?? '0'),
 							date,
 							description: description.value,
 							isCollection: () => false,
