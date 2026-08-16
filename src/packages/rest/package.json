@@ -34,7 +34,7 @@
 		"got-cjs": "12.5.4"
 	},
 	"devDependencies": {
-		"@types/node": "24.10.0",
+		"@types/node": "26.2.0",
 		"esbuild": "0.28.1",
 		"glob": "13.0.6",
 		"prettier": "3.6.2",
