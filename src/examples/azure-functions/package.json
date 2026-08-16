@@ -28,7 +28,7 @@
 		"mikro-orm-sqlite-wasm": "workspace:*"
 	},
 	"devDependencies": {
-		"@types/node": "24.10.0",
+		"@types/node": "26.2.0",
 		"graphweaver": "workspace:*",
 		"typescript": "7.0.2"
 	}

@@ -46,7 +46,7 @@
 	},
 	"devDependencies": {
 		"@opentelemetry/instrumentation": "0.212.0",
-		"@types/node": "24.10.0",
+		"@types/node": "26.2.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.28.1",
 		"glob": "13.0.6",

@@ -24,7 +24,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"devDependencies": {
-		"@types/node": "24.10.0",
+		"@types/node": "26.2.0",
 		"esbuild": "0.28.1",
 		"glob": "13.0.6",
 		"typescript": "7.0.2",
