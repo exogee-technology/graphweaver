@@ -40,16 +40,16 @@
 		"graphweaver": "workspace:*",
 		"jimp": "1.6.0",
 		"pg": "8.16.3",
-		"react": "19.2.4",
-		"react-dom": "19.2.4",
+		"react": "19.2.8",
+		"react-dom": "19.2.8",
 		"react-syntax-highlighter": "16.1.0"
 	},
 	"devDependencies": {
 		"@types/node": "24.10.0",
 		"dotenv-cli": "11.0.0",
 		"typescript": "7.0.2",
-		"@types/react": "19.2.13",
-		"@types/react-dom": "19.2.3",
+		"@types/react": "19.2.18",
+		"@types/react-dom": "19.2.4",
 		"@types/react-syntax-highlighter": "15.5.13"
 	},
 	"keywords": [
