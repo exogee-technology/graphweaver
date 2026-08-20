@@ -37,7 +37,7 @@
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.12",
 		"@types/node": "24.10.0",
-		"concurrently": "10.0.4",
+		"concurrently": "10.0.5",
 		"oxlint": "1.78.0",
 		"oxlint-tsgolint": "7.0.2001",
 		"prettier": "3.6.2",
