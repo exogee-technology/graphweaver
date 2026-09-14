@@ -51,7 +51,13 @@ export const resetDatabase = async () => {
 		});
 
 		const sql = fs.readFileSync(path.join(process.cwd(), 'databases', 'mysql.sql')).toString();
-		await connection.query(sql);
+
+		// mysql2 runs each statement in its own autocommit transaction, so the ~15.6k INSERTs in
+		// this file cost us ~15.6k commits (about 12.5s in CI, against a 30s hook timeout). The
+		// equivalent Postgres file takes 0.65s because node-postgres sends it as one implicit
+		// transaction, so do the same here. The DDL at the top of the file implicitly commits,
+		// which is fine; it's the INSERTs that need to land in a single transaction.
+		await connection.query(`SET autocommit = 0;\n${sql}\nCOMMIT;`);
 		await connection.end();
 		return;
 	}
