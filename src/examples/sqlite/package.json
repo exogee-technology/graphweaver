@@ -34,16 +34,16 @@
 		"graphql": "16.12.0",
 		"luxon": "3.7.2",
 		"mikro-orm-sqlite-wasm": "workspace:*",
-		"react": "19.2.4",
-		"react-dom": "19.2.4"
+		"react": "19.3.0",
+		"react-dom": "19.3.0"
 	},
 	"devDependencies": {
 		"@exogee/graphweaver-config": "workspace:*",
 		"@types/luxon": "3.7.1",
 		"@types/node": "26.5.1",
-		"@types/react": "19.2.13",
+		"@types/react": "19.3.0",
 		"graphweaver": "workspace:*",
 		"typescript": "7.0.2",
-		"@types/react-dom": "19.2.3"
+		"@types/react-dom": "19.3.0"
 	}
 }
