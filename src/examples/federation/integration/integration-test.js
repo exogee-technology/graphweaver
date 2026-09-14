@@ -31,7 +31,7 @@ Federation v2 compatibility
 exec(
 	'npx fedtest docker --compose docker-compose.yaml --schema schema.graphql',
 	(err, stdout, stderr) => {
-		if (err) throw err;
+		if (err) throw new Error(`Failed to run fedtest: ${err.message}`, { cause: err });
 		console.log(stdout);
 
 		if (!stdout.endsWith(expectedOutput)) {
