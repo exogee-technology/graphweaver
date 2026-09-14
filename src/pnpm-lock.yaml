@@ -876,8 +876,8 @@ importers:
         specifier: workspace:*
         version: link:../admin-ui-components
       formik:
-        specifier: 2.4.6
-        version: 2.4.6(@types/react@19.2.13)(react@19.2.4)
+        specifier: 2.4.9
+        version: 2.4.9(@types/react@19.2.13)(react@19.2.4)
       react:
         specifier: 19.2.4
         version: 19.2.4
@@ -1043,8 +1043,8 @@ importers:
         specifier: 10.1.11
         version: 10.1.11(eslint@10.4.0(jiti@2.6.1))(storybook@10.5.8(@types/react@19.2.13)(prettier@3.6.2)(react@19.2.4))(typescript@7.0.2)
       formik:
-        specifier: 2.4.6
-        version: 2.4.6(@types/react@19.2.13)(react@19.2.4)
+        specifier: 2.4.9
+        version: 2.4.9(@types/react@19.2.13)(react@19.2.4)
       glob:
         specifier: 13.0.6
         version: 13.0.6
@@ -9074,6 +9074,11 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
 
+  formik@2.4.9:
+    resolution: {integrity: sha512-5nI94BMnlFDdQRBY4Sz39WkhxajZJ57Fzs8wVbtsQlm5ScKIR1QLYqv/ultBnobObtlUyxpxoLodpixrsf36Og==}
+    peerDependencies:
+      react: '>=16.8.0'
+
   framer-motion@12.27.1:
     resolution: {integrity: sha512-cEAqO69kcZt3gL0TGua8WTgRQfv4J57nqt1zxHtLKwYhAwA0x9kDS/JbMa1hJbwkGY74AGJKvZ9pX/IqWZtZWQ==}
     peerDependencies:
@@ -10026,6 +10031,9 @@ packages:
 
   lodash-es@4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+
+  lodash-es@4.18.1:
+    resolution: {integrity: sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==}
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
@@ -21524,6 +21532,20 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  formik@2.4.9(@types/react@19.2.13)(react@19.2.4):
+    dependencies:
+      '@types/hoist-non-react-statics': 3.3.7(@types/react@19.2.13)
+      deepmerge: 2.2.1
+      hoist-non-react-statics: 3.3.2
+      lodash: 4.18.1
+      lodash-es: 4.18.1
+      react: 19.2.4
+      react-fast-compare: 2.0.4
+      tiny-warning: 1.0.3
+      tslib: 2.8.1
+    transitivePeerDependencies:
+      - '@types/react'
+
   framer-motion@12.27.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       motion-dom: 12.27.1
@@ -22051,7 +22073,7 @@ snapshots:
       cli-cursor: 3.1.0
       cli-width: 3.0.0
       figures: 3.2.0
-      lodash: 4.17.21
+      lodash: 4.18.1
       mute-stream: 0.0.8
       ora: 5.4.1
       run-async: 2.4.1
@@ -22628,6 +22650,8 @@ snapshots:
       p-locate: 5.0.0
 
   lodash-es@4.17.21: {}
+
+  lodash-es@4.18.1: {}
 
   lodash.camelcase@4.3.0: {}
 
