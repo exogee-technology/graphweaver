@@ -9,7 +9,7 @@ import {
 	substringFilterForFields,
 	toSelectOption,
 } from '..';
-import { getFilterOptionsQuery } from './graphql';
+import { getFilterOptionsQuery } from '../documents/filters';
 import { useCallback } from 'react';
 
 export interface DropdownTextFilterProps {

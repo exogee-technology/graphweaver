@@ -21,6 +21,7 @@ import {
 	checkPackageForNativeModules,
 	getExternalModules,
 } from '../util';
+import { generateStaticTrustedDocuments } from '../trusted-documents';
 
 import { config } from '@exogee/graphweaver-config';
 
@@ -57,7 +58,18 @@ export interface BackendStartOptions {
 	port: number /** Port to listen on, default is 9001 */;
 }
 
-export const startBackend = async ({ host, port }: BackendStartOptions) => {
+export type BackendStartHooks = {
+	/**
+	 * Runs once `.graphweaver/backend/index.js` exists but before we boot from it, for anything
+	 * that needs the built schema and has to end up inside the bundle. See `buildBackend`.
+	 */
+	onDevBundleReady?: () => Promise<boolean | void>;
+};
+
+export const startBackend = async (
+	{ host, port }: BackendStartOptions,
+	{ onDevBundleReady }: BackendStartHooks = {}
+) => {
 	console.log('Starting Backend...');
 
 	const { additionalFunctions } = config().backend;
@@ -67,6 +79,10 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	// Clear the folder
 	await rimraf(path.join('.graphweaver', 'backend'));
+
+	// The backend imports this, so it has to exist before we can build the backend. The schema
+	// dependent half happens in onDevBundleReady below.
+	await generateStaticTrustedDocuments();
 
 	// Check if the prod build works, this build is not used at this stage, this is an early warning system to check for native modules.
 	const checkNativeModules = build(
@@ -83,19 +99,25 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	);
 
 	// Put the index.js file in there.
-	const buildBackend = build(
-		onResolveEsbuildConfiguration({
-			...baseEsbuildConfig,
+	const buildDevBundle = () =>
+		build(
+			onResolveEsbuildConfiguration({
+				...baseEsbuildConfig,
 
-			// Anything in node_modules should be marked as external for running.
-			plugins: [makeAllPackagesExternalPlugin()],
+				// Anything in node_modules should be marked as external for running.
+				plugins: [makeAllPackagesExternalPlugin()],
 
-			entryPoints: ['./src/backend/index.ts'],
-			outfile: '.graphweaver/backend/index.js',
-		})
-	);
+				entryPoints: ['./src/backend/index.ts'],
+				outfile: '.graphweaver/backend/index.js',
+			})
+		);
 
-	await Promise.all([checkNativeModules, buildBackend]);
+	await Promise.all([checkNativeModules, buildDevBundle()]);
+
+	// If the hook wrote files this bundle imports, build it again before we boot from it.
+	// Otherwise the dev server would come up missing the generated trusted documents, and the
+	// Admin UI wouldn't work against it.
+	if (await onDevBundleReady?.()) await buildDevBundle();
 
 	const buildDir = path.posix.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver, handler, azureHandler } = await import(buildDir);

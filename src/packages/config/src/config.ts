@@ -99,6 +99,37 @@ export interface BuildOptions {
 	onResolveViteConfiguration: (options: InlineConfig) => Promise<InlineConfig> | InlineConfig;
 }
 
+/**
+ * Where the operations for a single trusted document allow list live.
+ *
+ * The shorthand form is just a list of globs. Use the long form when some of the
+ * documents in the list can't be found by a static scan of your source, for
+ * example CSV export overrides that build their document at runtime.
+ */
+export type TrustedDocumentAllowList =
+	| string[]
+	| {
+			/** Globs to scan for `.graphql` / `.gql` files and `gql` tags in `.ts` / `.tsx` / `.js` / `.jsx`. */
+			paths: string[];
+
+			/**
+			 * Path to a module whose default export is either an array of documents
+			 * (`DocumentNode[] | string[]`) or a function returning one. Evaluated at build
+			 * time with the built schema and Admin UI metadata, then hashed and validated
+			 * alongside the statically extracted documents.
+			 */
+			additionalDocumentsPath?: string;
+	  };
+
+export interface TrustedDocumentOptions {
+	/**
+	 * Named allow lists of operations. Each list is hashed into the server bundle at build
+	 * time; at runtime the `trustedDocuments.allowList` option on your Graphweaver instance
+	 * decides which list (or lists) a given request is permitted to use.
+	 */
+	allowLists: Record<string, TrustedDocumentAllowList>;
+}
+
 export interface ImportOptions {
 	source?: 'mysql' | 'postgresql' | 'sqlite';
 	dbName?: string;
@@ -116,6 +147,7 @@ export interface ConfigOptions {
 	start: StartOptions;
 	build: BuildOptions;
 	import: ImportOptions;
+	trustedDocuments: TrustedDocumentOptions;
 }
 
 export const defaultConfig = (): ConfigOptions => {
@@ -144,6 +176,9 @@ export const defaultConfig = (): ConfigOptions => {
 			onResolveViteConfiguration: (options) => options,
 		},
 		import: {},
+		trustedDocuments: {
+			allowLists: {},
+		},
 	};
 };
 

@@ -13,7 +13,7 @@ import { Backend, init } from './init';
 import { initAuth, AuthMethod, authMethods } from './auth';
 import { importDataSource } from './import';
 import { version } from '../package.json';
-import { generateTypes, printSchema } from './tasks';
+import { generateTrustedDocuments, generateTypes, printSchema } from './tasks';
 import * as path from 'path';
 import { config } from '@exogee/graphweaver-config';
 
@@ -205,7 +205,7 @@ void yargs
 				}),
 		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await buildBackend();
+				await buildBackend({ onDevBundleReady: generateTrustedDocuments });
 				await generateTypes();
 			}
 			if (environment === 'frontend' || environment === 'all') {
@@ -274,7 +274,7 @@ void yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await startBackend(args);
+				await startBackend(args, { onDevBundleReady: generateTrustedDocuments });
 				await generateTypes();
 			}
 			if (environment === 'frontend' || environment === 'all') {
@@ -305,7 +305,7 @@ void yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await startBackend(args);
+				await startBackend(args, { onDevBundleReady: generateTrustedDocuments });
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				// Logic to start the process
@@ -320,6 +320,12 @@ void yargs
 				const { graphweaver } = await import(buildDir);
 				const codegenOptions = graphweaver?.config?.fileAutoGenerationOptions;
 
+				// Trusted document allow lists can point outside ./src, at a sibling mobile app for
+				// example, so watch wherever the developer said their operations live.
+				const trustedDocumentPaths = Object.values(
+					config().trustedDocuments?.allowLists ?? {}
+				).flatMap((allowList) => (Array.isArray(allowList) ? allowList : allowList.paths));
+
 				// Watch the directory for file changes
 				const watcher = chokidar.watch(
 					[
@@ -329,8 +335,12 @@ void yargs
 									path.join(filePath, '/**')
 								)
 							: []),
+						...trustedDocumentPaths,
 					],
 					{
+						// Without this, chokidar fires `add` for every existing file as it scans, and
+						// our `add` handler below would kick off a rebuild for each one.
+						ignoreInitial: true,
 						ignored: [
 							/node_modules/,
 							/types.generated.ts/,
@@ -348,16 +358,21 @@ void yargs
 
 				console.log('Waiting for changes... \n\n');
 
-				// Restart the process on file change
-				watcher.on('change', () => {
+				// Restart the process on file change. `add` and `unlink` matter as much as `change`
+				// here: adding a new .graphql file has to make it into the trusted documents.
+				const rebuild = (reason: string) => {
 					void (async () => {
-						console.log('File changed. Rebuilding generated files...');
-						await buildBackend();
+						console.log(`${reason} Rebuilding generated files...`);
+						await buildBackend({ onDevBundleReady: generateTrustedDocuments });
 						await generateTypes();
 						console.log('Rebuild complete.\n\n');
 						console.log('Waiting for changes... \n\n');
 					})();
-				});
+				};
+
+				watcher.on('change', () => rebuild('File changed.'));
+				watcher.on('add', () => rebuild('File added.'));
+				watcher.on('unlink', () => rebuild('File removed.'));
 			}
 		},
 	})

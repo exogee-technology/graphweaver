@@ -97,6 +97,7 @@ export const viteConfig = async ({
 				'virtual:graphweaver-auth-ui-components',
 				'virtual:graphweaver-user-supplied-custom-fields',
 				'virtual:graphweaver-user-supplied-custom-pages',
+				'virtual:graphweaver-trusted-documents',
 			],
 		},
 		plugins: [react(), graphweaver()],

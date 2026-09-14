@@ -1,5 +1,11 @@
 import type { Plugin } from 'vite';
-import { loadCustomPages, loadCustomFields, loadAuth, loadCsvExportOverrides } from './loaders';
+import {
+	loadCustomPages,
+	loadCustomFields,
+	loadAuth,
+	loadCsvExportOverrides,
+	loadTrustedDocuments,
+} from './loaders';
 
 const resolved = (virtualModuleId: string) => `\0${virtualModuleId}`;
 
@@ -22,6 +28,9 @@ const graphweaverPlugin = ({
 	const virtualAdminUiCsvExportOverrides = 'virtual:graphweaver-admin-ui-csv-export-overrides';
 	const resolvedVirtualAdminUiCsvExportOverrides = resolved(virtualAdminUiCsvExportOverrides);
 
+	const virtualTrustedDocuments = 'virtual:graphweaver-trusted-documents';
+	const resolvedVirtualTrustedDocuments = resolved(virtualTrustedDocuments);
+
 	let adminUiPath: string | undefined;
 
 	return {
@@ -38,6 +47,7 @@ const graphweaverPlugin = ({
 			if (id === virtualCustomFieldsModuleId) return resolvedVirtualCustomFieldModuleId;
 			if (id === virtualAuthRoutesId) return resolvedVirtualAuthRoutesModuleId;
 			if (id === virtualAdminUiCsvExportOverrides) return resolvedVirtualAdminUiCsvExportOverrides;
+			if (id === virtualTrustedDocuments) return resolvedVirtualTrustedDocuments;
 
 			// Ok, if it's not any of our virtual modules, it may be in the user's project
 			// directory.
@@ -63,6 +73,7 @@ const graphweaverPlugin = ({
 			if (id === resolvedVirtualAuthRoutesModuleId) return await loadAuth();
 			if (id === resolvedVirtualAdminUiCsvExportOverrides)
 				return await loadCsvExportOverrides(projectRoot);
+			if (id === resolvedVirtualTrustedDocuments) return await loadTrustedDocuments(projectRoot);
 		},
 	};
 };

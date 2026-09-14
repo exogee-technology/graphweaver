@@ -1,0 +1,31 @@
+# Operations the web front end is allowed to send.
+#
+# `graphweaver build` hashes everything it finds here into the server bundle, so at runtime the
+# client sends only the hash. Anything not in this folder is rejected.
+
+query WebAlbumList($filter: AlbumsListFilter, $pagination: AlbumsPaginationInput) {
+	albums(filter: $filter, pagination: $pagination) {
+		...WebAlbumSummary
+	}
+}
+
+query WebAlbumDetail($id: ID!) {
+	album(id: $id) {
+		...WebAlbumSummary
+		tracks {
+			trackId
+			name
+		}
+	}
+}
+
+# Fragments can live in any file covered by the allow list; the build stitches each operation
+# together with the fragments it uses before hashing it.
+fragment WebAlbumSummary on Album {
+	albumId
+	title
+	artist {
+		artistId
+		name
+	}
+}

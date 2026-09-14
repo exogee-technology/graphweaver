@@ -6,26 +6,22 @@ import toast from 'react-hot-toast';
 import { useLocation, useParams, useSearchParams } from 'wouter';
 
 import { Button } from '../button';
-import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
+import { generateDeleteManyEntitiesMutation } from '../documents/detail-panel';
 import { ErrorView } from '../error-view';
 import { Header } from '../header';
 import { ListToolBar } from '../list-toolbar';
 import { Modal } from '../modal';
 import { SelectionBar } from '../selection-bar';
 import { Table } from '../table';
-import {
-	PAGE_SIZE,
-	SortEntity,
-	decodeSearchParams,
-	getOrderByQuery,
-	routeFor,
-	useSchema,
-} from '../utils';
+import { SortEntity, decodeSearchParams, getOrderByQuery, routeFor, useSchema } from '../utils';
 import { convertEntityToColumns } from './columns';
-import { QueryResponse, queryForEntityPage } from './graphql';
+import { QueryResponse, queryForEntityPage } from '../documents/entity-list';
 
 import { ExportModal } from '../export-modal';
 import styles from './styles.module.css';
+
+/** How many rows we fetch per page of an entity list. */
+export const PAGE_SIZE = 50;
 
 export const EntityList = <TData extends Record<string, unknown>>({
 	children,

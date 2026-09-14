@@ -21,7 +21,8 @@
 		"graphweaver": "bin/gw-bin.js",
 		"gw": "bin/gw-bin.js",
 		"gw-types": "bin/gw-types.js",
-		"gw-print-schema": "bin/gw-print-schema.js"
+		"gw-print-schema": "bin/gw-print-schema.js",
+		"gw-trusted-documents": "bin/gw-trusted-documents.js"
 	},
 	"files": [
 		"bin"

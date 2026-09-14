@@ -16,7 +16,13 @@ import { logger, safeErrorLog } from '@exogee/logger';
 import { ApolloServer, BaseContext, GraphQLRequest } from '@apollo/server';
 import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
 
-import { LogErrors, LogRequests, corsPlugin, dedupeGraphQL } from './apollo-plugins';
+import {
+	LogErrors,
+	LogRequests,
+	corsPlugin,
+	dedupeGraphQL,
+	trustedDocumentsPlugin,
+} from './apollo-plugins';
 import {
 	StartServerOptions,
 	startServerless,
@@ -39,7 +45,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
 	public schema: GraphQLSchema;
 	private graphweaverPlugins: Set<GraphweaverPlugin> = new Set();
-	private config: GraphweaverConfig = {
+	private config: GraphweaverConfig<TContext> = {
 		adminMetadata: { enabled: true },
 		apolloServerOptions: {
 			introspection: process.env.NODE_ENV !== 'production',
@@ -50,11 +56,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 		},
 	};
 
-	constructor(config?: GraphweaverConfig) {
+	constructor(config?: GraphweaverConfig<TContext>) {
 		logger.trace(`Graphweaver constructor called`);
 
 		// Assign default config
-		this.config = mergeConfig<GraphweaverConfig>(this.config, config ?? {});
+		this.config = mergeConfig<GraphweaverConfig<TContext>>(this.config, config ?? {});
 
 		startTracing({
 			instrumentations: this.config.openTelemetry?.instrumentations ?? [],
@@ -88,11 +94,18 @@ export default class Graphweaver<TContext extends BaseContext> {
 			});
 		}
 
+		// Trusted documents default to on whenever a manifest has been supplied.
+		const trustedDocuments = this.config.trustedDocuments;
+		const enforceTrustedDocuments = Boolean(
+			trustedDocuments?.manifest && (trustedDocuments.enabled ?? true)
+		);
+
 		// Order is important here
 		const plugins = [
 			LogRequests,
 			LogErrors,
 			corsPlugin(this.config.corsOptions),
+			...(enforceTrustedDocuments ? [trustedDocumentsPlugin<TContext>(trustedDocuments!)] : []),
 			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
@@ -129,6 +142,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 		this.server = new ApolloServer<TContext>({
 			...(this.config.apolloServerOptions as any),
 			...protection,
+
+			// Apollo turns automatic persisted queries on by default. Left alone, any client could
+			// register an operation of its choosing and then replay it by hash, walking straight
+			// around the safelist, so we force it off whenever we're enforcing trusted documents.
+			...(enforceTrustedDocuments ? { persistedQueries: false as const } : {}),
 			plugins: [...plugins, ...protection.plugins],
 			schema: this.schema,
 			fieldResolver,

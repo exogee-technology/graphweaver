@@ -1,3 +1,6 @@
+export * from './normalise';
+export * from './trusted-documents';
+
 import type { FieldPolicy, TypePolicies } from '@apollo/client';
 
 // Note: Entity metadata contains more than just these three fields,

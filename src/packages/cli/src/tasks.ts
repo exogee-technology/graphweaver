@@ -2,6 +2,7 @@ import { exec } from 'node:child_process';
 import path from 'node:path';
 import { writeFileSync } from 'node:fs';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
+import { config } from '@exogee/graphweaver-config';
 
 const asyncExec = async (command: string) =>
 	new Promise<void>((resolve, reject) => {
@@ -51,5 +52,22 @@ export const printSchema = async (output?: string) => {
 		}
 	} catch (error: any) {
 		console.error(`Schema Print Failed: ${error.message}`);
+	}
+};
+
+/** Returns true when it generated something, so the caller knows to rebuild. */
+export const generateTrustedDocuments = async () => {
+	// Nothing to do, and no reason to spawn a process that would boot the app to find that out.
+	if (!Object.keys(config().trustedDocuments?.allowLists ?? {}).length) return false;
+
+	try {
+		console.log(`Generating Trusted Documents...`);
+		await asyncExec(`gw-trusted-documents`);
+		return true;
+	} catch (error: any) {
+		// Unlike types, a failure here is fatal: shipping a stale or empty manifest would lock
+		// clients out of the API, or worse, let through documents that are no longer allowed.
+		console.error(`Generate Trusted Documents Failed: ${error.message}`);
+		throw error;
 	}
 };

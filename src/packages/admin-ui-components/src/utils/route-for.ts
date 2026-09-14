@@ -1,4 +1,4 @@
-import { Entity, Filter, SortEntity } from './use-schema';
+import { Entity, Filter, SortEntity } from './schema-types';
 
 interface RouteForEntity {
 	entity: string | Entity;

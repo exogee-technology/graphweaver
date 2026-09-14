@@ -1,5 +1,7 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
 import { inflate } from 'graphql-deduplicator';
+import { createTrustedDocumentsLink } from '@exogee/graphweaver-apollo-client';
+import { trustedDocumentsEnabled } from 'virtual:graphweaver-trusted-documents';
 import { localStorageAuthKey, uri } from './config';
 import { tokenRefreshLink } from './token-refresh-link';
 
@@ -70,8 +72,15 @@ const authLink = new ApolloLink((operation, forward) => {
 	});
 });
 
+// When the API enforces trusted documents we have to send ids instead of operations. We hash in
+// the browser rather than shipping a manifest, because the Admin UI builds its documents at
+// runtime from your schema - the build bakes those same documents into the `admin-ui` allow
+// list, so the ids match. Only added when it's turned on, so nobody else pays for the extra
+// round trip.
+const trustedDocumentsLink = trustedDocumentsEnabled ? [createTrustedDocumentsLink()] : [];
+
 // Token refresh link runs first to ensure fresh tokens before auth link reads them
 export const apolloClient = new ApolloClient({
-	link: ApolloLink.from([tokenRefreshLink, authLink, httpLink]),
+	link: ApolloLink.from([tokenRefreshLink, authLink, ...trustedDocumentsLink, httpLink]),
 	cache: new InMemoryCache(),
 });

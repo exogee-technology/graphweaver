@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from 'graphql-tag';
 
 export const TENANTS_QUERY = gql`
 	query TenantsQueryForSidebar {

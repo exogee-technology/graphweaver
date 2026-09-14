@@ -9,7 +9,8 @@ import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { useLocation, useParams, useSearchParams } from 'wouter';
 import { Button } from '../button';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
-import { getEntityListQueryName } from '../entity-list/graphql';
+import { getEntityListQueryName } from '../documents/entity-list';
+import { queryForEntityEdit } from '../documents/entity-edit';
 import { Modal } from '../modal';
 import { Spinner } from '../spinner';
 import {
@@ -19,7 +20,6 @@ import {
 	DetailPanelInputComponentOption,
 	Entity,
 	EntityField,
-	queryForEntityEdit,
 	routeFor,
 	unwrapGraphQLErrors,
 	useSchema,
@@ -37,7 +37,10 @@ import {
 	RichTextField,
 	TextField,
 } from './fields';
-import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
+import {
+	generateCreateEntityMutation,
+	generateUpdateEntityMutation,
+} from '../documents/detail-panel';
 import styles from './styles.module.css';
 import { dataTransforms } from './use-data-transform';
 import { isValueEmpty, parseValueForForm, transformValueForForm } from './util';

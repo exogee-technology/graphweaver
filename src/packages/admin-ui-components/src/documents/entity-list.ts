@@ -1,5 +1,7 @@
-import { gql } from '@apollo/client';
-import { AggregationType, Entity, generateGqlSelectForEntityFields } from '../utils';
+import { gql } from 'graphql-tag';
+
+import { AggregationType, Entity } from '../utils/schema-types.js';
+import { generateGqlSelectForEntityFields } from './select.js';
 
 export type QueryResponse<TData> = {
 	result: TData[];
