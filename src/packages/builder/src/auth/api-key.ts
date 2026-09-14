@@ -36,6 +36,7 @@ export const generateApiKey = async (options: GenerateApiKeyOptions) => {
 			password: options.password,
 			dbName: options.dbName,
 		},
+		ssl: options.ssl,
 	});
 
 	const database = ConnectionManager.database('default');

@@ -135,6 +135,29 @@ export interface TrustedDocumentOptions {
 	allowLists: Record<string, TrustedDocumentAllowList>;
 }
 
+/**
+ * SSL options for the database connection the import uses.
+ *
+ * Certificates and keys can be given either as a path to a file on disk or as the PEM encoded
+ * contents of the certificate itself, whichever is more convenient.
+ */
+export interface ImportSslOptions {
+	/** The certificate authority (or authorities) to trust when connecting. */
+	ca?: string | string[];
+
+	/** The client certificate to present to the server, if it requires one. */
+	cert?: string;
+
+	/** The private key for the client certificate above. */
+	key?: string;
+
+	/** The passphrase for the private key above, if it is encrypted. */
+	passphrase?: string;
+
+	/** Defaults to true. Set to false to accept certificates the CAs above don't vouch for. */
+	rejectUnauthorized?: boolean;
+}
+
 export interface ImportOptions {
 	source?: 'mysql' | 'postgresql' | 'sqlite';
 	dbName?: string;
@@ -144,6 +167,13 @@ export interface ImportOptions {
 	password?: string;
 	overwrite?: boolean;
 	clientGeneratedPrimaryKeys?: boolean;
+
+	/**
+	 * How to secure the connection to the database. `true` connects with SSL using the system
+	 * certificate authorities, or pass an object to supply your own certificates. Whatever you
+	 * set here is also written into the `database.ts` the import generates.
+	 */
+	ssl?: boolean | ImportSslOptions;
 }
 
 export interface ConfigOptions {

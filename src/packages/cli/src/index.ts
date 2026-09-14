@@ -12,6 +12,7 @@ import {
 import { Backend, init } from './init';
 import { initAuth, AuthMethod, authMethods } from './auth';
 import { importDataSource } from './import';
+import { sslOptionsFromFlags } from './database';
 import { version } from '../package.json';
 import { generateTrustedDocuments, generateTypes, printSchema } from './tasks';
 import * as path from 'path';
@@ -117,6 +118,30 @@ void yargs
 				.option('clientGeneratedPrimaryKeys', {
 					type: 'boolean',
 					describe: 'Whether to allow client generated primary keys for introspected entities.',
+				})
+				.option('ssl', {
+					type: 'boolean',
+					describe: 'Connect to the database with SSL.',
+				})
+				.option('ssl-ca', {
+					type: 'string',
+					describe:
+						'Path to the CA certificate to trust when connecting, or the certificate itself. Implies --ssl.',
+				})
+				.option('ssl-cert', {
+					type: 'string',
+					describe:
+						'Path to the client certificate to present to the database, or the certificate itself. Implies --ssl.',
+				})
+				.option('ssl-key', {
+					type: 'string',
+					describe:
+						'Path to the private key for the client certificate, or the key itself. Implies --ssl.',
+				})
+				.option('ssl-reject-unauthorized', {
+					type: 'boolean',
+					describe:
+						'Defaults to true. Pass --no-ssl-reject-unauthorized to accept self signed certificates. Implies --ssl.',
 				}),
 		handler: async ({
 			source,
@@ -127,10 +152,23 @@ void yargs
 			user,
 			overwrite,
 			clientGeneratedPrimaryKeys,
+			ssl: sslFlag,
+			sslCa,
+			sslCert,
+			sslKey,
+			sslRejectUnauthorized,
 		}) => {
 			console.log('Importing data source...');
 			// Do we have any pre-configured options?
 			const { import: importOptions } = config();
+
+			let ssl = sslOptionsFromFlags({
+				ssl: sslFlag,
+				sslCa,
+				sslCert,
+				sslKey,
+				sslRejectUnauthorized,
+			});
 
 			if (importOptions) {
 				if (source === undefined) source = importOptions.source;
@@ -142,6 +180,7 @@ void yargs
 				if (overwrite === undefined) overwrite = importOptions.overwrite;
 				if (clientGeneratedPrimaryKeys === undefined)
 					clientGeneratedPrimaryKeys = importOptions.clientGeneratedPrimaryKeys;
+				if (ssl === undefined) ssl = importOptions.ssl;
 			}
 
 			if (source) console.log(`Source: ${source}`);
@@ -159,16 +198,17 @@ void yargs
 				throw new Error(`Unsupported source: ${source}`);
 			}
 
-			await importDataSource(
+			await importDataSource({
 				source,
-				database,
+				dbName: database,
 				host,
 				port,
 				password,
 				user,
-				overwrite,
-				clientGeneratedPrimaryKeys
-			);
+				ssl,
+				overwriteAllFiles: overwrite,
+				clientGeneratedPrimaryKeys,
+			});
 		},
 	})
 	.command({

@@ -1,5 +1,6 @@
 import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';
+import type { DatabaseSsl } from '@exogee/graphweaver-mikroorm';
 
 import { generateConfig } from './config';
 import { generateAuthEnv } from './env';
@@ -15,7 +16,15 @@ export interface DatabaseOptions {
 	port?: number;
 	password?: string;
 	user?: string;
+
+	/**
+	 * How to secure the connection to the database. `true` uses the system certificate
+	 * authorities, or pass an object to supply your own certificates.
+	 */
+	ssl?: DatabaseSsl;
 }
+
+export type { DatabaseSsl, DatabaseSslOptions } from '@exogee/graphweaver-mikroorm';
 
 export type AuthMethod = 'password' | 'api-key' | 'magic-link';
 

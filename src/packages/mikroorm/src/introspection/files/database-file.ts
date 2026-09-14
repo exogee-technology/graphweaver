@@ -1,5 +1,7 @@
 import { Options } from '@mikro-orm/core';
-import { ConnectionOptions, DatabaseType } from '../../database';
+import { DatabaseType } from '../../database';
+import { IntrospectionOptions } from '../generate';
+import { driverOptionsForSsl } from '../ssl';
 
 const pad = '\t';
 
@@ -19,10 +21,34 @@ const driverForDatabaseType = (databaseType: DatabaseType) => {
 	throw new Error(`Unsupported database type: ${databaseType}`);
 };
 
+// Marks a value that should be written into the generated file as code instead of as data.
+class CodeExpression {
+	constructor(readonly code: string) {}
+}
+
+// Turns a plain object into the source code for the same object, indented to sit at `depth`.
+const serialise = (value: unknown, depth: number): string => {
+	if (value instanceof CodeExpression) return value.code;
+
+	if (Array.isArray(value)) {
+		const entries = value.map((entry) => `${pad.repeat(depth + 1)}${serialise(entry, depth + 1)},`);
+		return `[\n${entries.join('\n')}\n${pad.repeat(depth)}]`;
+	}
+
+	if (value && typeof value === 'object') {
+		const entries = Object.entries(value).map(
+			([key, entry]) => `${pad.repeat(depth + 1)}${key}: ${serialise(entry, depth + 1)},`
+		);
+		return `{\n${entries.join('\n')}\n${pad.repeat(depth)}}`;
+	}
+
+	return JSON.stringify(value);
+};
+
 export class DatabaseFile {
 	constructor(
 		protected readonly databaseType: DatabaseType,
-		protected readonly connection: ConnectionOptions
+		protected readonly connection: IntrospectionOptions
 	) {}
 
 	getBasePath() {
@@ -43,6 +69,23 @@ export class DatabaseFile {
 
 		const config = this.connection.mikroOrmConfig as Options;
 
+		// Certificates the developer gave us as a path stay a path in the generated file, so the
+		// project reads them at startup rather than carrying a copy of them around in its source.
+		let readsCertificatesFromDisk = false;
+		const driverOptions = driverOptionsForSsl(
+			this.databaseType,
+			this.connection.ssl,
+			(certificateOrPath) => {
+				if (certificateOrPath.includes('-----BEGIN')) return certificateOrPath;
+
+				readsCertificatesFromDisk = true;
+				const quotedPath = `'${certificateOrPath.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+				return new CodeExpression(`readFileSync(${quotedPath}, 'utf-8')`);
+			}
+		);
+
+		if (readsCertificatesFromDisk) imports.unshift(`import { readFileSync } from 'node:fs';`);
+
 		const connection = [`export const connection = {`];
 		connection.push(`${pad}connectionManagerId: '${this.databaseType}',`);
 		connection.push(`${pad}mikroOrmConfig: {`);
@@ -58,6 +101,9 @@ export class DatabaseFile {
 			connection.push(
 				`${pad}${pad}port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : ${config.port},`
 			);
+		}
+		if (driverOptions) {
+			connection.push(`${pad}${pad}driverOptions: ${serialise(driverOptions, 2)},`);
 		}
 		connection.push(`${pad}},`);
 		connection.push(`};`);

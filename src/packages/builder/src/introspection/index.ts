@@ -24,6 +24,7 @@ export const startIntrospection = async (
 				password: databaseOptions.password,
 				port: databaseOptions.port,
 			},
+			ssl: databaseOptions.ssl,
 		},
 		apiOptions
 	);

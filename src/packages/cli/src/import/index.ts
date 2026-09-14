@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { Source, startIntrospection } from '@exogee/graphweaver-builder';
+import { DatabaseSsl, Source, startIntrospection } from '@exogee/graphweaver-builder';
 import ora from 'ora-classic';
 
 import { GRAPHWEAVER_TARGET_VERSION, MIKRO_ORM_TARGET_VERSION } from '../init/constants';
@@ -63,16 +63,29 @@ const checkForMissingDependencies = (source: Source) => {
 	}
 };
 
-export const importDataSource = async (
-	source: Source,
-	dbName?: string,
-	host?: string,
-	port?: number,
-	password?: string,
-	user?: string,
-	overwriteAllFiles?: boolean,
-	clientGeneratedPrimaryKeys?: boolean
-) => {
+interface ImportDataSourceOptions {
+	source: Source;
+	dbName?: string;
+	host?: string;
+	port?: number;
+	password?: string;
+	user?: string;
+	ssl?: DatabaseSsl;
+	overwriteAllFiles?: boolean;
+	clientGeneratedPrimaryKeys?: boolean;
+}
+
+export const importDataSource = async ({
+	source,
+	dbName,
+	host,
+	port,
+	password,
+	user,
+	ssl,
+	overwriteAllFiles,
+	clientGeneratedPrimaryKeys,
+}: ImportDataSourceOptions) => {
 	const databaseOptions = await promptForDatabaseOptions({
 		source,
 		dbName,
@@ -80,6 +93,7 @@ export const importDataSource = async (
 		port,
 		password,
 		user,
+		ssl,
 	});
 	const apiOptions = {
 		clientGeneratedPrimaryKeys: clientGeneratedPrimaryKeys ?? false,

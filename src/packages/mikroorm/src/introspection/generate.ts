@@ -9,6 +9,7 @@ import {
 import pluralize from 'pluralize';
 
 import { ConnectionManager, ConnectionOptions, DatabaseType } from '../database';
+import { DatabaseSsl, driverOptionsForSsl } from './ssl';
 import {
 	DataEntityFile,
 	DataEntityIndexFile,
@@ -181,7 +182,7 @@ const convertSchemaToMetadata = async (
 	return { metadata, errors };
 };
 
-const openConnection = async (type: DatabaseType, options: ConnectionOptions) => {
+const openConnection = async (type: DatabaseType, options: IntrospectionOptions) => {
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const module = require(`@mikro-orm/${type}`);
 	const PLATFORMS = {
@@ -190,10 +191,18 @@ const openConnection = async (type: DatabaseType, options: ConnectionOptions) =>
 		postgresql: 'PostgreSqlDriver',
 		sqlite: 'SqliteDriver',
 	};
+
+	if (options.ssl && type === 'sqlite') {
+		console.warn('SSL options were provided, but SQLite reads a local file, so ignoring them.');
+	}
+
+	const sslDriverOptions = driverOptionsForSsl(type, options.ssl);
+
 	await ConnectionManager.connect(CONNECTION_MANAGER_ID, {
 		mikroOrmConfig: {
 			driver: module[PLATFORMS[type]],
 			...options.mikroOrmConfig,
+			...(sslDriverOptions ? { driverOptions: sslDriverOptions } : {}),
 		},
 	});
 };
@@ -221,9 +230,17 @@ export interface APIOptions {
 	clientGeneratedPrimaryKeys?: boolean;
 }
 
+export interface IntrospectionOptions extends ConnectionOptions {
+	/**
+	 * How to secure the connection to the database we're introspecting. This is also written into
+	 * the `database.ts` we generate, so the project we're importing into connects the same way.
+	 */
+	ssl?: DatabaseSsl;
+}
+
 export const generate = async (
 	databaseType: DatabaseType,
-	options: ConnectionOptions,
+	options: IntrospectionOptions,
 	apiOptions?: APIOptions
 ) => {
 	try {
