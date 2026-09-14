@@ -38,9 +38,9 @@ export const generateDeleteEntityMutation = (entity: Entity) => gql`
   `;
 
 export const generateDeleteManyEntitiesMutation = (entity: Entity) => gql`
-mutation Delete${entity.plural} ($ids: [ID!]!){
-  delete${entity.plural} (filter: { ${entity.primaryKeyField}_in: $ids })
-}
+	mutation Delete${entity.plural} ($ids: [ID!]!){
+	  delete${entity.plural} (filter: { ${entity.primaryKeyField}_in: $ids })
+	}
 `;
 
 export const getRelationshipQuery = (entity: Entity) => {
