@@ -1,4 +1,4 @@
-import { DocumentNode, gql, QueryOptions } from '@apollo/client';
+import { DocumentNode, QueryOptions } from '@apollo/client';
 import { isDocumentNode } from '@apollo/client/utilities';
 import { Entity, Filter, getOrderByQuery, SortEntity } from '../utils';
 import { listEntityForExport } from '../documents/export';

@@ -1,7 +1,16 @@
 test
+
+# The hand written bins are source; bin/index.js and its map are built by build.js.
+#
+# The root .gitignore excludes `bin` everywhere, and git won't re-include a file out of an
+# excluded directory, so we have to un-exclude the directory itself before the negations below
+# can take effect.
+!bin/
+bin/*
 !bin/gw-bin.js
 !bin/gw-types.js
 !bin/gw-print-schema.js
-bin
+!bin/gw-trusted-documents.js
+
 node_modules
 *.log
