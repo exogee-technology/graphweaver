@@ -14,7 +14,8 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
-		"version": "npm version --no-git-tag-version"
+		"version": "npm version --no-git-tag-version",
+		"test": "vitest run"
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
@@ -25,14 +26,15 @@
 		"lib"
 	],
 	"dependencies": {
+		"esbuild": "0.28.1",
 		"lodash": "4.18.1"
 	},
 	"devDependencies": {
 		"@types/lodash": "4.17.23",
 		"@types/node": "24.10.0",
-		"esbuild": "0.28.1",
 		"prettier": "3.6.2",
-		"vite": "7.3.2"
+		"vite": "7.3.2",
+		"vitest": "4.1.0"
 	},
 	"keywords": [
 		"graphql",

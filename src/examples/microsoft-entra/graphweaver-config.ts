@@ -1,7 +1,9 @@
-module.exports = {
+import { defineConfig, PrimaryAuthMethod } from '@exogee/graphweaver-config';
+
+export default defineConfig({
 	adminUI: {
 		auth: {
-			primaryMethods: ['MICROSOFT_ENTRA'],
+			primaryMethods: [PrimaryAuthMethod.MICROSOFT_ENTRA],
 		},
 	},
 
@@ -17,4 +19,4 @@ module.exports = {
 			mobile: ['src/frontend/mobile/**/*.graphql'],
 		},
 	},
-};
+});

@@ -1,4 +1,6 @@
-module.exports = {
+import { defineConfig } from '@exogee/graphweaver-config';
+
+export default defineConfig({
 	// Every operation the web front end can send lives in these files. `graphweaver build` hashes
 	// them into the server bundle, and the API then only accepts those hashes.
 	//
@@ -9,4 +11,4 @@ module.exports = {
 			web: ['src/frontend/web/**/*.graphql'],
 		},
 	},
-};
+});

@@ -45,7 +45,9 @@ async function main() {
 		}
 
 		for (const key of Object.keys(packageJson.devDependencies ?? {})) {
-			if (key === 'graphweaver') {
+			if (key.startsWith('@exogee')) {
+				packageJson.devDependencies[key] = `file:../local_modules/${key}`;
+			} else if (key === 'graphweaver') {
 				packageJson.devDependencies[key] = `file:../local_modules/graphweaver`;
 			}
 		}
