@@ -1,0 +1,13 @@
+# Operations the mobile app is allowed to send.
+#
+# Deliberately a narrower surface than the web portal: the catalogue, and nothing else. There is
+# no customer query here, so the mobile app cannot read customer records even when it presents a
+# perfectly valid Entra token for a user who *can* read them in the portal. The allow list is
+# chosen per request, so it is the client that is constrained, not just the user.
+
+query MobileAlbumList($pagination: AlbumsPaginationInput) {
+	albums(pagination: $pagination) {
+		albumId
+		title
+	}
+}

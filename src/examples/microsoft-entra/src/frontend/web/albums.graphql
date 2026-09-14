@@ -1,0 +1,28 @@
+# Operations the web portal is allowed to send.
+#
+# Staff reach the portal through Entra and can browse the catalogue in full, including the
+# customer and employee data the mobile app has no business seeing.
+
+query WebAlbumList($filter: AlbumsListFilter, $pagination: AlbumsPaginationInput) {
+	albums(filter: $filter, pagination: $pagination) {
+		...WebAlbumSummary
+	}
+}
+
+query WebCustomerList($pagination: CustomersPaginationInput) {
+	customers(pagination: $pagination) {
+		customerId
+		firstName
+		lastName
+		email
+	}
+}
+
+fragment WebAlbumSummary on Album {
+	albumId
+	title
+	artist {
+		artistId
+		name
+	}
+}
