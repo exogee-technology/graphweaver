@@ -40,7 +40,7 @@
 		"concurrently": "10.0.5",
 		"oxlint": "1.78.0",
 		"oxlint-tsgolint": "7.0.2001",
-		"prettier": "3.6.2",
+		"prettier": "3.9.6",
 		"turbo": "2.10.9",
 		"typescript": "7.0.2"
 	},
