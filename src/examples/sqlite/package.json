@@ -38,6 +38,7 @@
 		"react-dom": "19.2.4"
 	},
 	"devDependencies": {
+		"@exogee/graphweaver-config": "workspace:*",
 		"@types/luxon": "3.7.1",
 		"@types/node": "24.10.0",
 		"@types/react": "19.2.13",

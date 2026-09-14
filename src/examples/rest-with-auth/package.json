@@ -42,6 +42,7 @@
 		"wouter": "3.9.0"
 	},
 	"devDependencies": {
+		"@exogee/graphweaver-config": "workspace:*",
 		"@types/node": "24.10.0",
 		"dotenv-cli": "11.0.0",
 		"typescript": "7.0.2",

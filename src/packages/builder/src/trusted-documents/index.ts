@@ -208,7 +208,7 @@ export const generateTrustedDocuments = async ({
 
 		if (!allowLists[name].length) {
 			console.warn(
-				`The "${name}" allow list didn't match any operations, so every request claiming that list will be rejected. Check the paths in your graphweaver-config.js.`
+				`The "${name}" allow list didn't match any operations, so every request claiming that list will be rejected. Check the paths in your graphweaver-config file.`
 			);
 		}
 	}

@@ -3,3 +3,4 @@ test
 bin/index.js
 node_modules
 *.log
+.test-fixtures

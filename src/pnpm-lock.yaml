@@ -95,6 +95,9 @@ importers:
         specifier: 19.2.4
         version: 19.2.4
     devDependencies:
+      '@exogee/graphweaver-config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
@@ -361,6 +364,9 @@ importers:
         specifier: 19.2.4
         version: 19.2.4
     devDependencies:
+      '@exogee/graphweaver-config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
@@ -425,6 +431,9 @@ importers:
         specifier: 19.2.4
         version: 19.2.4
     devDependencies:
+      '@exogee/graphweaver-config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
@@ -529,6 +538,9 @@ importers:
         specifier: 3.9.0
         version: 3.9.0(react@19.2.4)
     devDependencies:
+      '@exogee/graphweaver-config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
@@ -733,6 +745,9 @@ importers:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
     devDependencies:
+      '@exogee/graphweaver-config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@types/luxon':
         specifier: 3.7.1
         version: 3.7.1
@@ -1470,6 +1485,9 @@ importers:
 
   packages/config:
     dependencies:
+      esbuild:
+        specifier: 0.28.1
+        version: 0.28.1
       lodash:
         specifier: 4.18.1
         version: 4.18.1
@@ -1480,15 +1498,15 @@ importers:
       '@types/node':
         specifier: 24.10.0
         version: 24.10.0
-      esbuild:
-        specifier: 0.28.1
-        version: 0.28.1
       prettier:
         specifier: 3.6.2
         version: 3.6.2
       vite:
         specifier: 7.3.2
         version: 7.3.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.8.2)
+      vitest:
+        specifier: 4.1.0
+        version: 4.1.0(@opentelemetry/api@1.9.0)(@types/node@24.10.0)(vite@7.3.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.8.2))
 
   packages/core:
     dependencies:
@@ -18114,7 +18132,7 @@ snapshots:
 
   '@rollup/pluginutils@5.3.0(rollup@4.60.1)':
     dependencies:
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
       estree-walker: 2.0.2
       picomatch: 4.0.5
     optionalDependencies:

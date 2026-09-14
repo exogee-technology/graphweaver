@@ -1,3 +1,4 @@
+import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';
 
 import { generateConfig } from './config';
@@ -30,9 +31,16 @@ export const initialiseAuth = async ({ method, ...databaseOptions }: InitialiseA
 	console.log('Environment file generated (./.env)');
 
 	if (method === 'password' || method === 'magic-link') {
-		const configFile = await generateConfig(method);
-		await writeFile('graphweaver-config.js', configFile);
-		console.log('Config file generated (./graphweaver-config.js)\n');
+		// A TypeScript config takes precedence over a JavaScript one, so if the project already has
+		// one, write there. Generating a graphweaver-config.js next to it would be ignored.
+		const configFileName =
+			['graphweaver-config.ts', 'graphweaver-config.mts', 'graphweaver-config.cts'].find((path) =>
+				existsSync(path)
+			) ?? 'graphweaver-config.js';
+
+		const configFile = await generateConfig(method, configFileName);
+		await writeFile(configFileName, configFile);
+		console.log(`Config file generated (./${configFileName})\n`);
 	}
 
 	if (method === 'password') {

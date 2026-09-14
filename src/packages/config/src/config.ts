@@ -1,4 +1,7 @@
-import { join } from 'path';
+import { existsSync } from 'fs';
+import { Module } from 'module';
+import { dirname, join } from 'path';
+import { buildSync } from 'esbuild';
 import { merge } from 'lodash';
 import type { InlineConfig } from 'vite';
 import type { BuildOptions as ESBuildOptions } from 'esbuild';
@@ -16,9 +19,11 @@ export interface AdditionalFunctionOptions {
 }
 
 export enum PrimaryAuthMethod {
-	PASSWORD = 'PASSWORD',
-	MAGIC_LINK = 'MAGIC_LINK',
 	AUTH_ZERO = 'AUTH_ZERO',
+	MAGIC_LINK = 'MAGIC_LINK',
+	MICROSOFT_ENTRA = 'MICROSOFT_ENTRA',
+	OKTA = 'OKTA',
+	PASSWORD = 'PASSWORD',
 }
 
 export enum SecondaryAuthMethod {
@@ -182,15 +187,99 @@ export const defaultConfig = (): ConfigOptions => {
 	};
 };
 
+/**
+ * The shape of a `graphweaver-config` file. Everything is optional; anything you leave out comes
+ * from `defaultConfig()` instead.
+ */
+export interface GraphweaverConfig {
+	backend?: Partial<BackendOptions>;
+	adminUI?: AdminUIOptions;
+	start?: Partial<StartOptions>;
+	build?: Partial<BuildOptions>;
+	import?: ImportOptions;
+	trustedDocuments?: TrustedDocumentOptions;
+}
+
+/**
+ * Identity function that gives you type checking and autocomplete inside a
+ * `graphweaver-config.ts`:
+ *
+ * ```ts
+ * import { defineConfig } from '@exogee/graphweaver-config';
+ *
+ * export default defineConfig({
+ * 	trustedDocuments: { allowLists: { web: ['src/frontend/**\/*.graphql'] } },
+ * });
+ * ```
+ */
+export const defineConfig = (config: GraphweaverConfig): GraphweaverConfig => config;
+
+// esbuild understands all three, so which one you reach for is up to your project's module setup.
+const TYPESCRIPT_EXTENSIONS = ['.ts', '.mts', '.cts'];
+
+// `config()` is called several times per command and each call would otherwise pay for another
+// transpile, so hold onto whatever we loaded the first time. The JavaScript path gets the same
+// treatment for free from `require()`'s own module cache.
+const typeScriptConfigCache = new Map<string, unknown>();
+
+const findTypeScriptConfig = (configRoot: string, configFileName: string) => {
+	for (const extension of TYPESCRIPT_EXTENSIONS) {
+		const candidate = join(configRoot, `${configFileName}${extension}`);
+		if (existsSync(candidate)) return candidate;
+	}
+};
+
+const loadTypeScriptConfig = (configPath: string) => {
+	if (typeScriptConfigCache.has(configPath)) return typeScriptConfigCache.get(configPath);
+
+	const { outputFiles } = buildSync({
+		entryPoints: [configPath],
+		bundle: true,
+		write: false,
+		platform: 'node',
+		format: 'cjs',
+		target: `node${process.versions.node.split('.')[0]}`,
+
+		// Bundling is only here so the config can import helpers from elsewhere in the project.
+		// Anything that comes from node_modules stays a plain require, so it resolves against the
+		// user's install at run time instead of being inlined into what we evaluate.
+		packages: 'external',
+
+		// We report failures ourselves below, so don't let esbuild print them as well.
+		logLevel: 'silent',
+	});
+
+	// Evaluate the result as a CommonJS module living where the original file lives, so relative
+	// requires and node_modules lookups both behave the way the author would expect.
+	const configModule = new Module(configPath);
+	configModule.filename = configPath;
+	configModule.paths = (Module as any)._nodeModulePaths(dirname(configPath));
+	(configModule as any)._compile(outputFiles[0].text, configPath);
+
+	const exports = configModule.exports;
+
+	// `export default { ... }` lands on `.default`, while named exports and `module.exports = ...`
+	// are the namespace itself.
+	const customConfig =
+		exports?.__esModule && 'default' in exports ? exports.default : (exports as unknown);
+
+	typeScriptConfigCache.set(configPath, customConfig);
+
+	return customConfig;
+};
+
 export const config = (
 	configRoot: string = process.cwd(),
 	configFileName = 'graphweaver-config'
 ): ConfigOptions => {
 	try {
-		const customConfigPath = join(configRoot, configFileName);
+		const typeScriptConfigPath = findTypeScriptConfig(configRoot, configFileName);
 
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		const customConfig = require(customConfigPath);
+		const customConfig = typeScriptConfigPath
+			? loadTypeScriptConfig(typeScriptConfigPath)
+			: // eslint-disable-next-line @typescript-eslint/no-require-imports
+				require(join(configRoot, configFileName));
+
 		if (!customConfig) throw new Error();
 
 		return merge(defaultConfig(), customConfig);
