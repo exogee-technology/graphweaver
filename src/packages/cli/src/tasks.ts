@@ -53,3 +53,15 @@ export const printSchema = async (output?: string) => {
 		console.error(`Schema Print Failed: ${error.message}`);
 	}
 };
+
+export const generateTrustedDocuments = async () => {
+	try {
+		console.log(`Generating Trusted Documents...`);
+		await asyncExec(`gw-trusted-documents`);
+	} catch (error: any) {
+		// Unlike types, a failure here is fatal: shipping a stale or empty manifest would lock
+		// clients out of the API, or worse, let through documents that are no longer allowed.
+		console.error(`Generate Trusted Documents Failed: ${error.message}`);
+		throw error;
+	}
+};

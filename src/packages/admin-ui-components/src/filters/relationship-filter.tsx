@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client';
 import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../combo-box';
 import { Filter, substringFilterForFields, useSchema } from '../utils';
-import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from './graphql';
+import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from '../documents/filters';
 import { useCallback } from 'react';
 import { toSelectOption } from './utils';
 

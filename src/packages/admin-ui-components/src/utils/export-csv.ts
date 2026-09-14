@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import { Entity } from './use-schema';
+import { Entity } from './schema-types';
 
 export const convertObjectValueToString = <T>(
 	entity: Entity,

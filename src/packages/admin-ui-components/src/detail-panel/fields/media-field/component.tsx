@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { useMutation } from '@apollo/client';
 
 import { EntityField } from '../../../utils';
-import { getDeleteUrlMutation, getUploadUrlMutation } from '../../graphql';
+import { getDeleteUrlMutation, getUploadUrlMutation } from '../../../documents/detail-panel';
 import { Button } from '../../../button';
 import { useAutoFocus } from '../../../hooks';
 

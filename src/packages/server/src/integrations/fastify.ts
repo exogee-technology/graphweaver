@@ -24,7 +24,7 @@ export type StartServerOptions = {
 
 export const startStandaloneServer = async <TContext extends BaseContext>(
 	{ port, host, path, configureFastify }: StartServerOptions,
-	{ fastifyOptions }: GraphweaverConfig,
+	{ fastifyOptions }: GraphweaverConfig<any>,
 	apollo: ApolloServer<TContext>,
 	plugins: Set<GraphweaverPlugin<void>>
 ) => {

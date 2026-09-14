@@ -1,5 +1,6 @@
-import { gql } from '@apollo/client';
-import { Entity } from '../utils';
+import { gql } from 'graphql-tag';
+
+import { Entity } from '../utils/schema-types.js';
 
 export const getRelationshipQuery = (entity?: Entity) => {
 	if (!entity) return;
@@ -7,7 +8,7 @@ export const getRelationshipQuery = (entity?: Entity) => {
 	const queryName = entity.plural[0].toLowerCase() + entity.plural.slice(1);
 
 	return gql`
-		query getRelationship ($filter: ${entity.plural}ListFilter, $pagination: ${entity.plural}PaginationInput) {
+		query ${entity.name}FilterRelationship ($filter: ${entity.plural}ListFilter, $pagination: ${entity.plural}PaginationInput) {
 			result: ${queryName} (filter: $filter, pagination: $pagination) {
 				${entity.primaryKeyField}
 				${entity.summaryField ?? ''}
@@ -22,7 +23,7 @@ export const getFilterOptionsQuery = (entity: Entity | undefined, fieldName: str
 	const queryName = entity.plural[0].toLowerCase() + entity.plural.slice(1);
 
 	return gql`
-		query getFilterOptions ($filter: ${entity.plural}ListFilter, $pagination: ${entity.plural}PaginationInput) {
+		query ${entity.name}FilterOptionsFor${fieldName[0].toUpperCase()}${fieldName.slice(1)} ($filter: ${entity.plural}ListFilter, $pagination: ${entity.plural}PaginationInput) {
 			result: ${queryName} (filter: $filter, pagination: $pagination) {
 				${entity.primaryKeyField}
 				${fieldName !== entity.primaryKeyField ? fieldName : ''}

@@ -1,5 +1,6 @@
-import { gql } from '@apollo/client';
-import { Entity, EntityField } from './use-schema';
+import { gql } from 'graphql-tag';
+
+import { Entity, EntityField } from '../utils/schema-types.js';
 
 export const SCHEMA_QUERY = gql`
 	query GraphweaverMetadata {

@@ -4,7 +4,7 @@ import { useField } from 'formik';
 import { useMemo, useCallback } from 'react';
 import { ComboBox, DataFetchOptions, SelectMode, SelectOption } from '../../combo-box';
 import { EntityField, substringFilterForFields, useSchema } from '../../utils';
-import { getRelationshipQuery } from '../graphql';
+import { getRelationshipQuery } from '../../documents/detail-panel';
 import { useDataTransform } from '../use-data-transform';
 import { getFieldId } from '../util';
 

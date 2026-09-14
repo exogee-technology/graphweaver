@@ -15,6 +15,11 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
+	"exports": {
+		".": "./lib/index.js",
+		"./normalise": "./lib/normalise.js",
+		"./lib/*": "./lib/*"
+	},
 	"source": "src/index.ts",
 	"directories": {
 		"lib": "lib"
@@ -23,11 +28,13 @@
 		"lib"
 	],
 	"peerDependencies": {
-		"@apollo/client": "^3.10.4"
+		"@apollo/client": "^3.10.4",
+		"graphql": "^16"
 	},
 	"devDependencies": {
 		"@apollo/client": "3.13.5",
 		"esbuild": "0.28.1",
+		"graphql": "16.12.0",
 		"typescript": "7.0.2"
 	},
 	"keywords": [

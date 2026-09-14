@@ -1,4 +1,4 @@
-import { SortEntity } from './use-schema';
+import { SortEntity } from './schema-types';
 
 export const isNumeric = (item: unknown): boolean => {
 	if (item === undefined || item === null) return false;

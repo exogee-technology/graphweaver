@@ -15,29 +15,58 @@ import {
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
 } from '../util';
+import { generateStaticTrustedDocuments } from '../trusted-documents';
 
-export const buildBackend = async () => {
+export type BuildBackendOptions = {
+	/**
+	 * Runs once `.graphweaver/backend/index.js` exists but before we build what actually ships.
+	 *
+	 * Anything that needs the built schema but has to end up inside the shipped bundle goes
+	 * here - trusted documents being the reason it exists. The CLI runs those in a separate
+	 * process, because importing the built backend boots the app.
+	 */
+	onDevBundleReady?: () => Promise<void>;
+};
+
+export const buildBackend = async ({ onDevBundleReady }: BuildBackendOptions = {}) => {
 	console.log('Building backend....');
 
 	// Clear the folder
 	await rimraf(path.join('.graphweaver', 'backend'));
 
+	// The backend imports this, so it has to exist before we can build the backend. The schema
+	// dependent half happens in onDevBundleReady below.
+	await generateStaticTrustedDocuments();
+
 	const { onResolveEsbuildConfiguration } = config().build;
 
 	// Put the index.js file in there.
-	await build(
-		onResolveEsbuildConfiguration({
-			...baseEsbuildConfig,
+	const buildDevBundle = async () =>
+		build(
+			onResolveEsbuildConfiguration({
+				...baseEsbuildConfig,
 
-			plugins: [
-				// Anything in node_modules should be marked as external for running.
-				makeAllPackagesExternalPlugin(),
-			],
+				plugins: [
+					// Anything in node_modules should be marked as external for running.
+					makeAllPackagesExternalPlugin(),
+				],
 
-			entryPoints: ['./src/backend/index.ts'],
-			outfile: '.graphweaver/backend/index.js',
-		})
-	);
+				entryPoints: ['./src/backend/index.ts'],
+				outfile: '.graphweaver/backend/index.js',
+			})
+		);
+
+	await buildDevBundle();
+
+	if (onDevBundleReady) {
+		await onDevBundleReady();
+
+		// Whatever just ran wrote files this bundle imports - the trusted document manifest, which
+		// needs the schema this bundle gave us. Build it again so `.graphweaver` matches what
+		// ships, otherwise anything running from it (`graphweaver start`, the watcher) would be
+		// missing the generated documents.
+		await buildDevBundle();
+	}
 
 	// Are there any custom additional functions we need to build?
 	// If so, merge them in.

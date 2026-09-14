@@ -1,18 +1,18 @@
-import { gql } from '@apollo/client';
-import {
-	AggregationType,
-	Entity,
-	generateGqlSelectForEntityFields,
-} from '@exogee/graphweaver-admin-ui-components';
+import { gql } from 'graphql-tag';
 
-export const queryForEntityPage = (entityName: string, entityByType: (type: string) => Entity) => {
-	const entity = entityByType(entityName);
+import { AggregationType, Entity } from '../utils/schema-types.js';
+import { generateGqlSelectForEntityFields } from './select.js';
+
+export const listEntityForExport = (
+	entity: Entity,
+	entityByType?: (entityType: string) => Entity
+) => {
 	const pluralName = entity.plural;
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
 	const entityCanCount = entity.supportedAggregationTypes.includes(AggregationType.COUNT);
 
 	return gql`
-		query ${pluralName}List($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
+		query ${entity.name}CsvExport($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
 			result: ${queryName}(filter: $filter, pagination: $pagination) {
 				${generateGqlSelectForEntityFields(
 					entity.fields.filter((field) => !field.hideInTable),

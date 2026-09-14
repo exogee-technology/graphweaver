@@ -1,4 +1,9 @@
-import { BaseContext, ApolloServerOptionsWithStaticSchema } from '@apollo/server';
+import {
+	BaseContext,
+	ApolloServerOptionsWithStaticSchema,
+	GraphQLRequest,
+	HeaderMap,
+} from '@apollo/server';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
 import { BackendProvider, GraphweaverPlugin, Instrumentation } from '@exogee/graphweaver';
 
@@ -30,7 +35,80 @@ export interface AdminMetadata {
 	};
 }
 
-export interface GraphweaverConfig {
+/** A single operation baked into the trusted document manifest at build time. */
+export interface TrustedDocumentManifestEntry {
+	/** The printed, normalised operation, including any fragments it depends on. */
+	body: string;
+	operationName?: string;
+	operationType?: 'query' | 'mutation' | 'subscription';
+}
+
+export interface TrustedDocumentManifest {
+	format: 'graphweaver-trusted-documents';
+	version: 1;
+
+	/** Allow list name -> document id -> the operation that id resolves to. */
+	allowLists: Record<string, Record<string, TrustedDocumentManifestEntry>>;
+}
+
+/**
+ * Which documents a request is permitted to send.
+ *
+ * - `true` allows any document, skipping enforcement for this request.
+ * - `false` rejects the request outright.
+ * - A name, or array of names, enforces against those allow lists.
+ */
+export type TrustedDocumentAllowListValue = boolean | string | string[];
+
+export type TrustedDocumentRequestParams<TContext extends BaseContext> = {
+	/** The document id the client sent, if it sent one. */
+	documentId?: string;
+
+	/** The operation name the client asked for, if any. */
+	operationName?: string | null;
+
+	/**
+	 * The request context. Authentication has already been resolved by the time this runs,
+	 * so `context.user` and `context.token` are populated if you're using `@exogee/graphweaver-auth`.
+	 */
+	context: TContext;
+
+	/** The request headers, or an empty map if the request didn't come in over HTTP. */
+	headers: HeaderMap;
+
+	request: GraphQLRequest;
+};
+
+export type TrustedDocumentAllowListFunction<TContext extends BaseContext> = (
+	params: TrustedDocumentRequestParams<TContext>
+) => TrustedDocumentAllowListValue | Promise<TrustedDocumentAllowListValue>;
+
+export type TrustedDocumentAllowList<TContext extends BaseContext> =
+	| TrustedDocumentAllowListValue
+	| TrustedDocumentAllowListFunction<TContext>;
+
+export interface TrustedDocumentOptions<TContext extends BaseContext> {
+	/**
+	 * Whether to enforce trusted documents. Defaults to `true` when a manifest is supplied.
+	 *
+	 * While enforcing, clients may only send document ids; a request carrying a raw `query`
+	 * is rejected, and Apollo's automatic persisted queries are disabled so that clients
+	 * can't register arbitrary operations and replay them by hash.
+	 */
+	enabled?: boolean;
+
+	/** The manifest generated at build time. Import it from `trusted-documents.generated.ts`. */
+	manifest: TrustedDocumentManifest;
+
+	/**
+	 * Which allow list(s) a given request may use. Either a static value or a function
+	 * (optionally async) returning one. Defaults to the union of every list in the manifest,
+	 * which is plain safelisting with no differentiation between clients.
+	 */
+	allowList?: TrustedDocumentAllowList<TContext>;
+}
+
+export interface GraphweaverConfig<TContext extends BaseContext = BaseContext> {
 	adminMetadata?: AdminMetadata;
 	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
@@ -54,6 +132,7 @@ export interface GraphweaverConfig {
 		traceProvider?: BackendProvider<unknown>;
 		instrumentations?: (Instrumentation | Instrumentation[])[];
 	};
+	trustedDocuments?: TrustedDocumentOptions<TContext>;
 }
 
 export const mergeConfig = <T>(defaultConfig: T, userConfig: Partial<T>): T => {
