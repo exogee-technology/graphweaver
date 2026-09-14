@@ -55,13 +55,15 @@ export const printSchema = async (output?: string) => {
 	}
 };
 
+/** Returns true when it generated something, so the caller knows to rebuild. */
 export const generateTrustedDocuments = async () => {
 	// Nothing to do, and no reason to spawn a process that would boot the app to find that out.
-	if (!Object.keys(config().trustedDocuments?.allowLists ?? {}).length) return;
+	if (!Object.keys(config().trustedDocuments?.allowLists ?? {}).length) return false;
 
 	try {
 		console.log(`Generating Trusted Documents...`);
 		await asyncExec(`gw-trusted-documents`);
+		return true;
 	} catch (error: any) {
 		// Unlike types, a failure here is fatal: shipping a stale or empty manifest would lock
 		// clients out of the API, or worse, let through documents that are no longer allowed.

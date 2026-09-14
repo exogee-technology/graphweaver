@@ -63,7 +63,7 @@ export type BackendStartHooks = {
 	 * Runs once `.graphweaver/backend/index.js` exists but before we boot from it, for anything
 	 * that needs the built schema and has to end up inside the bundle. See `buildBackend`.
 	 */
-	onDevBundleReady?: () => Promise<void>;
+	onDevBundleReady?: () => Promise<boolean | void>;
 };
 
 export const startBackend = async (
@@ -114,14 +114,10 @@ export const startBackend = async (
 
 	await Promise.all([checkNativeModules, buildDevBundle()]);
 
-	if (onDevBundleReady) {
-		await onDevBundleReady();
-
-		// That wrote files this bundle imports, so build it again before we boot from it. Without
-		// this the dev server would come up missing the generated trusted documents, and the
-		// Admin UI wouldn't work against it.
-		await buildDevBundle();
-	}
+	// If the hook wrote files this bundle imports, build it again before we boot from it.
+	// Otherwise the dev server would come up missing the generated trusted documents, and the
+	// Admin UI wouldn't work against it.
+	if (await onDevBundleReady?.()) await buildDevBundle();
 
 	const buildDir = path.posix.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver, handler, azureHandler } = await import(buildDir);

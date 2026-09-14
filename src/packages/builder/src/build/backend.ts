@@ -24,8 +24,11 @@ export type BuildBackendOptions = {
 	 * Anything that needs the built schema but has to end up inside the shipped bundle goes
 	 * here - trusted documents being the reason it exists. The CLI runs those in a separate
 	 * process, because importing the built backend boots the app.
+	 *
+	 * Return true if you wrote files the bundle imports, and we'll rebuild it so `.graphweaver`
+	 * matches what ships. Returning nothing skips that second pass.
 	 */
-	onDevBundleReady?: () => Promise<void>;
+	onDevBundleReady?: () => Promise<boolean | void>;
 };
 
 export const buildBackend = async ({ onDevBundleReady }: BuildBackendOptions = {}) => {
@@ -58,15 +61,10 @@ export const buildBackend = async ({ onDevBundleReady }: BuildBackendOptions = {
 
 	await buildDevBundle();
 
-	if (onDevBundleReady) {
-		await onDevBundleReady();
-
-		// Whatever just ran wrote files this bundle imports - the trusted document manifest, which
-		// needs the schema this bundle gave us. Build it again so `.graphweaver` matches what
-		// ships, otherwise anything running from it (`graphweaver start`, the watcher) would be
-		// missing the generated documents.
-		await buildDevBundle();
-	}
+	// The hook writes files this bundle imports - the trusted document manifest, which needs the
+	// schema this bundle gave us - so build it again when it did any work. Otherwise anything
+	// running from `.graphweaver` (`graphweaver start`, the watcher) would be missing them.
+	if (await onDevBundleReady?.()) await buildDevBundle();
 
 	// Are there any custom additional functions we need to build?
 	// If so, merge them in.
