@@ -38,7 +38,7 @@
 		"wouter": "3.11.0"
 	},
 	"devDependencies": {
-		"@chialab/esbuild-plugin-html": "0.19.0",
+		"@chialab/esbuild-plugin-html": "0.19.1",
 		"@types/react": "19.3.0",
 		"@types/react-dom": "19.3.0",
 		"@types/react-modal": "3.16.3",
