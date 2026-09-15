@@ -46,7 +46,7 @@
 	"dependencies": {
 		"@apollo/client": "3.13.5",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
-		"@graphiql/toolkit": "0.11.3",
+		"@graphiql/toolkit": "0.12.1",
 		"@tanstack/react-form": "1.23.8",
 		"@tanstack/react-table": "8.21.3",
 		"@tiptap/extension-link": "3.22.0",
