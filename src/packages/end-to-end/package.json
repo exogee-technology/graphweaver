@@ -62,7 +62,7 @@
 		"csv-parse": "6.1.0",
 		"dotenv": "17.2.3",
 		"expect": "30.4.1",
-		"graphql-tag": "2.12.6",
+		"graphql-tag": "2.12.7",
 		"http-server": "14.1.1",
 		"mockdate": "3.0.5",
 		"mysql2": "3.15.3",
