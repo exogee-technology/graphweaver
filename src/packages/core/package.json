@@ -48,7 +48,7 @@
 		"@opentelemetry/instrumentation": "0.212.0",
 		"@types/node": "26.5.1",
 		"@types/pluralize": "0.0.33",
-		"esbuild": "0.28.1",
+		"esbuild": "0.28.2",
 		"glob": "13.0.6",
 		"typescript": "7.0.2",
 		"vitest": "4.1.0"
