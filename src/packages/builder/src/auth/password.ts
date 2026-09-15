@@ -23,6 +23,7 @@ export const generateAdminPassword = async (options: GenerateAdminPasswordOption
 			password: options.password,
 			dbName: options.dbName,
 		},
+		ssl: options.ssl,
 	});
 
 	const database = ConnectionManager.database('default');

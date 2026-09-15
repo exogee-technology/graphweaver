@@ -1,4 +1,39 @@
-import { DatabaseOptions, Source } from '@exogee/graphweaver-builder';
+import { DatabaseOptions, DatabaseSslOptions, Source } from '@exogee/graphweaver-builder';
+
+export interface SslFlags {
+	ssl?: boolean;
+	sslCa?: string;
+	sslCert?: string;
+	sslKey?: string;
+	sslRejectUnauthorized?: boolean;
+}
+
+/**
+ * Collapses the --ssl* command line flags into the single options object the rest of the import
+ * works with. Returns undefined when the developer didn't ask for anything, so we know to fall
+ * back to the config file or to ask them.
+ */
+export const sslOptionsFromFlags = ({
+	ssl,
+	sslCa,
+	sslCert,
+	sslKey,
+	sslRejectUnauthorized,
+}: SslFlags) => {
+	const options: DatabaseSslOptions = {};
+	if (sslCa) options.ca = sslCa;
+	if (sslCert) options.cert = sslCert;
+	if (sslKey) options.key = sslKey;
+	if (typeof sslRejectUnauthorized === 'boolean') {
+		options.rejectUnauthorized = sslRejectUnauthorized;
+	}
+
+	// Passing any of the options above only makes sense with SSL on, so we don't make people
+	// pass --ssl as well.
+	if (Object.keys(options).length > 0) return options;
+
+	return ssl;
+};
 
 const defaultUserForSource = (source: Source) => {
 	if (source === 'mssql') return 'sa';
@@ -23,6 +58,7 @@ export const promptForDatabaseOptions = async ({
 	port,
 	password,
 	user,
+	ssl,
 }: Partial<DatabaseOptions>): Promise<DatabaseOptions> => {
 	const { default: inquirer } = await import('inquirer');
 
@@ -92,7 +128,11 @@ export const promptForDatabaseOptions = async ({
 		}
 	}
 
-	if (prompts.length > 0) {
+	// If everything we need was passed in on the command line we're being driven by a script, so
+	// we shouldn't start asking questions it can't answer.
+	const isInteractive = prompts.length > 0;
+
+	if (isInteractive) {
 		const answers = await inquirer.prompt(prompts);
 		dbName = answers.dbName ?? dbName;
 		host = answers.host ?? host;
@@ -101,9 +141,34 @@ export const promptForDatabaseOptions = async ({
 		user = answers.user ?? user;
 	}
 
+	if (isInteractive && source !== 'sqlite' && typeof ssl === 'undefined') {
+		const { useSsl } = await inquirer.prompt<{ useSsl: boolean }>([
+			{
+				type: 'confirm',
+				name: 'useSsl',
+				default: false,
+				message: `Does this database require an SSL connection?`,
+			},
+		]);
+
+		if (useSsl) {
+			const { ca } = await inquirer.prompt<{ ca: string }>([
+				{
+					type: 'input',
+					name: 'ca',
+					message: `Path to the CA certificate to trust (leave blank to use the system certificate authorities):`,
+				},
+			]);
+
+			ssl = ca ? { ca } : true;
+		} else {
+			ssl = false;
+		}
+	}
+
 	if (!dbName) {
 		throw new Error('Database name has not been provided, please provide a database name.');
 	}
 
-	return { source, dbName, host, port, password, user };
+	return { source, dbName, host, port, password, user, ssl };
 };

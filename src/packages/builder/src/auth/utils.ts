@@ -1,5 +1,11 @@
 import crypto from 'crypto';
-import { ConnectionManager, DatabaseType, ConnectionOptions } from '@exogee/graphweaver-mikroorm';
+import {
+	ConnectionManager,
+	DatabaseType,
+	DatabaseSsl,
+	ConnectionOptions,
+	driverOptionsForSsl,
+} from '@exogee/graphweaver-mikroorm';
 
 export const generateSalt = (): Uint8Array => {
 	const salt = new Uint8Array(16);
@@ -16,7 +22,10 @@ export const argon2IdOptions = {
 	outputType: 'encoded',
 };
 
-export const openConnection = async (type: DatabaseType, options: ConnectionOptions) => {
+export const openConnection = async (
+	type: DatabaseType,
+	options: ConnectionOptions & { ssl?: DatabaseSsl }
+) => {
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const module = require(`@mikro-orm/${type}`);
 	const PLATFORMS = {
@@ -25,10 +34,13 @@ export const openConnection = async (type: DatabaseType, options: ConnectionOpti
 		postgresql: 'PostgreSqlDriver',
 		sqlite: 'SqliteDriver',
 	};
+	const sslDriverOptions = driverOptionsForSsl(type, options.ssl);
+
 	await ConnectionManager.connect('default', {
 		mikroOrmConfig: {
 			driver: module[PLATFORMS[type]],
 			...options.mikroOrmConfig,
+			...(sslDriverOptions ? { driverOptions: sslDriverOptions } : {}),
 		},
 	});
 };

@@ -177,7 +177,7 @@ Inspect the schema of an external data source or an API endpoint and then import
 
 ```
 USAGE
-    $ graphweaver import [SOURCE] [--database <value>] [--host <value>] [--port <value>] [--password <value>] [--user <value>]
+    $ graphweaver import [SOURCE] [--database <value>] [--host <value>] [--port <value>] [--password <value>] [--user <value>] [--ssl] [--ssl-ca <value>] [--ssl-cert <value>] [--ssl-key <value>] [--no-ssl-reject-unauthorized]
 
 ARGUMENTS
     SOURCE  Data source for e.g. rest api, xero, sqlite, mysql, postgresql
@@ -197,7 +197,50 @@ FLAGS
 
     --user <value>
     Database server user name
+
+    --ssl
+    Connect to the database with SSL
+
+    --ssl-ca <value>
+    Path to the CA certificate to trust when connecting, or the certificate itself. Implies --ssl
+
+    --ssl-cert <value>
+    Path to the client certificate to present to the database, or the certificate itself. Implies --ssl
+
+    --ssl-key <value>
+    Path to the private key for the client certificate, or the key itself. Implies --ssl
+
+    --no-ssl-reject-unauthorized
+    Accept certificates the CAs above don't vouch for, e.g. self signed ones. Implies --ssl
 ```
+
+##### Connecting with SSL
+
+If you don't pass any of the SSL flags above, the import asks whether the database needs an SSL
+connection as part of its usual questions.
+
+You can also configure it in your `graphweaver-config.ts`, which is handy when you import the same
+database often:
+
+```typescript
+import { defineConfig } from '@exogee/graphweaver-config';
+
+export default defineConfig({
+	import: {
+		source: 'postgresql',
+		host: 'my-database.example.com',
+		dbName: 'my_database',
+
+		// `true` uses the system certificate authorities, or pass an object for anything more
+		// specific. Certificates can be a path to a file on disk or the certificate itself.
+		ssl: { ca: 'certs/ap-southeast-2-bundle.pem' },
+	},
+});
+```
+
+Whichever way you configure it, the same settings are written into the `backend/database.ts` the
+import generates, so your project connects the same way the import did. Certificates you pass as a
+path are read from that path when your project starts rather than copied into your source.
 
 #### graphweaver analyse [target]
 
