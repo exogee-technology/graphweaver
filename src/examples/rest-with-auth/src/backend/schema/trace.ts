@@ -7,19 +7,19 @@ import { myConnection } from '../database';
 /**
  * Where OpenTelemetry spans are stored.
  *
- * Trace is declared by the core package, so the storage mapping goes on the provider rather than
- * on the class. Its column names are camelCase in the database, which the naming strategy would
- * otherwise turn into snake_case.
+ * Trace is declared by the core package, so the storage mapping goes on the provider rather than on
+ * the class -- it is the escape hatch for an entity you do not own and therefore cannot decorate.
+ *
+ * Only the types need saying here. This table's columns are snake_case, which is exactly what the
+ * default naming strategy produces, so naming them again would only be a chance to get one wrong.
  */
 export const traceProvider = new SqlDataProvider(() => Trace, myConnection, {
 	table: 'trace',
 	columns: {
-		spanId: 'spanId',
-		parentId: 'parentId',
-		traceId: 'traceId',
-		timestamp: { column: 'timestamp', type: 'bigint' },
-		duration: { column: 'duration', type: 'bigint' },
-		attributes: { column: 'attributes', type: 'json' },
+		// BIGINT and JSON, neither of which the GraphQL type says.
+		timestamp: { type: 'bigint' },
+		duration: { type: 'bigint' },
+		attributes: { type: 'json' },
 	},
 });
 
