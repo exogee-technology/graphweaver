@@ -44,7 +44,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.13.5",
+		"@apollo/client": "4.3.0",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.12.1",
 		"@tanstack/react-form": "1.23.8",
