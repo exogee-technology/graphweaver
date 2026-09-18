@@ -99,6 +99,18 @@ jobs:
           /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -U sa -P 'Graphweaver1!' -C
           -Q "IF DB_ID('graphweaver_sql_test') IS NULL CREATE DATABASE graphweaver_sql_test"
 
+      # The SQL Server round trip reads a real, unmodified Chinook rather than a schema written for
+      # the test, which is the whole point of it -- so that database has to exist. The seed is the
+      # same committed script the end to end suite uses.
+      - name: Seed the SQL Server Chinook database
+        working-directory: src/packages/end-to-end
+        run: pnpm seed-mssql
+        env:
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_PORT: 1433
+          DATABASE_USERNAME: sa
+          DATABASE_PASSWORD: 'Graphweaver1!'
+
       # Every dialect runs the same conformance and introspection suites, so a divergence shows up
       # as one dialect failing a test its siblings pass.
       - name: Run the SQL provider suites against all four dialects

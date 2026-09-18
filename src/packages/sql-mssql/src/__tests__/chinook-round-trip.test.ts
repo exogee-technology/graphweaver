@@ -114,7 +114,11 @@ if (!host) {
 			playlists = (
 				await run('{ playlists(filter: { name: "Music Videos" }) { name tracks { name } } }')
 			).playlists;
-		});
+
+			// Introspecting the whole of Chinook, generating twelve entity files, importing them and
+			// building a schema is a lot for one hook, and vitest allows it ten seconds by default.
+			// That is enough on a warm laptop and not on a cold CI runner.
+		}, 120_000);
 
 		it('serves rows from a real database through generated entities', () => {
 			expect(albums).toHaveLength(3);
