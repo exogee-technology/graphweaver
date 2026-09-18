@@ -1,15 +1,12 @@
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { defineConnection } from '@exogee/graphweaver-sql';
+import { postgres } from '@exogee/graphweaver-sql-postgres';
 
-import { ImageNote, Submission } from './entities';
-
-export const pgConnection = {
-	connectionManagerId: 'pg',
-	mikroOrmConfig: {
-		entities: [Submission, ImageNote],
-		driver: PostgreSqlDriver,
-		dbName: process.env.PGDATABASE,
+export const pgConnection = defineConnection({
+	id: 'pg',
+	dialect: postgres({
+		database: process.env.PGDATABASE,
+		port: process.env.PGPORT ? parseInt(process.env.PGPORT) : 5432,
 		user: process.env.PGUSER,
 		password: process.env.PGPASSWORD,
-		port: process.env.PGPORT ? parseInt(process.env.PGPORT) : 5432,
-	},
-};
+	}),
+});

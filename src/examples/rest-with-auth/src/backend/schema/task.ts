@@ -1,4 +1,4 @@
-import { RelationshipField, Field, ID, Entity, graphweaverMetadata } from '@exogee/graphweaver';
+import { RelationshipField, ID, Entity, graphweaverMetadata } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -6,12 +6,16 @@ import {
 	AuthenticationMethod,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-
-import { Task as OrmTask, Priority } from '../entities';
 import { User } from './user';
 import { Tag } from './tag';
 import { myConnection } from '../database';
+import { Field, ManyToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
+
+export enum Priority {
+	HIGH = 'HIGH',
+	MEDIUM = 'MEDIUM',
+	LOW = 'LOW',
+}
 
 const acl: AccessControlList<Task, AuthorizationContext> = {
 	LIGHT_SIDE: {
@@ -41,7 +45,7 @@ graphweaverMetadata.collectEnumInformation({
 }))
 @ApplyAccessControlList(acl)
 @Entity<Task>('Task', {
-	provider: new MikroBackendProvider(OrmTask, myConnection),
+	provider: new SqlDataProvider(() => Task, myConnection),
 	adminUIOptions: {
 		summaryField: 'description',
 	},
@@ -53,16 +57,21 @@ export class Task {
 	@Field(() => String)
 	description!: string;
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { column: 'completed' })
 	isCompleted!: boolean;
 
 	@Field(() => String)
 	userId!: string;
 
-	@RelationshipField<OrmTask>(() => User, { id: 'userId', nullable: true })
+	// User is served by the REST provider, not this database, so this stays a plain
+	// @RelationshipField -- core resolves it through that provider using the userId above.
+	@RelationshipField<Task>(() => User, { id: 'userId', nullable: true })
 	user?: User;
 
-	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
+	@ManyToMany(() => [Tag], {
+		relatedField: 'tasks',
+		through: { table: 'task_tags', joinColumn: 'task_id', inverseJoinColumn: 'tag_id' },
+	})
 	tags!: Tag[];
 
 	@Field(() => Priority, { nullable: true })

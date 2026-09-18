@@ -1,0 +1,56 @@
+{
+	"name": "@exogee/graphweaver-sql-postgres",
+	"version": "2.24.0",
+	"description": "PostgreSQL dialect for the Graphweaver SQL data provider",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
+	"sideEffects": false,
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json",
+		"package:pack": "pnpm pack",
+		"prettier": "prettier --write src/**/*.ts",
+		"test": "vitest",
+		"version": "npm version --no-git-tag-version"
+	},
+	"dependencies": {
+		"@exogee/logger": "workspace:*"
+	},
+	"peerDependencies": {
+		"@exogee/graphweaver-sql": "workspace:*",
+		"pg": ">=8"
+	},
+	"devDependencies": {
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
+		"@exogee/graphweaver-sql": "workspace:*",
+		"@types/node": "26.5.1",
+		"@types/pg": "8.11.10",
+		"esbuild": "0.28.1",
+		"glob": "13.0.6",
+		"graphql": "16.12.0",
+		"graphql-tag": "2.12.6",
+		"pg": "8.16.3",
+		"reflect-metadata": "0.2.2",
+		"typescript": "7.0.2",
+		"vitest": "4.1.0"
+	},
+	"keywords": [
+		"graphql",
+		"graphweaver",
+		"postgres",
+		"postgresql"
+	]
+}

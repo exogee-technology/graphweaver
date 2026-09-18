@@ -12,7 +12,7 @@ test('should allow an admin to update a user', async ({ page }) => {
 	// Close the welcome page
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
-	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
+	await page.getByRole('link', { name: 'MySQL' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
 	await page.getByRole('cell', { name: 'darth' }).click();
 	await page.getByPlaceholder('Password').click();
@@ -35,7 +35,7 @@ test('should deny updating when a user has read only permission', async ({ page 
 	// Close the welcome page
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
-	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
+	await page.getByRole('link', { name: 'MySQL' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
 	await page.getByRole('cell', { name: 'luke' }).click();
 	await page.getByPlaceholder('Password').click();
@@ -61,7 +61,7 @@ test('should deny a non-admin to update another user', async ({ page }) => {
 	// Close the welcome page
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
-	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
+	await page.getByRole('link', { name: 'MySQL' }).click();
 	// Load another user's page
 	await page.goto(`${config.adminUiUrl}/Credential/4`);
 	const element = page.getByText('Failed to load entity.');

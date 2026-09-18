@@ -1,10 +1,9 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Track } from './track';
-import { Genre as OrmGenre } from '../entities';
 import { connection } from '../database';
+import { Field, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -12,15 +11,15 @@ import { connection } from '../database';
 	},
 })
 @Entity('Genre', {
-	provider: new MikroBackendProvider(OrmGenre, connection),
+	provider: new SqlDataProvider(() => Genre, connection, { table: 'Genre' }),
 })
 export class Genre {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'GenreId', primaryKeyField: true })
 	genreId!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
+	@Field(() => String, { column: 'Name', nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
-	@RelationshipField<Track>(() => [Track], { relatedField: 'genre' })
+	@OneToMany(() => [Track], { relatedField: 'genre' })
 	tracks!: Track[];
 }

@@ -1,19 +1,12 @@
-import {
-	AdminUIFilterType,
-	DetailPanelInputComponentOption,
-	Entity,
-	Field,
-	RelationshipField,
-} from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { AdminUIFilterType, DetailPanelInputComponentOption, Entity } from '@exogee/graphweaver';
 import { DateScalar, GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { myConnection } from '../database';
-import { Task as OrmTask } from '../entities';
 import { User } from './user';
+import { Field, ManyToOne, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity('Task', {
-	provider: new MikroBackendProvider(OrmTask, myConnection),
+	provider: new SqlDataProvider(() => Task, myConnection),
 })
 export class Task {
 	@Field(() => GraphQLBigInt)
@@ -28,11 +21,11 @@ export class Task {
 	})
 	description!: string;
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { column: 'completed' })
 	isCompleted!: boolean;
 
-	@RelationshipField<OrmTask>(() => User, {
-		id: (entity) => entity.userId,
+	@ManyToOne(() => User, {
+		column: 'user_id',
 		adminUIOptions: {
 			filterOptions: {
 				orderBy: { username: 'ASC' },

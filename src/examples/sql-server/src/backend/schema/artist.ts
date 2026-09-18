@@ -1,19 +1,21 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { Album } from './album';
-import { Artist as OrmArtist } from '../entities';
 import { connection } from '../database';
+import { Field, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity<Artist>('Artist', {
-	provider: new MikroBackendProvider(OrmArtist, connection, { backendDisplayName: 'SQL Server' }),
+	provider: new SqlDataProvider(() => Artist, connection, {
+		table: 'Artist',
+		backendDisplayName: 'SQL Server',
+	}),
 })
 export class Artist {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'ArtistId', primaryKeyField: true })
 	artistId!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
+	@Field(() => String, { column: 'Name', nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
-	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
+	@OneToMany(() => [Album], { relatedField: 'artist' })
 	albums!: Album[];
 }

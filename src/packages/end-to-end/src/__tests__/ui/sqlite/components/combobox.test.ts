@@ -48,10 +48,12 @@ test('Should allow navigation around using a keyboard', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: 'Employee' }).click();
 
-	await page.getByTestId('employee-filter').click();
-	await page.getByTestId('employee-filter').press('ArrowDown', { delay: 300 });
-	await page.getByTestId('employee-filter').press('ArrowDown', { delay: 300 });
-	await page.getByTestId('employee-filter').press('Enter', { delay: 300 });
+	// `reportsTo`, not `employee`: the importer names a many-to-one after its foreign key column
+	// rather than after the table it points at, so Chinook's `Employee.ReportsTo` keeps its name.
+	await page.getByTestId('reportsTo-filter').click();
+	await page.getByTestId('reportsTo-filter').press('ArrowDown', { delay: 300 });
+	await page.getByTestId('reportsTo-filter').press('ArrowDown', { delay: 300 });
+	await page.getByTestId('reportsTo-filter').press('Enter', { delay: 300 });
 	await expect(page.getByText('IT Manager×')).toBeVisible();
 	await page.getByText('IT Manager×').press('Delete');
 	await expect(page.getByText('IT Manager×')).not.toBeVisible();

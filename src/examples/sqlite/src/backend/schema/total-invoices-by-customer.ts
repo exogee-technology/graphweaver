@@ -1,22 +1,21 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { connection } from '../database';
-import { TotalInvoicesByCustomer as OrmTotalInvoicesByCustomer } from '../entities';
 import { Customer } from './customer';
+import { Field, ManyToOne, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 // Note: This entity is backed by a view. It allows filtering, pagination, and sorting as per normal
 //       but it is not writeable, hence the apiOptions below.
 @Entity('TotalInvoicesByCustomer', {
-	provider: new MikroBackendProvider(OrmTotalInvoicesByCustomer, connection),
+	provider: new SqlDataProvider(() => TotalInvoicesByCustomer, connection),
 	apiOptions: { excludeFromBuiltInWriteOperations: true },
 })
 export class TotalInvoicesByCustomer {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'CustomerId', primaryKeyField: true })
 	customerId!: string;
 
-	@Field(() => String)
+	@Field(() => String, { column: 'Total' })
 	total!: string;
 
-	@RelationshipField<TotalInvoicesByCustomer>(() => Customer, { id: (row) => row.customerId })
+	@ManyToOne(() => Customer, { column: 'CustomerId' })
 	customer!: Customer;
 }

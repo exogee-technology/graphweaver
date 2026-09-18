@@ -48,14 +48,45 @@ export type NumericOperator = 'gt' | 'gte' | 'lt' | 'lte';
 //   Else if the value in the field is a number, bigint or Date then apply the Numeric Operators from above.
 //   Else apply only the Base Operators and Array Operators from above
 export type FilterWithOperators<G> = {
-	[K in keyof G as G[K] extends string
-		? `${K & string}_${BaseOperator | ArrayOperator | StringOperator}`
-		: G[K] extends number | bigint | Date
-			? `${K & string}_${BaseOperator | ArrayOperator | NumericOperator}`
-			: `${K & string}_${BaseOperator | ArrayOperator}`]?: FilterValue<G[K]>;
+	[
+		K in keyof G as G[K] extends string
+			? `${K & string}_${BaseOperator | ArrayOperator | StringOperator}`
+			: G[K] extends number | bigint | Date
+				? `${K & string}_${BaseOperator | ArrayOperator | NumericOperator}`
+				: `${K & string}_${BaseOperator | ArrayOperator}`
+	]?: FilterValue<G[K]>;
 };
 
 export type FilterValue<T> = T | T[];
+
+/**
+ * Whether a field holds a related entity, or a list of them, rather than data.
+ *
+ * `Date` is an object and is not a relationship; a `string[]` is a list and is not one either.
+ */
+type IsRelationship<T> =
+	NonNullable<T> extends Date
+		? false
+		: NonNullable<T> extends readonly (infer Element)[]
+			? NonNullable<Element> extends Date
+				? false
+				: NonNullable<Element> extends object
+					? true
+					: false
+			: NonNullable<T> extends object
+				? true
+				: false;
+
+/**
+ * `{ tracks_exists: false }` -- whether a relationship has any rows at all, without saying anything
+ * about them.
+ *
+ * Only offered by providers that set `supportsRelationshipExistsFilter`, and only in the GraphQL
+ * schema where both sides live in the same data source.
+ */
+export type FilterRelationshipOperators<G> = {
+	[K in keyof G as IsRelationship<G[K]> extends true ? `${K & string}_exists` : never]?: boolean;
+};
 
 export type FilterEntity<G> = {
 	[K in keyof G]?: G[K] extends (...args: any[]) => Promise<infer C>
@@ -76,7 +107,10 @@ export type FilterTopLevelProperties<G> = {
 const topLevelFilterProperties = new Set(['_and', '_or', '_not']);
 export const isTopLevelFilterProperty = (key: string) => topLevelFilterProperties.has(key);
 
-export type Filter<G> = FilterEntity<G> & FilterTopLevelProperties<G> & FilterWithOperators<G>;
+export type Filter<G> = FilterEntity<G> &
+	FilterTopLevelProperties<G> &
+	FilterWithOperators<G> &
+	FilterRelationshipOperators<G>;
 
 export interface GraphQLArgs<G> {
 	items?: Partial<G>[];
@@ -163,8 +197,10 @@ export interface HookParams<G, TContext = BaseContext> {
 	deleted?: boolean; // Used by a delete operation to indicate if successful
 }
 
-export interface CreateOrUpdateHookParams<G, TContext = BaseContext>
-	extends HookParams<G, TContext> {
+export interface CreateOrUpdateHookParams<G, TContext = BaseContext> extends HookParams<
+	G,
+	TContext
+> {
 	args: { items: Partial<G>[] };
 }
 
@@ -228,6 +264,14 @@ export interface BackendProviderConfig {
 	// If you specify 'findOne', it will repeatedly call the findOne method on the provider with a filter like `{ id: '1' }`.
 	idListLoadingMethod?: 'find' | 'findOne';
 	supportsPseudoCursorPagination?: boolean;
+
+	/**
+	 * The provider understands `{ tracks_exists: false }` on a relationship field.
+	 *
+	 * Opt in, because the filter input only offers operators a provider can actually answer, and a
+	 * provider that ignored this one would quietly return every row instead of failing.
+	 */
+	supportsRelationshipExistsFilter?: boolean;
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (

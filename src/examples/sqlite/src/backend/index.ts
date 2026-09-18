@@ -1,13 +1,11 @@
 import Graphweaver from '@exogee/graphweaver-server';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-
 import './schema';
 
-import { traceConnection } from './database';
-import { Trace } from './entities';
 import { trustedDocuments } from '../trusted-documents.generated';
 
-export const traceProvider = new MikroBackendProvider(Trace, traceConnection);
+// Declared alongside the entity now, rather than constructed here.
+export { traceProvider } from './schema/trace';
+import { traceProvider } from './schema/trace';
 
 export const graphweaver = new Graphweaver({
 	openTelemetry: {

@@ -1,28 +1,5 @@
-import { after, before, describe, test } from 'node:test';
-import request from 'supertest-graphql';
-import { config } from '../../../../config';
-import { resetDatabase } from '../../../../utils';
-import { Artist, UPDATE_MANY_ARTISTS } from '../../shared';
+import { describe } from 'node:test';
+import { updateManySuite, mysqlOptions } from '../../shared/suites';
 
-describe('updateMany mutations', () => {
-	before(resetDatabase, { timeout: 30_000 });
-	after(resetDatabase, { timeout: 30_000 });
-
-	test('should update multiple artists', async () => {
-		const { data } = await request<{ updateArtists: Artist[] }>(config.baseUrl)
-			.mutate(UPDATE_MANY_ARTISTS)
-			.variables({
-				input: [
-					{ artistId: '1', name: 'Updated Artist One' },
-					{ artistId: '2', name: 'Updated Artist Two' },
-				],
-			})
-			.expectNoErrors();
-
-		expect(data?.updateArtists).toHaveLength(2);
-		expect(data?.updateArtists?.[0]?.artistId).toBe('1');
-		expect(data?.updateArtists?.[0]?.name).toBe('Updated Artist One');
-		expect(data?.updateArtists?.[1]?.artistId).toBe('2');
-		expect(data?.updateArtists?.[1]?.name).toBe('Updated Artist Two');
-	});
-});
+// The suite names what it tests, not what ran it, so the dialect goes on the outside.
+describe(mysqlOptions.name, () => updateManySuite(mysqlOptions));

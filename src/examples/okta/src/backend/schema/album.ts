@@ -1,11 +1,10 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Artist } from './artist';
 import { Track } from './track';
-import { Album as OrmAlbum } from '../entities';
 import { connection } from '../database';
+import { Field, ManyToOne, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -13,18 +12,18 @@ import { connection } from '../database';
 	},
 })
 @Entity<Album>('Album', {
-	provider: new MikroBackendProvider(OrmAlbum, connection),
+	provider: new SqlDataProvider(() => Album, connection, { table: 'Album' }),
 })
 export class Album {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'AlbumId', primaryKeyField: true })
 	albumId!: number;
 
-	@Field(() => String, { adminUIOptions: { summaryField: true } })
+	@Field(() => String, { column: 'Title', adminUIOptions: { summaryField: true } })
 	title!: string;
 
-	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.artistId })
+	@ManyToOne(() => Artist, { column: 'ArtistId' })
 	artist!: Artist;
 
-	@RelationshipField<Track>(() => [Track], { relatedField: 'album' })
+	@OneToMany(() => [Track], { relatedField: 'album' })
 	tracks!: Track[];
 }

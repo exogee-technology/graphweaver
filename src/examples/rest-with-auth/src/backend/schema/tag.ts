@@ -1,4 +1,4 @@
-import { RelationshipField, Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -6,11 +6,9 @@ import {
 	AuthenticationMethod,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-
-import { Tag as OrmTag } from '../entities';
 import { Task } from './task';
 import { myConnection } from '../database';
+import { SqlDataProvider, ManyToMany } from '@exogee/graphweaver-sql';
 
 const acl: AccessControlList<Tag, AuthorizationContext> = {
 	LIGHT_SIDE: {
@@ -31,7 +29,7 @@ const acl: AccessControlList<Tag, AuthorizationContext> = {
 }))
 @ApplyAccessControlList(acl)
 @Entity('Tag', {
-	provider: new MikroBackendProvider(OrmTag, myConnection),
+	provider: new SqlDataProvider(() => Tag, myConnection),
 })
 export class Tag {
 	@Field(() => ID)
@@ -40,6 +38,6 @@ export class Tag {
 	@Field(() => String)
 	name!: string;
 
-	@RelationshipField<Task>(() => [Task], { relatedField: 'tags', nullable: true })
+	@ManyToMany(() => [Task], { relatedField: 'tags', nullable: true })
 	tasks?: Task[];
 }

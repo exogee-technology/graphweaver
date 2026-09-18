@@ -9,3 +9,4 @@ import './media-type';
 import './playlist';
 import './total-invoices-by-customer';
 import './track';
+export * from './trace';

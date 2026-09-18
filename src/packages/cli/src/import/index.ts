@@ -1,22 +1,16 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { DatabaseSsl, Source, startIntrospection } from '@exogee/graphweaver-builder';
+import {
+	DatabaseSsl,
+	Source,
+	dialectForSource,
+	startIntrospection,
+} from '@exogee/graphweaver-builder';
 import ora from 'ora-classic';
 
-import { GRAPHWEAVER_TARGET_VERSION, MIKRO_ORM_TARGET_VERSION } from '../init/constants';
+import { DRIVER_VERSIONS, driverPackageForSource } from '../init/backend';
+import { GRAPHWEAVER_TARGET_VERSION } from '../init/constants';
 import { promptForDatabaseOptions } from '../database';
-
-const createDirectories = (dirPath: string) => {
-	const directories = dirPath.split(path.sep);
-	let currentPath = '';
-
-	for (const directory of directories) {
-		currentPath = path.join(currentPath, directory);
-		if (!existsSync(currentPath)) {
-			mkdirSync(currentPath);
-		}
-	}
-};
 
 export const isIntrospectionError = (
 	error: any
@@ -35,12 +29,13 @@ const checkForMissingDependencies = (source: Source) => {
 	const packageJson = require(path.join(process.cwd(), 'package.json'));
 	const dependencies = Object.keys(packageJson.dependencies ?? {});
 
-	// These dependencies are required to run the introspection.
+	// These dependencies are required to run the introspection. One package for the provider, one
+	// for the dialect, and the driver itself -- which is a peer of the dialect package so that
+	// users pin their own driver version.
 	const requiredDependencies = [
-		'@exogee/graphweaver-mikroorm',
-		'@mikro-orm/core',
-		'@mikro-orm/knex',
-		`@mikro-orm/${source}`,
+		'@exogee/graphweaver-sql',
+		`@exogee/graphweaver-sql-${dialectForSource(source)}`,
+		driverPackageForSource(source),
 	];
 
 	// hold on to any missing deps
@@ -49,9 +44,9 @@ const checkForMissingDependencies = (source: Source) => {
 	requiredDependencies.forEach((dependency) => {
 		if (!dependencies.includes(dependency)) {
 			// we found a missing dep lets save it
-			const version = dependency.includes('@mikro-orm/')
-				? MIKRO_ORM_TARGET_VERSION
-				: GRAPHWEAVER_TARGET_VERSION;
+			const version = dependency.startsWith('@exogee/')
+				? GRAPHWEAVER_TARGET_VERSION
+				: DRIVER_VERSIONS[dependency];
 			missingDependencies.push(`${dependency}@${version}`);
 		}
 	});
@@ -109,17 +104,20 @@ export const importDataSource = async ({
 
 		let fileCount = 0;
 		for (const file of files) {
-			createDirectories(path.join('.', 'src', file.path));
+			const fileFullPath = path.join(process.cwd(), 'src', file.path);
+			// `recursive` rather than walking the segments ourselves: rebuilding an absolute path
+			// by joining its parts onto '' drops the leading separator, so every import left an
+			// empty copy of the output tree hanging off the working directory.
+			mkdirSync(path.dirname(fileFullPath), { recursive: true });
 
-			const fileFullPath = path.join(process.cwd(), 'src', file.path, file.name);
 			let overwrite = true;
-			if (!overwriteAllFiles && file.needOverwriteWarning && existsSync(fileFullPath)) {
+			if (!overwriteAllFiles && file.warnBeforeOverwrite && existsSync(fileFullPath)) {
 				const { default: inquirer } = await import('inquirer');
 				const prompt = await inquirer.prompt<{ overwrite: boolean }>([
 					{
 						type: 'confirm',
 						name: 'overwrite',
-						message: `Overwrite this file ${path.join(file.path, file.name)}?`,
+						message: `Overwrite this file ${file.path}?`,
 						default: true,
 					},
 				]);

@@ -9,6 +9,7 @@ export enum Database {
 	SQLITE = 'sqlite',
 	POSTGRES = 'postgres',
 	MYSQL = 'mysql',
+	MSSQL = 'mssql',
 }
 
 export const resetDatabase = async () => {
@@ -26,7 +27,7 @@ export const resetDatabase = async () => {
 		const { Client } = await import('pg');
 		const client = new Client({
 			host: process.env.DATABASE_HOST || 'localhost',
-			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 5432,
+			port: process.env.DATABASE_PORT ? Number.parseInt(process.env.DATABASE_PORT) : 5432,
 			user: process.env.DATABASE_USERNAME || 'postgres',
 			password: process.env.DATABASE_PASSWORD || 'postgres',
 			database: process.env.DATABASE_NAME || 'gw',
@@ -44,7 +45,7 @@ export const resetDatabase = async () => {
 		const mysql = await import('mysql2/promise');
 		const connection = await mysql.createConnection({
 			host: process.env.DATABASE_HOST || 'localhost',
-			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 3306,
+			port: process.env.DATABASE_PORT ? Number.parseInt(process.env.DATABASE_PORT) : 3306,
 			user: process.env.DATABASE_USERNAME || 'root',
 			password: process.env.DATABASE_PASSWORD || 'root',
 			multipleStatements: true,
@@ -59,6 +60,36 @@ export const resetDatabase = async () => {
 		// which is fine; it's the INSERTs that need to land in a single transaction.
 		await connection.query(`SET autocommit = 0;\n${sql}\nCOMMIT;`);
 		await connection.end();
+		return;
+	}
+	if (database === Database.MSSQL) {
+		// `mssql` is CommonJS, and cjs-module-lexer does not find `connect` on it -- so the named
+		// import is undefined and only the default has the module on it.
+		const mssql = await import('mssql');
+		const connect = mssql.connect ?? mssql.default.connect;
+		const pool = await connect({
+			server: process.env.DATABASE_HOST || 'localhost',
+			port: process.env.DATABASE_PORT ? Number.parseInt(process.env.DATABASE_PORT) : 1433,
+			user: process.env.DATABASE_USERNAME || 'sa',
+			password: process.env.DATABASE_PASSWORD || 'Graphweaver1!',
+			// Not Chinook: the script's first act is to drop that database, which SQL Server
+			// refuses while this connection is sitting in it. The script selects it itself.
+			database: 'master',
+			options: { encrypt: false, trustServerCertificate: true },
+			// One connection, deliberately. `USE [Chinook]` is connection scoped, so a pool would
+			// run the batches after it against master and create every table in the wrong place.
+			pool: { min: 1, max: 1 },
+		});
+
+		const sql = fs.readFileSync(path.join(process.cwd(), 'databases', 'mssql.sql')).toString();
+
+		// The Chinook SQL Server script is batched with GO separators, which are a SQLCMD
+		// construct rather than T-SQL, so the driver never sees them. Split and run each batch.
+		for (const batch of sql.split(/^[^\S\r\n]*GO[^\S\r\n]*$/gim)) {
+			if (batch.trim()) await pool.request().batch(batch);
+		}
+
+		await pool.close();
 		return;
 	}
 };

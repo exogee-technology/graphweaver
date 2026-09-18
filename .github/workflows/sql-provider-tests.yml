@@ -1,0 +1,135 @@
+name: SQL Provider Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# These only read the repository and talk to service containers. Saying so explicitly means the
+# token cannot do anything else if a dependency of a test ever turns hostile.
+permissions:
+  contents: read
+
+jobs:
+  sql-provider-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: graphweaver_sql_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: graphweaver
+          MYSQL_DATABASE: graphweaver_sql_test
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -pgraphweaver"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 3306:3306
+
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: 'Y'
+          MSSQL_SA_PASSWORD: 'Graphweaver1!'
+          MSSQL_PID: Developer
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Graphweaver1!' -C -Q 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 20
+          --health-start-period 30s
+        ports:
+          - 1433:1433
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - uses: actions/cache@v6
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          version: 9.15.3
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build
+        run: pnpm build:types && pnpm build:js
+
+      # The SQL Server image takes no database name, unlike the other two.
+      #
+      # Run from the server image rather than `mssql-tools18`, which publishes no `latest` tag --
+      # the server image ships the same sqlcmd at the same path, which is what the service
+      # container's own health check above uses, and it is already pulled.
+      - name: Create the SQL Server test database
+        run: >-
+          docker run --rm --network host mcr.microsoft.com/mssql/server:2022-latest
+          /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -U sa -P 'Graphweaver1!' -C
+          -Q "IF DB_ID('graphweaver_sql_test') IS NULL CREATE DATABASE graphweaver_sql_test"
+
+      # The SQL Server round trip reads a real, unmodified Chinook rather than a schema written for
+      # the test, which is the whole point of it -- so that database has to exist. The seed is the
+      # same committed script the end to end suite uses.
+      - name: Seed the SQL Server Chinook database
+        working-directory: src/packages/end-to-end
+        run: pnpm seed-mssql
+        env:
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_PORT: 1433
+          DATABASE_USERNAME: sa
+          DATABASE_PASSWORD: 'Graphweaver1!'
+
+      # Every dialect runs the same conformance and introspection suites, so a divergence shows up
+      # as one dialect failing a test its siblings pass.
+      - name: Run the SQL provider suites against all four dialects
+        run: pnpm test:sql
+
+    env:
+      CI: true
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: graphweaver_sql_test
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: graphweaver
+      MYSQL_DATABASE: graphweaver_sql_test
+      MSSQL_HOST: 127.0.0.1
+      MSSQL_PORT: 1433
+      MSSQL_USER: sa
+      MSSQL_PASSWORD: 'Graphweaver1!'
+      MSSQL_DATABASE: graphweaver_sql_test

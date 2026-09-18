@@ -1,24 +1,21 @@
 import { MagicLink, MagicLinkData, MagicLinkEntity, UserProfile } from '@exogee/graphweaver-auth';
 import { BaseLoaders, fromBackendEntity } from '@exogee/graphweaver';
-import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { mapUserToProfile } from '../../auth/context';
-import { myConnection } from '../../database';
-import { Credential, Authentication } from '../../entities/mysql';
 import { User } from '../../schema/user';
 import { Roles } from '../roles';
+import { authenticationProviderFor, credentialProvider } from '../storage';
 
 export const magicLink = new MagicLink({
-	provider: new MikroBackendProvider(Authentication<MagicLinkData>, myConnection),
+	provider: authenticationProviderFor<MagicLinkData>(),
 	/**
 	 *
 	 * @param username fetch user details using a username
 	 * @returns return a UserProfile compatible entity
 	 */
 	getUser: async (username: string): Promise<UserProfile<Roles>> => {
-		const database = ConnectionManager.database(myConnection.connectionManagerId);
-		if (!database) throw new Error('Database connection not found');
-		const credential = await database.em.findOneOrFail(Credential, { username });
+		const credential = await credentialProvider.findOne({ username });
+		if (!credential) throw new Error('Bad Request: Unknown username provided.');
 
 		const user = fromBackendEntity(
 			User,

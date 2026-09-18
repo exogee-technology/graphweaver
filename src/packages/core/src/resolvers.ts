@@ -260,9 +260,7 @@ const _createOrUpdate = async <G>(
 			}
 
 			const existingEntities = await entity.provider?.find({
-				filter: {
-					[`${String(primaryKeyField)}_in`]: lookup.keys(),
-				},
+				[`${String(primaryKeyField)}_in`]: [...lookup.keys()],
 			});
 
 			for (const existingEntity of existingEntities ?? []) {

@@ -15,7 +15,7 @@ test('should show virtual entities', async ({ page }) => {
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
 	// navigate to the grid page
-	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
+	await page.getByRole('link', { name: 'MySQL' }).click();
 	await page.getByTestId('TaskCountByTag-entity-link').click();
 
 	expect(await page.getByRole('row').nth(1).getByRole('cell').nth(1).innerText()).toBe('urgent');

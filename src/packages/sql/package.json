@@ -1,0 +1,56 @@
+{
+	"name": "@exogee/graphweaver-sql",
+	"version": "2.24.0",
+	"description": "Database agnostic SQL data provider for Graphweaver",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/exogee-technology/graphweaver.git"
+	},
+	"sideEffects": false,
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json",
+		"package:pack": "pnpm pack",
+		"prettier": "prettier --write src/**/*.ts",
+		"test": "vitest",
+		"version": "npm version --no-git-tag-version"
+	},
+	"devDependencies": {
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-scalars": "workspace:*",
+		"@types/node": "26.5.1",
+		"@types/pluralize": "0.0.33",
+		"esbuild": "0.28.1",
+		"glob": "13.0.6",
+		"typescript": "7.0.2",
+		"vitest": "4.1.0"
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite",
+		"mssql"
+	],
+	"dependencies": {
+		"@exogee/logger": "workspace:*",
+		"pluralize": "8.0.0"
+	},
+	"peerDependencies": {
+		"@exogee/graphweaver": "workspace:*"
+	}
+}
