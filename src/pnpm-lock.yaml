@@ -958,8 +958,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       downshift:
-        specifier: 9.0.13
-        version: 9.0.13(react@19.3.0)
+        specifier: 9.4.0
+        version: 9.4.0(react@19.3.0)
       graphiql:
         specifier: 4.1.2
         version: 4.1.2(@codemirror/language@6.0.0)(@types/node@26.5.1)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.21.3))(graphql@16.12.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
@@ -8485,8 +8485,8 @@ packages:
     resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
     engines: {node: '>=12'}
 
-  downshift@9.0.13:
-    resolution: {integrity: sha512-fPV+K5jwEzfEAhNhprgCmpWQ23MKwKNzdbtK0QQFiw4hbFcKhMeGB+ccorfWJzmsLR5Dty+CmLDduWlIs74G/w==}
+  downshift@9.4.0:
+    resolution: {integrity: sha512-yIwyzRYzycKwMZhvOahsn4BmRr4Ffi0JymdWOtTDhR+LGDEXCZHTcwgUbNBC/oZLT6YrR46iwJe/BrQUS5ClQQ==}
     peerDependencies:
       react: '>=16.12.0'
 
@@ -11274,9 +11274,6 @@ packages:
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
-
-  react-is@18.2.0:
-    resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
 
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
@@ -20707,13 +20704,13 @@ snapshots:
 
   dotenv@17.2.3: {}
 
-  downshift@9.0.13(react@19.3.0):
+  downshift@9.4.0(react@19.3.0):
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.7
       compute-scroll-into-view: 3.1.1
       prop-types: 15.8.1
       react: 19.3.0
-      react-is: 18.2.0
+      react-is: 18.3.1
       tslib: 2.8.1
 
   dpop@2.1.1: {}
@@ -21281,7 +21278,7 @@ snapshots:
   fetch-mock@9.11.0(node-fetch@3.3.2):
     dependencies:
       '@babel/core': 7.29.0
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.7
       core-js: 3.46.0
       debug: 4.4.3
       glob-to-regexp: 0.4.1
@@ -23954,8 +23951,6 @@ snapshots:
   react-is@16.13.1: {}
 
   react-is@17.0.2: {}
-
-  react-is@18.2.0: {}
 
   react-is@18.3.1: {}
 
