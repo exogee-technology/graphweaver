@@ -8,7 +8,7 @@ export const mysql: Dialect = {
 	name: 'mysql',
 	displayName: 'MySQL',
 
-	quoteIdentifier: (name) => `\`${name.replace(/`/g, '``')}\``,
+	quoteIdentifier: (name) => `\`${name.replaceAll('`', '``')}\``,
 	placeholder: () => '?',
 
 	// Really bounded by max_allowed_packet rather than a fixed count; this is a safe working limit.

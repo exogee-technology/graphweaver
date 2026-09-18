@@ -5,7 +5,7 @@ export const postgres: Dialect = {
 	name: 'postgres',
 	displayName: 'PostgreSQL',
 
-	quoteIdentifier: (name) => `"${name.replace(/"/g, '""')}"`,
+	quoteIdentifier: (name) => `"${name.replaceAll('"', '""')}"`,
 	placeholder: (index) => `$${index + 1}`,
 
 	maxBindParameters: 65535,

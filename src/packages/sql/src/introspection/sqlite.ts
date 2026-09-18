@@ -32,9 +32,9 @@ export const sqliteIntrospector: SchemaIntrospector = {
 			// Needed for AUTOINCREMENT, which no pragma reports.
 			const createSql = String(tableRow.sql ?? '');
 
-			const columnRows = await query(`PRAGMA table_xinfo("${name.replace(/"/g, '""')}")`);
-			const foreignKeyRows = await query(`PRAGMA foreign_key_list("${name.replace(/"/g, '""')}")`);
-			const indexRows = await query(`PRAGMA index_list("${name.replace(/"/g, '""')}")`);
+			const columnRows = await query(`PRAGMA table_xinfo("${name.replaceAll('"', '""')}")`);
+			const foreignKeyRows = await query(`PRAGMA foreign_key_list("${name.replaceAll('"', '""')}")`);
+			const indexRows = await query(`PRAGMA index_list("${name.replaceAll('"', '""')}")`);
 
 			const columns: ColumnIR[] = [];
 			const primaryKeyColumns: { column: string; position: number }[] = [];
@@ -98,7 +98,7 @@ export const sqliteIntrospector: SchemaIntrospector = {
 				if (row.origin !== 'u') continue;
 
 				const indexName = String(row.name);
-				const infoRows = await query(`PRAGMA index_info("${indexName.replace(/"/g, '""')}")`);
+				const infoRows = await query(`PRAGMA index_info("${indexName.replaceAll('"', '""')}")`);
 
 				uniques.push({
 					name: indexName,

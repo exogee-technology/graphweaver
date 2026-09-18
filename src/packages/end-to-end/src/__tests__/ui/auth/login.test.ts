@@ -13,5 +13,5 @@ test('should allow a successful login', async ({ page }) => {
 	// Close the welcome page
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
-	await expect(page.getByRole('link', { name: 'mikro-orm-my-sql' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'MySQL' })).toBeVisible();
 });

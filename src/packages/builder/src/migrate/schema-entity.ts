@@ -57,7 +57,7 @@ const optionEntries = (object: ObjectLiteralExpression | undefined, drop: string
 		})
 		.map((property) => property.getText());
 
-const quote = (value: string) => `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+const quote = (value: string) => `'${value.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
 
 const objectArgument = (call: { getArguments(): Node[] }): ObjectLiteralExpression | undefined =>
 	call

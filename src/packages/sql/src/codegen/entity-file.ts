@@ -40,7 +40,7 @@ class Imports {
 	}
 }
 
-const quote = (value: string) => `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+const quote = (value: string) => `'${value.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
 
 const renderOptions = (entries: [string, string | undefined][]) => {
 	const present = entries.filter(([, value]) => value !== undefined);

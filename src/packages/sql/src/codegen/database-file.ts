@@ -17,7 +17,7 @@ const serialise = (value: unknown, indent = 1): string => {
 
 	if (value instanceof CodeExpression) return value.code;
 	if (value === null) return 'null';
-	if (typeof value === 'string') return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+	if (typeof value === 'string') return `'${value.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
 	if (typeof value === 'number' || typeof value === 'boolean') return String(value);
 
 	if (Array.isArray(value)) {

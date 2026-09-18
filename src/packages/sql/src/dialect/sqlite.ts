@@ -8,7 +8,7 @@ export const sqlite: Dialect = {
 	name: 'sqlite',
 	displayName: 'SQLite',
 
-	quoteIdentifier: (name) => `"${name.replace(/"/g, '""')}"`,
+	quoteIdentifier: (name) => `"${name.replaceAll('"', '""')}"`,
 	placeholder: () => '?',
 
 	// SQLITE_MAX_VARIABLE_NUMBER; 32766 since 3.32, 999 on older builds. Feature-detect on connect.

@@ -16,7 +16,7 @@ test('List Trace Page', async ({ page }) => {
 
 	await expect(page.getByRole('heading', { name: 'Trace' })).toBeVisible();
 
-	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
+	await page.getByRole('link', { name: 'MySQL' }).click();
 	await page.getByTestId('Tag-entity-link').click();
 	await page.getByTestId('Task-entity-link').click();
 

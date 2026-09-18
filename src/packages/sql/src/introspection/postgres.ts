@@ -158,7 +158,7 @@ export const enumValuesFromCheck = (definition: string, column: string): string[
 	if (!match || match[1] !== column) return undefined;
 
 	const values = [...match[2].matchAll(/'((?:[^']|'')*)'(?:::[a-z ]+)?/gi)].map((literal) =>
-		literal[1].replace(/''/g, "'")
+		literal[1].replaceAll("''", "'")
 	);
 
 	return values.length ? values : undefined;

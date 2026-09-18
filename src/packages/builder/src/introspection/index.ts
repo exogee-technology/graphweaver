@@ -92,7 +92,7 @@ const connectionLiteralFor = (dialect: Dialect, options: DatabaseOptions) => {
 		if (certificateOrPath.includes('-----BEGIN')) return certificateOrPath;
 
 		needsReadFileSync = true;
-		const quoted = `'${certificateOrPath.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+		const quoted = `'${certificateOrPath.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
 		return new CodeExpression(`readFileSync(${quoted}, 'utf-8')`);
 	});
 

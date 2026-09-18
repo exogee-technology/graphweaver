@@ -5,7 +5,7 @@ export const mssql: Dialect = {
 	name: 'mssql',
 	displayName: 'SQL Server',
 
-	quoteIdentifier: (name) => `[${name.replace(/]/g, ']]')}]`,
+	quoteIdentifier: (name) => `[${name.replaceAll(']', ']]')}]`,
 	placeholder: (index) => `@p${index}`,
 
 	// SQL Server's limit is 2100 parameters per request, and going over it is an error rather than
