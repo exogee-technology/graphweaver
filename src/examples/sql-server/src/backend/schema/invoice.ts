@@ -1,42 +1,44 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, ID } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Customer } from './customer';
 import { InvoiceLine } from './invoice-line';
-import { Invoice as OrmInvoice } from '../entities';
 import { connection } from '../database';
+import { Field, ManyToOne, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity<Invoice>('Invoice', {
-	provider: new MikroBackendProvider(OrmInvoice, connection, { backendDisplayName: 'SQL Server' }),
+	provider: new SqlDataProvider(() => Invoice, connection, {
+		table: 'Invoice',
+		backendDisplayName: 'SQL Server',
+	}),
 })
 export class Invoice {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'InvoiceId', primaryKeyField: true })
 	invoiceId!: number;
 
-	@RelationshipField<Invoice>(() => Customer, { id: (entity) => entity.customer?.customerId })
+	@ManyToOne(() => Customer, { column: 'CustomerId' })
 	customer!: Customer;
 
-	@Field(() => ISODateStringScalar)
+	@Field(() => ISODateStringScalar, { column: 'InvoiceDate' })
 	invoiceDate!: Date;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'BillingAddress', nullable: true })
 	billingAddress?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'BillingCity', nullable: true })
 	billingCity?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'BillingState', nullable: true })
 	billingState?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'BillingCountry', nullable: true })
 	billingCountry?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'BillingPostalCode', nullable: true })
 	billingPostalCode?: string;
 
-	@Field(() => String)
+	@Field(() => String, { column: 'Total' })
 	total!: string;
 
-	@RelationshipField<InvoiceLine>(() => [InvoiceLine], { relatedField: 'invoice' })
+	@OneToMany(() => [InvoiceLine], { relatedField: 'invoice' })
 	invoiceLines!: InvoiceLine[];
 }

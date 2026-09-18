@@ -16,9 +16,25 @@ import { sslOptionsFromFlags } from './database';
 import { version } from '../package.json';
 import { generateTrustedDocuments, generateTypes, printSchema } from './tasks';
 import * as path from 'path';
+import { execFileSync } from 'node:child_process';
 import { config } from '@exogee/graphweaver-config';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
+
+/** True when `git status` reports anything, so the migration can insist on a clean tree. */
+const hasUncommittedChanges = () => {
+	try {
+		return (
+			execFileSync('git', ['status', '--porcelain'], {
+				encoding: 'utf-8',
+				stdio: 'pipe',
+			}).trim().length > 0
+		);
+	} catch {
+		// Not a git repository, or git is not installed. Nothing to protect, so carry on.
+		return false;
+	}
+};
 
 const yargs = yargsFactory(process.argv.slice(2));
 
@@ -209,6 +225,79 @@ void yargs
 				overwriteAllFiles: overwrite,
 				clientGeneratedPrimaryKeys,
 			});
+		},
+	})
+	.command({
+		command: ['migrate [target]'],
+		describe: 'Migrates your project between Graphweaver data providers.',
+		builder: (yargs) =>
+			yargs
+				.positional('target', {
+					type: 'string',
+					choices: ['sql'],
+					default: 'sql',
+					describe: 'What to migrate to. `sql` moves from MikroORM to the SQL provider.',
+				})
+				.option('dry-run', {
+					type: 'boolean',
+					default: false,
+					describe: 'Report what would change without writing anything.',
+				})
+				.option('keep-entities', {
+					type: 'boolean',
+					default: false,
+					describe: 'Keep src/backend/entities instead of deleting it once nothing needs it.',
+				})
+				.option('force', {
+					type: 'boolean',
+					default: false,
+					describe: 'Run even though the working tree has uncommitted changes.',
+				}),
+		handler: async ({ dryRun, keepEntities, force }) => {
+			const { migrateToSqlProvider } = await import('@exogee/graphweaver-builder');
+
+			// This rewrites files in place, so without a clean tree there is no easy way back.
+			if (!force && !dryRun && hasUncommittedChanges()) {
+				console.error(
+					'\nYour working tree has uncommitted changes.\n\n' +
+						'This command edits your entities in place, so commit or stash first and you can\n' +
+						'always read the diff or throw it away. Pass --force to run anyway.\n'
+				);
+				process.exitCode = 1;
+				return;
+			}
+
+			const result = await migrateToSqlProvider({
+				dryRun,
+				removeEntities: !keepEntities,
+			});
+
+			console.log(
+				`\n${result.changedFiles.length} file(s) ${dryRun ? 'would change' : 'changed'}:`
+			);
+			for (const file of result.changedFiles)
+				console.log(`  ${path.relative(process.cwd(), file)}`);
+
+			for (const directory of result.removedDirectories) {
+				console.log(`\nRemoved ${path.relative(process.cwd(), directory)}.`);
+			}
+
+			if (result.issues.length) {
+				console.log(`\n${result.issues.length} thing(s) need a look:`);
+				for (const issue of result.issues) {
+					const where = issue.property ? `${issue.entity}.${issue.property}` : issue.entity;
+					console.log(`  ${where}: ${issue.message}`);
+				}
+				console.log(
+					'\nAnything that could not be migrated confidently was left alone with a TODO\n' +
+						'comment rather than rewritten into a guess.'
+				);
+			}
+
+			console.log(
+				`\nNext: install @exogee/graphweaver-sql and the dialect package for your database,\n` +
+					`drop the @mikro-orm/* dependencies, and run your formatter over the changed files.\n`
+			);
 		},
 	})
 	.command({

@@ -1,19 +1,24 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { Track } from './track';
-import { Playlist as OrmPlaylist } from '../entities';
 import { connection } from '../database';
+import { Field, ManyToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity<Playlist>('Playlist', {
-	provider: new MikroBackendProvider(OrmPlaylist, connection, { backendDisplayName: 'SQL Server' }),
+	provider: new SqlDataProvider(() => Playlist, connection, {
+		table: 'Playlist',
+		backendDisplayName: 'SQL Server',
+	}),
 })
 export class Playlist {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'PlaylistId', primaryKeyField: true })
 	playlistId!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
+	@Field(() => String, { column: 'Name', nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
-	@RelationshipField<Track>(() => [Track], { relatedField: 'playlists' })
+	@ManyToMany(() => [Track], {
+		relatedField: 'playlists',
+		through: { table: 'PlaylistTrack', joinColumn: 'PlaylistId', inverseJoinColumn: 'TrackId' },
+	})
 	tracks!: Track[];
 }

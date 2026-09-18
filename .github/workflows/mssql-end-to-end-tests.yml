@@ -1,0 +1,100 @@
+name: SQL Server End to End Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  mssql-end-to-end-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: "Y"
+          MSSQL_SA_PASSWORD: "Graphweaver1!"
+          MSSQL_PID: Developer
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Graphweaver1!' -C -Q 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 20
+          --health-start-period 30s
+        ports:
+          - 1433:1433
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - uses: actions/cache@v6
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          version: 9.15.3
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: "pnpm"
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build CLI tool
+        run: pnpm build
+
+      - name: Seed SQL Server
+        working-directory: src/packages/end-to-end
+        run: pnpm seed-mssql
+
+      - name: Import SQL Server Chinook Database
+        working-directory: src/packages/end-to-end
+        run: pnpm import-database-mssql
+
+      # `node --test` exits 0 when its glob matches nothing, so without this the step below
+      # would go green while running no tests at all.
+      - name: Check there are SQL Server tests to run
+        working-directory: src/packages/end-to-end
+        run: |
+          if [ -z "$(find src/__tests__/api/mssql -name '*.test.ts' 2>/dev/null)" ]; then
+            echo "No tests in src/__tests__/api/mssql. Add some, or drop this workflow."
+            exit 1
+          fi
+
+      - name: Start and Test GW instance
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 10
+        run: |
+          pnpm start-server &
+          # The other dialects' workflows sleep a fixed 5 seconds here. This one waits, because
+          # SQL Server is the slowest to come up and a fixed sleep turns a slow boot into a
+          # failure that reads like a broken test.
+          for _ in $(seq 1 60); do
+            curl -sf -o /dev/null -X POST http://localhost:9001/ \
+              -H 'Content-Type: application/json' \
+              -d '{"query":"{ __typename }"}' && break
+            sleep 2
+          done
+          pnpm test-mssql &&
+          killall node
+
+    env:
+      CI: true
+      DATABASE_HOST: localhost
+      DATABASE_USERNAME: sa
+      DATABASE_PASSWORD: "Graphweaver1!"
+      DATABASE_PORT: 1433
+      DATABASE_NAME: Chinook

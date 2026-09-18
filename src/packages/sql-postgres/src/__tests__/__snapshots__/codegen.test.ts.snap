@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`codegen from a live postgres schema > generates an entity per table 1`] = `
+"import { Entity, ID } from '@exogee/graphweaver';
+import { Field, ManyToOne, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
+import { connection } from '../database';
+import { Artist } from './artist';
+import { Track } from './track';
+
+@Entity<Album>('Album', {
+	provider: new SqlDataProvider(() => Album, connection),
+})
+export class Album {
+	@Field(() => ID, { primaryKeyField: true })
+	albumId!: number;
+
+	@Field(() => String)
+	title!: string;
+
+	@ManyToOne(() => Artist, { column: 'artist_id', nullable: true })
+	artist?: Artist;
+
+	@OneToMany(() => [Track], { relatedField: 'album' })
+	tracks!: Track[];
+}
+"
+`;
+
+exports[`codegen from a live postgres schema > generates the database file 1`] = `
+"import { defineConnection } from '@exogee/graphweaver-sql';
+import { postgres } from '@exogee/graphweaver-sql-postgres';
+
+export const connection = defineConnection({
+	id: 'pg',
+	dialect: postgres({
+		host: 'localhost',
+		database: 'chinook',
+		user: 'postgres'
+	}),
+	namingStrategy: 'snakeCase',
+});
+
+export const connections = [connection];
+"
+`;
+
+exports[`codegen from a live postgres schema > generates the many-to-many owner with its pivot 1`] = `
+"import { Entity, ID } from '@exogee/graphweaver';
+import { Field, ManyToMany, ManyToOne, SqlDataProvider } from '@exogee/graphweaver-sql';
+import { connection } from '../database';
+import { Album } from './album';
+import { Genre } from './genre';
+
+@Entity<Track>('Track', {
+	provider: new SqlDataProvider(() => Track, connection),
+})
+export class Track {
+	@Field(() => ID, { primaryKeyField: true })
+	trackId!: number;
+
+	@Field(() => String)
+	name!: string;
+
+	@Field(() => Number, { nullable: true })
+	milliseconds?: number;
+
+	@ManyToOne(() => Album, { column: 'album_id', nullable: true })
+	album?: Album;
+
+	@ManyToMany(() => [Genre], { relatedField: 'tracks' })
+	genres!: Genre[];
+}
+"
+`;

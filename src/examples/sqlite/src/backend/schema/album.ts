@@ -1,21 +1,22 @@
-import { AdminUIFilterType, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { AdminUIFilterType, Entity, ID } from '@exogee/graphweaver';
 import { connection } from '../database';
-import { Album as OrmAlbum } from '../entities';
 import { Artist } from './artist';
 import { Track } from './track';
+import { Field, ManyToOne, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity<Album>('Album', {
-	provider: new MikroBackendProvider(OrmAlbum, connection),
+	provider: new SqlDataProvider(() => Album, connection, { table: 'Album' }),
 })
 export class Album {
 	@Field(() => ID, {
+		column: 'AlbumId',
 		primaryKeyField: true,
 		adminUIOptions: { filterType: AdminUIFilterType.DROP_DOWN_TEXT },
 	})
 	albumId!: number;
 
 	@Field(() => String, {
+		column: 'Title',
 		adminUIOptions: {
 			summaryField: true,
 			filterType: AdminUIFilterType.DROP_DOWN_TEXT,
@@ -23,9 +24,9 @@ export class Album {
 	})
 	title!: string;
 
-	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.artistId })
+	@ManyToOne(() => Artist, { column: 'ArtistId' })
 	artist!: Artist;
 
-	@RelationshipField<Track>(() => [Track], { relatedField: 'album' })
+	@OneToMany(() => [Track], { relatedField: 'album' })
 	tracks!: Track[];
 }

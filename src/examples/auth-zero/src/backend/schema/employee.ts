@@ -1,11 +1,10 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, ID } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Customer } from './customer';
-import { Employee as OrmEmployee } from '../entities';
 import { connection } from '../database';
+import { Field, ManyToOne, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -13,60 +12,57 @@ import { connection } from '../database';
 	},
 })
 @Entity('Employee', {
-	provider: new MikroBackendProvider(OrmEmployee, connection),
+	provider: new SqlDataProvider(() => Employee, connection, { table: 'Employee' }),
 })
 export class Employee {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'EmployeeId', primaryKeyField: true })
 	employeeId!: number;
 
-	@Field(() => String)
+	@Field(() => String, { column: 'LastName' })
 	lastName!: string;
 
-	@Field(() => String)
+	@Field(() => String, { column: 'FirstName' })
 	firstName!: string;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
+	@Field(() => String, { column: 'Title', nullable: true, adminUIOptions: { summaryField: true } })
 	title?: string;
 
-	@RelationshipField<Employee>(() => Employee, {
-		id: (entity) => entity.employee?.employeeId,
-		nullable: true,
-	})
+	@ManyToOne(() => Employee, { column: 'ReportsTo', nullable: true })
 	employee?: Employee;
 
-	@Field(() => ISODateStringScalar, { nullable: true })
+	@Field(() => ISODateStringScalar, { column: 'BirthDate', nullable: true })
 	birthDate?: Date;
 
-	@Field(() => ISODateStringScalar, { nullable: true })
+	@Field(() => ISODateStringScalar, { column: 'HireDate', nullable: true })
 	hireDate?: Date;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Address', nullable: true })
 	address?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'City', nullable: true })
 	city?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'State', nullable: true })
 	state?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Country', nullable: true })
 	country?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'PostalCode', nullable: true })
 	postalCode?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Phone', nullable: true })
 	phone?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Fax', nullable: true })
 	fax?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Email', nullable: true })
 	email?: string;
 
-	@RelationshipField<Customer>(() => [Customer], { relatedField: 'employee' })
+	@OneToMany(() => [Customer], { relatedField: 'employee' })
 	customers!: Customer[];
 
-	@RelationshipField<Employee>(() => [Employee], { relatedField: 'employee' })
+	@OneToMany(() => [Employee], { relatedField: 'employee' })
 	employees!: Employee[];
 }

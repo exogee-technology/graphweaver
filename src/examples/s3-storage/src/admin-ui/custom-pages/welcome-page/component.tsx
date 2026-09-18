@@ -25,21 +25,28 @@ export const WelcomePage = () => (
 			location is passed to the backend in a mutation.
 		</p>
 		<Spacer height={10} />
-		<p> The underlying storage in the database is in PostgreSQL in a JSON field:</p>
+		<p>
+			The underlying storage in the database is in PostgreSQL in a JSON field. The entity is
+			declared once — there is no separate ORM entity alongside it:
+		</p>
 		<SyntaxHighlighter
 			language="typescript"
 			style={theme}
 			showLineNumbers
 			customStyle={{ background: 'hsl(264, 40%, 10%)' }}
 		>
-			{`import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+			{`import { Entity, Field, ID } from '@exogee/graphweaver';
+import { Column, SqlDataProvider } from '@exogee/graphweaver-sql';
+import { connection } from './database';
 
-@Entity()
+@Entity('Submission', {
+	provider: new SqlDataProvider(() => Submission, connection),
+})
 export class Submission {
-	@PrimaryKey({ type: new BigIntType('string') })
+	@Field(() => ID)
 	id!: string;
 
-	@Property({ type: 'json', nullable: true })
+	@Field(() => GraphQLJSON, { columnType: 'json', nullable: true })
 	image?: { filename: string; type: string };
 }`}
 		</SyntaxHighlighter>

@@ -25,14 +25,18 @@
 		"format": "pnpm prettier",
 		"lint:fix": "oxlint --fix .",
 		"lint": "oxlint .",
-		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build:packages && sleep 0.5 && pnpm packages:pack",
+		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm packages:pack",
 		"packages:pack": "turbo --filter \"!./examples/**\" package:pack -- --pack-destination ../../.packs",
 		"prettier": "prettier --write .",
 		"publish:dry": "pnpm build && pnpm -r publish --no-git-checks --access public --dry-run",
 		"publish:packages": "pnpm build && pnpm -r publish --no-git-checks --access public",
 		"relink:deps": "pnpm --filter \"!@exogee/graphweaver-end-to-end\" update -r \"@exogee/*\" \"vite-plugin-graphweaver\"",
 		"start": "echo \"To start an example, cd examples/[the application you want] then run pnpm start\"",
-		"version:bump": "pnpm -r version"
+		"version:bump": "pnpm -r version",
+		"compose:up": "docker compose -f docker-compose.sql.yml up -d --wait",
+		"compose:down": "docker compose -f docker-compose.sql.yml down -v",
+		"test:sql": "pnpm --filter \"@exogee/graphweaver-sql*\" test -- --run",
+		"test:sql:local": ". ./scripts/sql-test-env.sh && pnpm test:sql"
 	},
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.12",

@@ -1,16 +1,13 @@
 import { BaseLoaders, fromBackendEntity } from '@exogee/graphweaver';
 import { UserProfile, setAddUserToContext } from '@exogee/graphweaver-auth';
-import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 
 import { User } from '../schema/user';
 import { Roles } from './roles';
-import { Credential } from '../entities/mysql';
-import { myConnection } from '../database';
+import { credentialProvider } from './storage';
 
 export const mapUserToProfile = async (user: User): Promise<UserProfile<Roles>> => {
-	const database = ConnectionManager.database(myConnection.connectionManagerId);
-	if (!database) throw new Error('Database connection not found');
-	const credential = await database.em.findOneOrFail(Credential, { id: user.url });
+	const credential = await credentialProvider.findOne({ id: user.url });
+	if (!credential) throw new Error('Bad Request: Unknown credential id provided.');
 
 	return new UserProfile({
 		id: user.url,

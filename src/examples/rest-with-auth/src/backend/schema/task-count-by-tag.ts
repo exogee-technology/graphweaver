@@ -1,13 +1,12 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, Field, ID } from '@exogee/graphweaver';
 import { myConnection } from '../database';
-import { TaskCountByTag as OrmTaskCountByTag } from '../entities';
 import { Tag } from './tag';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
+import { SqlDataProvider, ManyToOne } from '@exogee/graphweaver-sql';
 
 const acl: AccessControlList<TaskCountByTag, AuthorizationContext> = {
 	// Dark side users can look at all tasks, nobody else can.
@@ -18,14 +17,14 @@ const acl: AccessControlList<TaskCountByTag, AuthorizationContext> = {
 //       but it is not writeable, hence the apiOptions below.
 @ApplyAccessControlList(acl)
 @Entity('TaskCountByTag', {
-	provider: new MikroBackendProvider(OrmTaskCountByTag, myConnection),
+	provider: new SqlDataProvider(() => TaskCountByTag, myConnection),
 	apiOptions: { excludeFromBuiltInWriteOperations: true },
 })
 export class TaskCountByTag {
 	@Field(() => ID, { primaryKeyField: true })
 	tagId!: string;
 
-	@RelationshipField<TaskCountByTag>(() => Tag, { id: (row) => row.tagId })
+	@ManyToOne(() => Tag, { column: 'tag_id' })
 	tag!: Tag;
 
 	@Field(() => Number)

@@ -1,0 +1,114 @@
+name: SQL Provider Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sql-provider-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: graphweaver_sql_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: graphweaver
+          MYSQL_DATABASE: graphweaver_sql_test
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -pgraphweaver"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 3306:3306
+
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: 'Y'
+          MSSQL_SA_PASSWORD: 'Graphweaver1!'
+          MSSQL_PID: Developer
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Graphweaver1!' -C -Q 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 20
+          --health-start-period 30s
+        ports:
+          - 1433:1433
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - uses: actions/cache@v6
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          version: 9.15.3
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build
+        run: pnpm build:types && pnpm build:js
+
+      # The SQL Server image takes no database name, unlike the other two.
+      - name: Create the SQL Server test database
+        run: >-
+          docker run --rm --network host mcr.microsoft.com/mssql-tools18
+          /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -U sa -P 'Graphweaver1!' -C
+          -Q "IF DB_ID('graphweaver_sql_test') IS NULL CREATE DATABASE graphweaver_sql_test"
+
+      # Every dialect runs the same conformance and introspection suites, so a divergence shows up
+      # as one dialect failing a test its siblings pass.
+      - name: Run the SQL provider suites against all four dialects
+        run: pnpm test:sql
+
+    env:
+      CI: true
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: graphweaver_sql_test
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: graphweaver
+      MYSQL_DATABASE: graphweaver_sql_test
+      MSSQL_HOST: 127.0.0.1
+      MSSQL_PORT: 1433
+      MSSQL_USER: sa
+      MSSQL_PASSWORD: 'Graphweaver1!'
+      MSSQL_DATABASE: graphweaver_sql_test

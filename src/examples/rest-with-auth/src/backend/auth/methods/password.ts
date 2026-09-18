@@ -6,18 +6,16 @@ import {
 	ForgottenPassword,
 	ForgottenPasswordLinkData,
 } from '@exogee/graphweaver-auth';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AccessControlList, AuthorizationContext } from '@exogee/graphweaver-auth';
-import { graphweaverMetadata, BaseLoaders, fromBackendEntity } from '@exogee/graphweaver';
+import { BaseLoaders, fromBackendEntity } from '@exogee/graphweaver';
 
 import { User } from '../../schema/user';
 import { mapUserToProfile } from '../context';
-import { myConnection } from '../../database';
-import { Authentication, Credential as OrmCredential } from '../../entities/mysql';
 import { Roles } from '../roles';
+import { authenticationProviderFor, credentialProvider } from '../storage';
 
 export const forgottenPassword = new ForgottenPassword({
-	provider: new MikroBackendProvider(Authentication<ForgottenPasswordLinkData>, myConnection),
+	provider: authenticationProviderFor<ForgottenPasswordLinkData>(),
 	/**
 	 * A callback that can be used to send the forgotten link via channels such as email or SMS
 	 * @param url the URL that was generated and should be sent to the user
@@ -36,14 +34,7 @@ export const forgottenPassword = new ForgottenPassword({
 	 * @returns return a UserProfile compatible entity
 	 */
 	getUser: async (username: string): Promise<UserProfile<Roles>> => {
-		const provider = graphweaverMetadata.getEntityByName<Credential, OrmCredential>(
-			'Credential'
-		)?.provider;
-
-		if (!provider)
-			throw new Error('Bad Request: No provider associated with the Credential entity.');
-
-		const user = await provider?.findOne({ username });
+		const user = await credentialProvider.findOne({ username });
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 
@@ -63,7 +54,7 @@ const acl: AccessControlList<Credential, AuthorizationContext> = {
 };
 
 export const password = new Password({
-	provider: new MikroBackendProvider(OrmCredential, myConnection),
+	provider: credentialProvider,
 	acl,
 	// This is called when a user has logged in to get the profile
 	getUserProfile: async (id: string, operation: PasswordOperation): Promise<UserProfile<Roles>> => {

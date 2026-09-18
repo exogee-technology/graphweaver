@@ -1,0 +1,53 @@
+# Databases for the SQL provider's conformance suites.
+#
+#   pnpm compose:up     start everything and wait for it
+#   pnpm test:sql       run all four dialects against them
+#   pnpm compose:down   stop and remove
+#
+# SQLite needs nothing here: it runs in process.
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: graphweaver_sql_test
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: graphweaver
+      MYSQL_DATABASE: graphweaver_sql_test
+    ports:
+      - '3306:3306'
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1', '-uroot', '-pgraphweaver']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: 'Graphweaver1!'
+      MSSQL_PID: Developer
+    ports:
+      - '1433:1433'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Graphweaver1!' -C -Q 'SELECT 1'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s

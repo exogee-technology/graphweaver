@@ -1,12 +1,8 @@
 import { Web3, AuthenticationMethod, WalletAddress } from '@exogee/graphweaver-auth';
-
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-
-import { Authentication } from '../../entities/mysql';
-import { myConnection } from '../../database';
+import { authenticationProviderFor } from '../storage';
 
 export const web3 = new Web3({
-	provider: new MikroBackendProvider(Authentication<WalletAddress>, myConnection),
+	provider: authenticationProviderFor<WalletAddress>(),
 	multiFactorAuthentication: async () => {
 		return {
 			Everyone: {

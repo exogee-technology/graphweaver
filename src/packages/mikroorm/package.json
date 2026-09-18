@@ -91,5 +91,6 @@
 		"postgresql",
 		"mysql",
 		"sqlite"
-	]
+	],
+	"deprecated": "Superseded by @exogee/graphweaver-sql, which needs no ORM and defines each entity once. Run  to move across. This package keeps working until the next major release."
 }

@@ -1,11 +1,10 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Employee } from './employee';
 import { Invoice } from './invoice';
-import { Customer as OrmCustomer } from '../entities';
 import { connection } from '../database';
+import { Field, ManyToOne, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -13,51 +12,48 @@ import { connection } from '../database';
 	},
 })
 @Entity('Customer', {
-	provider: new MikroBackendProvider(OrmCustomer, connection),
+	provider: new SqlDataProvider(() => Customer, connection, { table: 'Customer' }),
 })
 export class Customer {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'CustomerId', primaryKeyField: true })
 	customerId!: number;
 
-	@Field(() => String)
+	@Field(() => String, { column: 'FirstName' })
 	firstName!: string;
 
-	@Field(() => String)
+	@Field(() => String, { column: 'LastName' })
 	lastName!: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Company', nullable: true })
 	company?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Address', nullable: true })
 	address?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'City', nullable: true })
 	city?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'State', nullable: true })
 	state?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Country', nullable: true })
 	country?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'PostalCode', nullable: true })
 	postalCode?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Phone', nullable: true })
 	phone?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Fax', nullable: true })
 	fax?: string;
 
-	@Field(() => String)
+	@Field(() => String, { column: 'Email' })
 	email!: string;
 
-	@RelationshipField<Customer>(() => Employee, {
-		id: (entity) => entity.employee?.employeeId,
-		nullable: true,
-	})
+	@ManyToOne(() => Employee, { column: 'SupportRepId', nullable: true })
 	employee?: Employee;
 
-	@RelationshipField<Invoice>(() => [Invoice], { relatedField: 'customer' })
+	@OneToMany(() => [Invoice], { relatedField: 'customer' })
 	invoices!: Invoice[];
 }

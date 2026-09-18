@@ -1,32 +1,30 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { Invoice } from './invoice';
 import { Track } from './track';
-import { InvoiceLine as OrmInvoiceLine } from '../entities';
 import { connection } from '../database';
+import { Field, ManyToOne, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity('InvoiceLine', {
-	provider: new MikroBackendProvider(OrmInvoiceLine, connection),
+	provider: new SqlDataProvider(() => InvoiceLine, connection, { table: 'InvoiceLine' }),
 })
 export class InvoiceLine {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'InvoiceLineId', primaryKeyField: true })
 	invoiceLineId!: number;
 
-	@RelationshipField<InvoiceLine>(() => Invoice, {
-		id: (entity) => entity.invoice?.invoiceId,
-	})
+	@ManyToOne(() => Invoice, { column: 'InvoiceId' })
 	invoice!: Invoice;
 
-	@RelationshipField<InvoiceLine>(() => Track, { id: (entity) => entity.track?.trackId })
+	@ManyToOne(() => Track, { column: 'TrackId' })
 	track!: Track;
 
 	@Field(() => String, {
+		column: 'UnitPrice',
 		adminUIOptions: {
 			format: { type: 'currency', variant: 'AUD' },
 		},
 	})
 	unitPrice!: string;
 
-	@Field(() => Number)
+	@Field(() => Number, { column: 'Quantity' })
 	quantity!: number;
 }

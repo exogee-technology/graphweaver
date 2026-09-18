@@ -16,6 +16,22 @@ import { GraphweaverRequestEvent } from './types';
 import type { GraphweaverPlugin, GraphweaverPluginNextFunction } from './types';
 import { cleanFilter } from './utils';
 
+/**
+ * Providers can set this on records they return from `findByRelatedId` to say which of the
+ * requested related ids each record belongs to.
+ *
+ * Without it we have to read the key back out of `record[relatedField]`, which means the provider
+ * has to hydrate the relationship purely so we can read it here. That's wasteful, and for providers
+ * where the GraphQL entity and the data entity are the same class it's also unsafe: the hydrated
+ * value lands on `source[relatedField]`, which the relationship resolver returns directly, skipping
+ * the dataloader and the access control filters that run alongside it.
+ *
+ * Registered via Symbol.for rather than a unique Symbol: providers live in their own packages and
+ * depend on this one as a peer, so two copies of core in a tree are entirely possible. A unique
+ * symbol would then silently fail to match instead of failing loudly.
+ */
+export const RELATED_ID_KEYS = Symbol.for('graphweaver:relatedIdKeys');
+
 type LoaderMap = { [key: string]: DataLoader<string, unknown> };
 
 type LoadOneOptions<G = unknown> = {
@@ -189,6 +205,19 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 			} = getFieldTypeWithMetadata(fieldMetadata.getType);
 
 			for (const record of records) {
+				// If the provider told us which keys this record belongs to, use that and skip the
+				// relationship hydration dance entirely.
+				const explicitKeys = (record as Record<symbol, unknown>)[RELATED_ID_KEYS] as
+					string[] | undefined;
+
+				if (explicitKeys) {
+					for (const key of explicitKeys) {
+						if (!lookup[key]) lookup[key] = [];
+						lookup[key].push(record);
+					}
+					continue;
+				}
+
 				if (isEntityMetadata(fieldTypeMetadata)) {
 					const relatedRecord = record[relatedField as keyof D];
 					if (isList) {

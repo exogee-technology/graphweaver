@@ -1,0 +1,1313 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`mssql > and 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[name] = @p0 AND [t0].[composer] = @p1) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > empty and 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > empty or 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE 1 = 0 ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > equality 1`] = `
+{
+  "params": [
+    "Jagged Little Pill",
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[title] = @p0 ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > explicit null value 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[title] IS NULL ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > ilike 1`] = `
+{
+  "params": [
+    "%rock%",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE LOWER([t0].[name]) LIKE LOWER(@p0) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > in 1`] = `
+{
+  "params": [
+    1,
+    2,
+    3,
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[album_id] IN (@p0, @p1, @p2) ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > in, empty 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE 1 = 0 ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > in, from a non-array iterable 1`] = `
+{
+  "params": [
+    1,
+    2,
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[album_id] IN (@p0, @p1) ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > like 1`] = `
+{
+  "params": [
+    "%rock%",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE [t0].[name] LIKE @p0 ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > limit only 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] ORDER BY [t0].[album_id] ASC OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY",
+}
+`;
+
+exports[`mssql > many to many via pivot 1`] = `
+{
+  "params": [
+    "Rock",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE EXISTS (SELECT 1 FROM [track_genre] [p1] INNER JOIN [genre] [s1] ON [s1].[genre_id] = [p1].[genre_id] WHERE ([p1].[track_id] = [t0].[track_id] AND [s1].[name] = @p0)) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > many to many, inverse side 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT [t0].[genre_id], [t0].[name] FROM [genre] [t0] WHERE EXISTS (SELECT 1 FROM [track_genre] [p1] INNER JOIN [track] [s1] ON [s1].[track_id] = [p1].[track_id] WHERE ([p1].[genre_id] = [t0].[genre_id] AND [s1].[name] = @p0)) ORDER BY [t0].[genre_id] ASC",
+}
+`;
+
+exports[`mssql > many to one, collapsed to a foreign key IN 1`] = `
+{
+  "params": [
+    5,
+    6,
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[artist_id] IN (@p0, @p1) ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > many to one, collapsed to the foreign key 1`] = `
+{
+  "params": [
+    5,
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[artist_id] = @p0 ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > many to one, empty object means has one 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[artist_id] IS NOT NULL ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > many to one, nested filter 1`] = `
+{
+  "params": [
+    "Alanis",
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE EXISTS (SELECT 1 FROM [artist] [s1] WHERE ([s1].[artist_id] = [t0].[artist_id] AND [s1].[name] = @p0)) ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > many to one, null means no related row 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[artist_id] IS NULL ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > ne 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[title] <> @p0 ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > ne null 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[title] IS NOT NULL ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > nested and inside or 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+    "c",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE (([t0].[name] = @p0 AND [t0].[composer] = @p1) OR [t0].[name] = @p2) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > nin, empty 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE 1 = 1 ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > no filter 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > non default schema 1`] = `
+{
+  "params": [
+    10,
+  ],
+  "sql": "SELECT [t0].[invoice_id], [t0].[total] FROM [billing].[invoice] [t0] WHERE [t0].[total] >= @p0 ORDER BY [t0].[invoice_id] ASC",
+}
+`;
+
+exports[`mssql > not over a many to many 1`] = `
+{
+  "params": [
+    "Rock",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE NOT EXISTS (SELECT 1 FROM [track_genre] [p1] INNER JOIN [genre] [s1] ON [s1].[genre_id] = [p1].[genre_id] WHERE ([p1].[track_id] = [t0].[track_id] AND [s1].[name] = @p0)) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > not over a to-many relationship 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE NOT EXISTS (SELECT 1 FROM [track] [s1] WHERE ([s1].[album_id] = [t0].[album_id] AND [s1].[name] = @p0)) ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > not, scalar 1`] = `
+{
+  "params": [
+    "a",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE NOT ([t0].[name] = @p0) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > notnull operator 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[title] IS NOT NULL ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > null operator 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[title] IS NULL ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > null operator, false 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[title] IS NOT NULL ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > offset only 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] ORDER BY [t0].[album_id] ASC OFFSET 5 ROWS",
+}
+`;
+
+exports[`mssql > one to many 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE EXISTS (SELECT 1 FROM [track] [s1] WHERE ([s1].[album_id] = [t0].[album_id] AND [s1].[name] = @p0)) ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > one to many, empty object means has at least one 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE EXISTS (SELECT 1 FROM [track] [s1] WHERE [s1].[album_id] = [t0].[album_id]) ORDER BY [t0].[album_id] ASC",
+}
+`;
+
+exports[`mssql > or 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[name] = @p0 OR [t0].[composer] = @p1) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > ordering by the primary key is not duplicated 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] ORDER BY [t0].[album_id] ASC OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY",
+}
+`;
+
+exports[`mssql > pagination and ordering 1`] = `
+{
+  "params": [],
+  "sql": "SELECT [t0].[album_id], [t0].[title], [t0].[released_at], [t0].[artist_id] FROM [album] [t0] WHERE [t0].[title] IS NOT NULL ORDER BY CASE WHEN [t0].[title] IS NULL THEN 1 ELSE 0 END DESC, [t0].[title] DESC, [t0].[album_id] ASC OFFSET 20 ROWS FETCH NEXT 10 ROWS ONLY",
+}
+`;
+
+exports[`mssql > relationship combined with scalars and or 1`] = `
+{
+  "params": [
+    "Alanis",
+    "%rock%",
+    1000,
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ((EXISTS (SELECT 1 FROM [album] [s1] WHERE ([s1].[album_id] = [t0].[album_id] AND EXISTS (SELECT 1 FROM [artist] [s2] WHERE ([s2].[artist_id] = [s1].[artist_id] AND [s2].[name] = @p0)))) OR LOWER([t0].[name]) LIKE LOWER(@p1)) AND [t0].[milliseconds] >= @p2) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > two levels deep 1`] = `
+{
+  "params": [
+    "Alanis",
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE EXISTS (SELECT 1 FROM [album] [s1] WHERE ([s1].[album_id] = [t0].[album_id] AND EXISTS (SELECT 1 FROM [artist] [s2] WHERE ([s2].[artist_id] = [s1].[artist_id] AND [s2].[name] = @p0)))) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mssql > two operators on one field 1`] = `
+{
+  "params": [
+    1000,
+    5000,
+  ],
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[milliseconds] >= @p0 AND [t0].[milliseconds] < @p1) ORDER BY [t0].[track_id] ASC",
+}
+`;
+
+exports[`mysql > and 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE (\`t0\`.\`name\` = ? AND \`t0\`.\`composer\` = ?) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > empty and 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > empty or 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE 1 = 0 ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > equality 1`] = `
+{
+  "params": [
+    "Jagged Little Pill",
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`title\` = ? ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > explicit null value 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`title\` IS NULL ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > ilike 1`] = `
+{
+  "params": [
+    "%rock%",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE LOWER(\`t0\`.\`name\`) LIKE LOWER(?) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > in 1`] = `
+{
+  "params": [
+    1,
+    2,
+    3,
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`album_id\` IN (?, ?, ?) ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > in, empty 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE 1 = 0 ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > in, from a non-array iterable 1`] = `
+{
+  "params": [
+    1,
+    2,
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`album_id\` IN (?, ?) ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > like 1`] = `
+{
+  "params": [
+    "%rock%",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE \`t0\`.\`name\` LIKE ? ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > limit only 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` ORDER BY \`t0\`.\`album_id\` ASC LIMIT 5",
+}
+`;
+
+exports[`mysql > many to many via pivot 1`] = `
+{
+  "params": [
+    "Rock",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE EXISTS (SELECT 1 FROM \`track_genre\` \`p1\` INNER JOIN \`genre\` \`s1\` ON \`s1\`.\`genre_id\` = \`p1\`.\`genre_id\` WHERE (\`p1\`.\`track_id\` = \`t0\`.\`track_id\` AND \`s1\`.\`name\` = ?)) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > many to many, inverse side 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT \`t0\`.\`genre_id\`, \`t0\`.\`name\` FROM \`genre\` \`t0\` WHERE EXISTS (SELECT 1 FROM \`track_genre\` \`p1\` INNER JOIN \`track\` \`s1\` ON \`s1\`.\`track_id\` = \`p1\`.\`track_id\` WHERE (\`p1\`.\`genre_id\` = \`t0\`.\`genre_id\` AND \`s1\`.\`name\` = ?)) ORDER BY \`t0\`.\`genre_id\` ASC",
+}
+`;
+
+exports[`mysql > many to one, collapsed to a foreign key IN 1`] = `
+{
+  "params": [
+    5,
+    6,
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`artist_id\` IN (?, ?) ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > many to one, collapsed to the foreign key 1`] = `
+{
+  "params": [
+    5,
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`artist_id\` = ? ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > many to one, empty object means has one 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`artist_id\` IS NOT NULL ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > many to one, nested filter 1`] = `
+{
+  "params": [
+    "Alanis",
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE EXISTS (SELECT 1 FROM \`artist\` \`s1\` WHERE (\`s1\`.\`artist_id\` = \`t0\`.\`artist_id\` AND \`s1\`.\`name\` = ?)) ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > many to one, null means no related row 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`artist_id\` IS NULL ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > ne 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`title\` <> ? ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > ne null 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`title\` IS NOT NULL ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > nested and inside or 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+    "c",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE ((\`t0\`.\`name\` = ? AND \`t0\`.\`composer\` = ?) OR \`t0\`.\`name\` = ?) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > nin, empty 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE 1 = 1 ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > no filter 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > non default schema 1`] = `
+{
+  "params": [
+    10,
+  ],
+  "sql": "SELECT \`t0\`.\`invoice_id\`, \`t0\`.\`total\` FROM \`billing\`.\`invoice\` \`t0\` WHERE \`t0\`.\`total\` >= ? ORDER BY \`t0\`.\`invoice_id\` ASC",
+}
+`;
+
+exports[`mysql > not over a many to many 1`] = `
+{
+  "params": [
+    "Rock",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE NOT EXISTS (SELECT 1 FROM \`track_genre\` \`p1\` INNER JOIN \`genre\` \`s1\` ON \`s1\`.\`genre_id\` = \`p1\`.\`genre_id\` WHERE (\`p1\`.\`track_id\` = \`t0\`.\`track_id\` AND \`s1\`.\`name\` = ?)) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > not over a to-many relationship 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE NOT EXISTS (SELECT 1 FROM \`track\` \`s1\` WHERE (\`s1\`.\`album_id\` = \`t0\`.\`album_id\` AND \`s1\`.\`name\` = ?)) ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > not, scalar 1`] = `
+{
+  "params": [
+    "a",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE NOT (\`t0\`.\`name\` = ?) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > notnull operator 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`title\` IS NOT NULL ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > null operator 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`title\` IS NULL ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > null operator, false 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`title\` IS NOT NULL ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > offset only 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` ORDER BY \`t0\`.\`album_id\` ASC LIMIT 18446744073709551615 OFFSET 5",
+}
+`;
+
+exports[`mysql > one to many 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE EXISTS (SELECT 1 FROM \`track\` \`s1\` WHERE (\`s1\`.\`album_id\` = \`t0\`.\`album_id\` AND \`s1\`.\`name\` = ?)) ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > one to many, empty object means has at least one 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE EXISTS (SELECT 1 FROM \`track\` \`s1\` WHERE \`s1\`.\`album_id\` = \`t0\`.\`album_id\`) ORDER BY \`t0\`.\`album_id\` ASC",
+}
+`;
+
+exports[`mysql > or 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE (\`t0\`.\`name\` = ? OR \`t0\`.\`composer\` = ?) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > ordering by the primary key is not duplicated 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` ORDER BY \`t0\`.\`album_id\` ASC LIMIT 5",
+}
+`;
+
+exports[`mysql > pagination and ordering 1`] = `
+{
+  "params": [],
+  "sql": "SELECT \`t0\`.\`album_id\`, \`t0\`.\`title\`, \`t0\`.\`released_at\`, \`t0\`.\`artist_id\` FROM \`album\` \`t0\` WHERE \`t0\`.\`title\` IS NOT NULL ORDER BY (\`t0\`.\`title\` IS NULL) DESC, \`t0\`.\`title\` DESC, \`t0\`.\`album_id\` ASC LIMIT 10 OFFSET 20",
+}
+`;
+
+exports[`mysql > relationship combined with scalars and or 1`] = `
+{
+  "params": [
+    "Alanis",
+    "%rock%",
+    1000,
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE ((EXISTS (SELECT 1 FROM \`album\` \`s1\` WHERE (\`s1\`.\`album_id\` = \`t0\`.\`album_id\` AND EXISTS (SELECT 1 FROM \`artist\` \`s2\` WHERE (\`s2\`.\`artist_id\` = \`s1\`.\`artist_id\` AND \`s2\`.\`name\` = ?)))) OR LOWER(\`t0\`.\`name\`) LIKE LOWER(?)) AND \`t0\`.\`milliseconds\` >= ?) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > two levels deep 1`] = `
+{
+  "params": [
+    "Alanis",
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE EXISTS (SELECT 1 FROM \`album\` \`s1\` WHERE (\`s1\`.\`album_id\` = \`t0\`.\`album_id\` AND EXISTS (SELECT 1 FROM \`artist\` \`s2\` WHERE (\`s2\`.\`artist_id\` = \`s1\`.\`artist_id\` AND \`s2\`.\`name\` = ?)))) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`mysql > two operators on one field 1`] = `
+{
+  "params": [
+    1000,
+    5000,
+  ],
+  "sql": "SELECT \`t0\`.\`track_id\`, \`t0\`.\`name\`, \`t0\`.\`composer\`, \`t0\`.\`unit_price\`, \`t0\`.\`milliseconds\`, \`t0\`.\`album_id\` FROM \`track\` \`t0\` WHERE (\`t0\`.\`milliseconds\` >= ? AND \`t0\`.\`milliseconds\` < ?) ORDER BY \`t0\`.\`track_id\` ASC",
+}
+`;
+
+exports[`postgres > and 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE ("t0"."name" = $1 AND "t0"."composer" = $2) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > empty and 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > empty or 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE 1 = 0 ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > equality 1`] = `
+{
+  "params": [
+    "Jagged Little Pill",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" = $1 ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > explicit null value 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > ilike 1`] = `
+{
+  "params": [
+    "%rock%",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE "t0"."name" ILIKE $1 ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > in 1`] = `
+{
+  "params": [
+    1,
+    2,
+    3,
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."album_id" IN ($1, $2, $3) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > in, empty 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE 1 = 0 ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > in, from a non-array iterable 1`] = `
+{
+  "params": [
+    1,
+    2,
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."album_id" IN ($1, $2) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > like 1`] = `
+{
+  "params": [
+    "%rock%",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE "t0"."name" LIKE $1 ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > limit only 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" ORDER BY "t0"."album_id" ASC LIMIT 5",
+}
+`;
+
+exports[`postgres > many to many via pivot 1`] = `
+{
+  "params": [
+    "Rock",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE EXISTS (SELECT 1 FROM "track_genre" "p1" INNER JOIN "genre" "s1" ON "s1"."genre_id" = "p1"."genre_id" WHERE ("p1"."track_id" = "t0"."track_id" AND "s1"."name" = $1)) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > many to many, inverse side 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT "t0"."genre_id", "t0"."name" FROM "genre" "t0" WHERE EXISTS (SELECT 1 FROM "track_genre" "p1" INNER JOIN "track" "s1" ON "s1"."track_id" = "p1"."track_id" WHERE ("p1"."genre_id" = "t0"."genre_id" AND "s1"."name" = $1)) ORDER BY "t0"."genre_id" ASC",
+}
+`;
+
+exports[`postgres > many to one, collapsed to a foreign key IN 1`] = `
+{
+  "params": [
+    5,
+    6,
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."artist_id" IN ($1, $2) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > many to one, collapsed to the foreign key 1`] = `
+{
+  "params": [
+    5,
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."artist_id" = $1 ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > many to one, empty object means has one 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."artist_id" IS NOT NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > many to one, nested filter 1`] = `
+{
+  "params": [
+    "Alanis",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE EXISTS (SELECT 1 FROM "artist" "s1" WHERE ("s1"."artist_id" = "t0"."artist_id" AND "s1"."name" = $1)) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > many to one, null means no related row 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."artist_id" IS NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > ne 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" <> $1 ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > ne null 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NOT NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > nested and inside or 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+    "c",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE (("t0"."name" = $1 AND "t0"."composer" = $2) OR "t0"."name" = $3) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > nin, empty 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE 1 = 1 ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > no filter 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > non default schema 1`] = `
+{
+  "params": [
+    10,
+  ],
+  "sql": "SELECT "t0"."invoice_id", "t0"."total" FROM "billing"."invoice" "t0" WHERE "t0"."total" >= $1 ORDER BY "t0"."invoice_id" ASC",
+}
+`;
+
+exports[`postgres > not over a many to many 1`] = `
+{
+  "params": [
+    "Rock",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE NOT EXISTS (SELECT 1 FROM "track_genre" "p1" INNER JOIN "genre" "s1" ON "s1"."genre_id" = "p1"."genre_id" WHERE ("p1"."track_id" = "t0"."track_id" AND "s1"."name" = $1)) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > not over a to-many relationship 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE NOT EXISTS (SELECT 1 FROM "track" "s1" WHERE ("s1"."album_id" = "t0"."album_id" AND "s1"."name" = $1)) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > not, scalar 1`] = `
+{
+  "params": [
+    "a",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE NOT ("t0"."name" = $1) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > notnull operator 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NOT NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > null operator 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > null operator, false 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NOT NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > offset only 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" ORDER BY "t0"."album_id" ASC OFFSET 5",
+}
+`;
+
+exports[`postgres > one to many 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE EXISTS (SELECT 1 FROM "track" "s1" WHERE ("s1"."album_id" = "t0"."album_id" AND "s1"."name" = $1)) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > one to many, empty object means has at least one 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE EXISTS (SELECT 1 FROM "track" "s1" WHERE "s1"."album_id" = "t0"."album_id") ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`postgres > or 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE ("t0"."name" = $1 OR "t0"."composer" = $2) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > ordering by the primary key is not duplicated 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" ORDER BY "t0"."album_id" ASC LIMIT 5",
+}
+`;
+
+exports[`postgres > pagination and ordering 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NOT NULL ORDER BY "t0"."title" DESC NULLS FIRST, "t0"."album_id" ASC LIMIT 10 OFFSET 20",
+}
+`;
+
+exports[`postgres > relationship combined with scalars and or 1`] = `
+{
+  "params": [
+    "Alanis",
+    "%rock%",
+    1000,
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE ((EXISTS (SELECT 1 FROM "album" "s1" WHERE ("s1"."album_id" = "t0"."album_id" AND EXISTS (SELECT 1 FROM "artist" "s2" WHERE ("s2"."artist_id" = "s1"."artist_id" AND "s2"."name" = $1)))) OR "t0"."name" ILIKE $2) AND "t0"."milliseconds" >= $3) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > two levels deep 1`] = `
+{
+  "params": [
+    "Alanis",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE EXISTS (SELECT 1 FROM "album" "s1" WHERE ("s1"."album_id" = "t0"."album_id" AND EXISTS (SELECT 1 FROM "artist" "s2" WHERE ("s2"."artist_id" = "s1"."artist_id" AND "s2"."name" = $1)))) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`postgres > two operators on one field 1`] = `
+{
+  "params": [
+    1000,
+    5000,
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE ("t0"."milliseconds" >= $1 AND "t0"."milliseconds" < $2) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > and 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE ("t0"."name" = ? AND "t0"."composer" = ?) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > empty and 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > empty or 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE 1 = 0 ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > equality 1`] = `
+{
+  "params": [
+    "Jagged Little Pill",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" = ? ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > explicit null value 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > ilike 1`] = `
+{
+  "params": [
+    "%rock%",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE LOWER("t0"."name") LIKE LOWER(?) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > in 1`] = `
+{
+  "params": [
+    1,
+    2,
+    3,
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."album_id" IN (?, ?, ?) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > in, empty 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE 1 = 0 ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > in, from a non-array iterable 1`] = `
+{
+  "params": [
+    1,
+    2,
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."album_id" IN (?, ?) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > like 1`] = `
+{
+  "params": [
+    "%rock%",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE "t0"."name" LIKE ? ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > limit only 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" ORDER BY "t0"."album_id" ASC LIMIT 5",
+}
+`;
+
+exports[`sqlite > many to many via pivot 1`] = `
+{
+  "params": [
+    "Rock",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE EXISTS (SELECT 1 FROM "track_genre" "p1" INNER JOIN "genre" "s1" ON "s1"."genre_id" = "p1"."genre_id" WHERE ("p1"."track_id" = "t0"."track_id" AND "s1"."name" = ?)) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > many to many, inverse side 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT "t0"."genre_id", "t0"."name" FROM "genre" "t0" WHERE EXISTS (SELECT 1 FROM "track_genre" "p1" INNER JOIN "track" "s1" ON "s1"."track_id" = "p1"."track_id" WHERE ("p1"."genre_id" = "t0"."genre_id" AND "s1"."name" = ?)) ORDER BY "t0"."genre_id" ASC",
+}
+`;
+
+exports[`sqlite > many to one, collapsed to a foreign key IN 1`] = `
+{
+  "params": [
+    5,
+    6,
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."artist_id" IN (?, ?) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > many to one, collapsed to the foreign key 1`] = `
+{
+  "params": [
+    5,
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."artist_id" = ? ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > many to one, empty object means has one 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."artist_id" IS NOT NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > many to one, nested filter 1`] = `
+{
+  "params": [
+    "Alanis",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE EXISTS (SELECT 1 FROM "artist" "s1" WHERE ("s1"."artist_id" = "t0"."artist_id" AND "s1"."name" = ?)) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > many to one, null means no related row 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."artist_id" IS NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > ne 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" <> ? ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > ne null 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NOT NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > nested and inside or 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+    "c",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE (("t0"."name" = ? AND "t0"."composer" = ?) OR "t0"."name" = ?) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > nin, empty 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE 1 = 1 ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > no filter 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > non default schema 1`] = `
+{
+  "params": [
+    10,
+  ],
+  "sql": "SELECT "t0"."invoice_id", "t0"."total" FROM "billing"."invoice" "t0" WHERE "t0"."total" >= ? ORDER BY "t0"."invoice_id" ASC",
+}
+`;
+
+exports[`sqlite > not over a many to many 1`] = `
+{
+  "params": [
+    "Rock",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE NOT EXISTS (SELECT 1 FROM "track_genre" "p1" INNER JOIN "genre" "s1" ON "s1"."genre_id" = "p1"."genre_id" WHERE ("p1"."track_id" = "t0"."track_id" AND "s1"."name" = ?)) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > not over a to-many relationship 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE NOT EXISTS (SELECT 1 FROM "track" "s1" WHERE ("s1"."album_id" = "t0"."album_id" AND "s1"."name" = ?)) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > not, scalar 1`] = `
+{
+  "params": [
+    "a",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE NOT ("t0"."name" = ?) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > notnull operator 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NOT NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > null operator 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > null operator, false 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NOT NULL ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > offset only 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" ORDER BY "t0"."album_id" ASC LIMIT -1 OFFSET 5",
+}
+`;
+
+exports[`sqlite > one to many 1`] = `
+{
+  "params": [
+    "x",
+  ],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE EXISTS (SELECT 1 FROM "track" "s1" WHERE ("s1"."album_id" = "t0"."album_id" AND "s1"."name" = ?)) ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > one to many, empty object means has at least one 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE EXISTS (SELECT 1 FROM "track" "s1" WHERE "s1"."album_id" = "t0"."album_id") ORDER BY "t0"."album_id" ASC",
+}
+`;
+
+exports[`sqlite > or 1`] = `
+{
+  "params": [
+    "a",
+    "b",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE ("t0"."name" = ? OR "t0"."composer" = ?) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > ordering by the primary key is not duplicated 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" ORDER BY "t0"."album_id" ASC LIMIT 5",
+}
+`;
+
+exports[`sqlite > pagination and ordering 1`] = `
+{
+  "params": [],
+  "sql": "SELECT "t0"."album_id", "t0"."title", "t0"."released_at", "t0"."artist_id" FROM "album" "t0" WHERE "t0"."title" IS NOT NULL ORDER BY "t0"."title" DESC NULLS FIRST, "t0"."album_id" ASC LIMIT 10 OFFSET 20",
+}
+`;
+
+exports[`sqlite > relationship combined with scalars and or 1`] = `
+{
+  "params": [
+    "Alanis",
+    "%rock%",
+    1000,
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE ((EXISTS (SELECT 1 FROM "album" "s1" WHERE ("s1"."album_id" = "t0"."album_id" AND EXISTS (SELECT 1 FROM "artist" "s2" WHERE ("s2"."artist_id" = "s1"."artist_id" AND "s2"."name" = ?)))) OR LOWER("t0"."name") LIKE LOWER(?)) AND "t0"."milliseconds" >= ?) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > two levels deep 1`] = `
+{
+  "params": [
+    "Alanis",
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE EXISTS (SELECT 1 FROM "album" "s1" WHERE ("s1"."album_id" = "t0"."album_id" AND EXISTS (SELECT 1 FROM "artist" "s2" WHERE ("s2"."artist_id" = "s1"."artist_id" AND "s2"."name" = ?)))) ORDER BY "t0"."track_id" ASC",
+}
+`;
+
+exports[`sqlite > two operators on one field 1`] = `
+{
+  "params": [
+    1000,
+    5000,
+  ],
+  "sql": "SELECT "t0"."track_id", "t0"."name", "t0"."composer", "t0"."unit_price", "t0"."milliseconds", "t0"."album_id" FROM "track" "t0" WHERE ("t0"."milliseconds" >= ? AND "t0"."milliseconds" < ?) ORDER BY "t0"."track_id" ASC",
+}
+`;
