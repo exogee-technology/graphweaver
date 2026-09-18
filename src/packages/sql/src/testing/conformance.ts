@@ -31,6 +31,15 @@ export interface ConformanceSetup {
 	connection: SqlConnection;
 	/** DDL for the test schema. Only this differs between dialects. */
 	ddl: string[];
+	/**
+	 * Whether the database stores decimals exactly.
+	 *
+	 * SQLite does not, and cannot: it has no exact numeric type, so `DECIMAL(19, 4)` carries
+	 * NUMERIC affinity and the value is held as a double. 0.9900 comes back 0.99 and anything wider
+	 * than a double loses digits. That is the dialect rather than the provider, so it is stated
+	 * here instead of being quietly absorbed by a weaker assertion on all four.
+	 */
+	exactDecimals: boolean;
 	/** Runs a statement outside the provider, for setup and for asserting on raw rows. */
 	raw(sql: string): Promise<Record<string, unknown>[]>;
 	/**
@@ -199,16 +208,26 @@ export const runConformanceSuite = (setup: ConformanceSetup) => {
 			 * list; before that, 123456789012345.6789 came back as 123456789012345.67 and
 			 * 1234.5678 was written as 1235.
 			 */
-			it('reads decimals back as exact strings', async () => {
+			it('reads decimals back as strings', async () => {
 				const rows = await tracks.find({ unitPrice_null: false } as any);
 				const prices = (rows as any[])
 					.sort((left, right) => left.trackId - right.trackId)
-					.map((row) => String(row.unitPrice));
+					.map((row) => row.unitPrice);
+
+				// A string on every dialect, whatever the storage can hold. A number here would mean
+				// the value had already been through a double before anything could object.
+				for (const price of prices) expect(typeof price).toBe('string');
 
 				// Compared as strings on purpose: `Number('123456789012345.6789')` is
-				// 123456789012345.67, so asserting numerically would pass on the broken behaviour.
-				expect(prices).toEqual(['0.9900', '1234.5678', '123456789012345.6789']);
-				for (const price of prices) expect(typeof price).toBe('string');
+				// 123456789012345.67, so asserting numerically would pass on the broken behaviour
+				// this test exists to catch.
+				expect(prices).toEqual(
+					setup.exactDecimals
+						? ['0.9900', '1234.5678', '123456789012345.6789']
+						: // SQLite, holding them as doubles: trailing zeros gone, digits past a
+							// double's reach gone.
+							['0.99', '1234.5678', '123456789012345.67']
+				);
 			});
 
 			it('finds one, and null for a miss', async () => {

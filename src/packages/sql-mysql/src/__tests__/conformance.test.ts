@@ -31,6 +31,7 @@ if (!host) {
 		name: 'mysql',
 		connection,
 		ddl,
+		exactDecimals: true,
 		afterSeed,
 		raw: async (sql) => {
 			const { rows } = await connection.query({ text: sql, params: [] });

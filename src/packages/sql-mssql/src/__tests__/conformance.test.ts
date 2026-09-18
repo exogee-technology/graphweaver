@@ -35,6 +35,7 @@ if (!host) {
 		name: 'mssql',
 		connection,
 		ddl,
+		exactDecimals: true,
 		wrapSeed,
 		raw: async (sql) => {
 			const { rows } = await connection.query({ text: sql, params: [] });

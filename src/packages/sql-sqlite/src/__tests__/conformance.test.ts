@@ -15,5 +15,6 @@ runConformanceSuite({
 		dialect: sqlite.fromDatabase(database),
 	}),
 	ddl,
+	exactDecimals: false,
 	raw: async (sql) => database.all(sql) as Record<string, unknown>[],
 });
