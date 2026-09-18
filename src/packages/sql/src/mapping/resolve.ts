@@ -2,6 +2,7 @@ import {
 	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	isEntityMetadata,
+	isSerializableGraphQLEntityClass,
 } from '@exogee/graphweaver';
 import type { EntityMetadata, FieldMetadata } from '@exogee/graphweaver';
 import { SQL_STORAGE } from '../decorators/types';
@@ -39,10 +40,21 @@ export interface ResolveOptions {
 const storageFor = (field: FieldMetadata<any, any>): SqlFieldStorage | undefined =>
 	field.additionalInformation?.[SQL_STORAGE] as SqlFieldStorage | undefined;
 
-/** A relationship is a field whose type resolves to another entity. */
+/**
+ * A relationship is a field whose type resolves to another entity -- with one exception.
+ *
+ * An entity carrying `serialize`/`deserialize` statics is a value object, not a table. Core
+ * serialises it on the way in and deserialises it on the way out, so what reaches the provider is
+ * already a plain value bound for a single column. `@MediaField` in the storage provider package is
+ * the one in the tree: `GraphweaverMedia` is a real `@Entity` so it gets a GraphQL type, but it
+ * lives in one `jsonb` column. Treating it as a relationship invents a foreign key -- `image_id`
+ * for a column that is just `image`.
+ */
 const relatedEntityFor = (field: FieldMetadata<any, any>) => {
 	const { isList, metadata } = getFieldTypeWithMetadata(field.getType);
-	return isEntityMetadata(metadata) ? { entity: metadata, isList } : undefined;
+	if (!isEntityMetadata(metadata)) return undefined;
+	if (isSerializableGraphQLEntityClass(metadata.target)) return undefined;
+	return { entity: metadata, isList };
 };
 
 /** Class methods are field resolvers, never columns. */

@@ -3,7 +3,7 @@ import { MediaField, GraphweaverMedia } from '@exogee/graphweaver-storage-provid
 import { pgConnection } from '../database';
 import { ImageNote } from './image-note';
 import { s3Provider } from '../s3-provider';
-import { ManyToOne, SqlDataProvider } from '@exogee/graphweaver-sql';
+import { OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 if (!process.env.AWS_S3_BUCKET) throw new Error('Missing required env AWS_S3_BUCKET');
 
@@ -19,9 +19,10 @@ export class Submission {
 	@MediaField({ storageProvider: s3Provider })
 	image?: GraphweaverMedia;
 
-	// The SQL provider has no dedicated one-to-one. At the column level the owning side of a
-	// one-to-one is just a foreign key, so it is modelled as a many-to-one; the only thing lost is
-	// the uniqueness guarantee, which belongs to the database anyway.
-	@ManyToOne(() => ImageNote, { column: 'image_note_id', nullable: true })
+	// The inverse side of the one-to-one. The foreign key lives on `image_note`, so nothing is
+	// stored on this table -- `@OneToMany` is the right marker even though the field is singular,
+	// because what it describes is where the key lives, not how many rows come back. Core takes
+	// the first row for a non-list field.
+	@OneToMany(() => ImageNote, { relatedField: 'submission', nullable: true })
 	imageNote?: ImageNote;
 }

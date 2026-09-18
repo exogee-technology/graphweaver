@@ -1,4 +1,8 @@
-import { getFieldTypeWithMetadata, graphweaverMetadata } from '@exogee/graphweaver';
+import {
+	getFieldTypeWithMetadata,
+	graphweaverMetadata,
+	isSerializableGraphQLEntityClass,
+} from '@exogee/graphweaver';
 import type { FieldMetadata } from '@exogee/graphweaver';
 import type { ColumnType } from '../ir/nodes';
 
@@ -46,6 +50,11 @@ export const columnTypeForField = (field: FieldMetadata<any, any>): ColumnType =
 	if (isList) return 'array';
 
 	if (graphweaverMetadata.hasEnum(fieldType as any)) return 'string';
+
+	// A value object entity -- one with `serialize`/`deserialize` statics -- arrives already
+	// serialised to a plain object, which is a json column. Its class name is the entity's, so
+	// the lookup below would only ever say `unknown`.
+	if (isSerializableGraphQLEntityClass(fieldType)) return 'json';
 
 	const name = nameOfType(fieldType);
 	if (!name) return 'unknown';
