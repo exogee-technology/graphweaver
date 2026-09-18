@@ -1,3 +1,5 @@
+import { describe } from 'node:test';
 import { createManySuite, sqliteOptions } from '../../shared/suites';
 
-createManySuite(sqliteOptions);
+// The suite names what it tests, not what ran it, so the dialect goes on the outside.
+describe(sqliteOptions.name, () => createManySuite(sqliteOptions));

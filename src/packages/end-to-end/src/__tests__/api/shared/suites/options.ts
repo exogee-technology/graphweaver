@@ -6,11 +6,13 @@ import { DialectOptions } from './dialect';
  * do between every test.
  */
 export const sqliteOptions: DialectOptions = {
+	name: 'SQLite',
 	clientGeneratedPrimaryKeys: false,
 	reset: 'each-test',
 };
 
 export const postgresOptions: DialectOptions = {
+	name: 'PostgreSQL',
 	clientGeneratedPrimaryKeys: true,
 	reset: 'once-per-file',
 };
@@ -20,6 +22,7 @@ export const postgresOptions: DialectOptions = {
  * container, so it gets its own.
  */
 export const mysqlOptions: DialectOptions = {
+	name: 'MySQL',
 	clientGeneratedPrimaryKeys: true,
 	reset: 'once-per-file',
 	resetTimeout: 60_000,
@@ -30,6 +33,7 @@ export const mysqlOptions: DialectOptions = {
  * and the reason its reset connects to `master` rather than to Chinook.
  */
 export const mssqlOptions: DialectOptions = {
+	name: 'SQL Server',
 	clientGeneratedPrimaryKeys: true,
 	reset: 'once-per-file',
 	resetTimeout: 120_000,

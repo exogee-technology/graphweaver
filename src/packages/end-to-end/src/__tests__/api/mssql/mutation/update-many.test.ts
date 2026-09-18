@@ -1,3 +1,5 @@
+import { describe } from 'node:test';
 import { updateManySuite, mssqlOptions } from '../../shared/suites';
 
-updateManySuite(mssqlOptions);
+// The suite names what it tests, not what ran it, so the dialect goes on the outside.
+describe(mssqlOptions.name, () => updateManySuite(mssqlOptions));

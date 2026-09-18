@@ -106,7 +106,7 @@ export const migrateDatabaseFile = (file: SourceFile): MigrationIssue[] => {
 	});
 
 	// Nothing imports a MikroORM driver or the entities barrel any more.
-	for (const declaration of [...file.getImportDeclarations()]) {
+	for (const declaration of file.getImportDeclarations()) {
 		const module = declaration.getModuleSpecifierValue();
 		if (
 			module.startsWith('@mikro-orm/') ||

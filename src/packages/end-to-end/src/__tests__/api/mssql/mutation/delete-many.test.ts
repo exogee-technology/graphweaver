@@ -1,3 +1,5 @@
+import { describe } from 'node:test';
 import { deleteManySuite, mssqlOptions } from '../../shared/suites';
 
-deleteManySuite(mssqlOptions);
+// The suite names what it tests, not what ran it, so the dialect goes on the outside.
+describe(mssqlOptions.name, () => deleteManySuite(mssqlOptions));

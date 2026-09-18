@@ -49,6 +49,12 @@ describe('Filter', () => {
 			filter.tags_exists = true;
 			// @ts-expect-error a date is an object but not a related entity
 			filter.releasedAt_exists = true;
+
+			// The three lines above are the test, and `tsc` is what runs them -- each
+			// `@ts-expect-error` fails the build the day its key becomes legal. This keeps the case
+			// honest under vitest too: a test that cannot fail at runtime reads exactly like one
+			// that passed, which is worth a line to avoid.
+			expect(Object.keys(filter)).toEqual(['name_exists', 'tags_exists', 'releasedAt_exists']);
 		});
 	});
 });

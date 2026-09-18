@@ -9,6 +9,14 @@ import { resetDatabase } from '../../../../utils';
  */
 export interface DialectOptions {
 	/**
+	 * What to call this dialect in test output.
+	 *
+	 * The shared suites name what they test ('create mutations'), not which database ran them, so
+	 * without this the only thing distinguishing four identical-looking runs is the file path.
+	 */
+	name: string;
+
+	/**
 	 * Whether the seed's primary keys are database-generated.
 	 *
 	 * Only the SQLite Chinook seed declares AUTOINCREMENT; the Postgres, MySQL and SQL Server

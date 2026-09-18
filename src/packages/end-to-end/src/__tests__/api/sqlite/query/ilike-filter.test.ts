@@ -1,3 +1,5 @@
+import { describe } from 'node:test';
 import { ilikeFilterSuite, sqliteOptions } from '../../shared/suites';
 
-ilikeFilterSuite(sqliteOptions);
+// The suite names what it tests, not what ran it, so the dialect goes on the outside.
+describe(sqliteOptions.name, () => ilikeFilterSuite(sqliteOptions));

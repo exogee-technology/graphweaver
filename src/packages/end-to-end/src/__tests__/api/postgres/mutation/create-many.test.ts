@@ -1,3 +1,5 @@
+import { describe } from 'node:test';
 import { createManySuite, postgresOptions } from '../../shared/suites';
 
-createManySuite(postgresOptions);
+// The suite names what it tests, not what ran it, so the dialect goes on the outside.
+describe(postgresOptions.name, () => createManySuite(postgresOptions));

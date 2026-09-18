@@ -1,3 +1,5 @@
+import { describe } from 'node:test';
 import { deleteManySuite, mysqlOptions } from '../../shared/suites';
 
-deleteManySuite(mysqlOptions);
+// The suite names what it tests, not what ran it, so the dialect goes on the outside.
+describe(mysqlOptions.name, () => deleteManySuite(mysqlOptions));
