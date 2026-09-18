@@ -89,9 +89,13 @@ jobs:
         run: pnpm build:types && pnpm build:js
 
       # The SQL Server image takes no database name, unlike the other two.
+      #
+      # Run from the server image rather than `mssql-tools18`, which publishes no `latest` tag --
+      # the server image ships the same sqlcmd at the same path, which is what the service
+      # container's own health check above uses, and it is already pulled.
       - name: Create the SQL Server test database
         run: >-
-          docker run --rm --network host mcr.microsoft.com/mssql-tools18
+          docker run --rm --network host mcr.microsoft.com/mssql/server:2022-latest
           /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -U sa -P 'Graphweaver1!' -C
           -Q "IF DB_ID('graphweaver_sql_test') IS NULL CREATE DATABASE graphweaver_sql_test"
 
