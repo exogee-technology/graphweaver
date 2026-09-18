@@ -49,7 +49,7 @@
 		"@graphiql/toolkit": "0.12.1",
 		"@tanstack/react-form": "1.23.8",
 		"@tanstack/react-table": "8.21.3",
-		"@tiptap/extension-link": "3.22.0",
+		"@tiptap/extension-link": "3.31.3",
 		"@tiptap/react": "3.22.0",
 		"@tiptap/starter-kit": "3.22.0",
 		"@types/react-dom": "19.3.0",
