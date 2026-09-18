@@ -6,6 +6,7 @@ import type {
 	SchemaIntrospector,
 } from '../introspection/schema-ir';
 import type { TestHooks } from './conformance';
+import { byCodeUnit } from '../order';
 
 export interface IntrospectionSuiteSetup {
 	hooks: TestHooks;
@@ -35,7 +36,7 @@ export const runIntrospectionSuite = (setup: IntrospectionSuiteSetup) => {
 		});
 
 		it('finds every table', () => {
-			expect(schema.tables.map((table) => table.name).sort()).toEqual([
+			expect(schema.tables.map((table) => table.name).sort(byCodeUnit)).toEqual([
 				'album',
 				'app_user',
 				'artist',
@@ -76,7 +77,9 @@ export const runIntrospectionSuite = (setup: IntrospectionSuiteSetup) => {
 				'album_id',
 			]);
 			expect(
-				[...schema.tables.find((t) => t.name === 'track_genre')!.primaryKey!.columns].sort()
+				[...schema.tables.find((t) => t.name === 'track_genre')!.primaryKey!.columns].sort(
+					byCodeUnit
+				)
 			).toEqual(['genre_id', 'track_id']);
 		});
 
@@ -96,7 +99,7 @@ export const runIntrospectionSuite = (setup: IntrospectionSuiteSetup) => {
 				const { entities, errors } = buildEntityModels(schema, snakeCase);
 
 				expect(errors).toEqual([]);
-				expect(entities.map((entity) => entity.name).sort()).toEqual([
+				expect(entities.map((entity) => entity.name).sort(byCodeUnit)).toEqual([
 					'Album',
 					'AppUser',
 					'Artist',

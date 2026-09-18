@@ -27,7 +27,7 @@ export const resetDatabase = async () => {
 		const { Client } = await import('pg');
 		const client = new Client({
 			host: process.env.DATABASE_HOST || 'localhost',
-			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 5432,
+			port: process.env.DATABASE_PORT ? Number.parseInt(process.env.DATABASE_PORT) : 5432,
 			user: process.env.DATABASE_USERNAME || 'postgres',
 			password: process.env.DATABASE_PASSWORD || 'postgres',
 			database: process.env.DATABASE_NAME || 'gw',
@@ -45,7 +45,7 @@ export const resetDatabase = async () => {
 		const mysql = await import('mysql2/promise');
 		const connection = await mysql.createConnection({
 			host: process.env.DATABASE_HOST || 'localhost',
-			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 3306,
+			port: process.env.DATABASE_PORT ? Number.parseInt(process.env.DATABASE_PORT) : 3306,
 			user: process.env.DATABASE_USERNAME || 'root',
 			password: process.env.DATABASE_PASSWORD || 'root',
 			multipleStatements: true,
@@ -69,7 +69,7 @@ export const resetDatabase = async () => {
 		const connect = mssql.connect ?? mssql.default.connect;
 		const pool = await connect({
 			server: process.env.DATABASE_HOST || 'localhost',
-			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 1433,
+			port: process.env.DATABASE_PORT ? Number.parseInt(process.env.DATABASE_PORT) : 1433,
 			user: process.env.DATABASE_USERNAME || 'sa',
 			password: process.env.DATABASE_PASSWORD || 'Graphweaver1!',
 			// Not Chinook: the script's first act is to drop that database, which SQL Server
@@ -85,7 +85,7 @@ export const resetDatabase = async () => {
 
 		// The Chinook SQL Server script is batched with GO separators, which are a SQLCMD
 		// construct rather than T-SQL, so the driver never sees them. Split and run each batch.
-		for (const batch of sql.split(/^\s*GO\s*$/gim)) {
+		for (const batch of sql.split(/^[^\S\r\n]*GO[^\S\r\n]*$/gim)) {
 			if (batch.trim()) await pool.request().batch(batch);
 		}
 

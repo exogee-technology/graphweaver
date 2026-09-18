@@ -19,6 +19,16 @@ export interface ConnectionOptions {
 	isolationLevel?: IsolationLevel;
 
 	/**
+	 * What the Admin UI calls this data source, as in "From SQLite (275 rows)".
+	 *
+	 * Defaults to the dialect's own name. Worth setting when a project has more than one connection
+	 * to the same kind of database, where two sources both called "PostgreSQL" tells the reader
+	 * nothing -- "Reporting Warehouse" and "Billing" do. An individual entity can still override it
+	 * through its provider.
+	 */
+	displayName?: string;
+
+	/**
 	 * How entity and property names map onto tables and columns, for every entity on this
 	 * connection. An individual provider can still override it.
 	 */
@@ -28,6 +38,7 @@ export interface ConnectionOptions {
 export class SqlConnection {
 	readonly id: string;
 	readonly isolationLevel: IsolationLevel;
+	readonly displayName?: string;
 	readonly namingStrategy: NamingStrategy;
 
 	#dialect: ConnectableDialect;
@@ -38,6 +49,7 @@ export class SqlConnection {
 		this.id = options.id;
 		this.#dialect = options.dialect;
 		this.isolationLevel = options.isolationLevel ?? IsolationLevel.REPEATABLE_READ;
+		this.displayName = options.displayName;
 		this.namingStrategy =
 			typeof options.namingStrategy === 'string'
 				? namingStrategies[options.namingStrategy]

@@ -1,5 +1,6 @@
 import type { EntityModel, PropertyModel, RelationshipModel } from '../introspection/entity-model';
 import { graphQLTypeFor } from './graphql-types';
+import { byCodeUnit } from '../order';
 
 const CORE = '@exogee/graphweaver';
 const SQL = '@exogee/graphweaver-sql';
@@ -33,7 +34,7 @@ class Imports {
 		return modules
 			.map(
 				(module) =>
-					`import { ${[...this.#byModule.get(module)!].sort().join(', ')} } from '${module}';`
+					`import { ${[...this.#byModule.get(module)!].sort(byCodeUnit).join(', ')} } from '${module}';`
 			)
 			.join('\n');
 	}
@@ -218,5 +219,5 @@ ${body}
 export const renderIndexFile = (entities: EntityModel[]) =>
 	`${entities
 		.map((entity) => `export * from './${kebabCase(entity.name)}';`)
-		.sort()
+		.sort(byCodeUnit)
 		.join('\n')}\n`;

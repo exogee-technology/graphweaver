@@ -3,6 +3,7 @@ import { emulatedOrderByItem } from './dialect';
 
 export const mssql: Dialect = {
 	name: 'mssql',
+	displayName: 'SQL Server',
 
 	quoteIdentifier: (name) => `[${name.replace(/]/g, ']]')}]`,
 	placeholder: (index) => `@p${index}`,

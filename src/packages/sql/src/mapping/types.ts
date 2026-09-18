@@ -1,4 +1,5 @@
 import type { ColumnMeta, ColumnType } from '../ir/nodes';
+import { byCodeUnit } from '../order';
 
 /**
  * The resolved mapping the query planner reads.
@@ -90,7 +91,7 @@ export class UnknownFieldError extends Error {
 	) {
 		super(
 			`Could not locate '${field}' on entity '${entityName}'. Known fields are: ${known
-				.sort()
+				.sort(byCodeUnit)
 				.join(', ')}.`
 		);
 		this.name = 'UnknownFieldError';

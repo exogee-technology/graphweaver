@@ -108,7 +108,9 @@ export class SqlDataProvider<
 		this.#extraColumns = extraColumns;
 		this.connection = connection;
 		this.backendId = `sql-${connection.id}`;
-		this.backendDisplayName = options.backendDisplayName;
+		// Most specific wins: this entity, then the connection it is on, then the dialect.
+		this.backendDisplayName =
+			options.backendDisplayName ?? connection.displayName ?? connection.dialect.displayName;
 	}
 
 	/**

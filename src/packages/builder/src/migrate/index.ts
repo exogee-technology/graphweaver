@@ -159,10 +159,11 @@ export const migrateToSqlProvider = async (
 
 	const database = project.getSourceFile(databaseFile);
 	if (database) {
-		const databaseIssues = migrateDatabaseFile(database);
-		issues.push(...databaseIssues);
-		if (database.getFullText() !== database.getFullText()) changed.add(database);
-		changed.add(database);
+		// Read before migrating, or the comparison is the file against itself and always false.
+		const before = database.getFullText();
+		issues.push(...migrateDatabaseFile(database));
+
+		if (database.getFullText() !== before) changed.add(database);
 	}
 
 	// Anything still importing MikroORM is application code the codemod deliberately does not

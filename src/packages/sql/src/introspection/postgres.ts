@@ -127,10 +127,34 @@ const CHECK_CONSTRAINTS = `
  * comparison between two columns -- is a constraint we have no business reading as an enum, hence
  * the deliberately narrow match.
  */
-const CHECK_ENUM = /^CHECK \(+"?([^"\s=]+)"?\s*=\s*ANY\s*\(+ARRAY\[(.+?)\]\)+$/i;
+// Split into an anchored shape plus a plain search, rather than one pattern ending `\]\)+$`: a
+// lazy `(.+?)` followed by a run of closing parens gives the engine a choice at every paren, which
+// is superlinear on a definition that nearly matches. Trimming the parens first removes the choice.
+const CHECK_ENUM = /^"?([^"\s=]+)"?\s*=\s*ANY\s*\(ARRAY\[(.*)\]\)$/i;
+
+/** Strips `CHECK (` and the balanced parens Postgres wraps the expression in. */
+const unwrapCheck = (definition: string) => {
+	let inner = definition.replace(/\s+/g, ' ').trim();
+	if (!inner.toUpperCase().startsWith('CHECK ')) return undefined;
+
+	inner = inner.slice('CHECK '.length).trim();
+
+	while (inner.startsWith('(') && inner.endsWith(')')) {
+		const trimmed = inner.slice(1, -1).trim();
+		// Stop where the outer parens are not a wrapper, as in `(a) = ANY (b)`.
+		if (trimmed.includes('(') && !trimmed.includes(')')) break;
+		if (!trimmed.endsWith(')') && trimmed.includes(')')) break;
+		inner = trimmed;
+	}
+
+	return inner;
+};
 
 export const enumValuesFromCheck = (definition: string, column: string): string[] | undefined => {
-	const match = CHECK_ENUM.exec(definition.replace(/\s+/g, ' ').trim());
+	const inner = unwrapCheck(definition);
+	if (!inner) return undefined;
+
+	const match = CHECK_ENUM.exec(inner);
 	if (!match || match[1] !== column) return undefined;
 
 	const values = [...match[2].matchAll(/'((?:[^']|'')*)'(?:::[a-z ]+)?/gi)].map((literal) =>

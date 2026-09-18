@@ -5,6 +5,7 @@ import { sql } from '../connection/raw';
 import type { SqlDataProvider } from '../provider';
 import { defineTestEntities, SEED_STATEMENTS, TABLES_IN_DROP_ORDER } from './entities';
 import type { UserStorage } from './entities';
+import { byCodeUnit } from '../order';
 
 /**
  * The test framework's hooks, passed in rather than imported.
@@ -129,7 +130,9 @@ export const runConformanceSuite = (setup: ConformanceSetup) => {
 
 			it('filters through a many-to-many pivot', async () => {
 				expect(
-					(await tracks.find({ genres: { name: 'Alternative' } })).map((r: any) => r.name).sort()
+					(await tracks.find({ genres: { name: 'Alternative' } }))
+						.map((r: any) => r.name)
+						.sort(byCodeUnit)
 				).toEqual(['Karma Police', 'Paranoid Android']);
 			});
 
@@ -138,7 +141,7 @@ export const runConformanceSuite = (setup: ConformanceSetup) => {
 				expect(
 					(await tracks.find({ _not: { genres: { name: 'Alternative' } } }))
 						.map((r: any) => r.name)
-						.sort()
+						.sort(byCodeUnit)
 				).toEqual(['Ironic', 'You Oughta Know']);
 			});
 
@@ -155,7 +158,7 @@ export const runConformanceSuite = (setup: ConformanceSetup) => {
 					'Orphan Album',
 				]);
 				expect(
-					(await albums.find({ tracks_exists: true })).map((r: any) => r.title).sort()
+					(await albums.find({ tracks_exists: true })).map((r: any) => r.title).sort(byCodeUnit)
 				).toEqual(['Jagged Little Pill', 'OK Computer']);
 
 				expect((await albums.find({ artist_exists: false })).map((r: any) => r.title)).toEqual([
@@ -203,13 +206,13 @@ export const runConformanceSuite = (setup: ConformanceSetup) => {
 				const rows = await albums.findByRelatedId(null as any, 'artist', ['1', '2']);
 
 				expect(rows).toHaveLength(2);
-				expect(rows.flatMap((r: any) => r[RELATED_ID_KEYS]).sort()).toEqual(['1', '2']);
+				expect(rows.flatMap((r: any) => r[RELATED_ID_KEYS]).sort(byCodeUnit)).toEqual(['1', '2']);
 			});
 
 			it('gives a many-to-many record every key it matched', async () => {
 				const rows = await tracks.findByRelatedId(null as any, 'genres', ['1', '2']);
 				const byName = Object.fromEntries(
-					rows.map((r: any) => [r.name, [...r[RELATED_ID_KEYS]].sort()])
+					rows.map((r: any) => [r.name, [...r[RELATED_ID_KEYS]].sort(byCodeUnit)])
 				);
 
 				// In both genres, so it comes back once carrying both keys.
@@ -221,7 +224,7 @@ export const runConformanceSuite = (setup: ConformanceSetup) => {
 			it('loads a one-to-many batch', async () => {
 				const rows = await genres.findByRelatedId(null as any, 'tracks', ['3']);
 
-				expect(rows.map((r: any) => r.name).sort()).toEqual(['Alternative', 'Rock']);
+				expect(rows.map((r: any) => r.name).sort(byCodeUnit)).toEqual(['Alternative', 'Rock']);
 			});
 		});
 
@@ -465,7 +468,7 @@ export const runConformanceSuite = (setup: ConformanceSetup) => {
 				expect(
 					(await tracks.find({ album: { artist: { name: 'Radiohead' } } }))
 						.map((r: any) => r.name)
-						.sort()
+						.sort(byCodeUnit)
 				).toEqual(['Karma Police', 'Paranoid Android']);
 			});
 

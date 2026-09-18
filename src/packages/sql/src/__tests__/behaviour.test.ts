@@ -231,3 +231,31 @@ describe('defineConnection', () => {
 		expect(defineConnection({ id, dialect, namingStrategy: 'pascalCase' })).toBe(first);
 	});
 });
+
+describe('data source display name', () => {
+	it('names each dialect the way its vendor spells it', () => {
+		// The Admin UI shows this as "From SQLite (275 rows)". Coming from the dialect rather than
+		// from generated code means a hand written entity gets it too, and a generated file does
+		// not repeat `backendDisplayName` on every entity the way the MikroORM importer did.
+		expect(postgres.displayName).toBe('PostgreSQL');
+		expect(mysql.displayName).toBe('MySQL');
+		expect(sqlite.displayName).toBe('SQLite');
+		expect(mssql.displayName).toBe('SQL Server');
+	});
+
+	it('lets a connection override it, which is what two Postgres connections need', () => {
+		// Two data sources both labelled "PostgreSQL" tell the reader nothing.
+		const dialect = { ...postgres, connect: () => Promise.reject(new Error('unused')) };
+
+		const named = defineConnection({
+			id: `named-${Math.random()}`,
+			dialect,
+			displayName: 'Reporting Warehouse',
+		});
+
+		expect(named.displayName).toBe('Reporting Warehouse');
+		expect(
+			defineConnection({ id: `unnamed-${Math.random()}`, dialect }).displayName
+		).toBeUndefined();
+	});
+});

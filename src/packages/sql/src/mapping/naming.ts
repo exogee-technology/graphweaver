@@ -1,4 +1,5 @@
 import pluralize from 'pluralize';
+import { byCodeUnit } from '../order';
 
 export interface NamingStrategy {
 	readonly name: string;
@@ -38,7 +39,8 @@ export const snakeCase: NamingStrategy = {
 	tableName: (entityName) => underscore(entityName),
 	columnName: (property) => underscore(property),
 	foreignKeyColumn: (property) => `${underscore(property)}_id`,
-	pivotTableName: (ownerTable, relatedTable) => [ownerTable, relatedTable].sort().join('_'),
+	pivotTableName: (ownerTable, relatedTable) =>
+		[ownerTable, relatedTable].sort(byCodeUnit).join('_'),
 	pivotJoinColumn: (table, primaryKeyColumn) => `${table}_${underscore(primaryKeyColumn)}`,
 };
 
@@ -48,7 +50,8 @@ export const preserve: NamingStrategy = {
 	tableName: (entityName) => entityName,
 	columnName: (property) => property,
 	foreignKeyColumn: (property) => `${property}Id`,
-	pivotTableName: (ownerTable, relatedTable) => [ownerTable, relatedTable].sort().join(''),
+	pivotTableName: (ownerTable, relatedTable) =>
+		[ownerTable, relatedTable].sort(byCodeUnit).join(''),
 	pivotJoinColumn: (table, primaryKeyColumn) => `${table}${primaryKeyColumn}`,
 };
 
@@ -66,7 +69,8 @@ export const pascalCase: NamingStrategy = {
 	tableName: (entityName) => pascal(entityName),
 	columnName: (property) => pascal(property),
 	foreignKeyColumn: (property) => `${pascal(property)}Id`,
-	pivotTableName: (ownerTable, relatedTable) => [ownerTable, relatedTable].sort().join(''),
+	pivotTableName: (ownerTable, relatedTable) =>
+		[ownerTable, relatedTable].sort(byCodeUnit).join(''),
 	pivotJoinColumn: (table, primaryKeyColumn) => `${pascal(table)}${pascal(primaryKeyColumn)}`,
 };
 

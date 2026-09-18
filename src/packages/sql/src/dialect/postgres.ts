@@ -3,6 +3,7 @@ import { nativeOrderByItem } from './dialect';
 
 export const postgres: Dialect = {
 	name: 'postgres',
+	displayName: 'PostgreSQL',
 
 	quoteIdentifier: (name) => `"${name.replace(/"/g, '""')}"`,
 	placeholder: (index) => `$${index + 1}`,

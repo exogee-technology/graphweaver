@@ -6,6 +6,7 @@ const NO_LIMIT = '-1';
 
 export const sqlite: Dialect = {
 	name: 'sqlite',
+	displayName: 'SQLite',
 
 	quoteIdentifier: (name) => `"${name.replace(/"/g, '""')}"`,
 	placeholder: () => '?',

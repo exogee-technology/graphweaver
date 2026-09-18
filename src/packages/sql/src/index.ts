@@ -15,4 +15,5 @@ export * from './filter/operators';
 export { filterToPredicate } from './filter/filter-to-ir';
 export * from './plan/select';
 export * from './plan/related';
+export * from './order';
 export * from './provider';

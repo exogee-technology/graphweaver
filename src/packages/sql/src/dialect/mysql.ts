@@ -6,6 +6,7 @@ const NO_LIMIT = '18446744073709551615';
 
 export const mysql: Dialect = {
 	name: 'mysql',
+	displayName: 'MySQL',
 
 	quoteIdentifier: (name) => `\`${name.replace(/`/g, '``')}\``,
 	placeholder: () => '?',

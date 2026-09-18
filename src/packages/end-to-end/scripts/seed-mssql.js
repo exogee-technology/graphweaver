@@ -7,7 +7,7 @@ const SEED_FILE = './databases/mssql.sql';
 const DATABASE_HOST = process.env.DATABASE_HOST ?? 'localhost';
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME ?? 'sa';
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
-const DATABASE_PORT = parseInt(process.env.DATABASE_PORT ?? '1433');
+const DATABASE_PORT = Number.parseInt(process.env.DATABASE_PORT ?? '1433');
 
 const connection = {
 	server: DATABASE_HOST,
@@ -32,7 +32,7 @@ async function seedData() {
 
 		// GO is a SQLCMD batch separator rather than T-SQL, so the driver never sees it and we
 		// have to split on it ourselves. The Chinook script relies on it heavily.
-		for (const batch of script.split(/^\s*GO\s*$/gim)) {
+		for (const batch of script.split(/^[^\S\r\n]*GO[^\S\r\n]*$/gim)) {
 			if (batch.trim()) await pool.request().batch(batch);
 		}
 

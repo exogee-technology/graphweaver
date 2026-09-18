@@ -109,13 +109,20 @@ const MSSQL: Record<string, ColumnType> = {
 const sqliteAffinity = (declared: string): ColumnType => {
 	const type = declared.toUpperCase();
 
+	// Date and time spellings come first, before the affinity rules below.
+	//
+	// SQLite has no date type, and by its own affinity rules a column declared `DATETIME` gets
+	// NUMERIC affinity -- it contains none of INT, CHAR, CLOB, TEXT, BLOB, REAL, FLOA or DOUB. So
+	// going by affinity alone reads a date column as a number, which is what used to happen here
+	// and what turned Chinook's `InvoiceDate` into a `number` in generated code. The declared name
+	// is the only statement of intent the schema makes, and it is what every tool that writes
+	// these columns reads -- including the MikroORM importer this replaces.
+	if (type.includes('DATETIME') || type.includes('TIMESTAMP')) return 'datetime';
+	if (type.includes('DATE')) return 'date';
+	if (type.includes('TIME')) return 'time';
+
 	if (type.includes('INT')) return type.includes('BIGINT') ? 'bigint' : 'int';
-	if (type.includes('CHAR') || type.includes('CLOB') || type.includes('TEXT')) {
-		// Common spellings people use even though SQLite stores them as text.
-		if (type.includes('DATETIME') || type.includes('TIMESTAMP')) return 'datetime';
-		if (type.includes('DATE')) return 'date';
-		return 'string';
-	}
+	if (type.includes('CHAR') || type.includes('CLOB') || type.includes('TEXT')) return 'string';
 	if (type.includes('BLOB') || type === '') return 'binary';
 	if (type.includes('REAL') || type.includes('FLOA') || type.includes('DOUB')) return 'float';
 	if (type.includes('DECIMAL') || type.includes('NUMERIC')) return 'decimal';

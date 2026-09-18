@@ -23,6 +23,15 @@ export const ISOLATION_RANK: Record<IsolationLevel, number> = {
 export interface Dialect {
 	readonly name: DialectName;
 
+	/**
+	 * What the Admin UI calls this data source, as in "From SQLite (275 rows)".
+	 *
+	 * Spelled the way each vendor spells it. The provider uses it unless an entity says otherwise,
+	 * so a generated file does not have to repeat `backendDisplayName` on every entity the way the
+	 * MikroORM importer did -- and a hand written entity gets it without asking.
+	 */
+	readonly displayName: string;
+
 	/** Always applied. We never conditionally quote, so reserved words need no special handling. */
 	quoteIdentifier(name: string): string;
 

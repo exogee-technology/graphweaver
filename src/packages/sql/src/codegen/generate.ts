@@ -41,7 +41,7 @@ export const chooseNamingStrategy = (schema: DatabaseSchemaIR): NamingStrategyNa
 				// Score by round trip: would the strategy reproduce this column from the property
 				// name we would derive for it?
 				const property = column.name
-					.replace(/[_\s]+(\w)/g, (_, character: string) => character.toUpperCase())
+					.replace(/[_\s]+([^\W_])/g, (_, character: string) => character.toUpperCase())
 					.replace(/^(\p{Lu})(?=\p{Ll})/u, (character) => character.toLowerCase());
 
 				if (strategy.columnName(property) === column.name) score++;
