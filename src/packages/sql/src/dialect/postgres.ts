@@ -27,7 +27,7 @@ export const postgres: Dialect = {
 
 	compileInsert: ({ table, columns, values, returning, quote }) =>
 		`INSERT INTO ${table} (${columns}) VALUES ${values}` +
-		(returning ? ` RETURNING ${returning.map(quote).join(', ')}` : ''),
+		(returning ? ` RETURNING ${returning.map((column) => quote(column.name)).join(', ')}` : ''),
 
 	insertKeyStrategy: 'returning',
 	defaultValuesClause: 'DEFAULT VALUES',

@@ -180,19 +180,37 @@ const validateRowCount = (value: number, what: string) => {
 	return value;
 };
 
+/**
+ * Compiles one entry of a SELECT list, wrapping it where the driver could not read it faithfully.
+ *
+ * A wrapped column is an expression rather than a column, so it arrives with no name for the driver
+ * to key the row by -- it has to be aliased back even where the plan asked for no alias.
+ */
+const readBack = (
+	expr: Expr,
+	as: string | undefined,
+	dialect: Dialect,
+	params: ParamCollector
+): string => {
+	const compiled = compileExpr(expr, dialect, params);
+
+	const read =
+		expr.kind === 'column' && dialect.readExpression
+			? dialect.readExpression(compiled, expr.type)
+			: compiled;
+
+	const alias = as ?? (read === compiled ? undefined : (expr as { column: string }).column);
+
+	return alias ? `${read} AS ${dialect.quoteIdentifier(alias)}` : read;
+};
+
 const compileSelect = (
 	node: SelectNode,
 	dialect: Dialect,
 	params: ParamCollector,
 	options: CompileOptions
 ): string => {
-	const columns = node.columns
-		.map(({ expr, as }) =>
-			as
-				? `${compileExpr(expr, dialect, params)} AS ${dialect.quoteIdentifier(as)}`
-				: compileExpr(expr, dialect, params)
-		)
-		.join(', ');
+	const columns = node.columns.map(({ expr, as }) => readBack(expr, as, dialect, params)).join(', ');
 
 	const parts = [`SELECT ${columns}`, `FROM ${compileTableRef(node.from, dialect)}`];
 

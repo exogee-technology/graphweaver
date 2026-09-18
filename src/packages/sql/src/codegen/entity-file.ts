@@ -101,6 +101,12 @@ const renderProperty = (property: PropertyModel, entityName: string, imports: Im
 		// Only emitted where convention would get it wrong, which is what keeps generated files
 		// readable enough that people are willing to hand-edit them.
 		['column', property.isConventional ? undefined : quote(property.column)],
+		// A decimal reaches GraphQL as a String, and a String is a `string` column by convention --
+		// which loses the one fact that matters about it. SQL Server reads a decimal back through a
+		// cast to text, because tedious would otherwise parse it into a double and drop digits, and
+		// it can only know to do that if the mapping says the column is a decimal. The other three
+		// dialects marshal `decimal` and `string` identically, so this costs them nothing.
+		['columnType', property.type === 'decimal' ? quote('decimal') : undefined],
 		['nullable', property.nullable ? 'true' : undefined],
 	]);
 

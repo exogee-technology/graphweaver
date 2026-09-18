@@ -57,6 +57,15 @@ export const defineTestEntities = (connection: SqlConnection) => {
 		@Field(() => Number, { nullable: true })
 		milliseconds?: number;
 
+		/**
+		 * A decimal, and a String in the API rather than a Float, because a double cannot hold what
+		 * a numeric column can. Every dialect has to hand this back as a string with every digit
+		 * intact -- which took a driver-level cast on SQL Server, where tedious parses DECIMAL into
+		 * a JS double.
+		 */
+		@Field(() => String, { nullable: true, columnType: 'decimal' })
+		unitPrice?: string;
+
 		@ManyToOne(() => Album, { nullable: true })
 		album?: Album;
 
@@ -124,10 +133,10 @@ export const SEED_STATEMENTS = [
 	`INSERT INTO album (album_id, title, artist_id) VALUES (1, 'Jagged Little Pill', 1)`,
 	`INSERT INTO album (album_id, title, artist_id) VALUES (2, 'OK Computer', 2)`,
 	`INSERT INTO album (album_id, title, artist_id) VALUES (3, 'Orphan Album', NULL)`,
-	`INSERT INTO track (track_id, name, album_id, milliseconds) VALUES (1, 'You Oughta Know', 1, 249000)`,
-	`INSERT INTO track (track_id, name, album_id, milliseconds) VALUES (2, 'Ironic', 1, 229000)`,
-	`INSERT INTO track (track_id, name, album_id, milliseconds) VALUES (3, 'Paranoid Android', 2, 383000)`,
-	`INSERT INTO track (track_id, name, album_id, milliseconds) VALUES (4, 'Karma Police', 2, 264000)`,
+	`INSERT INTO track (track_id, name, album_id, milliseconds, unit_price) VALUES (1, 'You Oughta Know', 1, 249000, 0.9900)`,
+	`INSERT INTO track (track_id, name, album_id, milliseconds, unit_price) VALUES (2, 'Ironic', 1, 229000, 1234.5678)`,
+	`INSERT INTO track (track_id, name, album_id, milliseconds, unit_price) VALUES (3, 'Paranoid Android', 2, 383000, 123456789012345.6789)`,
+	`INSERT INTO track (track_id, name, album_id, milliseconds, unit_price) VALUES (4, 'Karma Police', 2, 264000, NULL)`,
 	`INSERT INTO genre (genre_id, name) VALUES (1, 'Rock')`,
 	`INSERT INTO genre (genre_id, name) VALUES (2, 'Alternative')`,
 	`INSERT INTO track_genre (track_id, genre_id) VALUES (1, 1)`,

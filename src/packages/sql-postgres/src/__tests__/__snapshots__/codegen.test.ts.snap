@@ -64,6 +64,9 @@ export class Track {
 	@Field(() => Number, { nullable: true })
 	milliseconds?: number;
 
+	@Field(() => String, { columnType: 'decimal', nullable: true })
+	unitPrice?: string;
+
 	@ManyToOne(() => Album, { column: 'album_id', nullable: true })
 	album?: Album;
 

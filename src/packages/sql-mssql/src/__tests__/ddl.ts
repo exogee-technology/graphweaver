@@ -13,7 +13,8 @@ export const ddl = [
 		track_id INT IDENTITY(1,1) PRIMARY KEY,
 		name NVARCHAR(255) NOT NULL,
 		album_id INT REFERENCES album(album_id),
-		milliseconds INT
+		milliseconds INT,
+		unit_price DECIMAL(19, 4)
 	)`,
 	`CREATE TABLE genre (
 		genre_id INT IDENTITY(1,1) PRIMARY KEY,

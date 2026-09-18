@@ -61,7 +61,7 @@ describe('bound values never appear in SQL text', () => {
 				into: { schema: undefined, name: 'track', alias: 't0' },
 				columns: ['name'],
 				rows: [[{ kind: 'param', value: SECRET, type: 'string' }]],
-				returning: ['track_id'],
+				returning: [{ name: 'track_id', type: 'int' }],
 			},
 			postgres
 		);

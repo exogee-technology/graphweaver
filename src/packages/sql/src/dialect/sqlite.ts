@@ -33,7 +33,7 @@ export const sqlite: Dialect = {
 		// RETURNING needs SQLite 3.35+. The driver feature detects on connect and clears
 		// `returning` on the plan when the build is older.
 		`INSERT INTO ${table} (${columns}) VALUES ${values}` +
-		(returning ? ` RETURNING ${returning.map(quote).join(', ')}` : ''),
+		(returning ? ` RETURNING ${returning.map((column) => quote(column.name)).join(', ')}` : ''),
 
 	insertKeyStrategy: 'returning',
 	defaultValuesClause: 'DEFAULT VALUES',

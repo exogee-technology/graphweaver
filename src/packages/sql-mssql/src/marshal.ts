@@ -22,7 +22,11 @@ export const mssqlMarshaller: Marshaller = {
 				// tedious binds BigInt as a string.
 				return String(value);
 			case 'decimal':
-				return Number(value);
+				// A string, like the other three dialects send, rather than `Number`. A double
+				// cannot hold what a numeric column can, and `fromDatabase` already hands decimals
+				// back as strings, so converting here made the round trip lossy in one direction
+				// only.
+				return String(value);
 			case 'json':
 				return JSON.stringify(value);
 			case 'uuid':
@@ -85,8 +89,21 @@ export const mssqlMarshaller: Marshaller = {
 			case 'float':
 				return TYPES.Float;
 			case 'decimal':
-				// Precision and scale are not optional here: without them tedious rounds.
-				return TYPES.Decimal;
+				// NVarChar, not TYPES.Decimal, and the difference is silent data loss.
+				//
+				// tedious defaults a Decimal to scale 0, so a parameter declared that way rounds:
+				// 1234.5678 written to a DECIMAL(10,4) column comes back as 1235. The scale is
+				// knowable only from `columnMeta`, which codegen never emits, and tedious takes a
+				// Decimal's value as a JS number regardless, so anything past ~15 significant
+				// digits would be gone before it reached the wire.
+				//
+				// SQL Server converts the text to the column's own decimal type exactly, and
+				// decimal outranks nvarchar in data type precedence, so a comparison converts the
+				// parameter rather than the column. This is also the path every generated entity
+				// already takes -- codegen maps a decimal column to GraphQL String and emits no
+				// `columnType` -- so declaring the type now agrees with generating it, instead of
+				// being quietly worse than saying nothing.
+				return TYPES.NVarChar;
 			case 'uuid':
 				return TYPES.UniqueIdentifier;
 			case 'date':
@@ -101,7 +118,6 @@ export const mssqlMarshaller: Marshaller = {
 			case 'json':
 				return TYPES.NVarChar;
 			default:
-				void meta;
 				return TYPES.NVarChar;
 		}
 	},

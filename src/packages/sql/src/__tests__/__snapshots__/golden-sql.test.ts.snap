@@ -6,21 +6,21 @@ exports[`mssql > and 1`] = `
     "a",
     "b",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[name] = @p0 AND [t0].[composer] = @p1) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[name] = @p0 AND [t0].[composer] = @p1) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
 exports[`mssql > empty and 1`] = `
 {
   "params": [],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] ORDER BY [t0].[track_id] ASC",
 }
 `;
 
 exports[`mssql > empty or 1`] = `
 {
   "params": [],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE 1 = 0 ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE 1 = 0 ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -45,7 +45,7 @@ exports[`mssql > ilike 1`] = `
   "params": [
     "%rock%",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE LOWER([t0].[name]) LIKE LOWER(@p0) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE LOWER([t0].[name]) LIKE LOWER(@p0) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -82,7 +82,7 @@ exports[`mssql > like 1`] = `
   "params": [
     "%rock%",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE [t0].[name] LIKE @p0 ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE [t0].[name] LIKE @p0 ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -98,7 +98,7 @@ exports[`mssql > many to many via pivot 1`] = `
   "params": [
     "Rock",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE EXISTS (SELECT 1 FROM [track_genre] [p1] INNER JOIN [genre] [s1] ON [s1].[genre_id] = [p1].[genre_id] WHERE ([p1].[track_id] = [t0].[track_id] AND [s1].[name] = @p0)) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE EXISTS (SELECT 1 FROM [track_genre] [p1] INNER JOIN [genre] [s1] ON [s1].[genre_id] = [p1].[genre_id] WHERE ([p1].[track_id] = [t0].[track_id] AND [s1].[name] = @p0)) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -176,7 +176,7 @@ exports[`mssql > nested and inside or 1`] = `
     "b",
     "c",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE (([t0].[name] = @p0 AND [t0].[composer] = @p1) OR [t0].[name] = @p2) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE (([t0].[name] = @p0 AND [t0].[composer] = @p1) OR [t0].[name] = @p2) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -199,7 +199,7 @@ exports[`mssql > non default schema 1`] = `
   "params": [
     10,
   ],
-  "sql": "SELECT [t0].[invoice_id], [t0].[total] FROM [billing].[invoice] [t0] WHERE [t0].[total] >= @p0 ORDER BY [t0].[invoice_id] ASC",
+  "sql": "SELECT [t0].[invoice_id], CAST([t0].[total] AS NVARCHAR(41)) AS [total] FROM [billing].[invoice] [t0] WHERE [t0].[total] >= @p0 ORDER BY [t0].[invoice_id] ASC",
 }
 `;
 
@@ -208,7 +208,7 @@ exports[`mssql > not over a many to many 1`] = `
   "params": [
     "Rock",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE NOT EXISTS (SELECT 1 FROM [track_genre] [p1] INNER JOIN [genre] [s1] ON [s1].[genre_id] = [p1].[genre_id] WHERE ([p1].[track_id] = [t0].[track_id] AND [s1].[name] = @p0)) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE NOT EXISTS (SELECT 1 FROM [track_genre] [p1] INNER JOIN [genre] [s1] ON [s1].[genre_id] = [p1].[genre_id] WHERE ([p1].[track_id] = [t0].[track_id] AND [s1].[name] = @p0)) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -226,7 +226,7 @@ exports[`mssql > not, scalar 1`] = `
   "params": [
     "a",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE NOT ([t0].[name] = @p0) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE NOT ([t0].[name] = @p0) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -280,7 +280,7 @@ exports[`mssql > or 1`] = `
     "a",
     "b",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[name] = @p0 OR [t0].[composer] = @p1) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[name] = @p0 OR [t0].[composer] = @p1) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -305,7 +305,7 @@ exports[`mssql > relationship combined with scalars and or 1`] = `
     "%rock%",
     1000,
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ((EXISTS (SELECT 1 FROM [album] [s1] WHERE ([s1].[album_id] = [t0].[album_id] AND EXISTS (SELECT 1 FROM [artist] [s2] WHERE ([s2].[artist_id] = [s1].[artist_id] AND [s2].[name] = @p0)))) OR LOWER([t0].[name]) LIKE LOWER(@p1)) AND [t0].[milliseconds] >= @p2) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ((EXISTS (SELECT 1 FROM [album] [s1] WHERE ([s1].[album_id] = [t0].[album_id] AND EXISTS (SELECT 1 FROM [artist] [s2] WHERE ([s2].[artist_id] = [s1].[artist_id] AND [s2].[name] = @p0)))) OR LOWER([t0].[name]) LIKE LOWER(@p1)) AND [t0].[milliseconds] >= @p2) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -314,7 +314,7 @@ exports[`mssql > two levels deep 1`] = `
   "params": [
     "Alanis",
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE EXISTS (SELECT 1 FROM [album] [s1] WHERE ([s1].[album_id] = [t0].[album_id] AND EXISTS (SELECT 1 FROM [artist] [s2] WHERE ([s2].[artist_id] = [s1].[artist_id] AND [s2].[name] = @p0)))) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE EXISTS (SELECT 1 FROM [album] [s1] WHERE ([s1].[album_id] = [t0].[album_id] AND EXISTS (SELECT 1 FROM [artist] [s2] WHERE ([s2].[artist_id] = [s1].[artist_id] AND [s2].[name] = @p0)))) ORDER BY [t0].[track_id] ASC",
 }
 `;
 
@@ -324,7 +324,7 @@ exports[`mssql > two operators on one field 1`] = `
     1000,
     5000,
   ],
-  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], [t0].[unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[milliseconds] >= @p0 AND [t0].[milliseconds] < @p1) ORDER BY [t0].[track_id] ASC",
+  "sql": "SELECT [t0].[track_id], [t0].[name], [t0].[composer], CAST([t0].[unit_price] AS NVARCHAR(41)) AS [unit_price], [t0].[milliseconds], [t0].[album_id] FROM [track] [t0] WHERE ([t0].[milliseconds] >= @p0 AND [t0].[milliseconds] < @p1) ORDER BY [t0].[track_id] ASC",
 }
 `;
 

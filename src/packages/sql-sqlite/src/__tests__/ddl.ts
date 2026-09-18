@@ -10,7 +10,8 @@ export const ddl = [
 		track_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL,
 		album_id INTEGER REFERENCES album(album_id),
-		milliseconds INTEGER
+		milliseconds INTEGER,
+		unit_price DECIMAL(19, 4)
 	)`,
 	`CREATE TABLE genre (genre_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)`,
 	`CREATE TABLE track_genre (

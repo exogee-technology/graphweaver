@@ -188,6 +188,29 @@ export const runConformanceSuite = (setup: ConformanceSetup) => {
 				expect(await tracks.find({ milliseconds_null: true })).toHaveLength(0);
 			});
 
+			/**
+			 * Decimal is the type most likely to be corrupted silently, and differently on each
+			 * dialect: every driver's instinct is to hand it over as a double, and a double cannot
+			 * represent what a numeric column can. So all four are held to the same answer -- a
+			 * string, with every digit the column was given.
+			 *
+			 * SQL Server is the one that had to be made to comply. tedious parses DECIMAL into a JS
+			 * double in its own row handler, so the dialect casts the column to text in the SELECT
+			 * list; before that, 123456789012345.6789 came back as 123456789012345.67 and
+			 * 1234.5678 was written as 1235.
+			 */
+			it('reads decimals back as exact strings', async () => {
+				const rows = await tracks.find({ unitPrice_null: false } as any);
+				const prices = (rows as any[])
+					.sort((left, right) => left.trackId - right.trackId)
+					.map((row) => String(row.unitPrice));
+
+				// Compared as strings on purpose: `Number('123456789012345.6789')` is
+				// 123456789012345.67, so asserting numerically would pass on the broken behaviour.
+				expect(prices).toEqual(['0.9900', '1234.5678', '123456789012345.6789']);
+				for (const price of prices) expect(typeof price).toBe('string');
+			});
+
 			it('finds one, and null for a miss', async () => {
 				expect(await albums.findOne({ albumId: 2 })).toMatchObject({ title: 'OK Computer' });
 				expect(await albums.findOne({ albumId: 999 })).toBeNull();

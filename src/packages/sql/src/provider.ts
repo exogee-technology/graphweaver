@@ -18,7 +18,7 @@ import { FOREIGN_KEYS } from './decorators';
 import type { HiddenColumns } from './decorators/types';
 import { IsolationLevel } from './dialect/dialect';
 import { and, param } from './ir/builders';
-import type { ColumnType, Expr, Predicate } from './ir/nodes';
+import type { ColumnType, Expr, Predicate, ReturningColumn } from './ir/nodes';
 import { registerMappingOptions, resolveEntityCached } from './mapping/registry';
 import type { ResolveOptions } from './mapping/resolve';
 import type {
@@ -337,13 +337,18 @@ export class SqlDataProvider<
 	 * relationships rather than the column map. An INSERT has to return the same set, or a created
 	 * entity comes back without the foreign keys a found one would have.
 	 */
-	#readableColumnNames(): string[] {
+	#readableColumns(): ReturningColumn[] {
 		const names = [...this.mapping.columns.values()]
 			.filter((column) => column.select !== false || this.#extraColumns.has(column.property))
-			.map((column) => column.name);
+			.map((column) => ({ name: column.name, type: column.type }));
 
 		for (const relationship of this.mapping.relationships.values()) {
-			if (relationship.kind === 'manyToOne') names.push(relationship.foreignKey.name);
+			if (relationship.kind === 'manyToOne') {
+				names.push({
+					name: relationship.foreignKey.name,
+					type: relationship.foreignKey.type,
+				});
+			}
 		}
 
 		return names;
@@ -401,7 +406,7 @@ export class SqlDataProvider<
 	async #insertGroup(columns: ResolvedColumn[], rows: Expr[][]): Promise<(G & H)[]> {
 		const { dialect } = this.connection;
 		const returning =
-			dialect.insertKeyStrategy === 'insertId' ? undefined : this.#readableColumnNames();
+			dialect.insertKeyStrategy === 'insertId' ? undefined : this.#readableColumns();
 
 		const insert = (batch: Expr[][]) =>
 			this.connection.query(

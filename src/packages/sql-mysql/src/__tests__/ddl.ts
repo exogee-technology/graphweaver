@@ -15,6 +15,7 @@ export const ddl = [
 		name VARCHAR(255) NOT NULL,
 		album_id INT,
 		milliseconds INT,
+		unit_price DECIMAL(19, 4),
 		FOREIGN KEY (album_id) REFERENCES album(album_id)
 	)`,
 	`CREATE TABLE genre (

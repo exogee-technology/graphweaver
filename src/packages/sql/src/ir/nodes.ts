@@ -118,13 +118,24 @@ export interface SelectNode {
  * the rows before touching them. Keeping it that way avoids the UPDATE/DELETE aliasing divergence
  * between the dialects entirely -- SQL Server cannot alias an UPDATE target the way the others can.
  */
+/** A column an INSERT reads back. */
+export interface ReturningColumn {
+	name: string;
+	type: ColumnType;
+}
+
 export interface InsertNode {
 	kind: 'insert';
 	into: TableRef;
 	columns: string[];
 	rows: Expr[][];
-	/** Column names to read back, where the dialect can do it in one round trip. */
-	returning?: string[];
+	/**
+	 * Columns to read back, where the dialect can do it in one round trip.
+	 *
+	 * Typed rather than named, because a dialect may have to wrap one to read it without loss --
+	 * see `Dialect.readExpression`.
+	 */
+	returning?: ReturningColumn[];
 }
 
 export interface UpdateNode {

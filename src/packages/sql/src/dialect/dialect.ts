@@ -1,4 +1,4 @@
-import type { BoundParam, OrderByItem } from '../ir/nodes';
+import type { BoundParam, ColumnType, OrderByItem, ReturningColumn } from '../ir/nodes';
 
 export type DialectName = 'postgres' | 'mysql' | 'sqlite' | 'mssql';
 
@@ -80,9 +80,22 @@ export interface Dialect {
 		table: string;
 		columns: string;
 		values: string;
-		returning?: string[];
+		returning?: ReturningColumn[];
 		quote: (name: string) => string;
 	}): string;
+
+	/**
+	 * Wraps a column being read back, where the driver would otherwise hand up a lossy value.
+	 *
+	 * Only SQL Server needs it: tedious parses DECIMAL into a JS double, so a numeric wider than a
+	 * double comes back with digits missing. The other three drivers are all configured to return
+	 * numerics as strings, so a decimal is a string on every dialect -- and this is what keeps that
+	 * true rather than nearly true.
+	 *
+	 * Applied to projections only. A WHERE clause must compare on the column's own type or it
+	 * cannot use an index, and an ORDER BY on text would sort 9 after 10.
+	 */
+	readExpression?(expressionText: string, type: ColumnType): string;
 
 	/** Returns the clause that follows ORDER BY, or undefined when there's no paging to emit. */
 	compilePagination(limit: number | undefined, offset: number | undefined): string | undefined;
