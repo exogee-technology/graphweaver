@@ -1,7 +1,7 @@
 import { AliasAllocator, and, param } from '../ir/builders';
 import { filterToPredicate } from '../filter/filter-to-ir';
 import type { Expr, SelectNode } from '../ir/nodes';
-import type { ResolvedEntity } from '../mapping/types';
+import type { ResolvedColumn, ResolvedEntity } from '../mapping/types';
 import { ROOT_ALIAS, selectListFor } from './select';
 
 /** The alias the parent key comes back under, whichever shape produced it. */
@@ -33,13 +33,6 @@ export const planFindByRelatedId = (
 ): RelatedPlan => {
 	const relationship = entity.relationships.get(relatedField);
 
-	if (!relationship) {
-		throw new Error(
-			`'${relatedField}' is not a relationship on '${entity.name}', so it cannot be loaded by ` +
-				`related id. Known relationships: ${[...entity.relationships.keys()].join(', ') || '(none)'}.`
-		);
-	}
-
 	const aliases = new AliasAllocator();
 	const columns = selectListFor(entity, ROOT_ALIAS, include);
 	const where = filterToPredicate(entity, filter, ROOT_ALIAS, aliases);
@@ -56,14 +49,16 @@ export const planFindByRelatedId = (
 		},
 	];
 
-	// Many to one. The foreign key is on this table, so there is nothing to join: the parent key
-	// is already sitting on every row. This is the common case and the one worth keeping cheap.
-	if (relationship.kind === 'manyToOne') {
+	/**
+	 * Plans the case where the parent key is already on this table, so there is nothing to join.
+	 * The common case, and the one worth keeping cheap.
+	 */
+	const byKeyOnThisRow = (key: ResolvedColumn): RelatedPlan => {
 		const foreignKey: Expr = {
 			kind: 'column',
 			table: ROOT_ALIAS,
-			column: relationship.foreignKey.name,
-			type: relationship.foreignKey.type,
+			column: key.name,
+			type: key.type,
 		};
 
 		return {
@@ -78,14 +73,38 @@ export const planFindByRelatedId = (
 					{
 						kind: 'in',
 						operand: foreignKey,
-						values: relatedIds.map((id) => param(id, relationship.foreignKey.type)),
+						values: relatedIds.map((id) => param(id, key.type)),
 						negated: false,
 					},
 				]),
 				orderBy,
 			},
 		};
+	};
+
+	/**
+	 * `relatedField` may name a plain foreign key column rather than a relationship, and that is
+	 * not a mistake: it is what a cross-datasource relationship looks like from this side. A REST
+	 * backed `Task.user` leaves no SQL relationship for `User.tasks` to point at, so it points at
+	 * `userId` -- the column the key is actually in. Which is where a many-to-one keeps it too, so
+	 * the two plan identically.
+	 */
+	if (!relationship) {
+		const column = entity.columns.get(relatedField);
+
+		if (!column) {
+			throw new Error(
+				`'${relatedField}' is neither a relationship nor a column on '${entity.name}', so it ` +
+					`cannot be loaded by related id. Known relationships: ` +
+					`${[...entity.relationships.keys()].join(', ') || '(none)'}. Known columns: ` +
+					`${[...entity.columns.keys()].join(', ') || '(none)'}.`
+			);
+		}
+
+		return byKeyOnThisRow(column);
 	}
+
+	if (relationship.kind === 'manyToOne') return byKeyOnThisRow(relationship.foreignKey);
 
 	// One to many, inverted: find the rows whose related records are in the batch.
 	if (relationship.kind === 'oneToMany') {
