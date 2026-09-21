@@ -106,9 +106,8 @@ const loadAdminUiDocuments = async (metadata: any): Promise<ExtractedDocument[]>
 	if (!metadata?.entities) return [];
 
 	try {
-		const { enumerateAdminUiDocuments } = await import(
-			'@exogee/graphweaver-admin-ui-components/documents'
-		);
+		const { enumerateAdminUiDocuments } =
+			await import('@exogee/graphweaver-admin-ui-components/documents');
 
 		return enumerateAdminUiDocuments(metadata);
 	} catch (error) {
@@ -245,14 +244,19 @@ export const writeGeneratedManifest = ({ allowLists }: GeneratedTrustedDocuments
 			Object.entries(allowLists).map(([name, documents]) => [
 				name,
 				Object.fromEntries(
-					documents.map((document) => [
-						document.id,
-						{
-							body: document.body,
-							operationName: document.operationName,
-							operationType: document.operationType,
-						},
-					])
+					// An entry per variant, so an operation is accepted whether the client sent it as
+					// written or as Apollo rewrote it, and either way we execute the document it asked
+					// for. See `TrustedDocument.apollo`.
+					documents.flatMap((document) =>
+						[document, document.apollo].filter(Boolean).map((variant) => [
+							variant!.id,
+							{
+								body: variant!.body,
+								operationName: document.operationName,
+								operationType: document.operationType,
+							},
+						])
+					)
 				),
 			])
 		),
@@ -287,12 +291,20 @@ export const writeClientManifests = ({ allowLists }: GeneratedTrustedDocuments) 
 				{
 					format: 'apollo-persisted-query-manifest',
 					version: 1,
-					operations: documents.map((document) => ({
-						id: document.id,
-						name: document.operationName,
-						type: document.operationType,
-						body: document.body,
-					})),
+					// Apollo's manifest format is keyed on the operation name, so this is one entry per
+					// operation, not per variant. It's the Apollo variant that goes in: this file exists
+					// for Apollo clients, and its whole job is to hand them the id they'd otherwise have
+					// to hash. A client that sends operations as written doesn't need a manifest at all.
+					operations: documents.map((document) => {
+						const variant = document.apollo ?? document;
+
+						return {
+							id: variant.id,
+							name: document.operationName,
+							type: document.operationType,
+							body: variant.body,
+						};
+					}),
 				},
 				null,
 				2
