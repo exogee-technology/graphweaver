@@ -24,7 +24,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.1",
 		"k6": "0.0.0"
 	},
 	"devDependencies": {
