@@ -6,15 +6,19 @@ import {
 	DetailPanelInputComponentOption,
 	AdminUIFilterType,
 } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-
-import { User as OrmUser, UserStatus } from '../entities';
 import { pgConnection } from '../database';
+import { SqlDataProvider } from '@exogee/graphweaver-sql';
+
+export enum UserStatus {
+	ACTIVE = 'active',
+	BLOCKED = 'blocked',
+	SUSPENDED = 'suspended',
+}
 
 graphweaverMetadata.collectEnumInformation({ target: UserStatus, name: 'UserStatus' });
 
 @Entity<User>('User', {
-	provider: new MikroBackendProvider(OrmUser, pgConnection),
+	provider: new SqlDataProvider(() => User, pgConnection),
 	adminUIOptions: {
 		// TODO: Enum values as default filters don't currently work. This is a known issue
 		// defaultFilter: { status: UserStatus.ACTIVE },

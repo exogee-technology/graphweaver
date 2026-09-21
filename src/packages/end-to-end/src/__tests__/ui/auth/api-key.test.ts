@@ -15,7 +15,7 @@ test('should allow a successful api key creation', async ({ page }) => {
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
 	// navigate to the grid page
-	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
+	await page.getByRole('link', { name: 'MySQL' }).click();
 	await page.getByRole('link', { name: 'ApiKey' }).click();
 	await page.getByRole('button', { name: 'Create New ApiKey' }).click();
 

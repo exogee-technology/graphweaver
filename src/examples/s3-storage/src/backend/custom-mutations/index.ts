@@ -6,11 +6,9 @@ import {
 	InputType,
 	ResolverOptions,
 } from '@exogee/graphweaver';
-import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { Jimp } from 'jimp';
-import { pgConnection } from '../database';
 import { s3Provider } from '../s3-provider';
-import { Submission } from '../schema';
+import { Submission, submissionProvider } from '../schema/submission';
 @InputType('CreateThumbnailInput')
 class CreateThumbnailInput {
 	@Field(() => ID)
@@ -35,11 +33,11 @@ graphweaverMetadata.addMutation({
 		fields,
 	}: ResolverOptions<{ input: CreateThumbnailInput }>) => {
 		// get the metadata of the submission to copy
-		const database = ConnectionManager.database(pgConnection.connectionManagerId);
-		if (!database) throw new Error('Database connection not found');
-		const submission = await database.em.findOneOrFail(Submission, {
+		const submission = await submissionProvider.findOne({
 			id: args.input.submissionId.toString(),
 		});
+
+		if (!submission) throw new Error('Submission not found');
 
 		const filename = submission.image?.filename;
 
@@ -71,15 +69,13 @@ graphweaverMetadata.addMutation({
 		});
 
 		// create the new submission in the database
-		const result = database.em.create(Submission, {
+		const result = await submissionProvider.createOne({
 			image: {
 				filename: upload.filename,
 				type: upload.type,
 				url: upload.url,
 			},
-		});
-
-		await database.em.persistAndFlush(result);
+		} as Partial<Submission>);
 
 		// Call fromBackendEntity to ensure the client can access nested fields
 		return fromBackendEntity(Submission, result);

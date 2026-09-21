@@ -19,18 +19,6 @@ async function execAsync(command: string) {
 	return child;
 }
 
-const getDependencyVersion = async (dependency: string) => {
-	const packageJson = JSON.parse(
-		await fs.promises.readFile(path.join(__dirname, '..', 'package.json'), 'utf-8')
-	);
-
-	if (!packageJson.dependencies?.[dependency]) {
-		throw new Error(`Dependency ${dependency} not found in package.json`);
-	}
-
-	return packageJson.dependencies[dependency];
-};
-
 async function main() {
 	try {
 		await execAsync('pwd');
@@ -66,9 +54,6 @@ async function main() {
 
 		await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
-		await execAsync(
-			`pnpm add '@mikro-orm/sqlite@${await getDependencyVersion('@mikro-orm/sqlite')}'`
-		);
 		fs.mkdirSync('./databases');
 		await execAsync('pwd');
 		await execAsync('pnpm i --ignore-workspace --no-lockfile');

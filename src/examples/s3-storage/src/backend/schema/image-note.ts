@@ -1,20 +1,20 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { ImageNote as OrmImageNote } from '../entities';
+import { Entity, Field, ID } from '@exogee/graphweaver';
 import { Submission } from './submission';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { pgConnection } from '../database';
+import { ManyToOne, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity('ImageNote', {
-	provider: new MikroBackendProvider(OrmImageNote, pgConnection),
+	provider: new SqlDataProvider(() => ImageNote, pgConnection),
 	apiOptions: { clientGeneratedPrimaryKeys: true },
 })
 export class ImageNote {
 	@Field(() => ID)
 	id!: string;
 
-	@RelationshipField<ImageNote>(() => Submission, {
-		id: (entity) => entity.submission.id,
-	})
+	// This is the owning side: `image_note.submission_id` is the real foreign key. A one-to-one's
+	// owning side is a foreign key like any other, so it is a many-to-one here; the only thing
+	// lost is the uniqueness guarantee, which belongs to the database.
+	@ManyToOne(() => Submission, { column: 'submission_id' })
 	submission!: Submission;
 
 	@Field(() => String)

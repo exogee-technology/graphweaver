@@ -1,18 +1,13 @@
-import { MySqlDriver } from '@mikro-orm/mysql';
-import { Authentication, Credential, ApiKey, Tag, Task, Trace, TaskCountByTag } from './entities';
-
-// @ts-expect-error details of this fix can be found here https://github.com/mikro-orm/mikro-orm/issues/5279
-MySqlDriver.prototype.getAutoIncrementIncrement = async () => 1;
+import { defineConnection } from '@exogee/graphweaver-sql';
+import { mysql } from '@exogee/graphweaver-sql-mysql';
 
 // Define the database connection
-export const myConnection = {
-	connectionManagerId: 'my-sql',
-	mikroOrmConfig: {
-		entities: [ApiKey, Authentication, Credential, Tag, Task, TaskCountByTag, Trace],
-		driver: MySqlDriver,
-		dbName: 'todo_app',
+export const myConnection = defineConnection({
+	id: 'my-sql',
+	dialect: mysql({
+		database: 'todo_app',
+		port: 3306,
 		user: process.env.DATABASE_USERNAME,
 		password: process.env.DATABASE_PASSWORD,
-		port: 3306,
-	},
-};
+	}),
+});

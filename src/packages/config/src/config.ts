@@ -159,7 +159,7 @@ export interface ImportSslOptions {
 }
 
 export interface ImportOptions {
-	source?: 'mysql' | 'postgresql' | 'sqlite';
+	source?: 'mysql' | 'postgresql' | 'sqlite' | 'mssql';
 	dbName?: string;
 	host?: string;
 	port?: number;

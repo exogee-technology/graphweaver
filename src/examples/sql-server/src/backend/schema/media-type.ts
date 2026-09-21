@@ -1,21 +1,21 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { Track } from './track';
-import { MediaType as OrmMediaType } from '../entities';
 import { connection } from '../database';
+import { Field, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity<MediaType>('MediaType', {
-	provider: new MikroBackendProvider(OrmMediaType, connection, {
+	provider: new SqlDataProvider(() => MediaType, connection, {
+		table: 'MediaType',
 		backendDisplayName: 'SQL Server',
 	}),
 })
 export class MediaType {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'MediaTypeId', primaryKeyField: true })
 	mediaTypeId!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
+	@Field(() => String, { column: 'Name', nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
-	@RelationshipField<Track>(() => [Track], { relatedField: 'mediaType' })
+	@OneToMany(() => [Track], { relatedField: 'mediaType' })
 	tracks!: Track[];
 }

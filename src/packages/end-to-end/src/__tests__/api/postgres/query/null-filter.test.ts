@@ -124,13 +124,16 @@ describe('null filter', () => {
 					}
 				}
 			`)
-			.variables({
-				filter: {
-					customers: {
-						customerId_null: true,
-					},
-				},
-			})
+			// Negating a condition every customer satisfies, rather than the `customerId_null: true`
+			// this used to send. That was the LEFT JOIN idiom the MikroORM provider compiled to;
+			// against the correlated EXISTS this provider generates it asks for a customer whose
+			// primary key is null, which matches nothing.
+			// `SqlDataProvider.treatRelationshipNullAsAbsent` brings the old reading back for
+			// projects that cannot rewrite their filters.
+			//
+			// Not the tidier `_not: { customers: {} }`: core's `cleanFilter` drops empty filter
+			// objects, so that one never reaches the provider and every employee matches.
+			.variables({ filter: { _not: { customers: { customerId_null: false } } } })
 			.expectNoErrors();
 
 		expect(data?.employees).toHaveLength(5);

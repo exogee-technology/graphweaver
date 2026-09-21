@@ -1,20 +1,12 @@
-import { SqliteDriver } from 'mikro-orm-sqlite-wasm';
-import { entities, Trace } from './entities';
+import { defineConnection } from '@exogee/graphweaver-sql';
+import { sqlite } from '@exogee/graphweaver-sql-sqlite';
 
-export const connection = {
-	connectionManagerId: 'sqlite',
-	mikroOrmConfig: {
-		entities: entities,
-		driver: SqliteDriver,
-		dbName: 'databases/database.sqlite',
-	},
-};
+export const connection = defineConnection({
+	id: 'sqlite',
+	dialect: sqlite({ filename: 'databases/database.sqlite' }),
+});
 
-export const traceConnection = {
-	connectionManagerId: 'sqlite2',
-	mikroOrmConfig: {
-		entities: [Trace],
-		driver: SqliteDriver,
-		dbName: 'databases/trace.sqlite',
-	},
-};
+export const traceConnection = defineConnection({
+	id: 'sqlite2',
+	dialect: sqlite({ filename: 'databases/trace.sqlite' }),
+});

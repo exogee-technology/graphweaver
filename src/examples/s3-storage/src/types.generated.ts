@@ -276,6 +276,7 @@ export type ImageNotesListFilter = {
   note_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   note_null?: InputMaybe<Scalars['Boolean']['input']>;
   submission?: InputMaybe<SubmissionsListFilter>;
+  submission_exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type ImageNotesOrderByInput = {
@@ -541,6 +542,7 @@ export type SubmissionsListFilter = {
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   image?: InputMaybe<GraphweaverMediasListFilter>;
   imageNote?: InputMaybe<ImageNotesListFilter>;
+  imageNote_exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SubmissionsOrderByInput = {

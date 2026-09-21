@@ -21,15 +21,13 @@
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
 		"@exogee/graphweaver-auth-ui-components": "workspace:*",
-		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.6.2",
-		"@mikro-orm/knex": "6.6.2",
-		"@mikro-orm/sqlite": "6.6.2",
+		"@exogee/graphweaver-sql": "workspace:*",
+		"@exogee/graphweaver-sql-sqlite": "workspace:*",
 		"graphql": "16.12.0",
 		"graphweaver": "workspace:*",
-		"mikro-orm-sqlite-wasm": "workspace:*",
+		"node-sqlite3-wasm": "0.8.53",
 		"react": "19.3.0"
 	},
 	"devDependencies": {

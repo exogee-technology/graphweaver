@@ -14,7 +14,7 @@ test('should error if password is not strong enough', async ({ page }) => {
 	// Close the welcome page
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
-	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
+	await page.getByRole('link', { name: 'MySQL' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
 	await page.getByRole('button', { name: 'Create New Credential' }).click();
 	await page.getByLabel('username').click();

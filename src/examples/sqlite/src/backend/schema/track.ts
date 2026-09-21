@@ -1,57 +1,48 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { Album } from './album';
 import { Genre } from './genre';
 import { InvoiceLine } from './invoice-line';
 import { MediaType } from './media-type';
 import { Playlist } from './playlist';
-import { Track as OrmTrack } from '../entities';
 import { connection } from '../database';
+import { Field, ManyToMany, ManyToOne, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @Entity('Track', {
-	provider: new MikroBackendProvider(OrmTrack, connection),
+	provider: new SqlDataProvider(() => Track, connection, { table: 'Track' }),
 })
 export class Track {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'TrackId', primaryKeyField: true })
 	trackId!: number;
 
-	@Field(() => String, { adminUIOptions: { summaryField: true } })
+	@Field(() => String, { column: 'Name', adminUIOptions: { summaryField: true } })
 	name!: string;
 
-	@RelationshipField<Track>(() => Album, {
-		id: (entity) => entity.album?.albumId,
-		nullable: true,
-	})
+	@ManyToOne(() => Album, { column: 'AlbumId', nullable: true })
 	album?: Album;
 
-	@RelationshipField<Track>(() => MediaType, {
-		id: (entity) => entity.mediaType?.mediaTypeId,
-	})
+	@ManyToOne(() => MediaType, { column: 'MediaTypeId' })
 	mediaType!: MediaType;
 
-	@RelationshipField<Track>(() => Genre, {
-		id: (entity) => entity.genre?.genreId,
-		nullable: true,
-	})
+	@ManyToOne(() => Genre, { column: 'GenreId', nullable: true })
 	genre?: Genre;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { column: 'Composer', nullable: true })
 	composer?: string;
 
-	@Field(() => Number)
+	@Field(() => Number, { column: 'Milliseconds' })
 	milliseconds!: number;
 
-	@Field(() => Number, { nullable: true })
+	@Field(() => Number, { column: 'Bytes', nullable: true })
 	bytes?: number;
 
-	@Field(() => String)
+	@Field(() => String, { column: 'UnitPrice' })
 	unitPrice!: string;
 
-	@RelationshipField<InvoiceLine>(() => [InvoiceLine], { relatedField: 'track' })
+	@OneToMany(() => [InvoiceLine], { relatedField: 'track' })
 	invoiceLines!: InvoiceLine[];
 
 	// This is a many-to-many relationship, and takes a long time to load so we hide it from the table in the admin UI
-	@RelationshipField<Playlist>(() => [Playlist], {
+	@ManyToMany(() => [Playlist], {
 		relatedField: 'tracks',
 		adminUIOptions: { hideInFilterBar: true, hideInTable: true },
 	})

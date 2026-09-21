@@ -33,6 +33,16 @@ CREATE TABLE task_tags (
   FOREIGN KEY (tag_id) REFERENCES tag(id)
 );
 
+-- Backs the TaskCountByTag entity.
+--
+-- Under MikroORM this was a virtual entity: the same SELECT lived inline on the entity as an
+-- `expression`, and no view existed. The SQL provider reads tables and views, not inline queries,
+-- so the query moves into the database where the rest of the schema is.
+CREATE VIEW task_count_by_tag AS
+  SELECT tag_id, COUNT(task_id) AS `count`
+  FROM task_tags
+  GROUP BY tag_id;
+
 CREATE TABLE credential (
   id BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,

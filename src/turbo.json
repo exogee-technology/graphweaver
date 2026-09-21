@@ -17,8 +17,18 @@
 			"outputs": ["dist/**", "lib/**", "bin/index.js*", "tsconfig.tsbuildinfo"]
 		},
 		"package:pack": {
-			"dependsOn": ["^build"],
-			"outputs": ["../../.packs/**"]
+			// This package's own build, not just its dependencies'. `^build` left a package free to
+			// be packed while its own `lib/` was still being written, which produces a tarball
+			// containing a truncated file -- an empty `.js.map` is the usual one, and esbuild
+			// rejects it much later with "Unexpected end of file in source map".
+			"dependsOn": ["build"],
+
+			// Never cached. The only effect of packing is a tarball written to `.packs`, which is
+			// outside the package and shared by every one of them, so turbo cannot track it as an
+			// output: it used to be declared as `../../.packs/**`, which made a cache hit replay
+			// the logs and skip the work, leaving no tarball at all or a 10 byte empty gzip where
+			// one should be.
+			"cache": false
 		},
 		"build": {
 			"dependsOn": ["^build"],

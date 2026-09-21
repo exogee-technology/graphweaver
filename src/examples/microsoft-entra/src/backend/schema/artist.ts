@@ -1,10 +1,9 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Entity, ID } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Album } from './album';
-import { Artist as OrmArtist } from '../entities';
 import { connection } from '../database';
+import { Field, OneToMany, SqlDataProvider } from '@exogee/graphweaver-sql';
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -12,15 +11,15 @@ import { connection } from '../database';
 	},
 })
 @Entity('Artist', {
-	provider: new MikroBackendProvider(OrmArtist, connection),
+	provider: new SqlDataProvider(() => Artist, connection, { table: 'Artist' }),
 })
 export class Artist {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { column: 'ArtistId', primaryKeyField: true })
 	artistId!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
+	@Field(() => String, { column: 'Name', nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
-	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
+	@OneToMany(() => [Album], { relatedField: 'artist' })
 	albums!: Album[];
 }

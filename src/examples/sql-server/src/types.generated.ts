@@ -204,6 +204,7 @@ export type AlbumsListFilter = {
   albumId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   albumId_null?: InputMaybe<Scalars['Boolean']['input']>;
   artist?: InputMaybe<ArtistsListFilter>;
+  artist_exists?: InputMaybe<Scalars['Boolean']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   title_gt?: InputMaybe<Scalars['String']['input']>;
   title_gte?: InputMaybe<Scalars['String']['input']>;
@@ -217,6 +218,7 @@ export type AlbumsListFilter = {
   title_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   title_null?: InputMaybe<Scalars['Boolean']['input']>;
   tracks?: InputMaybe<TracksListFilter>;
+  tracks_exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type AlbumsOrderByInput = {
@@ -279,6 +281,7 @@ export type ArtistsListFilter = {
   _not?: InputMaybe<ArtistsListFilter>;
   _or?: InputMaybe<Array<InputMaybe<ArtistsListFilter>>>;
   albums?: InputMaybe<AlbumsListFilter>;
+  albums_exists?: InputMaybe<Scalars['Boolean']['input']>;
   artistId?: InputMaybe<Scalars['ID']['input']>;
   artistId_gt?: InputMaybe<Scalars['ID']['input']>;
   artistId_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -488,6 +491,7 @@ export type CustomersListFilter = {
   email_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   email_null?: InputMaybe<Scalars['Boolean']['input']>;
   employee?: InputMaybe<EmployeesListFilter>;
+  employee_exists?: InputMaybe<Scalars['Boolean']['input']>;
   fax?: InputMaybe<Scalars['String']['input']>;
   fax_gt?: InputMaybe<Scalars['String']['input']>;
   fax_gte?: InputMaybe<Scalars['String']['input']>;
@@ -513,6 +517,7 @@ export type CustomersListFilter = {
   firstName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   firstName_null?: InputMaybe<Scalars['Boolean']['input']>;
   invoices?: InputMaybe<InvoicesListFilter>;
+  invoices_exists?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   lastName_gt?: InputMaybe<Scalars['String']['input']>;
   lastName_gte?: InputMaybe<Scalars['String']['input']>;
@@ -769,6 +774,7 @@ export type EmployeesListFilter = {
   country_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   country_null?: InputMaybe<Scalars['Boolean']['input']>;
   customers?: InputMaybe<CustomersListFilter>;
+  customers_exists?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   email_gt?: InputMaybe<Scalars['String']['input']>;
   email_gte?: InputMaybe<Scalars['String']['input']>;
@@ -792,7 +798,9 @@ export type EmployeesListFilter = {
   employeeId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   employeeId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   employeeId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  employee_exists?: InputMaybe<Scalars['Boolean']['input']>;
   employees?: InputMaybe<EmployeesListFilter>;
+  employees_exists?: InputMaybe<Scalars['Boolean']['input']>;
   fax?: InputMaybe<Scalars['String']['input']>;
   fax_gt?: InputMaybe<Scalars['String']['input']>;
   fax_gte?: InputMaybe<Scalars['String']['input']>;
@@ -983,6 +991,7 @@ export type GenresListFilter = {
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   tracks?: InputMaybe<TracksListFilter>;
+  tracks_exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type GenresOrderByInput = {
@@ -1142,6 +1151,7 @@ export type InvoiceLinesListFilter = {
   invoiceLineId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   invoiceLineId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   invoiceLineId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  invoice_exists?: InputMaybe<Scalars['Boolean']['input']>;
   quantity?: InputMaybe<Scalars['Float']['input']>;
   quantity_gt?: InputMaybe<Scalars['Float']['input']>;
   quantity_gte?: InputMaybe<Scalars['Float']['input']>;
@@ -1153,6 +1163,7 @@ export type InvoiceLinesListFilter = {
   quantity_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   quantity_null?: InputMaybe<Scalars['Boolean']['input']>;
   track?: InputMaybe<TracksListFilter>;
+  track_exists?: InputMaybe<Scalars['Boolean']['input']>;
   unitPrice?: InputMaybe<Scalars['String']['input']>;
   unitPrice_gt?: InputMaybe<Scalars['String']['input']>;
   unitPrice_gte?: InputMaybe<Scalars['String']['input']>;
@@ -1259,6 +1270,7 @@ export type InvoicesListFilter = {
   billingState_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   billingState_null?: InputMaybe<Scalars['Boolean']['input']>;
   customer?: InputMaybe<CustomersListFilter>;
+  customer_exists?: InputMaybe<Scalars['Boolean']['input']>;
   invoiceDate?: InputMaybe<Scalars['ISOString']['input']>;
   invoiceDate_gt?: InputMaybe<Scalars['ISOString']['input']>;
   invoiceDate_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -1280,6 +1292,7 @@ export type InvoicesListFilter = {
   invoiceId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   invoiceId_null?: InputMaybe<Scalars['Boolean']['input']>;
   invoiceLines?: InputMaybe<InvoiceLinesListFilter>;
+  invoiceLines_exists?: InputMaybe<Scalars['Boolean']['input']>;
   total?: InputMaybe<Scalars['String']['input']>;
   total_gt?: InputMaybe<Scalars['String']['input']>;
   total_gte?: InputMaybe<Scalars['String']['input']>;
@@ -1382,6 +1395,7 @@ export type MediaTypesListFilter = {
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   tracks?: InputMaybe<TracksListFilter>;
+  tracks_exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type MediaTypesOrderByInput = {
@@ -1960,6 +1974,7 @@ export type PlaylistsListFilter = {
   playlistId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   playlistId_null?: InputMaybe<Scalars['Boolean']['input']>;
   tracks?: InputMaybe<TracksListFilter>;
+  tracks_exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type PlaylistsOrderByInput = {
@@ -2329,6 +2344,7 @@ export type TracksListFilter = {
   _not?: InputMaybe<TracksListFilter>;
   _or?: InputMaybe<Array<InputMaybe<TracksListFilter>>>;
   album?: InputMaybe<AlbumsListFilter>;
+  album_exists?: InputMaybe<Scalars['Boolean']['input']>;
   bytes?: InputMaybe<Scalars['Float']['input']>;
   bytes_gt?: InputMaybe<Scalars['Float']['input']>;
   bytes_gte?: InputMaybe<Scalars['Float']['input']>;
@@ -2352,8 +2368,11 @@ export type TracksListFilter = {
   composer_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   composer_null?: InputMaybe<Scalars['Boolean']['input']>;
   genre?: InputMaybe<GenresListFilter>;
+  genre_exists?: InputMaybe<Scalars['Boolean']['input']>;
   invoiceLines?: InputMaybe<InvoiceLinesListFilter>;
+  invoiceLines_exists?: InputMaybe<Scalars['Boolean']['input']>;
   mediaType?: InputMaybe<MediaTypesListFilter>;
+  mediaType_exists?: InputMaybe<Scalars['Boolean']['input']>;
   milliseconds?: InputMaybe<Scalars['Float']['input']>;
   milliseconds_gt?: InputMaybe<Scalars['Float']['input']>;
   milliseconds_gte?: InputMaybe<Scalars['Float']['input']>;
@@ -2377,6 +2396,7 @@ export type TracksListFilter = {
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   playlists?: InputMaybe<PlaylistsListFilter>;
+  playlists_exists?: InputMaybe<Scalars['Boolean']['input']>;
   trackId?: InputMaybe<Scalars['ID']['input']>;
   trackId_gt?: InputMaybe<Scalars['ID']['input']>;
   trackId_gte?: InputMaybe<Scalars['ID']['input']>;

@@ -1,0 +1,26 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./lib",
+		"paths": {
+			"@exogee/graphweaver-sql-mssql": [
+				"./src/index.ts"
+			]
+		}
+	},
+	"include": [
+		"./src"
+	],
+	"references": [
+		{
+			"path": "../sql"
+		},
+		{
+			"path": "../logger"
+		}
+	],
+	"exclude": [
+		"./src/__tests__/.generated"
+	]
+}

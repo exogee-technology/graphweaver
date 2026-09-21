@@ -58,8 +58,7 @@ import { GraphQLByte, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 
 export type GraphweaverSchemaExtension = Readonly<GraphQLObjectTypeExtensions<any, any>> & {
 	graphweaverSchemaInfo:
-		| GraphweaverSchemaInfoExtensionWithSourceEntity
-		| GraphweaverOtherSchemaInfoExtension;
+		GraphweaverSchemaInfoExtensionWithSourceEntity | GraphweaverOtherSchemaInfoExtension;
 };
 
 export type GraphweaverOtherSchemaInfoExtension = {
@@ -529,6 +528,28 @@ const filterTypeForEntity = (
 							fields[field.name] = {
 								type: filterTypeForEntity(metadata, entityFilter),
 							};
+
+							// `{ tracks_exists: false }` asks whether there are any related rows at all.
+							// The rest of the grammar cannot: `_not: { tracks: {} }` says it, but
+							// `cleanFilter` strips empty filter objects before a provider sees one, so
+							// the condition vanishes and every row matches.
+							//
+							// Offered only where the provider understands it and both sides live in the
+							// same data source -- across data sources this entity's provider cannot see
+							// the related table, and unlike a nested filter there are no ids to flatten
+							// the question into.
+							if (
+								entity.provider?.backendProviderConfig?.supportsRelationshipExistsFilter &&
+								entity.provider.backendId === metadata.provider?.backendId
+							) {
+								if (fields[`${field.name}_exists`]) {
+									throw new Error(
+										`Duplicate field '${field.name}_exists' on entity ${entity.name}.`
+									);
+								}
+
+								fields[`${field.name}_exists`] = { type: GraphQLBoolean };
+							}
 						}
 					} else if (isEnumMetadata(metadata)) {
 						const enumFieldType = graphQLTypeForEnum(metadata, entityFilter);

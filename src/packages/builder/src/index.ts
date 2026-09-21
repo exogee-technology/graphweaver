@@ -5,3 +5,4 @@ export * from './introspection';
 export * from './start';
 export * from './codegen';
 export * from './trusted-documents';
+export * from './migrate';

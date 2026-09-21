@@ -1,30 +1,5 @@
-import { describe, test } from 'node:test';
-import request from 'supertest-graphql';
-import gql from 'graphql-tag';
+import { describe } from 'node:test';
+import { basicListSuite, mysqlOptions } from '../../shared/suites';
 
-import { config } from '../../../../config';
-
-type Album = {
-	albumId: number;
-	title: string;
-	artist: {
-		artistId: number;
-		name: string;
-	};
-};
-
-describe('basic query', () => {
-	test('should get albums', async () => {
-		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
-			.query(gql`
-				query {
-					albums {
-						albumId
-					}
-				}
-			`)
-			.expectNoErrors();
-
-		expect(data?.albums).toHaveLength(347);
-	});
-});
+// The suite names what it tests, not what ran it, so the dialect goes on the outside.
+describe(mysqlOptions.name, () => basicListSuite(mysqlOptions));

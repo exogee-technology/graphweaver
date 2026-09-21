@@ -4,10 +4,7 @@ import {
 	ApiKeyEntity,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
-import { ApiKey as OrmApiKey } from '../../entities/mysql';
-import { myConnection } from '../../database';
 import { Roles } from '../roles';
 
 const acl: AccessControlList<ApiKeyEntity<Roles>, AuthorizationContext> = {
@@ -17,7 +14,8 @@ const acl: AccessControlList<ApiKeyEntity<Roles>, AuthorizationContext> = {
 	},
 };
 
-export const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, myConnection);
+export { apiKeyProvider as apiKeyDataProvider } from '../storage';
+import { apiKeyProvider as apiKeyDataProvider } from '../storage';
 
 export const apiKey = new ApiKey<Roles>({
 	provider: apiKeyDataProvider,

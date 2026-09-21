@@ -60,11 +60,18 @@ jobs:
           killall node
 
       - name: Add Native Module
-        # This step is expected to fail, as we sqlite3 contains native code
+        # Expected to fail: the backend bundles for Lambda, where a .node binary cannot go, so the
+        # builder refuses to bundle a package with native code.
+        #
+        # The import is the part that matters. That guard is an esbuild resolve hook, so it only
+        # sees a package something actually imports -- installing one and never importing it builds
+        # cleanly, which is the state this step silently fell into once the SQL adapter replaced
+        # MikroORM's native sqlite driver with a wasm one and nothing pulled sqlite3 in any more.
         working-directory: src/packages/end-to-end/app
         id: native-module
         run: |
           pnpm add sqlite3
+          echo "import 'sqlite3';" >> src/backend/index.ts
           pnpm build
         continue-on-error: true
 

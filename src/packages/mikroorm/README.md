@@ -1,3 +1,17 @@
+> [!WARNING]
+> **This package is deprecated.** It is superseded by
+> [`@exogee/graphweaver-sql`](../sql), which generates its own SQL, needs no ORM, and lets you
+> define each entity once instead of twice.
+>
+> To move across, run `graphweaver migrate sql` in your project. It rewrites your entities in
+> place, so your hooks, `adminUIOptions`, descriptions and field resolvers are preserved. Anything
+> it cannot migrate confidently is left alone with a `TODO(graphweaver)` comment and listed in a
+> report rather than rewritten into a guess.
+>
+> This package keeps working until the next major release, and the two providers can run side by
+> side in the same project — query splitting is per-connection — so you can migrate one entity at
+> a time.
+
 # `@exogee/graphweaver-mikroorm`
 
 MikroORM adapter package for Graphweaver
