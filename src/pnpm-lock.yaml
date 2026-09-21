@@ -1264,6 +1264,9 @@ importers:
 
   packages/builder:
     dependencies:
+      '@apollo/client':
+        specifier: 3.13.5
+        version: 3.13.5(@types/react@19.3.0)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.21.3))(graphql@16.12.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(subscriptions-transport-ws@0.11.0(graphql@16.12.0))
       '@exogee/graphweaver-admin-ui':
         specifier: workspace:*
         version: link:../admin-ui
