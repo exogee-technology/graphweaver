@@ -45,7 +45,7 @@
 		"react-syntax-highlighter": "16.1.0"
 	},
 	"devDependencies": {
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.1",
 		"dotenv-cli": "11.0.0",
 		"typescript": "7.0.2",
 		"@types/react": "19.3.0",

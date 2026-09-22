@@ -53,7 +53,7 @@
 		"xero-node": "13.3.1"
 	},
 	"devDependencies": {
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.1",
 		"esbuild": "0.28.1",
 		"prettier": "3.9.6",
 		"typescript": "7.0.2",
