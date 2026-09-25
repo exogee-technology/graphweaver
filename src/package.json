@@ -38,7 +38,7 @@
 		"@bessonovs/set-project-references": "0.0.12",
 		"@types/node": "26.6.2",
 		"concurrently": "10.0.5",
-		"oxlint": "1.78.0",
+		"oxlint": "1.85.0",
 		"oxlint-tsgolint": "7.0.2002",
 		"prettier": "3.9.6",
 		"turbo": "2.10.9",
