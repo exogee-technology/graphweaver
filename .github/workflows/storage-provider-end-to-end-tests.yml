@@ -54,15 +54,18 @@ jobs:
       # Map host 9010 -> container 9000 so presigned uploads do not collide with Graphweaver's
       # admin UI, which binds port 9000 on the runner.
       #
-      # Pulled from quay.io, which is MinIO's own registry: they withdrew minio/minio from Docker
-      # Hub in September 2026 and it now 404s, which broke this job. Same image, same tags.
+      # Chainguard's build of MinIO, from MinIO's source: MinIO withdrew its own images from Docker
+      # Hub, and then from quay.io, where pulls now fail with "unauthorized". Its entrypoint is
+      # `minio` with no arguments, so `server /data` is still passed here. /data is a volume, since
+      # on the container's overlay filesystem MinIO logs "Rename across devices not allowed".
       - name: Start MinIO
         run: |
           docker run -d --name gw-minio \
             -p 9010:9000 \
+            -v gw-minio-data:/data \
             -e MINIO_ROOT_USER=minioadmin \
             -e MINIO_ROOT_PASSWORD=minioadmin \
-            quay.io/minio/minio:latest \
+            cgr.dev/chainguard/minio:latest \
             server /data
 
       - name: Configure MinIO (S3)
