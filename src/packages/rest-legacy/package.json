@@ -42,7 +42,7 @@
 		"@types/node": "26.6.2",
 		"esbuild": "0.28.1",
 		"glob": "13.0.6",
-		"prettier": "3.9.6",
+		"prettier": "3.9.8",
 		"typescript": "7.0.2"
 	},
 	"keywords": [
