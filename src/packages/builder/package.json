@@ -55,7 +55,7 @@
 	},
 	"devDependencies": {
 		"@types/jsonwebtoken": "9.0.10",
-		"@types/node": "26.6.1",
+		"@types/node": "26.6.2",
 		"@types/omgopass": "3.2.3",
 		"jsonwebtoken": "9.0.3",
 		"prettier": "3.9.6",

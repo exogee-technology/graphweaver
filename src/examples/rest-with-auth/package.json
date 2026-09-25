@@ -43,7 +43,7 @@
 	},
 	"devDependencies": {
 		"@exogee/graphweaver-config": "workspace:*",
-		"@types/node": "26.6.1",
+		"@types/node": "26.6.2",
 		"dotenv-cli": "11.0.0",
 		"typescript": "7.0.2",
 		"vite": "7.3.2",

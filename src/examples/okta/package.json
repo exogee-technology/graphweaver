@@ -35,7 +35,7 @@
 	},
 	"devDependencies": {
 		"@exogee/graphweaver-config": "workspace:*",
-		"@types/node": "26.6.1",
+		"@types/node": "26.6.2",
 		"typescript": "7.0.2",
 		"@types/react": "19.3.0",
 		"@types/react-dom": "19.3.0"
