@@ -16,6 +16,7 @@ import type {
 	PoolOptions as Mysql2PoolOptions,
 	ResultSetHeader,
 	RowDataPacket,
+	TypeCast,
 } from 'mysql2/promise';
 import { mysqlMarshaller } from './marshal';
 
@@ -37,6 +38,21 @@ const REQUIRED: Mysql2PoolOptions = {
 };
 
 /**
+ * FLOAT and DOUBLE read exactly over the text protocol.
+ *
+ * mysql2 parses them itself, digit by digit into a double, dividing and multiplying by powers of ten
+ * as it goes -- and a mantissa of sixteen or seventeen digits passes 2^53 on the way, so about one in
+ * seven doubles comes back a unit or so in the last place off. MySQL's text of a double is exact;
+ * `Number` reads it exactly. The binary protocol, which `execute` uses, carries the double itself,
+ * and needs none of this.
+ */
+const exactFloats: TypeCast = (field, next) => {
+	if (field.type !== 'DOUBLE' && field.type !== 'FLOAT') return next();
+	const text = field.string();
+	return text === null ? null : Number(text);
+};
+
+/**
  * Runs a statement, choosing between MySQL's two wire protocols.
  *
  * `execute` prepares the statement, which is what we want for anything carrying values -- it is
@@ -51,7 +67,7 @@ const run = async (
 	{ text, params }: SqlFragment
 ): Promise<unknown> => {
 	if (params.length === 0) {
-		const [rows] = await target.query(text);
+		const [rows] = await target.query({ sql: text, typeCast: exactFloats });
 		return rows;
 	}
 

@@ -143,8 +143,9 @@ export const columnTypeForSqlType = (dialect: DialectName, column: ColumnIR): Co
 		return sqliteAffinity(column.dataType);
 	}
 
-	// MySQL spells a boolean TINYINT(1), which is indistinguishable from a small int by name alone.
-	if (dialect === 'mysql' && /^tinyint\(1\)/i.test(column.fullType)) return 'boolean';
+	// MySQL spells a boolean TINYINT(1), which is indistinguishable from a small int by name alone,
+	// or BIT(1), a single bit; a wider BIT is a bit field, and stays binary.
+	if (dialect === 'mysql' && /^(tinyint|bit)\(1\)/i.test(column.fullType)) return 'boolean';
 
 	// An enum column is stored as whatever its labels are, which is text in every case we emit.
 	if (column.enumValues?.length) return 'string';
