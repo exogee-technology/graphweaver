@@ -38,3 +38,27 @@ describe('sqlite column types', () => {
 		});
 	}
 });
+
+/**
+ * MySQL has no boolean type. It spells one TINYINT(1) or BIT(1), and both have to come out as
+ * boolean -- BIT(1) especially, since its values arrive as a Buffer that, read as binary, a client
+ * gets back as bytes rather than a flag.
+ */
+describe('mysql column types', () => {
+	const cases: [dataType: string, fullType: string, expected: string][] = [
+		['tinyint', 'tinyint(1)', 'boolean'],
+		['bit', 'bit(1)', 'boolean'],
+		// A wider BIT is a bit field, not a flag.
+		['bit', 'bit(8)', 'binary'],
+		['tinyint', 'tinyint', 'int'],
+		['tinyint', 'tinyint(4)', 'int'],
+	];
+
+	for (const [dataType, fullType, expected] of cases) {
+		it(`reads ${fullType} as ${expected}`, () => {
+			expect(columnTypeForSqlType('mysql', { name: 'c', dataType, fullType } as never)).toBe(
+				expected
+			);
+		});
+	}
+});

@@ -12,7 +12,7 @@ export const mysqlMarshaller: Marshaller = {
 
 		switch (type) {
 			case 'boolean':
-				// TINYINT(1).
+				// TINYINT(1) or BIT(1), both of which take a 1 or a 0.
 				return value ? 1 : 0;
 			case 'json':
 				return JSON.stringify(value);
@@ -34,6 +34,9 @@ export const mysqlMarshaller: Marshaller = {
 
 		switch (type) {
 			case 'boolean':
+				// A BIT column comes back as a Buffer, whose Number() is NaN -- which made every BIT(1)
+				// false. It is true when any bit is set.
+				if (value instanceof Uint8Array) return value.some((byte) => byte !== 0);
 				return Boolean(Number(value));
 			case 'decimal':
 				// decimalNumbers is off, so this arrives as a string. Keep it one.
