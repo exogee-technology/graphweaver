@@ -1,11 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
 import { parse, print } from 'graphql';
+import { ApolloClient, ApolloLink, InMemoryCache, Observable, gql } from '@apollo/client';
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { normaliseDocument } from '@exogee/graphweaver-apollo-client/normalise';
 
 import { enumerateAdminUiDocuments } from '@exogee/graphweaver-admin-ui-components/documents';
 
 import { buildTrustedDocuments, TrustedDocumentError } from './extract';
+
+/** The id a client works out for an operation it is about to send, as written. */
+const clientIdFor = (document: string) =>
+	createHash('sha256')
+		.update(normaliseDocument(parse(document)), 'utf8')
+		.digest('hex');
 
 /**
  * The build writes ids into the manifest; the client works out the id for the operation it's
@@ -242,5 +250,98 @@ describe('the generated Admin UI documents are Apollo compatible', () => {
 		const documents = buildTrustedDocuments(enumerateAdminUiDocuments(metadata as any));
 
 		expect(documents.every((d) => Boolean(d.operationName))).toBe(true);
+	});
+});
+
+/**
+ * The contract that matters most, because it is the one that was wrong.
+ *
+ * Every id above is computed by hashing a document the way we believe a client will send it. That
+ * belief is worth checking against the real thing: Apollo Client rewrites operations on their way
+ * to the link chain, and an id hashed from the operation as written is not one any Apollo client
+ * ever sends. Here the operation goes through an actual `ApolloClient`, and the id it puts in
+ * `extensions.persistedQuery.sha256Hash` is the one the safelist has to contain.
+ */
+describe('an operation an Apollo client sends is in the safelist', () => {
+	/** The id a real Apollo client would send for this operation, hashed the way our link does. */
+	const idApolloWouldSend = async (source: string) => {
+		let sent: string | undefined;
+
+		const capture = new ApolloLink(
+			(operation) =>
+				new Observable<any>((observer) => {
+					sent = operation.extensions?.persistedQuery?.sha256Hash;
+					observer.next({ data: {} });
+					observer.complete();
+				})
+		);
+
+		const link = createPersistedQueryLink({
+			generateHash: async (document) =>
+				createHash('sha256').update(normaliseDocument(document), 'utf8').digest('hex'),
+			disable: () => false,
+		});
+
+		const client = new ApolloClient({
+			link: ApolloLink.from([link, capture]),
+			cache: new InMemoryCache(),
+		});
+
+		const document = gql(source);
+		const operation = document.definitions.find((d) => d.kind === 'OperationDefinition') as any;
+
+		if (operation.operation === 'query') {
+			await client.query({ query: document, fetchPolicy: 'no-cache' });
+		} else {
+			await client.mutate({ mutation: document, fetchPolicy: 'no-cache' });
+		}
+
+		return sent;
+	};
+
+	const idsFor = (source: string) => {
+		const [built] = buildTrustedDocuments([{ document: parse(source), source: 'a.graphql' }]);
+		return [built.id, built.apollo?.id].filter(Boolean);
+	};
+
+	const cases: Array<[string, string]> = [
+		['a query selecting fields', 'query Tasks { tasks { id description } }'],
+		[
+			'a query with a fragment',
+			'query Tasks { tasks { ...TaskFields } } fragment TaskFields on Task { id description }',
+		],
+		['a mutation selecting fields', 'mutation AddTask { addTask { id } }'],
+		['nested selections', 'query Tasks { tasks { id tags { id name } } }'],
+		['an operation that already asks for __typename', 'query Tasks { tasks { id __typename } }'],
+	];
+
+	for (const [what, source] of cases) {
+		it(`covers ${what}`, async () => {
+			const sent = await idApolloWouldSend(source);
+
+			expect(sent).toBeDefined();
+			expect(idsFor(source)).toContain(sent);
+		});
+	}
+
+	it('still covers an operation with no nested selections, with a single entry', () => {
+		const source = 'mutation DeleteTask($id: ID!) { deleteTask(id: $id) }';
+		const [built] = buildTrustedDocuments([{ document: parse(source), source: 'a.graphql' }]);
+
+		// Apollo has nothing to add to an operation whose only selection set is the root, so the two
+		// variants would be the same document and we keep just the one.
+		expect(built.apollo).toBeUndefined();
+	});
+
+	it('keeps the operation as written trusted too, for clients that send it that way', () => {
+		const source = 'query Tasks { tasks { id } }';
+		const [built] = buildTrustedDocuments([{ document: parse(source), source: 'a.graphql' }]);
+
+		expect(built.id).toBe(clientIdFor(source));
+		expect(built.apollo!.id).not.toBe(built.id);
+		// The body follows its own id, so whichever the client asked for is what gets executed --
+		// an Apollo client's cache needs the __typename it asked for to come back.
+		expect(built.body).not.toContain('__typename');
+		expect(built.apollo!.body).toContain('__typename');
 	});
 });

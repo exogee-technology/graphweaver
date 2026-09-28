@@ -12,7 +12,9 @@ export default defineConfig({
 	// sends only the hash, and the server decides which list that request may draw from.
 	//
 	// Graphweaver adds an `admin-ui` list of its own, holding the documents the Admin UI builds
-	// from your schema at runtime, so it keeps working with trusted documents turned on.
+	// from your schema at runtime, so it keeps working with trusted documents turned on. Projects
+	// that pass `adminMetadata: { enabled: false }` to Graphweaver aren't serving the Admin UI, and
+	// don't get that list.
 	trustedDocuments: {
 		allowLists: {
 			web: ['src/frontend/web/**/*.graphql'],

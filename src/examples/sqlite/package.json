@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-sqlite",
-	"version": "2.24.0",
+	"version": "2.24.1",
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
@@ -38,7 +38,7 @@
 	"devDependencies": {
 		"@exogee/graphweaver-config": "workspace:*",
 		"@types/luxon": "3.7.1",
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.2",
 		"@types/react": "19.3.0",
 		"graphweaver": "workspace:*",
 		"typescript": "7.0.2",

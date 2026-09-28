@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "2.24.0",
+	"version": "2.24.1",
 	"description": "Graphweaver Core Package",
 	"license": "Apache-2.0",
 	"repository": {
@@ -46,7 +46,7 @@
 	},
 	"devDependencies": {
 		"@opentelemetry/instrumentation": "0.212.0",
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.2",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.28.2",
 		"glob": "13.0.6",

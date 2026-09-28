@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-rest-legacy",
-	"version": "2.24.0",
+	"version": "2.24.1",
 	"description": "Legacy RESTful backend adapter for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"repository": {
@@ -39,7 +39,7 @@
 	"devDependencies": {
 		"@types/lodash": "4.17.23",
 		"@types/luxon": "3.7.1",
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.2",
 		"esbuild": "0.28.2",
 		"glob": "13.0.6",
 		"prettier": "3.9.6",

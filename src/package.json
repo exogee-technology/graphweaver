@@ -40,10 +40,10 @@
 	},
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.12",
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.2",
 		"concurrently": "10.0.5",
 		"oxlint": "1.82.0",
-		"oxlint-tsgolint": "7.0.2001",
+		"oxlint-tsgolint": "7.0.2002",
 		"prettier": "3.9.6",
 		"turbo": "2.10.12",
 		"typescript": "7.0.2"

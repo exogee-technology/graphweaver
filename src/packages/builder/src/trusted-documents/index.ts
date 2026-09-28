@@ -23,6 +23,24 @@ export type { TrustedDocument } from './extract';
 /** The reserved list holding everything the Admin UI can send. */
 export const ADMIN_UI_ALLOW_LIST = 'admin-ui';
 
+/** The query the Admin UI introspects the schema with, added only when it's switched on. */
+export const ADMIN_UI_METADATA_QUERY = '_graphweaver';
+
+/**
+ * Whether this project serves the Admin UI.
+ *
+ * Projects that pass `adminMetadata: { enabled: false }` to Graphweaver don't get the
+ * `_graphweaver` query, and the Admin UI can't do anything without it, so its absence from the
+ * built schema is the same thing as "nobody is running the Admin UI against this API". Those
+ * projects shouldn't have a few hundred generated documents they'll never send trusted on their
+ * behalf.
+ *
+ * Without a schema we can't tell, and silently trusting documents is the worse mistake of the
+ * two, so we say no.
+ */
+export const servesAdminUi = (schema?: GraphQLSchema) =>
+	Boolean(schema?.getQueryType()?.getFields()?.[ADMIN_UI_METADATA_QUERY]);
+
 export const GENERATED_FILE = path.join('src', 'trusted-documents.generated.ts');
 export const MANIFEST_DIRECTORY = path.join('dist', 'trusted-documents');
 
@@ -106,9 +124,8 @@ const loadAdminUiDocuments = async (metadata: any): Promise<ExtractedDocument[]>
 	if (!metadata?.entities) return [];
 
 	try {
-		const { enumerateAdminUiDocuments } = await import(
-			'@exogee/graphweaver-admin-ui-components/documents'
-		);
+		const { enumerateAdminUiDocuments } =
+			await import('@exogee/graphweaver-admin-ui-components/documents');
 
 		return enumerateAdminUiDocuments(metadata);
 	} catch (error) {
@@ -167,7 +184,11 @@ export type GenerateOptions = {
 	/** The `_graphweaver` metadata, used to enumerate the Admin UI's documents. */
 	metadata?: unknown;
 
-	/** Skip the Admin UI list, for projects that don't serve it. */
+	/**
+	 * Whether to generate the Admin UI allow list. Defaults to whether the schema serves the
+	 * Admin UI's metadata query, so projects that have turned the Admin UI off don't safelist
+	 * its documents.
+	 */
 	includeAdminUi?: boolean;
 };
 
@@ -179,12 +200,20 @@ export type GeneratedTrustedDocuments = {
 export const generateTrustedDocuments = async ({
 	schema,
 	metadata,
-	includeAdminUi = true,
+	includeAdminUi,
 }: GenerateOptions = {}): Promise<GeneratedTrustedDocuments | undefined> => {
 	const { trustedDocuments, adminUI } = getGraphweaverConfig();
 	const configured = Object.entries(trustedDocuments?.allowLists ?? {});
 
 	if (!configured.length) return undefined;
+
+	const adminUiIsServed = servesAdminUi(schema);
+
+	if (includeAdminUi === undefined && !adminUiIsServed) {
+		console.log(
+			`This project doesn't serve the Admin UI, so the "${ADMIN_UI_ALLOW_LIST}" allow list has been left out of the manifest.`
+		);
+	}
 
 	const allowLists: Record<string, TrustedDocument[]> = {};
 
@@ -213,7 +242,7 @@ export const generateTrustedDocuments = async ({
 		}
 	}
 
-	if (includeAdminUi) {
+	if (includeAdminUi ?? adminUiIsServed) {
 		const adminUiDocuments = await loadAdminUiDocuments(metadata);
 
 		// Anything the developer wrote into their custom pages or CSV export overrides is sent by
@@ -245,14 +274,19 @@ export const writeGeneratedManifest = ({ allowLists }: GeneratedTrustedDocuments
 			Object.entries(allowLists).map(([name, documents]) => [
 				name,
 				Object.fromEntries(
-					documents.map((document) => [
-						document.id,
-						{
-							body: document.body,
-							operationName: document.operationName,
-							operationType: document.operationType,
-						},
-					])
+					// An entry per variant, so an operation is accepted whether the client sent it as
+					// written or as Apollo rewrote it, and either way we execute the document it asked
+					// for. See `TrustedDocument.apollo`.
+					documents.flatMap((document) =>
+						[document, document.apollo].filter(Boolean).map((variant) => [
+							variant!.id,
+							{
+								body: variant!.body,
+								operationName: document.operationName,
+								operationType: document.operationType,
+							},
+						])
+					)
 				),
 			])
 		),
@@ -287,12 +321,20 @@ export const writeClientManifests = ({ allowLists }: GeneratedTrustedDocuments) 
 				{
 					format: 'apollo-persisted-query-manifest',
 					version: 1,
-					operations: documents.map((document) => ({
-						id: document.id,
-						name: document.operationName,
-						type: document.operationType,
-						body: document.body,
-					})),
+					// Apollo's manifest format is keyed on the operation name, so this is one entry per
+					// operation, not per variant. It's the Apollo variant that goes in: this file exists
+					// for Apollo clients, and its whole job is to hand them the id they'd otherwise have
+					// to hash. A client that sends operations as written doesn't need a manifest at all.
+					operations: documents.map((document) => {
+						const variant = document.apollo ?? document;
+
+						return {
+							id: variant.id,
+							name: document.operationName,
+							type: document.operationType,
+							body: variant.body,
+						};
+					}),
 				},
 				null,
 				2

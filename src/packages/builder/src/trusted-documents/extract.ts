@@ -9,14 +9,32 @@ import {
 	validate,
 	visit,
 } from 'graphql';
+import { addTypenameToDocument } from '@apollo/client/utilities';
 import { normaliseDocument } from '@exogee/graphweaver-apollo-client/normalise';
 
-export type TrustedDocument = {
-	/** The stable id clients send in place of the operation. */
+export type TrustedDocumentVariant = {
+	/** The stable id a client sends in place of the operation. */
 	id: string;
 
 	/** The printed, normalised operation, with every fragment it depends on. */
 	body: string;
+};
+
+export type TrustedDocument = TrustedDocumentVariant & {
+	/**
+	 * The same operation as an Apollo client will send it.
+	 *
+	 * Apollo Client runs every operation through `addTypenameToDocument` before the link chain sees
+	 * it, so what a browser puts on the wire - and hashes - always carries `__typename` on every
+	 * selection set. That is never the operation as written, so a client hashing its own documents
+	 * would agree with nothing in the manifest. Both variants go into the safelist and either is
+	 * accepted; the server executes whichever one the client actually asked for, which matters
+	 * because `InMemoryCache` cannot normalise a result that came back without `__typename`.
+	 *
+	 * Undefined when the transform changes nothing - an operation selecting no nested fields, say -
+	 * because then the two variants are the same document and one entry covers both.
+	 */
+	apollo?: TrustedDocumentVariant;
 
 	operationName?: string;
 	operationType: 'query' | 'mutation' | 'subscription';
@@ -170,9 +188,19 @@ export const buildTrustedDocuments = (
 		if (previous) continue;
 		seen.set(id, source);
 
+		// Apollo's own transform rather than our reading of it: the whole point is to arrive at the
+		// byte-for-byte document its clients send, and a subtle difference here would reject every
+		// request from them with nothing to show why.
+		const apolloBody = normalise(
+			addTypenameToDocument(document).definitions as (
+				OperationDefinitionNode | FragmentDefinitionNode
+			)[]
+		);
+
 		documents.push({
 			id,
 			body,
+			apollo: apolloBody === body ? undefined : { id: hashDocument(apolloBody), body: apolloBody },
 			operationName: operation.name?.value,
 			operationType: operation.operation,
 			source,

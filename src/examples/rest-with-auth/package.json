@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest-with-auth",
-	"version": "2.24.0",
+	"version": "2.24.1",
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
@@ -43,7 +43,7 @@
 	},
 	"devDependencies": {
 		"@exogee/graphweaver-config": "workspace:*",
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.2",
 		"dotenv-cli": "11.0.0",
 		"typescript": "7.0.2",
 		"vite": "8.3.0",

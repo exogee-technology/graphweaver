@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { print } from 'graphql';
+import { parse, print, visit } from 'graphql';
 import * as documents from '@exogee/graphweaver-admin-ui-components/documents';
 import { enumerateAdminUiDocuments } from '@exogee/graphweaver-admin-ui-components/documents';
 
@@ -197,5 +197,40 @@ describe('Admin UI document enumeration', () => {
 
 		expect(trusted.length).toBeGreaterThan(20);
 		expect(new Set(trusted.map((d) => d.id)).size).toBe(trusted.length);
+	});
+
+	/**
+	 * The Admin UI is an Apollo client, so every document it sends carries `__typename` whether the
+	 * generator wrote one or not. Safelisting only the documents as generated would mean an Admin UI
+	 * that cannot load a single page against its own API, which is exactly what used to happen.
+	 */
+	it('safelists the Admin UI documents as its Apollo client will send them', () => {
+		// Apollo has nothing to add to an operation whose only selection set is the root one, so the
+		// documents to check are those selecting fields on something.
+		const selectsFieldsOnSomething = (body: string) => {
+			let nested = false;
+			visit(parse(body), {
+				Field: (field) => {
+					if (field.selectionSet) nested = true;
+				},
+			});
+			return nested;
+		};
+
+		const trusted = buildTrustedDocuments(enumerateAdminUiDocuments(metadata as any));
+		const selectsNestedFields = trusted.filter((document) =>
+			selectsFieldsOnSomething(document.body)
+		);
+
+		expect(selectsNestedFields.length).toBeGreaterThan(20);
+
+		for (const document of selectsNestedFields) {
+			expect(
+				document.apollo,
+				`${document.operationName ?? document.source} has no Apollo variant`
+			).toBeDefined();
+			expect(document.apollo!.body).toContain('__typename');
+			expect(document.apollo!.id).not.toBe(document.id);
+		}
 	});
 });

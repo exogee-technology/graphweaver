@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-builder",
-	"version": "2.24.0",
+	"version": "2.24.1",
 	"description": "A tool for building and running Graphweaver projects",
 	"license": "Apache-2.0",
 	"repository": {
@@ -21,6 +21,7 @@
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"dependencies": {
+		"@apollo/client": "3.13.5",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
@@ -60,7 +61,7 @@
 	},
 	"devDependencies": {
 		"@types/jsonwebtoken": "9.0.10",
-		"@types/node": "26.5.1",
+		"@types/node": "26.6.2",
 		"@types/omgopass": "3.2.3",
 		"jsonwebtoken": "9.0.3",
 		"prettier": "3.9.6",
