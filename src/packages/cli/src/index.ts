@@ -13,7 +13,7 @@ import { Backend, init } from './init';
 import { initAuth, AuthMethod, authMethods } from './auth';
 import { importDataSource } from './import';
 import { version } from '../package.json';
-import { generateTrustedDocuments, generateTypes, printSchema } from './tasks';
+import { generateTypes, generateTypesAndTrustedDocuments, printSchema } from './tasks';
 import * as path from 'path';
 import { config } from '@exogee/graphweaver-config';
 
@@ -205,8 +205,7 @@ void yargs
 				}),
 		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await buildBackend({ onDevBundleReady: generateTrustedDocuments });
-				await generateTypes();
+				await buildBackend({ onDevBundleReady: generateTypesAndTrustedDocuments });
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
@@ -274,8 +273,7 @@ void yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await startBackend(args, { onDevBundleReady: generateTrustedDocuments });
-				await generateTypes();
+				await startBackend(args, { onDevBundleReady: generateTypesAndTrustedDocuments });
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args);
@@ -304,8 +302,9 @@ void yargs
 						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
 				}),
 		handler: async ({ environment, ...args }) => {
-			if (environment === 'backend' || environment === 'all') {
-				await startBackend(args, { onDevBundleReady: generateTrustedDocuments });
+			const startsBackend = environment === 'backend' || environment === 'all';
+			if (startsBackend) {
+				await startBackend(args, { onDevBundleReady: generateTypesAndTrustedDocuments });
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				// Logic to start the process
@@ -351,10 +350,12 @@ void yargs
 					}
 				);
 
-				// Build Types
-				console.log('Generating files...');
-				await generateTypes();
-				console.log('Generating files complete.\n\n');
+				// Build Types, unless starting the backend above already did.
+				if (!startsBackend) {
+					console.log('Generating files...');
+					await generateTypes();
+					console.log('Generating files complete.\n\n');
+				}
 
 				console.log('Waiting for changes... \n\n');
 
@@ -363,8 +364,7 @@ void yargs
 				const rebuild = (reason: string) => {
 					void (async () => {
 						console.log(`${reason} Rebuilding generated files...`);
-						await buildBackend({ onDevBundleReady: generateTrustedDocuments });
-						await generateTypes();
+						await buildBackend({ onDevBundleReady: generateTypesAndTrustedDocuments });
 						console.log('Rebuild complete.\n\n');
 						console.log('Waiting for changes... \n\n');
 					})();
