@@ -55,7 +55,9 @@ pnpm start
 
 You can also run MinIO in Docker (similar to CI):
 
-`docker run -p 9000:9000 -e MINIO_ROOT_USER=minioadmin -e MINIO_ROOT_PASSWORD=minioadmin minio/minio server /data`
+`docker run -p 9000:9000 -v minio-data:/data -e MINIO_ROOT_USER=minioadmin -e MINIO_ROOT_PASSWORD=minioadmin cgr.dev/chainguard/minio:latest server /data`
+
+MinIO no longer publishes its own images on Docker Hub or quay.io; this is Chainguard's build of it, as CI uses.
 
 Then create a bucket with the AWS CLI, pointing `AWS_S3_ENDPOINT` at `http://127.0.0.1:9000` and using the same root user and password as `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`:
 
