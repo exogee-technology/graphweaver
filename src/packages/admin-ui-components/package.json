@@ -50,7 +50,7 @@
 		"@tanstack/react-form": "1.33.5",
 		"@tanstack/react-table": "8.21.3",
 		"@tiptap/extension-link": "3.22.0",
-		"@tiptap/react": "3.22.0",
+		"@tiptap/react": "3.31.3",
 		"@tiptap/starter-kit": "3.22.0",
 		"@types/react-dom": "19.3.0",
 		"clsx": "2.1.1",
