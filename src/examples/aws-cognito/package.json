@@ -30,7 +30,7 @@
 		"@exogee/graphweaver-aws": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"dotenv": "17.2.3",
-		"graphql": "16.12.0",
+		"graphql": "17.0.2",
 		"react": "19.3.0"
 	},
 	"devDependencies": {
