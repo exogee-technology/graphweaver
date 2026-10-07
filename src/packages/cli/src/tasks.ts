@@ -71,3 +71,18 @@ export const generateTrustedDocuments = async () => {
 		throw error;
 	}
 };
+
+/**
+ * The `onDevBundleReady` hook for every command that builds the backend: types first, then trusted
+ * documents.
+ *
+ * Codegen has to come first because an allow list can be built from what it writes. Apps import the
+ * `*.generated.ts` documents codegen emits, not the `graphql.ts` sources, so those are what a project
+ * should safelist - and if they were scanned before codegen ran, the manifest would hold whatever the
+ * previous build generated. A changed operation would then be refused (or fail a check comparing the
+ * two) until a second build caught up.
+ */
+export const generateTypesAndTrustedDocuments = async () => {
+	await generateTypes();
+	return generateTrustedDocuments();
+};
