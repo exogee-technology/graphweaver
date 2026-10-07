@@ -21,7 +21,7 @@
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"dependencies": {
-		"@apollo/client": "3.13.5",
+		"@apollo/client": "4.3.1",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
